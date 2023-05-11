@@ -57,7 +57,8 @@ static std::list<fs::path> glob(const std::string& pattern) {
 
 Driver::Driver(int argc, char** argv) :
     name("Untitled"),
-    version("0.0.0") {
+    version("0.0.0"),
+    output("docs") {
   /* command-line options */
   enum {
     NAME_ARG = 256,
@@ -98,6 +99,11 @@ Driver::Driver(int argc, char** argv) :
       break;
     }
     c = getopt_long_only(argc, argv, short_options, long_options, &option_index);
+  }
+
+  /* some error checking */
+  if (output.empty()) {
+    error("--output cannot be empty");
   }
 }
 
@@ -155,7 +161,11 @@ void Driver::help() {
   std::cout << std::endl;
   std::cout << "   Build the project documentation." << std::endl;
   std::cout << std::endl;
+  std::cout << "    --output (default docs): Output directory." << std::endl;
+  std::cout << std::endl;
   std::cout << "doxide clean" << std::endl;
+  std::cout << std::endl;
+  std::cout << "    --output (default docs): Output directory." << std::endl;
   std::cout << std::endl;
   std::cout << "  Remove generated files." << std::endl;
   std::cout << std::endl;
