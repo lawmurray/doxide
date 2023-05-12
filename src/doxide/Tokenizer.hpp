@@ -25,11 +25,10 @@ public:
       value.str("");
     }
 
-    /* initialize iterator over files */
     keyIter = sources.cbegin();
-
-    /* initialize iterator over file contents */
     valueIter = keyIter->second.cbegin();
+    currentLine = 1;
+    currentColumn = 1;
   }
 
   /**
@@ -43,6 +42,27 @@ public:
    * Get the next token.
    */
   Token next();
+
+  /**
+   * Get the current file.
+   */
+  const std::string& file() const {
+    return keyIter->first;
+  }
+
+  /**
+   * Get the current line in the current file.
+   */
+  size_t line() const {
+    return currentLine;
+  }
+
+  /**
+   * Get the current column in the current file.
+   */
+  size_t column() const {
+    return currentColumn;
+  }
 
 private:
   using map_type = std::unordered_map<std::string,std::string>;
@@ -64,4 +84,14 @@ private:
    * Iterator through current source file contents.
    */
   value_iterator_type valueIter;
+
+  /**
+   * Current line in current file.
+   */
+  size_t currentLine;
+
+  /**
+   * Current column in current file.
+   */
+  size_t currentColumn;
 };

@@ -39,6 +39,12 @@ Token Tokenizer::next() {
           regex.second, std::regex_constants::match_continuous)) {
         Token token(regex.first, valueIter, valueIter + match.length());
         valueIter += match.length();
+        if (regex.first == END_OF_LINE) {
+          ++currentLine;
+          currentColumn = 1;
+        } else {
+          currentColumn += match.length();
+        }
         return token;
       }
     }
