@@ -122,9 +122,10 @@ void Driver::docs() {
   Tokenizer tokenizer(files.begin(), files.end());
   while (tokenizer.hasNext()) {
     Token token = tokenizer.next();
-    if (token.type != SPACE && token.type != END_OF_LINE) {
+    if (token.type != SPACE && token.type != END_OF_LINE &&
+        token.type != END_OF_FILE) {
       std::cerr << tokenizer.file() << ':' << tokenizer.line() << ':' <<
-          tokenizer.column() << ':' << token.str() << std::endl;
+          tokenizer.column() << ": " << token.str() << std::endl;
     }
   }
 

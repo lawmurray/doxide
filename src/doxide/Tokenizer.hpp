@@ -17,18 +17,17 @@ public:
   template<class Iterator>
   Tokenizer(Iterator first, Iterator last) {
     /* read all file contents */
-    std::stringstream value;
     for (auto iter = first; iter != last; ++iter) {
+      std::stringstream value;
       std::ifstream in(*iter);
       value << in.rdbuf();
       sources.insert({*iter, value.str()});
-      value.str("");
     }
 
     keyIter = sources.cbegin();
     valueIter = keyIter->second.cbegin();
     currentLine = 1;
-    currentColumn = 1;
+    currentColumn = 0;
   }
 
   /**

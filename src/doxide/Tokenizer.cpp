@@ -1,8 +1,10 @@
 #include "doxide/Tokenizer.hpp"
 
 static auto regexes = {
-  std::make_pair(DOC_COMMENT, std::regex("/\\*\\*(?:.|\\n)*?\\*/")),
-  std::make_pair(INLINE_COMMENT, std::regex("/\\*(?:.|\\n)*?\\*/")),
+  std::make_pair(DOC_COMMENT_OPEN, std::regex("/\\*\\*")),
+  std::make_pair(DOC_COMMENT_CLOSE, std::regex("\\*/")),
+  std::make_pair(INLINE_COMMENT_OPEN, std::regex("/\\*")),
+  std::make_pair(INLINE_COMMENT_CLOSE, std::regex("\\*/")),
   std::make_pair(LINE_COMMENT, std::regex("//.*?$")),
   std::make_pair(BRACE_OPEN, std::regex("\\{")),
   std::make_pair(BRACE_CLOSE, std::regex("\\}")),
@@ -12,7 +14,7 @@ static auto regexes = {
   std::make_pair(PAREN_CLOSE, std::regex("\\)")),
   std::make_pair(ANGLE_OPEN, std::regex("<")),
   std::make_pair(ANGLE_CLOSE, std::regex(">")),
-  std::make_pair(CHAR, std::regex("'(?:\\\\'|[^'])'")),
+  std::make_pair(CHAR, std::regex("'(?:\\\\'|[^'])*?'")),
   std::make_pair(STRING, std::regex("\"(?:\\\\\"|[^\"])*?\"")),
   std::make_pair(COLON, std::regex(":")),
   std::make_pair(SEMICOLON, std::regex(";")),
@@ -20,14 +22,15 @@ static auto regexes = {
   std::make_pair(CLASS, std::regex("class")),
   std::make_pair(STRUCT, std::regex("struct")),
   std::make_pair(END_OF_LINE, std::regex("\\n")),
-  std::make_pair(SPACE, std::regex("\\s+")),
-  std::make_pair(OTHER, std::regex("[^{}\\[\\]()<>'\":; \t\v\f\n\r]+"))
+  std::make_pair(SPACE, std::regex("[ \\t\\v\\f]+")),
+  std::make_pair(OTHER, std::regex("[^{}\\[\\]()<>'\":; \\t\\v\\f\\n\\r]+"))
 };
 
 Token Tokenizer::next() {
   if (valueIter == keyIter->second.cend()) {
     Token token(END_OF_FILE, valueIter, valueIter);
     ++keyIter;
+    currentLine = 1;
     if (keyIter != sources.cend()) {
       valueIter = keyIter->second.cbegin();
     }
@@ -41,7 +44,7 @@ Token Tokenizer::next() {
         valueIter += match.length();
         if (regex.first == END_OF_LINE) {
           ++currentLine;
-          currentColumn = 1;
+          currentColumn = 0;
         } else {
           currentColumn += match.length();
         }
