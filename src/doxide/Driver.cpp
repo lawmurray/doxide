@@ -1,8 +1,4 @@
-/**
- * @file
- */
 #include "doxide/Driver.hpp"
-
 #include "doxide/Config.hpp"
 #include "doxide/Tokenizer.hpp"
 #include "doxide/Parser.hpp"
@@ -122,17 +118,17 @@ void Driver::init() {
 void Driver::docs() {
   config();
 
-  /* split that file into multiple files for mkdocs */
-  fs::path docs(output), file;
-  fs::create_directories(docs);
-  fs::create_directories(docs / "types");
-  fs::create_directories(docs / "variables");
-  fs::create_directories(docs / "functions");
-  fs::create_directories(docs / "operators");
-  fs::create_directories(docs / "classes");
-  fs::create_directories(docs / "structs");
+  /* generate documentation */
+  Tokenizer tokenizer(files.begin(), files.end());
+  while (tokenizer.hasNext()) {
+    Token token = tokenizer.next();
+    if (token.type != SPACE && token.type != END_OF_LINE) {
+      std::cerr << token.str() << std::endl;
+    }
+  }
 
   /* index file */
+  fs::path docs(output);
   if (fs::exists("README.md")) {
     copy("README.md", docs / "index.md");
   } else {
@@ -140,6 +136,15 @@ void Driver::docs() {
     stream << description << '\n';
     stream.close();
   }
+
+  /* other files */
+  fs::create_directories(docs);
+  fs::create_directories(docs / "types");
+  fs::create_directories(docs / "variables");
+  fs::create_directories(docs / "functions");
+  fs::create_directories(docs / "operators");
+  fs::create_directories(docs / "classes");
+  fs::create_directories(docs / "structs");
 }
 
 void Driver::clean() {

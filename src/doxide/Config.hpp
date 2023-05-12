@@ -1,6 +1,3 @@
-/**
- * @file
- */
 #pragma once
 
 #include "doxide.hpp"

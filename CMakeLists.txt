@@ -10,5 +10,9 @@ add_executable(doxide
     src/doxide/Config.hpp
     src/doxide/Config.cpp
     src/doxide/Driver.hpp
-    src/doxide/Driver.cpp)
+    src/doxide/Driver.cpp
+    src/doxide/Token.hpp
+    src/doxide/Token.cpp
+    src/doxide/Tokenizer.hpp
+    src/doxide/Tokenizer.cpp)
 target_link_libraries(doxide yaml)

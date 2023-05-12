@@ -1,6 +1,3 @@
-/**
- * @file
- */
 #include "doxide/Config.hpp"
 
 Config::Config() {

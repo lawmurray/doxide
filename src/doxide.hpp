@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <regex>
 #include <stack>
 #include <list>
 #include <unordered_set>
