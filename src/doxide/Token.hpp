@@ -5,7 +5,7 @@
 /**
  * Token types.
  */
-enum TokenType {
+enum class TokenType {
   DOC_COMMENT_OPEN,
   DOC_COMMENT_CLOSE,
   INLINE_COMMENT_OPEN,
@@ -26,6 +26,9 @@ enum TokenType {
   NAMESPACE,
   CLASS,
   STRUCT,
+  ENUM,
+  USING,
+  FRIEND,
   SPACE,
   OTHER,
   END_OF_LINE,
@@ -35,18 +38,14 @@ enum TokenType {
 /**
  * Token.
  */
-class Token {
+struct Token {
 public:
-  /**
-   * Constructor.
-   */
-  Token(const TokenType& type, const std::string::const_iterator& first,
-      const std::string::const_iterator& last);
-
   /**
    * Get token as string.
    */
-  std::string_view str() const;
+  std::string_view str() const {
+    return std::string_view(first, last);
+  }
 
   /**
    * Token type.
