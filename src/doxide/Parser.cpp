@@ -9,10 +9,10 @@ void Parser::parseGlobal() {
   Node child;
   Token token;
   do {
-    token = consume(~(NAMESPACE|CLASS|STRUCT|DOC));
+    token = consume(~(NAMESPACE|CLASS|DOC));
     if (token.type & NAMESPACE) {
       global.add(parseNamespace(token));
-    } else if (token.type & (CLASS|STRUCT)) {
+    } else if (token.type & (CLASS)) {
       global.add(parseClass(token));
     } else if (token.type & DOC) {
       global.add(parseDocs(token));
@@ -33,10 +33,10 @@ Node Parser::parseNamespace(const Token& first) {
   /* members */
   if (token.type & BRACE) {
     do {
-      token = consume(~(NAMESPACE|CLASS|STRUCT|DOC|BRACE_CLOSE));
+      token = consume(~(NAMESPACE|CLASS|DOC|BRACE_CLOSE));
       if (token.type & NAMESPACE) {
         node.add(parseNamespace(token));
-      } else if (token.type & (CLASS|STRUCT)) {
+      } else if (token.type & CLASS) {
         node.add(parseClass(token));
       } else if (token.type & DOC) {
         node.add(parseDocs(token));
@@ -78,7 +78,7 @@ Node Parser::parseDocs(const Token& first) {
   token = consume(WHITESPACE);
   if (token.type & NAMESPACE) {
     node = parseNamespace(token);
-  } else if (token.type & (CLASS|STRUCT)) {
+  } else if (token.type & CLASS) {
     node = parseClass(token);
   } else if (token.type & DOC) {
     node = parseDocs(token);
