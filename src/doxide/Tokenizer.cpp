@@ -29,28 +29,28 @@ size_t Tokenizer::column() const {
   return currentColumn;
 }
 
-bool Tokenizer::hasNext() const {
-  return iter != source.cend();
-}
-
 Token Tokenizer::next() {
   Token token;
-  std::smatch match;
-  for (auto& regex : regexes) {
-    if (std::regex_search(iter, source.cend(), match, regex.second,
-        std::regex_constants::match_continuous)) {
-      token = {regex.first, iter, iter + match.length()};
-      iter += match.length();
-      if (regex.first & EOL) {
-        currentLine += 1;
-        currentColumn = 0;
-      } else {
-        currentColumn += match.length();
+  if (iter == source.cend()) {
+    return token;
+  } else {
+    std::smatch match;
+    for (auto& regex : regexes) {
+      if (std::regex_search(iter, source.cend(), match, regex.second,
+          std::regex_constants::match_continuous)) {
+        Token token = {regex.first, iter, iter + match.length()};
+        iter += match.length();
+        if (regex.first & EOL) {
+          currentLine += 1;
+          currentColumn = 0;
+        } else {
+          currentColumn += match.length();
+        }
+        return token;
       }
-      return token;
     }
+    warn("unrecognized token at " << currentFile << ':' << currentLine << ':'
+        << currentColumn);
+    return token;
   }
-  warn("unrecognized token at " << currentFile << ':' << currentLine << ':'
-      << currentColumn);
-  return token;
 }

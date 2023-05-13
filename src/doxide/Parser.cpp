@@ -8,8 +8,8 @@ void Parser::parse(const std::string& file) {
 void Parser::parseGlobal() {
   Node child;
   Token token;
-  while (tokenizer.hasNext()) {
-    token = tokenizer.next();
+  do {
+    token = consume(~(NAMESPACE|CLASS|STRUCT|DOC));
     if (token.type & NAMESPACE) {
       global.add(parseNamespace(token));
     } else if (token.type & (CLASS|STRUCT)) {
@@ -17,7 +17,7 @@ void Parser::parseGlobal() {
     } else if (token.type & DOC) {
       global.add(parseDocs(token));
     }
-  }
+  } while (token.type);
 }
 
 Node Parser::parseNamespace(const Token& first) {
@@ -41,7 +41,7 @@ Node Parser::parseNamespace(const Token& first) {
       } else if (token.type & DOC) {
         node.add(parseDocs(token));
       }
-    } while (!(token.type & BRACE_CLOSE));
+    } while (token.type && !(token.type & BRACE_CLOSE));
   }
   return node;
 }
@@ -63,7 +63,7 @@ Node Parser::parseClass(const Token& first) {
       if (token.type & DOC) {
         node.add(parseDocs(token));
       }
-    } while (!(token.type & BRACE_CLOSE));
+    } while (token.type && !(token.type & BRACE_CLOSE));
   }
 
   return node;
@@ -86,7 +86,7 @@ Node Parser::parseDocs(const Token& first) {
     /* might be a variable, function, or operator */
     bool done = false;
     while (!done) {
-      Token last = consume(~(WORD|EQUALS|BRACE|SEMICOLON|PAREN));
+      token = consume(~(WORD|EQUALS|BRACE|SEMICOLON|PAREN));
       if (token.type & WORD) {
         /* name of whatever comes next, may be overwritten on subsequent
          * iterations to ensure that the last word becomes the name */
@@ -143,14 +143,12 @@ Node Parser::parseDocs(const Token& first) {
 
 Token Parser::consume(const uint64_t valid, const bool flat) {
   Token token;
-  if (tokenizer.hasNext()) {
-    do {
-      token = tokenizer.next();
-      if (!flat && token.type & DELIMITER) {
-        token = consume(~(token.type << 1), flat);
-        // ^ left shift gives matching closing delimiter
-      }
-    } while (token.type & valid && tokenizer.hasNext());
-  }
+  do {
+    token = tokenizer.next();
+    if (!flat && token.type & DELIMITER) {
+      token = consume(~(token.type << 1), flat);
+      // ^ left shift gives matching closing delimiter
+    }
+  } while (token.type & valid);
   return token;
 }

@@ -34,11 +34,6 @@ public:
    * Get the current column in the current file.
    */
   size_t column() const;
-
-  /**
-   * Is there another token?
-   */
-  bool hasNext() const;
   
   /**
    * Get the next token.
@@ -46,7 +41,9 @@ public:
    * @return Next token.
    * 
    * The token is only valid for the lifetime of the Tokenizer, as it contains
-   * a reference to a substring of the source file.
+   * a reference to a substring of the source file. If no tokens remain (i.e.
+   * the end of the file is reached), a token with a type of `NONE` is
+   * returned.
    */
   Token next();
 

@@ -24,10 +24,10 @@ private:
    * which is returned. If @p delimeters is true, then delimiters must also
    * match.
    * 
-   * With no arguments, the default value of `~ALL` for @p valid will simply
-   * return the next token.
+   * The token type `NONE` is never valid. Given as the value of @p valid (the
+   * default) means that the next token is returned, regardless of type.
    */
-  Token consume(const uint64_t valid = ~ALL, const bool delimiters = true);
+  Token consume(const uint64_t valid = NONE, const bool delimiters = true);
 
   void parseGlobal();
   Node parseNamespace(const Token& first);

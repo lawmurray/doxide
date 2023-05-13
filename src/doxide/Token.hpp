@@ -8,7 +8,7 @@
  * Closing delimiters must be one shift left of their opening counterparts.
  */
 enum TokenType : uint64_t {
-  NONE = 0,
+  NONE = 0ull,
   DOC = 1ull << 0,
   DOC_CLOSE = 1ull << 1,
   COMMENT = 1ull << 2,
@@ -41,10 +41,8 @@ enum TokenType : uint64_t {
   SPACE = 1ull << 29,
   EOL = 1ull << 30,
   WORD = 1ull << 31,
-  END_OF_FILE = 1ull << 32,
 
   /* aggregate tokens */
-  ALL = -1ull,
   WHITESPACE = SPACE|EOL,
   DELIMITER = DOC|COMMENT|BRACE|BRACKET|PAREN|ANGLE
 };
