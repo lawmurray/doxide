@@ -87,6 +87,18 @@ static auto regexes = {
  */
 struct Token {
   /**
+   * Constructor.
+   */
+  Token(const TokenType& type = NONE,
+      const std::string::const_iterator& first = {},
+      const std::string::const_iterator& last = {}) :
+      type(type),
+      first(first),
+      last(last) {
+    //
+  }
+
+  /**
    * Get token as string.
    */
   std::string_view str() const {

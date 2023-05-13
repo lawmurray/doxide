@@ -38,7 +38,7 @@ Token Tokenizer::next() {
     for (auto& regex : regexes) {
       if (std::regex_search(iter, source.cend(), match, regex.second,
           std::regex_constants::match_continuous)) {
-        Token token = {regex.first, iter, iter + match.length()};
+        Token token{regex.first, iter, iter + match.length()};
         iter += match.length();
         if (regex.first & EOL) {
           currentLine += 1;
