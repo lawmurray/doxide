@@ -118,16 +118,10 @@ void Driver::init() {
 void Driver::docs() {
   config();
 
-  /* generate documentation */
-  Tokenizer tokenizer(files.begin(), files.end());
-  while (tokenizer.hasNext()) {
-    Token token = tokenizer.next();
-    if (token.type != TokenType::SPACE &&
-        token.type != TokenType::END_OF_LINE &&
-        token.type != TokenType::END_OF_FILE) {
-      std::cerr << tokenizer.file() << ':' << tokenizer.line() << ':' <<
-          tokenizer.column() << ": " << token.str() << std::endl;
-    }
+  /* parse documentation */
+  Parser parser;
+  for (auto file: files) {
+    parser.parse(file);
   }
 
   /* index file */

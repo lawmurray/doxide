@@ -29,31 +29,47 @@ static auto regexes = {
   std::make_pair(TokenType::OTHER, std::regex("[^{}\\[\\]()<>'\":; \\t\\v\\f\\n\\r]+"))
 };
 
+Tokenizer::Tokenizer(const std::string& file) :
+    currentFile(file),
+    currentLine(1),
+    currentColumn(0) {
+  std::stringstream stream;
+  stream << std::ifstream(file).rdbuf();
+  source = stream.str();
+  iter = source.begin();
+}
+
+const std::string& Tokenizer::file() const {
+  return currentFile;
+}
+
+size_t Tokenizer::line() const {
+  return currentLine;
+}
+
+size_t Tokenizer::column() const {
+  return currentColumn;
+}
+
+bool Tokenizer::hasNext() const {
+  return iter != source.cend();
+}
+
 Token Tokenizer::next() {
-  if (valueIter == keyIter->second.cend()) {
-    Token token{TokenType::END_OF_FILE, valueIter, valueIter};
-    ++keyIter;
-    currentLine = 1;
-    if (keyIter != sources.cend()) {
-      valueIter = keyIter->second.cbegin();
-    }
-    return token;
-  } else {
-    std::smatch match;
-    for (auto& regex : regexes) {
-      if (std::regex_search(valueIter, keyIter->second.cend(), match,
-          regex.second, std::regex_constants::match_continuous)) {
-        Token token{regex.first, valueIter, valueIter + match.length()};
-        valueIter += match.length();
-        if (regex.first == TokenType::END_OF_LINE) {
-          ++currentLine;
-          currentColumn = 0;
-        } else {
-          currentColumn += match.length();
-        }
-        return token;
+  std::smatch match;
+  for (auto& regex : regexes) {
+    if (std::regex_search(iter, source.cend(), match, regex.second,
+        std::regex_constants::match_continuous)) {
+      Token token{regex.first, iter, iter + match.length()};
+      iter += match.length();
+      if (regex.first == TokenType::END_OF_LINE) {
+        ++currentLine;
+        currentColumn = 0;
+      } else {
+        currentColumn += match.length();
       }
+      return token;
     }
-    error("unrecognized token");
   }
+  error("unrecognized token");
 }

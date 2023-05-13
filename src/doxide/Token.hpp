@@ -37,9 +37,11 @@ enum class TokenType {
 
 /**
  * Token.
+ * 
+ * A token is only valid for the lifetime of the Tokenizer that produced it,
+ * as it contains a reference to a substring of the source file.
  */
 struct Token {
-public:
   /**
    * Get token as string.
    */

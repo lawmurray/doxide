@@ -11,78 +11,45 @@ public:
   /**
    * Constructor.
    * 
-   * @param first Iterator to first file name.
-   * @param last Iterator to last file name.
+   * @param file File name.
    */
-  template<class Iterator>
-  Tokenizer(Iterator first, Iterator last) {
-    /* read all file contents */
-    for (auto iter = first; iter != last; ++iter) {
-      std::stringstream value;
-      std::ifstream in(*iter);
-      value << in.rdbuf();
-      sources.insert({*iter, value.str()});
-    }
-
-    keyIter = sources.cbegin();
-    valueIter = keyIter->second.cbegin();
-    currentLine = 1;
-    currentColumn = 0;
-  }
-
-  /**
-   * Is there another token?
-   */
-  bool hasNext() const {
-    return keyIter != sources.cend();
-  }
-  
-  /**
-   * Get the next token.
-   */
-  Token next();
+  Tokenizer(const std::string& file);
 
   /**
    * Get the current file.
    */
-  const std::string& file() const {
-    return keyIter->first;
-  }
+  const std::string& file() const;
 
   /**
    * Get the current line in the current file.
    */
-  size_t line() const {
-    return currentLine;
-  }
+  size_t line() const;
 
   /**
    * Get the current column in the current file.
    */
-  size_t column() const {
-    return currentColumn;
-  }
+  size_t column() const;
+
+  /**
+   * Is there another token?
+   */
+  bool hasNext() const;
+  
+  /**
+   * Get the next token.
+   * 
+   * @return Next token.
+   * 
+   * The token is only valid for the lifetime of the Tokenizer, as it contains
+   * a reference to a substring of the source file.
+   */
+  Token next();
 
 private:
-  using map_type = std::unordered_map<std::string,std::string>;
-  using iterator_type = map_type::const_iterator;
-  using value_iterator_type = std::string::const_iterator;
-
   /**
-   * Sources. Keys are file names, values are contents. Individual tokens
-   * create std::string_view over these values.
+   * File name.
    */
-  map_type sources;
-
-  /**
-   * Iterator through source files.
-   */
-  iterator_type keyIter;
-
-  /**
-   * Iterator through current source file contents.
-   */
-  value_iterator_type valueIter;
+  std::string currentFile;
 
   /**
    * Current line in current file.
@@ -93,4 +60,14 @@ private:
    * Current column in current file.
    */
   size_t currentColumn;
+
+  /**
+   * File contents.
+   */
+  std::string source;
+
+  /**
+   * Iterator over file contents.
+   */
+  std::string::const_iterator iter;
 };
