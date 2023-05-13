@@ -12,6 +12,7 @@ add_executable(doxide
     src/doxide/Config.cpp
     src/doxide/Driver.hpp
     src/doxide/Driver.cpp
+    src/doxide/Node.cpp
     src/doxide/Node.hpp
     src/doxide/Parser.hpp
     src/doxide/Parser.cpp

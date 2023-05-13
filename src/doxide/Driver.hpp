@@ -4,8 +4,6 @@
 
 /**
  * Driver.
- *
- * @ingroup driver
  */
 class Driver {
 public:

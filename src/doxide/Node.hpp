@@ -17,11 +17,12 @@ enum class NodeType {
  * Token.
  */
 struct Node {
-  using map_type = std::map<std::string,Node>;
+  using map_type = std::multimap<std::string,Node>;
 
-  void add(const Node& child) {
-
-  }
+  /**
+   * Add a child node.
+   */
+  void add(const Node& node);
 
   /**
    * Node type.
