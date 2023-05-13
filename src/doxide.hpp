@@ -11,6 +11,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <cassert>
+
 #include <getopt.h>
 #include <glob.h>
 #include <yaml.h>

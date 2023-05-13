@@ -7,10 +7,7 @@
  */
 enum class NodeType {
   NAMESPACE,
-  CLASS,
-  STRUCT,
   TYPE,
-  ENUM,
   VARIABLE,
   FUNCTION,
   OPERATOR
@@ -21,6 +18,10 @@ enum class NodeType {
  */
 struct Node {
   using map_type = std::map<std::string,Node>;
+
+  void add(const Node& child) {
+
+  }
 
   /**
    * Node type.
@@ -38,24 +39,19 @@ struct Node {
   std::string decl;
 
   /**
-   * Child classes.
+   * Entity documentation.
    */
-  map_type classes;
+  std::string docs;
 
   /**
-   * Child structs.
+   * Child namespaces.
    */
-  map_type structs;
+  map_type namespaces;
 
   /**
    * Child types.
    */
   map_type types;
-
-  /**
-   * Child enums.
-   */
-  map_type enums;
 
   /**
    * Child variables.

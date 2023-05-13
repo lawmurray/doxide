@@ -13,7 +13,12 @@ public:
    * 
    * @param file File name.
    */
-  Tokenizer(const std::string& file);
+  Tokenizer();
+
+  /**
+   * Load a file.
+   */
+  void load(const std::string& file);
 
   /**
    * Get the current file.
