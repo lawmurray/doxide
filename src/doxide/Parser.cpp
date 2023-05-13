@@ -12,7 +12,7 @@ void Parser::parseGlobal() {
     token = consume(~(NAMESPACE|CLASS|DOC));
     if (token.type & NAMESPACE) {
       global.add(parseNamespace(token));
-    } else if (token.type & (CLASS)) {
+    } else if (token.type & CLASS) {
       global.add(parseClass(token));
     } else if (token.type & DOC) {
       global.add(parseDocs(token));

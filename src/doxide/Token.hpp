@@ -65,7 +65,7 @@ static auto regexes = {
   std::make_pair(TokenType::STRING, std::regex("\"(?:\\\\\"|[^\"])*?\"")),
   std::make_pair(TokenType::NAMESPACE, std::regex("\\bnamespace\\b")),
   std::make_pair(TokenType::USING_NAMESPACE, std::regex("\\busing\\s+namespace\\b")),
-  std::make_pair(TokenType::CLASS, std::regex("\\(?:class|struct)\\b")),
+  std::make_pair(TokenType::CLASS, std::regex("\\b(?:class|struct)\\b")),
   std::make_pair(TokenType::ENUM_CLASS, std::regex("\\benum\\s+(?:class|struct)\\b")),
   std::make_pair(TokenType::FRIEND_CLASS, std::regex("\\bfriend\\s+(?:class|struct)\\b")),
   std::make_pair(TokenType::TYPEDEF, std::regex("\\btypedef\\b")),
