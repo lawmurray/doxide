@@ -23,23 +23,18 @@ private:
   /**
    * Consume tokens until stopping criterion.
    * 
-   * @param valid Bitmask giving the valid token types.
-   * @param delimiters Match delimiters?
+   * @param stop Bitmask giving the token type on which to stop and return.
    * 
    * @return Last token consumed.
    * 
-   * Tokens are consumed until one is encountered with a type not in @p valid,
-   * which is returned. If @p delimeters is true, then delimiters must also
-   * match.
-   * 
-   * The token type `NONE` is never valid. Given as the value of @p valid (the
-   * default) means that the next token is returned, regardless of type.
+   * Tokens are consumed until one is encountered with a type in @p stop,
+   * which is then returned. If @p stop is `ANY` then the next token is
+   * returned.
    */
-  Token consume(const uint64_t valid = NONE, const bool delimiters = true);
+  Token consume(const uint64_t stop = ANY);
 
   void parseGlobal();
   Node parseNamespace(const Token& first);
-  Node parseType(const Token& first);
   Node parseDocs(const Token& first);
 
   /**
@@ -51,4 +46,9 @@ private:
    * Global namespace.
    */
   Node global;
+
+  /**
+   * Last word token read.
+   */
+  Token word;
 };
