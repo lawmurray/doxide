@@ -192,19 +192,51 @@ void Generator::generateType(const std::filesystem::path& dir,
 
 void Generator::generateVariable(const std::filesystem::path& dir,
     const Node& node) {
+  std::filesystem::create_directories(dir);
+  std::ofstream out(dir / "index.md");
 
+  out << "# " << node.name << std::endl;
+  out << std::endl;
+  out << "!!! abstract \"" << line(node.decl) << '"' << std::endl;
+  out << std::endl;
+  out << indent(detailed(node.docs)) << std::endl;
+  out << std::endl;
 }
 
 template<class Iterator>
 void Generator::generateFunction(const std::filesystem::path& dir,
     const Iterator& first, const Iterator& last) {
-  
+  std::filesystem::create_directories(dir);
+  std::ofstream out(dir / "index.md");
+
+  auto& node = first->second;
+  out << "# " << node.name << std::endl;
+  out << std::endl;
+  for (auto iter = first; iter != last; ++iter) {
+    auto& node = iter->second;
+    out << "!!! abstract \"" << line(node.decl) << '"' << std::endl;
+    out << std::endl;
+    out << indent(detailed(node.docs)) << std::endl;
+    out << std::endl;
+  }
 }
 
 template<class Iterator>
 void Generator::generateOperator(const std::filesystem::path& dir,
     const Iterator& first, const Iterator& last) {
-  
+  std::filesystem::create_directories(dir);
+  std::ofstream out(dir / "index.md");
+
+  auto& node = first->second;
+  out << "# " << node.name << std::endl;
+  out << std::endl;
+  for (auto iter = first; iter != last; ++iter) {
+    auto& node = iter->second;
+    out << "!!! abstract \"" << line(node.decl) << '"' << std::endl;
+    out << std::endl;
+    out << indent(detailed(node.docs)) << std::endl;
+    out << std::endl;
+  }
 }
 
 std::string Generator::detailed(const std::string& str) {
