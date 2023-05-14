@@ -13,11 +13,9 @@ void Parser::parseGlobal() {
   Node child;
   Token token;
   do {
-    token = consume(~(NAMESPACE|CLASS|DOC));
+    token = consume(~(NAMESPACE|DOC));
     if (token.type & NAMESPACE) {
       global.add(parseNamespace(token));
-    } else if (token.type & CLASS) {
-      global.add(parseType(token));
     } else if (token.type & DOC) {
       global.add(parseDocs(token));
     }
@@ -37,11 +35,9 @@ Node Parser::parseNamespace(const Token& first) {
   /* members */
   if (token.type & BRACE) {
     do {
-      token = consume(~(NAMESPACE|CLASS|DOC|BRACE_CLOSE));
+      token = consume(~(NAMESPACE|DOC|BRACE_CLOSE));
       if (token.type & NAMESPACE) {
         node.add(parseNamespace(token));
-      } else if (token.type & CLASS) {
-        node.add(parseType(token));
       } else if (token.type & DOC) {
         node.add(parseDocs(token));
       }
@@ -87,11 +83,84 @@ Node Parser::parseDocs(const Token& first) {
     node = parseNamespace(token);
   } else if (token.type & CLASS) {
     node = parseType(token);
+  } else if (token.type & TEMPLATE) {
+    /* might be a type, function, or operator (template) */
+    bool done = false;
+    while (!done) {
+      last = consume(~(WORD|PAREN|OPERATOR|CLASS));
+      if (last.type & WORD) {
+        /* name of whatever comes next, may be overwritten on subsequent
+         * iterations to ensure that the last word becomes the name */
+        node.name = last.str();
+      } else if (last.type & PAREN) {
+        /* function */
+        node.type = NodeType::FUNCTION;
+
+        /* finish reading in the parameters */
+        last = consume(~PAREN_CLOSE);
+
+        /* read to the end of the signature (e.g. trailing const on member
+         * functions) or start of the initializer list (for a constructor) */
+        last = consume(~(SEMICOLON|BRACE|COLON));
+        node.decl = std::string_view(token.first, last.first);
+
+        /* if that was the start of an initializer list, skip ahead to the
+         * opening brace */
+        if (last.type & COLON) {
+          last = consume(~BRACE);
+        }
+
+        /* skip over the function body, if it exists */
+        if (last.type & BRACE) {
+          last = consume(~BRACE_CLOSE);
+        }
+        done = true;
+      } else if (last.type & OPERATOR) {
+        /* operator */
+        node.type = NodeType::OPERATOR;
+
+        /* skip to the opening parenthesis */
+        last = consume(~PAREN);
+        node.name = std::string_view(token.first, last.first);
+
+        /* finish reading in the parameters */
+        last = consume(~(SEMICOLON|BRACE));
+        node.decl = std::string_view(token.first, last.first);
+
+        /* skip over the operator body, if it exists */
+        if (last.type & BRACE) {
+          last = consume(~BRACE_CLOSE);
+        }
+        done = true;
+      } else if (last.type & CLASS) {
+        /* type */
+        node.type = NodeType::TYPE;
+
+        /* signature */
+        last = consume(WHITESPACE);
+        if (last.type & WORD) {
+          node.name = last.str();
+        }
+        last = consume(~(BRACE|SEMICOLON));
+        node.decl = std::string_view(first.first, last.first);
+
+        /* members */
+        if (last.type & BRACE) {
+          do {
+            last = consume(~(DOC|BRACE_CLOSE));
+            if (last.type & DOC) {
+              node.add(parseDocs(last));
+            }
+          } while (last.type && !(last.type & BRACE_CLOSE));
+        }
+        done = true;
+      }
+    }
   } else {
     /* might be a variable, function, or operator */
     bool done = false;
     while (!done) {
-      last = consume(~(WORD|EQUALS|BRACE|SEMICOLON|PAREN));
+      last = consume(~(WORD|EQUALS|BRACE|SEMICOLON|PAREN|OPERATOR));
       if (last.type & WORD) {
         /* name of whatever comes next, may be overwritten on subsequent
          * iterations to ensure that the last word becomes the name */
@@ -133,13 +202,15 @@ Node Parser::parseDocs(const Token& first) {
         }
         done = true;
       } else if (last.type & OPERATOR) {
-        /* operator; skip to the opening parenthesis */
+        /* operator */
+        node.type = NodeType::OPERATOR;
+
+        /* skip to the opening parenthesis */
         last = consume(~PAREN);
         node.name = std::string_view(token.first, last.first);
 
         /* finish reading in the parameters */
         last = consume(~(SEMICOLON|BRACE));
-        node.type = NodeType::OPERATOR;
         node.decl = std::string_view(token.first, last.first);
 
         /* skip over the operator body, if it exists */
