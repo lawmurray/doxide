@@ -32,10 +32,11 @@ enum TokenType : uint64_t {
   COLON = 1ull << 20,
   SEMICOLON = 1ull << 21,
   EQUALS = 1ull << 22,
-  PUNCT = 1ull << 23,
-  SPACE = 1ull << 24,
-  EOL = 1ull << 25,
-  WORD = 1ull << 26,
+  TILDE = 1ull << 23,
+  PUNCT = 1ull << 24,
+  SPACE = 1ull << 25,
+  EOL = 1ull << 26,
+  WORD = 1ull << 27,
 
   /* aggregate tokens */
   WHITESPACE = SPACE|EOL
@@ -68,7 +69,8 @@ static auto regexes = {
   std::make_pair(TokenType::COLON, std::regex(":")),
   std::make_pair(TokenType::SEMICOLON, std::regex(";")),
   std::make_pair(TokenType::EQUALS, std::regex("=")),
-  std::make_pair(TokenType::PUNCT, std::regex("[,.?!~&|<>\\-+*/%^@#]")),
+  std::make_pair(TokenType::TILDE, std::regex("~")),
+  std::make_pair(TokenType::PUNCT, std::regex("[,.?!&|<>\\-+*/%^@#]")),
   std::make_pair(TokenType::SPACE, std::regex("[ \\t\\v\\f]+")),
   std::make_pair(TokenType::EOL, std::regex("\\n")),
   std::make_pair(TokenType::WORD, std::regex("[^{}\\[\\]()<>'\":;=,.?!~&|\\-+*/%^:@#\\n \\t\\v\\f\\r]+"))

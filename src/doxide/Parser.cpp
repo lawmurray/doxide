@@ -82,7 +82,30 @@ Node Parser::parseDocs(const Token& first) {
   if (token.type & NAMESPACE) {
     node = parseNamespace(token);
   } else if (token.type & CLASS) {
-    node = parseType(token);
+    node = parseType(token);  
+  } else if (token.type & TILDE) {
+    /* destructor */
+    node.type = NodeType::FUNCTION;
+
+    /* finish reading name */
+    last = consume();
+    if (last.type & WORD) {
+      node.name = "~";
+      node.name += last.str();
+    }
+
+    /* finish reading in the parameters */
+    last = consume(~PAREN);
+    last = consume(~PAREN_CLOSE);
+
+    /* read to the end of the signature */
+    last = consume(~(SEMICOLON|BRACE));
+    node.decl = std::string_view(token.first, last.first);
+
+    /* skip over the function body, if it exists */
+    if (last.type & BRACE) {
+      last = consume(~BRACE_CLOSE);
+    }
   } else if (token.type & TEMPLATE) {
     /* might be a type, function, or operator (template) */
     bool done = false;
@@ -120,8 +143,9 @@ Node Parser::parseDocs(const Token& first) {
         node.type = NodeType::OPERATOR;
 
         /* skip to the opening parenthesis */
+        Token name = last;
         last = consume(~PAREN);
-        node.name = std::string_view(token.first, last.first);
+        node.name = std::string_view(name.first, last.first);
 
         /* finish reading in the parameters */
         last = consume(~(SEMICOLON|BRACE));
@@ -158,6 +182,11 @@ Node Parser::parseDocs(const Token& first) {
     }
   } else {
     /* might be a variable, function, or operator */
+    if (token.type & WORD) {
+      /* name of whatever comes next, may be overwritten on subsequent
+       * iterations to ensure that the last word becomes the name */
+      node.name = token.str();
+    }
     bool done = false;
     while (!done) {
       last = consume(~(WORD|EQUALS|BRACE|SEMICOLON|PAREN|OPERATOR));
@@ -206,8 +235,9 @@ Node Parser::parseDocs(const Token& first) {
         node.type = NodeType::OPERATOR;
 
         /* skip to the opening parenthesis */
+        Token name = last;
         last = consume(~PAREN);
-        node.name = std::string_view(token.first, last.first);
+        node.name = std::string_view(name.first, last.first);
 
         /* finish reading in the parameters */
         last = consume(~(SEMICOLON|BRACE));
