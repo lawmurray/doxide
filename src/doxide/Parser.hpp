@@ -4,6 +4,9 @@
 #include "doxide/Tokenizer.hpp"
 #include "doxide/Node.hpp"
 
+/**
+ * Parser.
+ */
 class Parser {
 public:
   /**
@@ -36,7 +39,7 @@ private:
 
   void parseGlobal();
   Node parseNamespace(const Token& first);
-  Node parseClass(const Token& first);
+  Node parseType(const Token& first);
   Node parseDocs(const Token& first);
 
   /**

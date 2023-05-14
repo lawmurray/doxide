@@ -3,7 +3,7 @@
 #include "doxide.hpp"
 
 /**
- * Token types.
+ * Node types.
  */
 enum class NodeType {
   NAMESPACE,
@@ -14,7 +14,7 @@ enum class NodeType {
 };
 
 /**
- * Token.
+ * Node.
  */
 struct Node {
   using map_type = std::map<std::string,Node>;

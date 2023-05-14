@@ -17,7 +17,7 @@ void Parser::parseGlobal() {
     if (token.type & NAMESPACE) {
       global.add(parseNamespace(token));
     } else if (token.type & CLASS) {
-      global.add(parseClass(token));
+      global.add(parseType(token));
     } else if (token.type & DOC) {
       global.add(parseDocs(token));
     }
@@ -41,7 +41,7 @@ Node Parser::parseNamespace(const Token& first) {
       if (token.type & NAMESPACE) {
         node.add(parseNamespace(token));
       } else if (token.type & CLASS) {
-        node.add(parseClass(token));
+        node.add(parseType(token));
       } else if (token.type & DOC) {
         node.add(parseDocs(token));
       }
@@ -50,15 +50,17 @@ Node Parser::parseNamespace(const Token& first) {
   return node;
 }
 
-Node Parser::parseClass(const Token& first) {
+Node Parser::parseType(const Token& first) {
   Node node;
   Token token;
 
   node.type = NodeType::TYPE;
   token = consume(WHITESPACE);
-  node.name = token.str();
+  if (token.type & WORD) {
+    node.name = token.str();
+  }
   token = consume(~(BRACE|SEMICOLON));
-  node.decl = std::string_view(first.first, token.last);
+  node.decl = std::string_view(first.first, token.first);
 
   /* members */
   if (token.type & BRACE) {
@@ -75,66 +77,74 @@ Node Parser::parseClass(const Token& first) {
 
 Node Parser::parseDocs(const Token& first) {
   Node node;
-  Token token;
+  Token token, last;
 
-  token = consume(~DOC_CLOSE, false);
+  token = consume(~COMMENT_CLOSE, false);
   std::string_view docs = std::string_view(first.first, token.last);
   token = consume(WHITESPACE);
+  
   if (token.type & NAMESPACE) {
     node = parseNamespace(token);
   } else if (token.type & CLASS) {
-    node = parseClass(token);
-  } else if (token.type & DOC) {
-    node = parseDocs(token);
+    node = parseType(token);
   } else {
     /* might be a variable, function, or operator */
     bool done = false;
     while (!done) {
-      token = consume(~(WORD|EQUALS|BRACE|SEMICOLON|PAREN));
-      if (token.type & WORD) {
+      last = consume(~(WORD|EQUALS|BRACE|SEMICOLON|PAREN));
+      if (last.type & WORD) {
         /* name of whatever comes next, may be overwritten on subsequent
          * iterations to ensure that the last word becomes the name */
-        node.name = token.str();
-      } else if (token.type & (EQUALS|BRACE|SEMICOLON)) {
-        /* variable, e.g.
-         *   int x;
-         *   int x = 0;
-         *   int x{0};
-         */
+        node.name = last.str();
+      } else if (last.type & (EQUALS|BRACE|SEMICOLON)) {
+        /* variable, e.g. int x; int x = 0; int x{0}; */
         node.type = NodeType::VARIABLE;
-        node.decl = std::string_view(first.first, token.last);
+
+        /* signature */
+        node.decl = std::string_view(token.first, last.first);
 
         /* in the case an initializer, skip over it to the end of the
          * statement */
-        if (token.type & (EQUALS|BRACE)) {
-          token = consume(~SEMICOLON);
+        if (last.type & (EQUALS|BRACE)) {
+          last = consume(~SEMICOLON);
         }
         done = true;
-      } else if (token.type & PAREN) {
-        /* function; finish reading in the parameters */
-        token = consume(~(SEMICOLON|BRACE));
+      } else if (last.type & PAREN) {
+        /* function */
         node.type = NodeType::FUNCTION;
-        node.decl = std::string_view(first.first, token.last);
-
-        /* skip over the function body, if it exists */
-        if (token.type & BRACE) {
-          token = consume(~BRACE_CLOSE);
-        }
-        done = true;
-      } else if (token.type & OPERATOR) {
-        /* operator; skip to the opening parenthesis */
-        Token name = token;
-        token = consume(~PAREN);
-        node.name = std::string_view(name.first, token.last);
 
         /* finish reading in the parameters */
-        token = consume(~(SEMICOLON|BRACE));
+        last = consume(~PAREN_CLOSE);
+
+        /* read to the end of the signature (e.g. trailing const on member
+         * functions) or start of the initializer list (for a constructor) */
+        last = consume(~(SEMICOLON|BRACE|COLON));
+        node.decl = std::string_view(token.first, last.first);
+
+        /* if that was the start of an initializer list, skip ahead to the
+         * opening brace */
+        if (last.type & COLON) {
+          last = consume(~BRACE);
+        }
+
+        /* skip over the function body, if it exists */
+        if (last.type & BRACE) {
+          last = consume(~BRACE_CLOSE);
+        }
+        done = true;
+      } else if (last.type & OPERATOR) {
+        /* operator; skip to the opening parenthesis */
+        last = consume(~PAREN);
+        node.name = std::string_view(token.first, last.first);
+
+        /* finish reading in the parameters */
+        last = consume(~(SEMICOLON|BRACE));
         node.type = NodeType::OPERATOR;
-        node.decl = std::string_view(first.first, token.last);
+        node.decl = std::string_view(token.first, last.first);
 
         /* skip over the operator body, if it exists */
-        if (token.type & BRACE) {
-          token = consume(~BRACE_CLOSE);
+        if (last.type & BRACE) {
+          last = consume(~BRACE_CLOSE);
         }
         done = true;
       }
@@ -145,14 +155,17 @@ Node Parser::parseDocs(const Token& first) {
   return node;
 }
 
-Token Parser::consume(const uint64_t valid, const bool flat) {
-  Token token;
-  do {
-    token = tokenizer.next();
-    if (!flat && token.type & DELIMITER) {
-      token = consume(~(token.type << 1), flat);
-      // ^ left shift gives matching closing delimiter
+Token Parser::consume(const uint64_t valid, const bool delimiters) {
+  Token token = tokenizer.next();
+  while (token.type & valid) {
+    if (token.type & (BRACE|BRACKET|PAREN) && delimiters) {
+      /* for all of BRACE, BRACKET and PAREN, the closing counterpart in
+       * TokenType is a left shift away */
+      token = consume(~(token.type << 1), true);
+    } else if (token.type & (DOC|COMMENT)) {
+      token = consume(~COMMENT_CLOSE, false);
     }
-  } while (token.type & valid);
+    token = tokenizer.next();
+  }
   return token;
 }
