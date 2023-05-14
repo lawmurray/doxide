@@ -30,11 +30,6 @@ private:
       const Iterator& first, const Iterator& last);
 
   /**
-   * Process a string to a heading with the current depth.
-   */
-  std::string head(const std::string& name);
-
-  /**
    * Process a documentation comment to detailed description.
    */
   static std::string detailed(const std::string& str);
@@ -53,9 +48,4 @@ private:
    * Quote lines in a string with the given prefix.
    */
   static std::string quote(const std::string& str, const std::string& indent);
-
-  /**
-   * Current section depth.
-   */
-  int depth;
 };

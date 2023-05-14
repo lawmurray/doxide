@@ -127,25 +127,6 @@ void Driver::docs() {
   /* generate */
   Generator generator;
   generator.generate(output, parser.root());
-
-  /* index file */
-  fs::path docs(output);
-  if (fs::exists("README.md")) {
-    copy("README.md", docs / "index.md");
-  } else {
-    std::fstream stream(docs / "index.md", std::ios::out);
-    stream << description << '\n';
-    stream.close();
-  }
-
-  /* other files */
-  fs::create_directories(docs);
-  fs::create_directories(docs / "types");
-  fs::create_directories(docs / "variables");
-  fs::create_directories(docs / "functions");
-  fs::create_directories(docs / "operators");
-  fs::create_directories(docs / "classes");
-  fs::create_directories(docs / "structs");
 }
 
 void Driver::clean() {

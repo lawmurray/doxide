@@ -1,13 +1,8 @@
 #include "doxide/Generator.hpp"
 
-void Generator::generate(const std::filesystem::path& dir, const Node& node) {
-  if (node.type == NodeType::NAMESPACE) {
-    generateNamespace(dir, node);
-  } else if (node.type == NodeType::TYPE) {
-    generateType(dir, node);
-  } else {
-    warn("unrecognized node type, ignoring");
-  }
+void Generator::generate(const std::filesystem::path& dir,
+    const Node& global) {
+  generateNamespace(dir, global);
 }
 
 void Generator::generateNamespace(const std::filesystem::path& dir,
@@ -16,10 +11,10 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
   std::ofstream out(dir / "index.md");
 
   /* namespace page */
-  out << head("Namespace " + node.name) << std::endl;
-  ++depth;
+  out << "# Namespace " + node.name << std::endl;
+  out << std::endl;
   if (node.namespaces.size() > 0) {
-    out << "# Namespaces" << std::endl;
+    out << "## Namespaces" << std::endl;
     out << std::endl;
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
@@ -30,7 +25,8 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
     out << "" << std::endl;
   }
   if (node.types.size() > 0) {
-    line(head("Types"));
+    out << "## Types" << std::endl;
+    out << std::endl;
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : node.types) {
@@ -40,7 +36,8 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
     out << "" << std::endl;
   }
   if (node.variables.size() > 0) {
-    line(head("Variables"));
+    out << "## Variables" << std::endl;
+    out << std::endl;
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : node.types) {
@@ -50,7 +47,8 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
     out << "" << std::endl;
   }
   if (node.operators.size() > 0) {
-    line(head("Operators"));
+    out << "## Operators" << std::endl;
+    out << std::endl;
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : node.operators) {
@@ -60,7 +58,8 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
     out << "" << std::endl;
   }
   if (node.functions.size() > 0) {
-    line(head("Functions"));
+    out << "## Functions" << std::endl;
+    out << std::endl;
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : node.functions) {
@@ -69,7 +68,6 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
     }
     out << std::endl;
   }
-  --depth;
 
   /* child pages */
   for (auto& [name, child] : node.namespaces) {
@@ -81,16 +79,18 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
   for (auto& [name, child] : node.variables) {
     generateVariable(dir / "variables" / name, child);
   }
-  for (auto iter = node.operators.begin(); iter != node.operators.end();
-      ++iter) {
+  for (auto iter = node.operators.begin(); iter != node.operators.end(); ) {
     auto first = iter;
-    iter = node.operators.upper_bound(first->first);
+    do {
+      ++iter;
+    } while (iter != node.functions.end() && iter->first == first->first);
     generateOperator(dir / "operators" / first->first, first, iter);
   }
-  for (auto iter = node.functions.begin(); iter != node.functions.end();
-      ++iter) {
+  for (auto iter = node.functions.begin(); iter != node.functions.end(); ) {
     auto first = iter;
-    iter = node.functions.upper_bound(first->first);
+    do {
+      ++iter;
+    } while (iter != node.functions.end() && iter->first == first->first);
     generateFunction(dir / "functions" / first->first, first, iter);
   }
 }
@@ -117,18 +117,9 @@ void Generator::generateOperator(const std::filesystem::path& dir,
   
 }
 
-std::string Generator::head(const std::string& name) {
-  std::stringstream buf;
-  buf << std::endl;
-  for (int i = 0; i < depth; ++i) {
-    buf << '#';
-  }
-  buf << ' ' << name << std::endl << std::endl;
-  return buf.str();
-}
-
 std::string Generator::detailed(const std::string& str) {
-  static const std::regex newline(" *\n *\\* ?");
+  static const std::regex start("^/\\*\\*\\s*|\\s*\\*\\s*");
+  static const std::regex end("\\s*/$");
   static const std::regex param("@t?param\\s*(\\S+)");
   static const std::regex p("@p *(\\S+)");
   static const std::regex ret("@return");
@@ -136,7 +127,8 @@ std::string Generator::detailed(const std::string& str) {
   static const std::regex admonition("@(attention|bug|example|note|quote|todo|warning)");
 
   std::string r = str;
-  r = std::regex_replace(r, newline, "\n");
+  r = std::regex_replace(r, start, "");
+  r = std::regex_replace(r, end, "");
   r = std::regex_replace(r, param, "  - **$1** ");
   r = std::regex_replace(r, p, "**$1**");
   r = std::regex_replace(r, ret, "**Returns** ");
@@ -158,11 +150,12 @@ std::string Generator::brief(const std::string& str) {
 }
 
 std::string Generator::line(const std::string& str) {
-  return std::regex_replace(detailed(str), std::regex("\\n"), " ");
+  static const std::regex newline("\\n");
+  return std::regex_replace(detailed(str), newline, " ");
 }
 
 std::string Generator::quote(const std::string& str,
     const std::string& indent) {
-  return std::regex_replace(indent + str, std::regex("\\n"),
-      std::string("\n") + indent);
+  static const std::regex start("^");
+  return std::regex_replace(str, start, indent);
 }
