@@ -45,7 +45,8 @@ private:
   static std::string line(const std::string& str);
 
   /**
-   * Quote lines in a string with the given prefix.
+   * Indent the lines of a strong.
    */
-  static std::string quote(const std::string& str, const std::string& indent);
+  static std::string indent(const std::string& str,
+      const std::string& indent = "    ");
 };

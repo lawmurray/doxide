@@ -101,11 +101,93 @@ void Generator::generateType(const std::filesystem::path& dir,
   std::ofstream out(dir / "index.md");
 
   /* type page */
-  out << "# Type " + node.name << std::endl;
+  out << "# " + node.name << std::endl;
   out << std::endl;
-  out << "```cpp" << std::endl;
-  out << node.decl << std::endl;
-  out << "```" << std::endl;
+  out << "**" << line(node.decl) << "**" << std::endl;
+  out << std::endl;
+  out << detailed(node.docs) << std::endl;
+  out << std::endl;
+
+  /* brief descriptions */
+  if (node.variables.size() > 0) {
+    out << "## Member Variables" << std::endl;
+    out << std::endl;
+    out << "| Name | Description |" << std::endl;
+    out << "| ---- | ----------- |" << std::endl;
+    for (auto& [name, child] : node.variables) {
+      out << "| [" << name << "](#" << name << ") | ";
+      out << line(child.docs) << " |" << std::endl;
+    }
+    out << std::endl;
+  }
+  if (node.operators.size() > 0) {
+    out << "## Member Operators" << std::endl;
+    out << std::endl;
+    out << "| Name | Description |" << std::endl;
+    out << "| ---- | ----------- |" << std::endl;
+    for (auto& [name, child] : node.operators) {
+      out << "| [" << name << "](#" << name << ") | ";
+      out << brief(child.docs) << " |" << std::endl;
+    }
+    out << std::endl;
+  }
+  if (node.functions.size() > 0) {
+    out << "## Member Functions" << std::endl;
+    out << std::endl;
+    out << "| Name | Description |" << std::endl;
+    out << "| ---- | ----------- |" << std::endl;
+    for (auto& [name, child] : node.functions) {
+      out << "| [" << name << "](#" << name << ") | ";
+      out << brief(child.docs) << " |" << std::endl;
+    }
+    out << std::endl;
+  }
+
+  /* detailed descriptions */
+  if (node.variables.size() > 0) {
+    out << "## Member Variable Details" << std::endl;
+    out << std::endl;
+    for (auto& [name, child] : node.variables) {
+      out << "### " << name << std::endl;
+      out << std::endl;
+      out << "!!! abstract \"" << line(child.decl) << '"' << std::endl;
+      out << std::endl;
+      out << indent(detailed(child.docs)) << std::endl;
+      out << std::endl;
+    }
+  }
+  if (node.operators.size() > 0) {
+    out << "## Member Operator Details" << std::endl;
+    out << std::endl;
+    std::string prev;
+    for (auto& [name, child] : node.operators) {
+      if (name != prev) {
+        /* heading only for the first overload of this name */
+        out << "### " << name << std::endl;
+        out << std::endl;
+      }
+      out << "!!! abstract \"" << line(child.decl) << '"' << std::endl;
+      out << std::endl;
+      out << indent(detailed(child.docs)) << std::endl;
+      out << std::endl;
+    }
+  }
+  if (node.functions.size() > 0) {
+    out << "## Member Function Details" << std::endl;
+    out << std::endl;
+    std::string prev;
+    for (auto& [name, child] : node.functions) {
+      if (name != prev) {
+        /* heading only for the first overload of this name */
+        out << "### " << name << std::endl;
+        out << std::endl;
+      }
+      out << "!!! abstract \"" << line(child.decl) << '"' << std::endl;
+      out << std::endl;
+      out << indent(detailed(child.docs)) << std::endl;
+      out << std::endl;
+    }
+  }
 }
 
 void Generator::generateVariable(const std::filesystem::path& dir,
@@ -126,16 +208,18 @@ void Generator::generateOperator(const std::filesystem::path& dir,
 }
 
 std::string Generator::detailed(const std::string& str) {
-  static const std::regex start("^/\\*\\*\\s*|\\s*\\*\\s*");
+  static const std::regex start("^/\\*\\*\\s*");
+  static const std::regex line("(^|\\n)[ \t]*\\*[ \t]*");
   static const std::regex end("\\s*/$");
-  static const std::regex param("@t?param\\s*(\\S+)");
-  static const std::regex p("@p *(\\S+)");
+  static const std::regex param("@t?param[ \t]+(\\S+)");
+  static const std::regex p("@p[ \t]+(\\S+)");
   static const std::regex ret("@return");
   static const std::regex see("@see");
   static const std::regex admonition("@(attention|bug|example|note|quote|todo|warning)");
 
   std::string r = str;
   r = std::regex_replace(r, start, "");
+  r = std::regex_replace(r, line, "$1");
   r = std::regex_replace(r, end, "");
   r = std::regex_replace(r, param, "  - **$1** ");
   r = std::regex_replace(r, p, "**$1**");
@@ -158,12 +242,12 @@ std::string Generator::brief(const std::string& str) {
 }
 
 std::string Generator::line(const std::string& str) {
-  static const std::regex newline("\\n");
+  static const std::regex newline("\\s*\\n\\s*");
   return std::regex_replace(detailed(str), newline, " ");
 }
 
-std::string Generator::quote(const std::string& str,
+std::string Generator::indent(const std::string& str,
     const std::string& indent) {
-  static const std::regex start("^");
-  return std::regex_replace(str, start, indent);
+  static const std::regex start("\\n");
+  return "    " + std::regex_replace(str, start, "\n    ");
 }

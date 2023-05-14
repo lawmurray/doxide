@@ -142,7 +142,7 @@ Node Parser::parseDocs(const Token& first) {
           node.name = last.str();
         }
         last = consume(~(BRACE|SEMICOLON));
-        node.decl = std::string_view(first.first, last.first);
+        node.decl = std::string_view(token.first, last.first);
 
         /* members */
         if (last.type & BRACE) {
