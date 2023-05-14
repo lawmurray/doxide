@@ -124,6 +124,14 @@ void Driver::docs() {
     parser.parse(file);
   }
 
+  /* if a readme file exists, make it the front page; global entities are
+   * appended to the page */
+  if (fs::exists("README.md")) {
+    fs::create_directories(output);
+    fs::copy_file("README.md", fs::path(output) / "index.md",
+        fs::copy_options::overwrite_existing);
+  }
+
   /* generate */
   Generator generator;
   generator.generate(output, parser.root());
