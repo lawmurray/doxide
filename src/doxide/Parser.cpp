@@ -5,6 +5,10 @@ void Parser::parse(const std::string& file) {
   parseGlobal();
 }
 
+const Node& Parser::root() const {
+  return global;
+}
+
 void Parser::parseGlobal() {
   Node child;
   Token token;

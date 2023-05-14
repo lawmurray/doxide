@@ -11,6 +11,11 @@ public:
    */
   void parse(const std::string& file);
 
+  /**
+   * Get the root node.
+   */
+  const Node& root() const;
+
 private:
   /**
    * Consume tokens until stopping criterion.

@@ -118,11 +118,15 @@ void Driver::init() {
 void Driver::docs() {
   config();
 
-  /* parse documentation */
+  /* parse */
   Parser parser;
   for (auto file: files) {
     parser.parse(file);
   }
+
+  /* generate */
+  Generator generator;
+  generator.generate(output, parser.root());
 
   /* index file */
   fs::path docs(output);

@@ -17,7 +17,8 @@ enum class NodeType {
  * Token.
  */
 struct Node {
-  using map_type = std::multimap<std::string,Node>;
+  using map_type = std::map<std::string,Node>;
+  using multimap_type = std::multimap<std::string,Node>;
 
   /**
    * Add a child node.
@@ -62,10 +63,10 @@ struct Node {
   /**
    * Child functions.
    */
-  map_type functions;
+  multimap_type functions;
 
   /**
    * Child operators.
    */
-  map_type operators;
+  multimap_type operators;
 };
