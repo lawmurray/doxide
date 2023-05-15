@@ -285,8 +285,7 @@ std::string Generator::line(const std::string& str) {
   return std::regex_replace(detailed(str), newline, " ");
 }
 
-std::string Generator::indent(const std::string& str,
-    const std::string& indent) {
+std::string Generator::indent(const std::string& str) {
   static const std::regex start("\\n");
   return "    " + std::regex_replace(str, start, "\n    ");
 }

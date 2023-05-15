@@ -47,6 +47,5 @@ private:
   /**
    * Indent the lines of a strong.
    */
-  static std::string indent(const std::string& str,
-      const std::string& indent = "    ");
+  static std::string indent(const std::string& str);
 };
