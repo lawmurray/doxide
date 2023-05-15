@@ -175,6 +175,7 @@ void Generator::generateType(const std::filesystem::path& dir,
       out << std::endl;
       out << indent(detailed(child.docs)) << std::endl;
       out << std::endl;
+      prev = name;
     }
   }
   if (node.functions.size() > 0) {
@@ -191,6 +192,7 @@ void Generator::generateType(const std::filesystem::path& dir,
       out << std::endl;
       out << indent(detailed(child.docs)) << std::endl;
       out << std::endl;
+      prev = name;
     }
   }
 }
