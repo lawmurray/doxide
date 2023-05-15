@@ -121,7 +121,7 @@ void Generator::generateType(const std::filesystem::path& dir,
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : node.variables) {
       out << "| [" << name << "](#" << name << ") | ";
-      out << line(child.docs) << " |" << std::endl;
+      out << brief(child.docs) << " |" << std::endl;
     }
     out << std::endl;
   }
