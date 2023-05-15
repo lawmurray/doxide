@@ -155,7 +155,7 @@ void Generator::generateType(const std::filesystem::path& dir,
     for (auto& [name, child] : node.variables) {
       out << "### " << name << std::endl;
       out << std::endl;
-      out << "!!! abstract \"" << line(child.decl) << '"' << std::endl;
+      out << "!!! abstract \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
       out << indent(detailed(child.docs)) << std::endl;
       out << std::endl;
@@ -171,7 +171,7 @@ void Generator::generateType(const std::filesystem::path& dir,
         out << "### " << name << std::endl;
         out << std::endl;
       }
-      out << "!!! abstract \"" << line(child.decl) << '"' << std::endl;
+      out << "!!! abstract \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
       out << indent(detailed(child.docs)) << std::endl;
       out << std::endl;
@@ -188,7 +188,7 @@ void Generator::generateType(const std::filesystem::path& dir,
         out << "### " << name << std::endl;
         out << std::endl;
       }
-      out << "!!! abstract \"" << line(child.decl) << '"' << std::endl;
+      out << "!!! abstract \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
       out << indent(detailed(child.docs)) << std::endl;
       out << std::endl;
@@ -204,7 +204,7 @@ void Generator::generateVariable(const std::filesystem::path& dir,
 
   out << "# " << node.name << std::endl;
   out << std::endl;
-  out << "!!! abstract \"" << line(node.decl) << '"' << std::endl;
+  out << "!!! abstract \"" << htmlize(line(node.decl)) << '"' << std::endl;
   out << std::endl;
   out << indent(detailed(node.docs)) << std::endl;
   out << std::endl;
@@ -221,7 +221,7 @@ void Generator::generateFunction(const std::filesystem::path& dir,
   out << std::endl;
   for (auto iter = first; iter != last; ++iter) {
     auto& node = iter->second;
-    out << "!!! abstract \"" << line(node.decl) << '"' << std::endl;
+    out << "!!! abstract \"" << htmlize(line(node.decl)) << '"' << std::endl;
     out << std::endl;
     out << indent(detailed(node.docs)) << std::endl;
     out << std::endl;
@@ -239,7 +239,7 @@ void Generator::generateOperator(const std::filesystem::path& dir,
   out << std::endl;
   for (auto iter = first; iter != last; ++iter) {
     auto& node = iter->second;
-    out << "!!! abstract \"" << line(node.decl) << '"' << std::endl;
+    out << "!!! abstract \"" << htmlize(line(node.decl)) << '"' << std::endl;
     out << std::endl;
     out << indent(detailed(node.docs)) << std::endl;
     out << std::endl;
@@ -254,7 +254,7 @@ std::string Generator::detailed(const std::string& str) {
   static const std::regex p("@p[ \t]+(\\S+)");
   static const std::regex ret("@return");
   static const std::regex see("@see");
-  static const std::regex admonition("@(attention|bug|example|note|quote|todo|warning)");
+  static const std::regex admonition("@(attention|bug|example|note|todo|warning)\\s+(.+)");
 
   std::string r = str;
   r = std::regex_replace(r, start, "");
@@ -264,7 +264,7 @@ std::string Generator::detailed(const std::string& str) {
   r = std::regex_replace(r, p, "**$1**");
   r = std::regex_replace(r, ret, "**Returns** ");
   r = std::regex_replace(r, see, "**See also** ");
-  r = std::regex_replace(r, admonition, "!!! $1");
+  r = std::regex_replace(r, admonition, "!!! $1\n$2");
   return r;
 }
 
@@ -288,4 +288,20 @@ std::string Generator::line(const std::string& str) {
 std::string Generator::indent(const std::string& str) {
   static const std::regex start("\\n");
   return "    " + std::regex_replace(str, start, "\n    ");
+}
+
+std::string Generator::htmlize(const std::string& str) {
+  static const std::regex amp("&");
+  static const std::regex lt("<");
+  static const std::regex gt(">");
+  static const std::regex quot("\"");
+  static const std::regex apos("'");
+
+  std::string r = str;
+  r = std::regex_replace(r, amp, "&amp;");  // must go first or new & replaced
+  r = std::regex_replace(r, lt, "&lt;");
+  r = std::regex_replace(r, gt, "&gt;");
+  r = std::regex_replace(r, quot, "&quot;");
+  r = std::regex_replace(r, apos, "&apos;");
+  return r;
 }

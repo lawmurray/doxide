@@ -48,4 +48,9 @@ private:
    * Indent the lines of a strong.
    */
   static std::string indent(const std::string& str);
+
+  /**
+   * Escape a string for HTML, replacing special characters with entities.
+   */
+  static std::string htmlize(const std::string& str);
 };
