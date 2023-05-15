@@ -12,7 +12,7 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
   if (node.name.empty()) {
     out.open(dir / "index.md", std::ios::app);
   } else {
-    out.open(dir / (node.name + ".md"));
+    out.open(dir / node.name / "index.md");
     out << "# Namespace " << node.name << std::endl;
   }
 
@@ -79,24 +79,24 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
     generateNamespace(dir, child);
   }
   for (auto& [name, child] : node.types) {
-    generateType(dir / "types", child);
+    generateType(dir / node.name / "types", child);
   }
   for (auto& [name, child] : node.variables) {
-    generateVariable(dir / "variables", child);
+    generateVariable(dir / node.name / "variables", child);
   }
   for (auto iter = node.operators.begin(); iter != node.operators.end(); ) {
     auto first = iter;
     do {
       ++iter;
     } while (iter != node.operators.end() && iter->first == first->first);
-    generateOperator(dir / "operators", first, iter);
+    generateOperator(dir / node.name / "operators", first, iter);
   }
   for (auto iter = node.functions.begin(); iter != node.functions.end(); ) {
     auto first = iter;
     do {
       ++iter;
     } while (iter != node.functions.end() && iter->first == first->first);
-    generateFunction(dir / "functions", first, iter);
+    generateFunction(dir / node.name / "functions", first, iter);
   }
 }
 
