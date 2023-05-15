@@ -26,6 +26,11 @@ struct Node {
   void add(const Node& node);
 
   /**
+   * Merge another namespace node.
+   */
+  void merge(const Node& node);
+
+  /**
    * Node type.
    */
   NodeType type;
