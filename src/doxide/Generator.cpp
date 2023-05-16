@@ -12,7 +12,7 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
   if (node.name.empty()) {
     out.open(dir / "index.md", std::ios::app);
   } else {
-    out.open(dir / node.name / "index.md");
+    out.open(dir / sanitize(node.name) / "index.md");
     out << "# Namespace " << node.name << std::endl;
   }
 
@@ -24,7 +24,7 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : node.namespaces) {
-      out << "| [" << name << "](" << name << "/) | ";
+      out << "| [" << name << "](" << sanitize(name) << "/) | ";
       out << brief(child.docs) << " |" << std::endl;
     }
     out << "" << std::endl;
@@ -35,7 +35,7 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : node.types) {
-      out << "| [" << name << "](types/" << name << "/) | ";
+      out << "| [" << name << "](types/" << sanitize(name) << "/) | ";
       out << brief(child.docs) << " |" << std::endl;
     }
     out << "" << std::endl;
@@ -46,7 +46,7 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : node.variables) {
-      out << "| [" << name << "](variables/" << name << "/) | ";
+      out << "| [" << name << "](variables/" << sanitize(name) << "/) | ";
       out << brief(child.docs) << " |" << std::endl;
     }
     out << "" << std::endl;
@@ -57,7 +57,7 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : node.operators) {
-      out << "| [" << name << "](operators/" << name << "/) | ";
+      out << "| [" << name << "](operators/" << sanitize(name) << "/) | ";
       out << brief(child.docs) << " |" << std::endl;
     }
     out << "" << std::endl;
@@ -68,7 +68,7 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : node.functions) {
-      out << "| [" << name << "](functions/" << name << "/) | ";
+      out << "| [" << name << "](functions/" << sanitize(name) << "/) | ";
       out << brief(child.docs) << " |" << std::endl;
     }
     out << std::endl;
@@ -76,34 +76,34 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
 
   /* child pages */
   for (auto& [name, child] : node.namespaces) {
-    generateNamespace(dir, child);
+    generateNamespace(dir / sanitize(node.name), child);
   }
   for (auto& [name, child] : node.types) {
-    generateType(dir / node.name / "types", child);
+    generateType(dir / sanitize(node.name) / "types", child);
   }
   for (auto& [name, child] : node.variables) {
-    generateVariable(dir / node.name / "variables", child);
+    generateVariable(dir / sanitize(node.name) / "variables", child);
   }
   for (auto iter = node.operators.begin(); iter != node.operators.end(); ) {
     auto first = iter;
     do {
       ++iter;
     } while (iter != node.operators.end() && iter->first == first->first);
-    generateOperator(dir / node.name / "operators", first, iter);
+    generateOperator(dir / sanitize(node.name) / "operators", first, iter);
   }
   for (auto iter = node.functions.begin(); iter != node.functions.end(); ) {
     auto first = iter;
     do {
       ++iter;
     } while (iter != node.functions.end() && iter->first == first->first);
-    generateFunction(dir / node.name / "functions", first, iter);
+    generateFunction(dir / sanitize(node.name) / "functions", first, iter);
   }
 }
 
 void Generator::generateType(const std::filesystem::path& dir,
     const Node& node) {
   std::filesystem::create_directories(dir);
-  std::ofstream out(dir / (node.name + ".md"));
+  std::ofstream out(dir / (sanitize(node.name) + ".md"));
 
   /* type page */
   out << "# " + node.name << std::endl;
@@ -120,7 +120,7 @@ void Generator::generateType(const std::filesystem::path& dir,
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : node.variables) {
-      out << "| [" << name << "](#" << name << ") | ";
+      out << "| [" << name << "](#" << sanitize(name) << ") | ";
       out << brief(child.docs) << " |" << std::endl;
     }
     out << std::endl;
@@ -131,7 +131,7 @@ void Generator::generateType(const std::filesystem::path& dir,
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : node.operators) {
-      out << "| [" << name << "](#" << name << ") | ";
+      out << "| [" << name << "](#" << sanitize(name) << ") | ";
       out << brief(child.docs) << " |" << std::endl;
     }
     out << std::endl;
@@ -142,7 +142,7 @@ void Generator::generateType(const std::filesystem::path& dir,
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : node.functions) {
-      out << "| [" << name << "](#" << name << ") | ";
+      out << "| [" << name << "](#" << sanitize(name) << ") | ";
       out << brief(child.docs) << " |" << std::endl;
     }
     out << std::endl;
@@ -153,7 +153,8 @@ void Generator::generateType(const std::filesystem::path& dir,
     out << "## Member Variable Details" << std::endl;
     out << std::endl;
     for (auto& [name, child] : node.variables) {
-      out << "### " << name << std::endl;
+      out << "### " << name;
+      out << "<a name=\"" << sanitize(name) << "\"></a>" << std::endl;
       out << std::endl;
       out << "!!! abstract \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
@@ -168,7 +169,8 @@ void Generator::generateType(const std::filesystem::path& dir,
     for (auto& [name, child] : node.operators) {
       if (name != prev) {
         /* heading only for the first overload of this name */
-        out << "### " << name << std::endl;
+        out << "### " << name;
+        out << "<a name=\"" << sanitize(name) << "\"></a>" << std::endl;
         out << std::endl;
       }
       out << "!!! abstract \"" << htmlize(line(child.decl)) << '"' << std::endl;
@@ -185,8 +187,8 @@ void Generator::generateType(const std::filesystem::path& dir,
     for (auto& [name, child] : node.functions) {
       if (name != prev) {
         /* heading only for the first overload of this name */
-        out << "### " << name << std::endl;
-        out << std::endl;
+        out << "### " << name;
+        out << "<a name=\"" << sanitize(name) << "\"></a>" << std::endl;
       }
       out << "!!! abstract \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
@@ -200,7 +202,7 @@ void Generator::generateType(const std::filesystem::path& dir,
 void Generator::generateVariable(const std::filesystem::path& dir,
     const Node& node) {
   std::filesystem::create_directories(dir);
-  std::ofstream out(dir / (node.name + ".md"));
+  std::ofstream out(dir / (sanitize(node.name) + ".md"));
 
   out << "# " << node.name << std::endl;
   out << std::endl;
@@ -215,7 +217,7 @@ void Generator::generateFunction(const std::filesystem::path& dir,
     const Iterator& first, const Iterator& last) {
   auto& node = first->second;
   std::filesystem::create_directories(dir);
-  std::ofstream out(dir / (node.name + ".md"));
+  std::ofstream out(dir / (sanitize(node.name) + ".md"));
 
   out << "# " << node.name << std::endl;
   out << std::endl;
@@ -233,7 +235,7 @@ void Generator::generateOperator(const std::filesystem::path& dir,
     const Iterator& first, const Iterator& last) {
   auto& node = first->second;
   std::filesystem::create_directories(dir);
-  std::ofstream out(dir / (node.name + ".md"));
+  std::ofstream out(dir / (sanitize(node.name) + ".md"));
 
   out << "# " << node.name << std::endl;
   out << std::endl;
@@ -304,4 +306,18 @@ std::string Generator::htmlize(const std::string& str) {
   r = std::regex_replace(r, quot, "&quot;");
   r = std::regex_replace(r, apos, "&apos;");
   return r;
+}
+
+std::string Generator::sanitize(const std::string& str) {
+  static const std::regex word("\\w");
+
+  std::stringstream buf;
+  for (auto iter = str.begin(); iter != str.end(); ++iter) {
+    if (std::regex_match(iter, iter + 1, word)) {
+      buf << *iter;
+    } else {
+      buf << "_u" << std::setfill('0') << std::setw(4) << std::hex << int(*iter);
+    }
+  }
+  return buf.str();
 }

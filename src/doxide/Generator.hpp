@@ -50,7 +50,12 @@ private:
   static std::string indent(const std::string& str);
 
   /**
-   * Escape a string for HTML, replacing special characters with entities.
+   * Sanitize a string for HTML, replacing special characters with entities.
    */
   static std::string htmlize(const std::string& str);
+
+  /**
+   * Sanitize a string for a file name or internal anchor.
+   */
+  static std::string sanitize(const std::string& str);
 };
