@@ -126,14 +126,9 @@ Node Parser::parseDocs(const Token& first) {
   } else if (scan.type & OPERATOR) {
     /* operator */
     node.type = NodeType::OPERATOR;
-
-    /* name */
-    Token name = scan;
-    scan = consume(PAREN);
-    node.name = std::string_view(name.first, scan.first);
+    node.name = scan.str();
 
     /* signature */
-    scan = consume(PAREN_CLOSE);
     scan = consume(SEMICOLON|BRACE);
     node.decl = std::string_view(from.first, scan.first);
 

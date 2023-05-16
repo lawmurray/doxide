@@ -56,7 +56,7 @@ static auto regexes = {
   std::make_pair(TokenType::USING_NAMESPACE, std::regex("\\busing\\s+namespace\\b")),
   std::make_pair(TokenType::TYPE, std::regex("\\b(?:class|struct|enum|typedef)\\b")),
   std::make_pair(TokenType::FRIEND_TYPE, std::regex("\\bfriend\\s+(?:class|struct)\\b")),
-  std::make_pair(TokenType::OPERATOR, std::regex("\\boperator\\b")),
+  std::make_pair(TokenType::OPERATOR, std::regex("\\boperator(?:\\+|-|\\*|/|%|^|&|\\||~|!|=|<|>|\\+=|-=|\\*=|/=|%=|^=|&=|\\|=|<<|>>|>>=|<<=|==|!=|<=|>=|<=>|&&|\\|\\||\\+\\+|--|,|->\\*|->|\\(\\)|\\[\\])")),
   std::make_pair(TokenType::COLON, std::regex(":")),
   std::make_pair(TokenType::SEMICOLON, std::regex(";")),
   std::make_pair(TokenType::EQUALS, std::regex("=")),
