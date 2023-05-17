@@ -192,8 +192,7 @@ Node Parser::interpret() {
   int indent = 0;
   while (token.type && !(token.type & DOC_CLOSE)) {
     if (token.type & DOC_COMMAND) {
-      if (token.substr(1) == "param" || token.substr(1) == "param[in]" ||
-          token.substr(1) == "tparam") {
+      if (token.substr(1) == "param" || token.substr(1) == "param[in]") {
         auto name = consumeWord();
         node.docs.append(":material-location-enter: **Parameter** `");
         node.docs.append(name.str());
@@ -206,6 +205,11 @@ Node Parser::interpret() {
       } else if (token.substr(1) == "param[in,out]") {
         auto name = consumeWord();
         node.docs.append(":material-location-enter::material-location-exit: **Parameter** `");
+        node.docs.append(name.str());
+        node.docs.append("`\n:   ");
+      } else if (token.substr(1) == "tparam") {
+        auto name = consumeWord();
+        node.docs.append(":material-code-tags: **Template parameter** `");
         node.docs.append(name.str());
         node.docs.append("`\n:   ");
       } else if (token.substr(1) == "p") {
@@ -225,6 +229,8 @@ Node Parser::interpret() {
         warn("unrecognized command: " << token.str());
         node.docs.append(token.str());
       }
+    } else if (token.type & DOC_ESCAPE) {
+      node.docs.append(token.substr(1));
     } else if (token.type & DOC_PARA) {
       node.docs.append("\n\n");
       indent = std::max(indent - 4, 0);
