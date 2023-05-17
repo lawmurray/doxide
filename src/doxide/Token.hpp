@@ -65,9 +65,9 @@ static auto regexes = {
   std::make_pair(SENTENCE, std::regex("[.!?]")),
   std::make_pair(EQUALS, std::regex("=")),
   std::make_pair(TILDE, std::regex("~")),
-  std::make_pair(PUNCT, std::regex("[,&|\\-+*/%^@#']")),
+  std::make_pair(PUNCT, std::regex("[,&|\\-+*/%^@#'`]")),
   std::make_pair(WHITESPACE, std::regex("\\s+")),
-  std::make_pair(WORD, std::regex("[^{}\\[\\]()<>'\":;=,.?!~&|\\-+*/%^:@#\\n \\t\\v\\f\\r]+"))
+  std::make_pair(WORD, std::regex("[^{}\\[\\]()<>'`\":;=,.?!~&|\\-+*/%^:@#\\n \\t\\v\\f\\r]+"))
 };
 
 /**
