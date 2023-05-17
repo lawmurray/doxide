@@ -189,6 +189,7 @@ std::pair<Token,Token> Parser::consumeSentence() {
 Node Parser::interpret() {
   Node node;
   Token token = tokenizer.next();
+  int indent = 0;
   while (token.type && !(token.type & DOC_CLOSE)) {
     if (token.type & DOC_COMMAND) {
       if (token.substr(1) == "param" || token.substr(1) == "tparam") {
@@ -205,12 +206,20 @@ Node Parser::interpret() {
         node.docs.append("**Returns** ");
       } else if (token.substr(1) == "see") {
         node.docs.append("**See also** ");
+      } else if (token.substr(1) == "attention") {
+        node.docs.append("!!! warning\n");
+        indent += 4;
+        node.docs.append(indent, ' ');
       } else {
         warn("unrecognized command" << token.str());
         node.docs.append(token.str());
       }
+    } else if (token.type & DOC_PARA) {
+      node.docs.append("\n\n");
+      indent = std::max(indent - 4, 0);
     } else if (token.type & DOC_LINE) {
       node.docs.append("\n");
+      node.docs.append(indent, ' ');
     } else {
       node.docs.append(token.str());
     }
