@@ -218,9 +218,15 @@ Node Parser::interpret() {
         node.docs.append(name.str());
         node.docs.append("`");
       } else if (token.substr(1) == "return") {
-        node.docs.append(":material-location-exit: **Returns**\n:   ");
+        node.docs.append(":material-location-exit: **Return**\n:   ");
+      } else if (token.substr(1) == "pre") {
+        node.docs.append(":material-check-circle-outline: **Pre-condition**\n:   ");
+      } else if (token.substr(1) == "post") {
+        node.docs.append(":material-check-circle-outline: **Post-condition**\n:   ");
+      } else if (token.substr(1) == "throw") {
+        node.docs.append(":material-alert-circle-outline: **Throw**\n:   ");
       } else if (token.substr(1) == "see") {
-        node.docs.append(":material-eye: **See also**\n:   ");
+        node.docs.append(":material-eye-outline: **See**\n:   ");
       } else if (token.substr(1) == "attention") {
         node.docs.append("!!! warning \"Attention\"\n");
         indent += 4;
