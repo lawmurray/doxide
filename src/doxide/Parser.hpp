@@ -33,6 +33,27 @@ private:
    */
   Token consume(const uint64_t stop = ANY);
 
+  /**
+   * Consume leading whitespace, then a word, and return it.
+   */
+  Token consumeWord();
+
+  /**
+   * Consume leading whitespace, then a sentence, and return it as a range
+   * of tokens.
+   */
+  std::pair<Token,Token> consumeSentence();
+
+  /**
+   * Interpret a documentation comment.
+   * 
+   * @return Node initialized from the documentation comment.
+   * 
+   * This initialises member variables of the node using structural commands,
+   * while also translating formatting commands to Markdown.
+   */
+  Node interpret();
+
   void parseGlobal();
   Node parseNamespace(const Token& first);
   Node parseDocs(const Token& first);

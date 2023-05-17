@@ -110,7 +110,7 @@ void Generator::generateType(const std::filesystem::path& dir,
   out << std::endl;
   out << "**" << line(node.decl) << "**" << std::endl;
   out << std::endl;
-  out << detailed(node.docs) << std::endl;
+  out << node.docs << std::endl;
   out << std::endl;
 
   /* brief descriptions */
@@ -158,7 +158,7 @@ void Generator::generateType(const std::filesystem::path& dir,
       out << std::endl;
       out << "!!! abstract \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
-      out << indent(detailed(child.docs)) << std::endl;
+      out << indent(child.docs) << std::endl;
       out << std::endl;
     }
   }
@@ -175,7 +175,7 @@ void Generator::generateType(const std::filesystem::path& dir,
       }
       out << "!!! abstract \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
-      out << indent(detailed(child.docs)) << std::endl;
+      out << indent(child.docs) << std::endl;
       out << std::endl;
       prev = name;
     }
@@ -192,7 +192,7 @@ void Generator::generateType(const std::filesystem::path& dir,
       }
       out << "!!! abstract \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
-      out << indent(detailed(child.docs)) << std::endl;
+      out << indent(child.docs) << std::endl;
       out << std::endl;
       prev = name;
     }
@@ -208,7 +208,7 @@ void Generator::generateVariable(const std::filesystem::path& dir,
   out << std::endl;
   out << "!!! abstract \"" << htmlize(line(node.decl)) << '"' << std::endl;
   out << std::endl;
-  out << indent(detailed(node.docs)) << std::endl;
+  out << indent(node.docs) << std::endl;
   out << std::endl;
 }
 
@@ -225,7 +225,7 @@ void Generator::generateFunction(const std::filesystem::path& dir,
     auto& node = iter->second;
     out << "!!! abstract \"" << htmlize(line(node.decl)) << '"' << std::endl;
     out << std::endl;
-    out << indent(detailed(node.docs)) << std::endl;
+    out << indent(node.docs) << std::endl;
     out << std::endl;
   }
 }
@@ -243,31 +243,9 @@ void Generator::generateOperator(const std::filesystem::path& dir,
     auto& node = iter->second;
     out << "!!! abstract \"" << htmlize(line(node.decl)) << '"' << std::endl;
     out << std::endl;
-    out << indent(detailed(node.docs)) << std::endl;
+    out << indent(node.docs) << std::endl;
     out << std::endl;
   }
-}
-
-std::string Generator::detailed(const std::string& str) {
-  static const std::regex start("^/\\*\\*\\s*");
-  static const std::regex line("(^|\\n)[ \t]*\\*[ \t]*");
-  static const std::regex end("\\s*/$");
-  static const std::regex param("@t?param[ \t]+(\\S+)");
-  static const std::regex p("@p[ \t]+(\\S+)");
-  static const std::regex ret("@return");
-  static const std::regex see("@see");
-  static const std::regex admonition("@(attention|bug|example|note|todo|warning)\\s+(.+)");
-
-  std::string r = str;
-  r = std::regex_replace(r, start, "");
-  r = std::regex_replace(r, line, "$1");
-  r = std::regex_replace(r, end, "");
-  r = std::regex_replace(r, param, "  - **$1** ");
-  r = std::regex_replace(r, p, "**$1**");
-  r = std::regex_replace(r, ret, "**Returns** ");
-  r = std::regex_replace(r, see, "**See also** ");
-  r = std::regex_replace(r, admonition, "!!! $1\n$2");
-  return r;
 }
 
 std::string Generator::brief(const std::string& str) {
@@ -284,7 +262,7 @@ std::string Generator::brief(const std::string& str) {
 
 std::string Generator::line(const std::string& str) {
   static const std::regex newline("\\s*\\n\\s*");
-  return std::regex_replace(detailed(str), newline, " ");
+  return std::regex_replace(str, newline, " ");
 }
 
 std::string Generator::indent(const std::string& str) {

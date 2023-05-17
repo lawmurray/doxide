@@ -50,7 +50,7 @@ Node Parser::parseDocs(const Token& first) {
   static const auto useful =
       NAMESPACE|TYPE|TILDE|EQUALS|BRACE|SEMICOLON|PAREN|OPERATOR;
 
-  Node node;
+  Node node = interpret();
   Token from = consume(~WHITESPACE);
   Token scan = from.type & useful ? from : consume(useful);
 
@@ -138,7 +138,6 @@ Node Parser::parseDocs(const Token& first) {
     }
   }
 
-  node.docs = first.str();
   return node;
 }
 
@@ -165,4 +164,57 @@ Token Parser::consume(const uint64_t stop) {
     }
   }
   return token;
+}
+
+Token Parser::consumeWord() {
+  Token token;
+  do {
+    token = tokenizer.next();
+  } while (token.type && (token.type & WHITESPACE));
+  return token;
+}
+
+std::pair<Token,Token> Parser::consumeSentence() {
+  Token first = tokenizer.next();
+  while (first.type && (first.type & WHITESPACE)) {
+    first = tokenizer.next();
+  }
+  Token last = first;
+  while (last.type && !(last.type & (SENTENCE|DOC_CLOSE))) {
+    last = tokenizer.next();
+  } 
+  return {first, last};
+}
+
+Node Parser::interpret() {
+  Node node;
+  Token token = tokenizer.next();
+  while (token.type && !(token.type & DOC_CLOSE)) {
+    if (token.type & DOC_COMMAND) {
+      if (token.substr(1) == "param" || token.substr(1) == "tparam") {
+        auto name = consumeWord();
+        node.docs.append("  - **");
+        node.docs.append(name.str());
+        node.docs.append("**");
+      } else if (token.substr(1) == "p") {
+        auto name = consumeWord();
+        node.docs.append("**");
+        node.docs.append(name.str());
+        node.docs.append("**");
+      } else if (token.substr(1) == "return") {
+        node.docs.append("**Returns** ");
+      } else if (token.substr(1) == "see") {
+        node.docs.append("**See also** ");
+      } else {
+        warn("unrecognized command" << token.str());
+        node.docs.append(token.str());
+      }
+    } else if (token.type & DOC_LINE) {
+      node.docs.append("\n");
+    } else {
+      node.docs.append(token.str());
+    }
+    token = tokenizer.next();
+  }
+  return node;
 }
