@@ -227,8 +227,32 @@ Node Parser::interpret() {
         node.docs.append(":material-alert-circle-outline: **Throw**\n:   ");
       } else if (token.substr(1) == "see") {
         node.docs.append(":material-eye-outline: **See**\n:   ");
+      } else if (token.substr(1) == "note" ||
+          token.substr(1) == "abstract" ||
+          token.substr(1) == "info" ||
+          token.substr(1) == "tip" ||
+          token.substr(1) == "success" ||
+          token.substr(1) == "question" ||
+          token.substr(1) == "warning" ||
+          token.substr(1) == "failure" ||
+          token.substr(1) == "danger" ||
+          token.substr(1) == "bug" ||
+          token.substr(1) == "example" ||
+          token.substr(1) == "quote") {
+        node.docs.append("!!! ");
+        node.docs.append(token.substr(1));
+        indent += 4;
+        node.docs.append(indent, ' ');
       } else if (token.substr(1) == "attention") {
         node.docs.append("!!! warning \"Attention\"\n");
+        indent += 4;
+        node.docs.append(indent, ' ');
+      } else if (token.substr(1) == "todo") {
+        node.docs.append("!!! example \"To-do\"\n");
+        indent += 4;
+        node.docs.append(indent, ' ');
+      } else if (token.substr(1) == "remark") {
+        node.docs.append("!!! quote \"Remark\"\n");
         indent += 4;
         node.docs.append(indent, ' ');
       } else {
