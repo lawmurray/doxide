@@ -30,6 +30,8 @@ private:
    * Tokens are consumed until one is encountered with a type in @p stop,
    * which is then returned. If @p stop is `ANY` then the next token is
    * returned.
+   * 
+   * @see interpret()
    */
   Token consume(const uint64_t stop = ANY);
 

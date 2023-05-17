@@ -153,10 +153,10 @@ void Generator::generateType(const std::filesystem::path& dir,
     out << "## Member Variable Details" << std::endl;
     out << std::endl;
     for (auto& [name, child] : node.variables) {
-      out << "### " << name;
+      //out << "### " << name;
       out << "<a name=\"" << sanitize(name) << "\"></a>" << std::endl;
       out << std::endl;
-      out << "!!! abstract \"" << htmlize(line(child.decl)) << '"' << std::endl;
+      out << "!!! info \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
       out << indent(child.docs) << std::endl;
       out << std::endl;
@@ -169,11 +169,11 @@ void Generator::generateType(const std::filesystem::path& dir,
     for (auto& [name, child] : node.operators) {
       if (name != prev) {
         /* heading only for the first overload of this name */
-        out << "### " << name;
+        //out << "### " << name;
         out << "<a name=\"" << sanitize(name) << "\"></a>" << std::endl;
         out << std::endl;
       }
-      out << "!!! abstract \"" << htmlize(line(child.decl)) << '"' << std::endl;
+      out << "!!! note \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
       out << indent(child.docs) << std::endl;
       out << std::endl;
@@ -187,7 +187,7 @@ void Generator::generateType(const std::filesystem::path& dir,
     for (auto& [name, child] : node.functions) {
       if (name != prev) {
         /* heading only for the first overload of this name */
-        out << "### " << name;
+        //out << "### " << name;
         out << "<a name=\"" << sanitize(name) << "\"></a>" << std::endl;
       }
       out << "!!! abstract \"" << htmlize(line(child.decl)) << '"' << std::endl;

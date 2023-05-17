@@ -192,26 +192,37 @@ Node Parser::interpret() {
   int indent = 0;
   while (token.type && !(token.type & DOC_CLOSE)) {
     if (token.type & DOC_COMMAND) {
-      if (token.substr(1) == "param" || token.substr(1) == "tparam") {
+      if (token.substr(1) == "param" || token.substr(1) == "param[in]" ||
+          token.substr(1) == "tparam") {
         auto name = consumeWord();
-        node.docs.append("  - **");
+        node.docs.append(":material-location-enter: **Parameter** `");
         node.docs.append(name.str());
-        node.docs.append("**");
+        node.docs.append("`\n:   ");
+      } else if (token.substr(1) == "param[out]") {
+        auto name = consumeWord();
+        node.docs.append(":material-location-exit: **Parameter** `");
+        node.docs.append(name.str());
+        node.docs.append("`\n:   ");
+      } else if (token.substr(1) == "param[in,out]") {
+        auto name = consumeWord();
+        node.docs.append(":material-location-enter::material-location-exit: **Parameter** `");
+        node.docs.append(name.str());
+        node.docs.append("`\n:   ");
       } else if (token.substr(1) == "p") {
         auto name = consumeWord();
-        node.docs.append("**");
+        node.docs.append("`");
         node.docs.append(name.str());
-        node.docs.append("**");
+        node.docs.append("`");
       } else if (token.substr(1) == "return") {
-        node.docs.append("**Returns** ");
+        node.docs.append(":material-location-exit: **Returns**\n:   ");
       } else if (token.substr(1) == "see") {
-        node.docs.append("**See also** ");
+        node.docs.append(":material-eye: **See also**\n:   ");
       } else if (token.substr(1) == "attention") {
-        node.docs.append("!!! warning\n");
+        node.docs.append("!!! warning \"Attention\"\n");
         indent += 4;
         node.docs.append(indent, ' ');
       } else {
-        warn("unrecognized command" << token.str());
+        warn("unrecognized command: " << token.str());
         node.docs.append(token.str());
       }
     } else if (token.type & DOC_PARA) {
