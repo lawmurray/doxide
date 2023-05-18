@@ -1,62 +1,53 @@
 #include "doxide/Parser.hpp"
 
-void Parser::parse(const std::string& file) {
-  tokenizer.load(file);
-  parseGlobal();
-}
-
 const Node& Parser::root() const {
   return global;
 }
 
-void Parser::parseGlobal() {
-  Node child;
-  Token token;
-  do {
+void Parser::parse(const std::string& file) {
+  tokenizer.load(file);
+
+  Token token = consume(NAMESPACE|DOC);
+  while (token.type && token.type & (NAMESPACE|DOC)) {
+    global.add(parseEntity(token));
     token = consume(NAMESPACE|DOC);
-    if (token.type & NAMESPACE) {
-      global.add(parseNamespace(token));
-    } else if (token.type & DOC) {
-      global.add(parseDocs(token));
-    }
-  } while (token.type);
-}
-
-Node Parser::parseNamespace(const Token& first) {
-  Node node;
-  Token token;
-
-  node.type = NodeType::NAMESPACE;
-  token = consume(WORD);
-  node.name = token.str();
-  token = consume(BRACE|SEMICOLON);
-  node.decl = std::string_view(first.first, token.first);
-
-  /* members */
-  if (token.type & BRACE) {
-    do {
-      token = consume(NAMESPACE|DOC|BRACE_CLOSE);
-      if (token.type & NAMESPACE) {
-        node.add(parseNamespace(token));
-      } else if (token.type & DOC) {
-        node.add(parseDocs(token));
-      }
-    } while (token.type && !(token.type & BRACE_CLOSE));
   }
-  return node;
 }
 
-Node Parser::parseDocs(const Token& first) {
+Node Parser::parseEntity(const Token& first) {
   static const auto useful =
       NAMESPACE|TYPE|TILDE|EQUALS|BRACE|SEMICOLON|PAREN|OPERATOR;
 
-  Node node = interpret();
-  Token from = consume(~WHITESPACE);
-  Token scan = from.type & useful ? from : consume(useful);
+  Node node;
+  Token from = first, scan = first;
+  if (first.type & DOC) {
+    /* consume the documentation comment first */
+    node = interpret();
+    from = consume(~WHITESPACE);
+    scan = (from.type & useful) ? from : consume(useful);
+  }
 
   if (scan.type & NAMESPACE) {
     /* namespace */
-    node = parseNamespace(scan);
+    node.type = NodeType::NAMESPACE;
+
+    /* name */
+    scan = consume(WORD);
+    node.name = scan.str();
+
+    /* signature */
+    scan = consume(BRACE|SEMICOLON);
+    node.decl = std::string_view(from.first, scan.first);
+
+    /* members */
+    if (scan.type & BRACE) {
+      do {
+        scan = consume(NAMESPACE|DOC|BRACE_CLOSE);
+        if (scan.type & (NAMESPACE|DOC)) {
+          node.add(parseEntity(scan));
+        }
+      } while (scan.type && !(scan.type & BRACE_CLOSE));
+    }
   } else if (scan.type & TYPE) {
     /* type */
     node.type = NodeType::TYPE;
@@ -74,7 +65,7 @@ Node Parser::parseDocs(const Token& first) {
       do {
         scan = consume(DOC|BRACE_CLOSE);
         if (scan.type & DOC) {
-          node.add(parseDocs(scan));
+          node.add(parseEntity(scan));
         }
       } while (scan.type && !(scan.type & BRACE_CLOSE));
     }
@@ -272,5 +263,6 @@ Node Parser::interpret() {
     }
     token = tokenizer.next();
   }
+
   return node;
 }

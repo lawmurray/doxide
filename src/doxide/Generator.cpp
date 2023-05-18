@@ -13,11 +13,16 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
     out.open(dir / "index.md", std::ios::app);
   } else {
     out.open(dir / sanitize(node.name) / "index.md");
-    out << "# Namespace " << node.name << std::endl;
+    out << "# " << node.name << std::endl;
+    out << std::endl;
   }
 
   /* namespace page */
+  out << "**" << line(node.decl) << "**" << std::endl;
   out << std::endl;
+  out << node.docs << std::endl;
+  out << std::endl;
+
   if (node.namespaces.size() > 0) {
     out << "## Namespaces" << std::endl;
     out << std::endl;

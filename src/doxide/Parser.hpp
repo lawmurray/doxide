@@ -56,9 +56,7 @@ private:
    */
   Node interpret();
 
-  void parseGlobal();
-  Node parseNamespace(const Token& first);
-  Node parseDocs(const Token& first);
+  Node parseEntity(const Token& first);
 
   /**
    * Tokenizer.

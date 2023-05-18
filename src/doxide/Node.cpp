@@ -22,7 +22,7 @@ void Node::add(const Node& node) {
 }
 
 void Node::merge(const Node& node) {
-  docs += node.docs;
+  docs.append(node.docs);
   namespaces.insert(node.namespaces.begin(), node.namespaces.end());
   types.insert(node.types.begin(), node.types.end());
   variables.insert(node.variables.begin(), node.variables.end());
