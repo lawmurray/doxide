@@ -6,6 +6,7 @@
  * Node types.
  */
 enum class NodeType {
+  NONE,
   NAMESPACE,
   TYPE,
   VARIABLE,
@@ -21,6 +22,11 @@ struct Node {
   using multimap_type = std::multimap<std::string,Node>;
 
   /**
+   * Constructor.
+  */
+  Node();
+
+  /**
    * Add a child node.
    */
   void add(const Node& node);
@@ -29,26 +35,6 @@ struct Node {
    * Merge another namespace node.
    */
   void merge(const Node& node);
-
-  /**
-   * Node type.
-   */
-  NodeType type;
-
-  /**
-   * Entity name (e.g. name of variable, function, class).
-   */
-  std::string name;
-
-  /**
-   * Entity declaration (e.g. function signature).
-   */
-  std::string decl;
-
-  /**
-   * Entity documentation.
-   */
-  std::string docs;
 
   /**
    * Child namespaces.
@@ -74,4 +60,34 @@ struct Node {
    * Child operators.
    */
   multimap_type operators;
+
+  /**
+   * Entity name (e.g. name of variable, function, class).
+   */
+  std::string name;
+
+  /**
+   * Entity declaration (e.g. function signature).
+   */
+  std::string decl;
+
+  /**
+   * Entity documentation.
+   */
+  std::string docs;
+
+  /**
+   * Alternative brief description.
+   */
+  std::string brief;
+
+  /**
+   * Node type.
+   */
+  NodeType type;
+
+  /**
+   * Hide this node?
+   */
+  bool hide;
 };

@@ -54,7 +54,7 @@ static auto regexes = {
   std::make_pair(PAREN_CLOSE, std::regex("\\)")),
   std::make_pair(DOC, std::regex("/\\*\\*")),
   std::make_pair(DOC_CLOSE, std::regex("\\*/")),
-  std::make_pair(DOC_COMMAND, std::regex("[@\\\\](?:param(?:\\[(?:in|out|in,out)\\])?|\\w+)")),
+  std::make_pair(DOC_COMMAND, std::regex("[@\\\\](?:param(?:\\[(?:in|out|in,out)\\])?|\\w+|f[\\$\\[\\]])")),
   std::make_pair(DOC_ESCAPE, std::regex("[\\\\%]\\S")),
   std::make_pair(DOC_PARA, std::regex("(?:(?:^|\\n)[ \t]*\\*(?!/)[ \t]*){2}")),
   std::make_pair(DOC_LINE, std::regex("(?:^|\\n)[ \t]*\\*(?!/)[ \t]*")),

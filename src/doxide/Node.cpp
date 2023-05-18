@@ -1,5 +1,11 @@
 #include "doxide/Node.hpp"
 
+Node::Node() :
+   type(NodeType::NONE),
+   hide(false) {
+  //
+}
+
 void Node::add(const Node& node) {
   if (node.type == NodeType::NAMESPACE) {
     /* multiple named namespace definitions are allowed, and are merged */
