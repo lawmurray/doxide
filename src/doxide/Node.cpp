@@ -7,23 +7,31 @@ Node::Node() :
 }
 
 void Node::add(const Node& node) {
-  if (node.type == NodeType::NAMESPACE) {
-    /* multiple named namespace definitions are allowed, and are merged */
-    if (namespaces.contains(node.name)) {
-      namespaces[node.name].merge(node);
+  if (!node.hide) {
+    if (!node.ingroup.empty() && node.ingroup != name) {
+      group(node.ingroup).add(node);
+    } else if (node.type == NodeType::NAMESPACE) {
+      /* multiple named namespace definitions are allowed, and are merged */
+      if (namespaces.contains(node.name)) {
+        namespaces[node.name].merge(node);
+      } else {
+        namespaces[node.name] = node;
+      }
+    } else if (node.type == NodeType::TYPE) {
+      types.insert({node.name, node});
+    } else if (node.type == NodeType::VARIABLE) {
+      variables.insert({node.name, node});
+    } else if (node.type == NodeType::FUNCTION) {
+      functions.insert({node.name, node});
+    } else if (node.type == NodeType::OPERATOR) {
+      operators.insert({node.name, node});
+    } else if (node.type == NodeType::GROUP) {
+      groups.insert({node.name, node});
+    } else if (node.type == NodeType::FILE) {
+      warn("@file is not supported");
     } else {
-      namespaces[node.name] = node;
+      warn("unrecognized node type, ignoring");
     }
-  } else if (node.type == NodeType::TYPE) {
-    types.insert({node.name, node});
-  } else if (node.type == NodeType::VARIABLE) {
-    variables.insert({node.name, node});
-  } else if (node.type == NodeType::FUNCTION) {
-    functions.insert({node.name, node});
-  } else if (node.type == NodeType::OPERATOR) {
-    operators.insert({node.name, node});
-  } else {
-    warn("unrecognized node type, ignoring");
   }
 }
 
@@ -34,4 +42,18 @@ void Node::merge(const Node& node) {
   variables.insert(node.variables.begin(), node.variables.end());
   functions.insert(node.functions.begin(), node.functions.end());
   operators.insert(node.operators.begin(), node.operators.end());
+  groups.insert(node.groups.begin(), node.groups.end());
+}
+
+Node& Node::group(const std::string& name) {
+  auto iter = groups.find(name);
+  if (iter != groups.end()) {
+    return iter->second;
+  } else {
+    Node node;
+    node.type = NodeType::GROUP;
+    node.name = name;
+    add(node);
+    return group(name);
+  }
 }

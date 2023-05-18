@@ -17,7 +17,7 @@ public:
   void generate(const std::filesystem::path& dir, const Node& node);
 
 private:
-  void generateNamespace(const std::filesystem::path& dir, const Node& node);
+  void generateGroup(const std::filesystem::path& dir, const Node& node);
   void generateType(const std::filesystem::path& dir, const Node& node);
   void generateVariable(const std::filesystem::path& dir, const Node& node);
 

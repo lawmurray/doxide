@@ -38,13 +38,19 @@ private:
   /**
    * Consume leading whitespace, then a word, and return it.
    */
-  Token consumeWord();
+  std::string_view consumeWord();
 
   /**
    * Consume leading whitespace, then a sentence, and return it as a range
    * of tokens.
    */
-  std::pair<Token,Token> consumeSentence();
+  std::string_view consumeSentence();
+
+  /**
+   * Consume leading whitespace, then a paragraph, and return it as a range
+   * of tokens.
+   */
+  std::string_view consumeParagraph();
 
   /**
    * Interpret a documentation comment.

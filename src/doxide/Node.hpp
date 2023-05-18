@@ -11,7 +11,9 @@ enum class NodeType {
   TYPE,
   VARIABLE,
   FUNCTION,
-  OPERATOR
+  OPERATOR,
+  GROUP,
+  FILE
 };
 
 /**
@@ -35,6 +37,11 @@ struct Node {
    * Merge another namespace node.
    */
   void merge(const Node& node);
+
+  /**
+   * Get a group node, creating it if necessary.
+   */
+  Node& group(const std::string& name);
 
   /**
    * Child namespaces.
@@ -62,6 +69,11 @@ struct Node {
   multimap_type operators;
 
   /**
+   * Child groups.
+   */
+  map_type groups;
+
+  /**
    * Entity name (e.g. name of variable, function, class).
    */
   std::string name;
@@ -80,6 +92,11 @@ struct Node {
    * Alternative brief description.
    */
   std::string brief;
+
+  /**
+   * Group to which this belongs.
+   */
+  std::string ingroup;
 
   /**
    * Node type.

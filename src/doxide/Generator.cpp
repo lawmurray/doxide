@@ -2,27 +2,36 @@
 
 void Generator::generate(const std::filesystem::path& dir,
     const Node& global) {
-  generateNamespace(dir, global);
+  generateGroup(dir, global);
 }
 
-void Generator::generateNamespace(const std::filesystem::path& dir,
+void Generator::generateGroup(const std::filesystem::path& dir,
     const Node& node) {
-  std::filesystem::create_directories(dir);
   std::ofstream out;
   if (node.name.empty()) {
+    std::filesystem::create_directories(dir);
     out.open(dir / "index.md", std::ios::app);
   } else {
+    std::filesystem::create_directories(dir / sanitize(node.name));
     out.open(dir / sanitize(node.name) / "index.md");
+
+    /* use YAML frontmatter to ensure correct capitalization of the title */
+    out << "title: " << node.name << std::endl;
+    out << "---" << std::endl;
+    out << std::endl;
+
+    /* header */
     out << "# " << node.name << std::endl;
     out << std::endl;
   }
 
-  /* namespace page */
-  out << "**" << line(node.decl) << "**" << std::endl;
-  out << std::endl;
-  out << node.docs << std::endl;
-  out << std::endl;
-
+  if (node.type == NodeType::NAMESPACE) {
+    /* namespace page */
+    out << "**" << line(node.decl) << "**" << std::endl;
+    out << std::endl;
+    out << node.docs << std::endl;
+    out << std::endl;
+  }
   if (node.namespaces.size() > 0) {
     out << "## Namespaces" << std::endl;
     out << std::endl;
@@ -80,8 +89,11 @@ void Generator::generateNamespace(const std::filesystem::path& dir,
   }
 
   /* child pages */
+  for (auto& [name, child] : node.groups) {
+    generateGroup(dir / sanitize(node.name), child);
+  }
   for (auto& [name, child] : node.namespaces) {
-    generateNamespace(dir / sanitize(node.name), child);
+    generateGroup(dir / sanitize(node.name), child);
   }
   for (auto& [name, child] : node.types) {
     generateType(dir / sanitize(node.name) / "types", child);
@@ -109,6 +121,11 @@ void Generator::generateType(const std::filesystem::path& dir,
     const Node& node) {
   std::filesystem::create_directories(dir);
   std::ofstream out(dir / (sanitize(node.name) + ".md"));
+
+  /* use YAML frontmatter to ensure correct capitalization of the title */
+  out << "title: " << node.name << std::endl;
+  out << "---" << std::endl;
+  out << std::endl;
 
   /* type page */
   out << "# " + node.name << std::endl;
@@ -209,9 +226,14 @@ void Generator::generateVariable(const std::filesystem::path& dir,
   std::filesystem::create_directories(dir);
   std::ofstream out(dir / (sanitize(node.name) + ".md"));
 
+  /* use YAML frontmatter to ensure correct capitalization of the title */
+  out << "title: " << node.name << std::endl;
+  out << "---" << std::endl;
+  out << std::endl;
+
   out << "# " << node.name << std::endl;
   out << std::endl;
-  out << "!!! abstract \"" << htmlize(line(node.decl)) << '"' << std::endl;
+  out << "!!! info \"" << htmlize(line(node.decl)) << '"' << std::endl;
   out << std::endl;
   out << indent(node.docs) << std::endl;
   out << std::endl;
@@ -224,11 +246,16 @@ void Generator::generateFunction(const std::filesystem::path& dir,
   std::filesystem::create_directories(dir);
   std::ofstream out(dir / (sanitize(node.name) + ".md"));
 
+  /* use YAML frontmatter to ensure correct capitalization of the title */
+  out << "title: " << node.name << std::endl;
+  out << "---" << std::endl;
+  out << std::endl;
+
   out << "# " << node.name << std::endl;
   out << std::endl;
   for (auto iter = first; iter != last; ++iter) {
     auto& node = iter->second;
-    out << "!!! abstract \"" << htmlize(line(node.decl)) << '"' << std::endl;
+    out << "!!! note \"" << htmlize(line(node.decl)) << '"' << std::endl;
     out << std::endl;
     out << indent(node.docs) << std::endl;
     out << std::endl;
@@ -241,6 +268,11 @@ void Generator::generateOperator(const std::filesystem::path& dir,
   auto& node = first->second;
   std::filesystem::create_directories(dir);
   std::ofstream out(dir / (sanitize(node.name) + ".md"));
+
+  /* use YAML frontmatter to ensure correct capitalization of the title */
+  out << "title: " << node.name << std::endl;
+  out << "---" << std::endl;
+  out << std::endl;
 
   out << "# " << node.name << std::endl;
   out << std::endl;

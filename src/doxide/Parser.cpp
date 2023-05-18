@@ -23,6 +23,9 @@ Node Parser::parseEntity(const Token& first) {
   if (first.type & DOC) {
     /* consume the documentation comment first */
     node = interpret();
+    if (node.type == NodeType::FILE) {  // skip @file
+      return node;
+    }
     from = consume(~WHITESPACE);
     scan = (from.type & useful) ? from : consume(useful);
   }
@@ -157,15 +160,15 @@ Token Parser::consume(const uint64_t stop) {
   return token;
 }
 
-Token Parser::consumeWord() {
+std::string_view Parser::consumeWord() {
   Token token;
   do {
     token = tokenizer.next();
   } while (token.type && (token.type & WHITESPACE));
-  return token;
+  return token.str();
 }
 
-std::pair<Token,Token> Parser::consumeSentence() {
+std::string_view Parser::consumeSentence() {
   Token first = tokenizer.next();
   while (first.type && (first.type & WHITESPACE)) {
     first = tokenizer.next();
@@ -174,7 +177,19 @@ std::pair<Token,Token> Parser::consumeSentence() {
   while (last.type && !(last.type & (SENTENCE|DOC_CLOSE))) {
     last = tokenizer.next();
   } 
-  return {first, last};
+  return std::string_view(first.first, last.last);
+}
+
+std::string_view Parser::consumeParagraph() {
+  Token first = tokenizer.next();
+  while (first.type && (first.type & WHITESPACE)) {
+    first = tokenizer.next();
+  }
+  Token last = first;
+  while (last.type && !(last.type & (DOC_PARA|DOC_CLOSE))) {
+    last = tokenizer.next();
+  }
+  return std::string_view(first.first, last.last);
 }
 
 Node Parser::interpret() {
@@ -187,23 +202,23 @@ Node Parser::interpret() {
       if (token.substr(1) == "param" ||
           token.substr(1) == "param[in]") {
         node.docs.append(":material-location-enter: **Parameter** `");
-        node.docs.append(consumeWord().str());
+        node.docs.append(consumeWord());
         node.docs.append("`\n:   ");
       } else if (token.substr(1) == "param[out]") {
         node.docs.append(":material-location-exit: **Parameter** `");
-        node.docs.append(consumeWord().str());
+        node.docs.append(consumeWord());
         node.docs.append("`\n:   ");
       } else if (token.substr(1) == "param[in,out]") {
         node.docs.append(":material-location-enter::material-location-exit: **Parameter** `");
-        node.docs.append(consumeWord().str());
+        node.docs.append(consumeWord());
         node.docs.append("`\n:   ");
       } else if (token.substr(1) == "tparam") {
         node.docs.append(":material-code-tags: **Template parameter** `");
-        node.docs.append(consumeWord().str());
+        node.docs.append(consumeWord());
         node.docs.append("`\n:   ");
       } else if (token.substr(1) == "p") {
         node.docs.append("`");
-        node.docs.append(consumeWord().str());
+        node.docs.append(consumeWord());
         node.docs.append("`");
       } else if (token.substr(1) == "return") {
         node.docs.append(":material-location-exit: **Return**\n:   ");
@@ -217,7 +232,7 @@ Node Parser::interpret() {
         node.docs.append(":material-eye-outline: **See**\n:   ");
       } else if (token.substr(1) == "anchor") {
         node.docs.append("<a name=\"");
-        node.docs.append(consumeWord().str());
+        node.docs.append(consumeWord());
         node.docs.append("\"></a>");
       } else if (token.substr(1) == "note" ||
           token.substr(1) == "abstract" ||
@@ -235,6 +250,18 @@ Node Parser::interpret() {
         node.docs.append(token.substr(1));
         indent += 4;
         node.docs.append(indent, ' ');
+      } else if (token.substr(1) == "group") {
+        Node group;
+        group.type = NodeType::GROUP;
+        group.name = consumeWord();
+        node.add(group);
+        node.docs.append(":material-view-module-outline: **Group** [");
+        node.docs.append(group.name);
+        node.docs.append("](");
+        node.docs.append(group.name);
+        node.docs.append("/)\n:   ");
+      } else if (token.substr(1) == "ingroup") {
+        node.ingroup = consumeWord();
 
       /* legacy commands */
       } else if (token.substr(1) == "returns" ||
@@ -242,27 +269,26 @@ Node Parser::interpret() {
         node.docs.append(":material-location-exit: **Return**\n:   ");
       } else if (token.substr(1) == "sa") {
         node.docs.append(":material-eye-outline: **See**\n:   ");
-      } else if (token.substr(1) == "file" ||
-          token.substr(1) == "internal") {
-        warn("@" << token.substr(1) << " not supported, will hide");
+      } else if (token.substr(1) == "file") {
+        node.type = NodeType::FILE;
+      } else if (token.substr(1) == "internal") {
         node.hide = true;
       } else if (token.substr(1) == "brief" ||
           token.substr(1) == "short") {
-        auto [first, last] = consumeSentence();
-        node.brief.append(first.first, last.last);
+        node.brief.append(consumeSentence());
       } else if (token.substr(1) == "e" ||
           token.substr(1) == "em" ||
           token.substr(1) == "a") {
         node.docs.append("*");
-        node.docs.append(consumeWord().str());
+        node.docs.append(consumeWord());
         node.docs.append("*");
       } else if (token.substr(1) == "b") {
         node.docs.append("**");
-        node.docs.append(consumeWord().str());
+        node.docs.append(consumeWord());
         node.docs.append("**");
       } else if (token.substr(1) == "c") {
         node.docs.append("`");
-        node.docs.append(consumeWord().str());
+        node.docs.append(consumeWord());
         node.docs.append("`");
       } else if (token.substr(1) == "f$") {
         node.docs.append("$");
@@ -276,9 +302,9 @@ Node Parser::interpret() {
         auto href = consumeWord();
         auto text = consumeWord();
         node.docs.append("[");
-        node.docs.append(text.str());
+        node.docs.append(text);
         node.docs.append("](#");
-        node.docs.append(href.str());
+        node.docs.append(href);
         node.docs.append(")");
       } else if (token.substr(1) == "code" ||
           token.substr(1) == "endcode" ||
