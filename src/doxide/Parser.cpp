@@ -56,9 +56,6 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
 
-    std::cerr << o.docs << std::endl;
-    std::cerr << "namespace " << o.name << ": " << o.decl << std::endl;
-
     if (ts_tree_cursor_goto_first_child(cursor)) {
       parseNode(src, cursor, &o);
       ts_tree_cursor_goto_parent(cursor);
@@ -77,9 +74,6 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
 
-    std::cerr << o.docs << std::endl;
-    std::cerr << "class " << o.name << ": " << o.decl << std::endl;
-
     if (ts_tree_cursor_goto_first_child(cursor)) {
       parseNode(src, cursor, &o);
       ts_tree_cursor_goto_parent(cursor);
@@ -97,10 +91,8 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     o.type = NodeType::VARIABLE;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-    parent->add(o);
 
-    std::cerr << o.docs << std::endl;
-    std::cerr << "variable " << o.name << ": " << o.decl << std::endl;
+    parent->add(o);
   } else if (strcmp(ts_node_type(node), "function_definition") == 0) {
     TSNode name = ts_node_child_by_field_name(ts_node_child_by_field_name(node, "declarator", 10), "declarator", 10);
     TSNode body = ts_node_child_by_field_name(node, "body", 4);
@@ -117,14 +109,8 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     }
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-    parent->add(o);
 
-    std::cerr << o.docs << std::endl;
-    if (strcmp(ts_node_type(name), "operator_name") == 0) {
-      std::cerr << "operator " << o.name << ": " << o.decl << std::endl;
-    } else {
-      std::cerr << "function " << o.name << ": " << o.decl << std::endl;
-    }
+    parent->add(o);
   } else if (strcmp(ts_node_type(node), "preproc_def") == 0) {
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
 
@@ -136,10 +122,8 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     o.type = NodeType::MACRO;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-    parent->add(o);
 
-    std::cerr << o.docs << std::endl;
-    std::cerr << "macro " << o.name << ": " << o.decl << std::endl;
+    parent->add(o);
   } else if (strcmp(ts_node_type(node), "preproc_function_def") == 0) {
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
     TSNode params = ts_node_child_by_field_name(node, "parameters", 10);
@@ -152,10 +136,8 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     o.type = NodeType::MACRO;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-    parent->add(o);
 
-    std::cerr << o.docs << std::endl;
-    std::cerr << "macro " << o.name << ": " << o.decl << std::endl;
+    parent->add(o);
   } else {
     /* continue depth-first search */
     if (ts_tree_cursor_goto_first_child(cursor)) {
