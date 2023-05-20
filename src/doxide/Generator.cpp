@@ -27,7 +27,7 @@ void Generator::generateGroup(const std::filesystem::path& dir,
 
   if (node.type == NodeType::NAMESPACE) {
     /* namespace page */
-    out << "**" << line(node.decl) << "**" << std::endl;
+    out << "**" << htmlize(line(node.decl)) << "**" << std::endl;
     out << std::endl;
     out << node.docs << std::endl;
     out << std::endl;
@@ -163,7 +163,7 @@ void Generator::generateType(const std::filesystem::path& dir,
   /* type page */
   out << "# " + node.name << std::endl;
   out << std::endl;
-  out << "**" << line(node.decl) << "**" << std::endl;
+  out << "**" << htmlize(line(node.decl)) << "**" << std::endl;
   out << std::endl;
   out << node.docs << std::endl;
   out << std::endl;
