@@ -144,7 +144,7 @@ void Generator::generateMacro(const std::filesystem::path& dir,
 
   out << "# " << node.name << std::endl;
   out << std::endl;
-  out << "!!! info \"" << htmlize(line(node.decl)) << '"' << std::endl;
+  out << "!!! macro \"" << htmlize(line(node.decl)) << '"' << std::endl;
   out << std::endl;
   out << indent(node.docs) << std::endl;
   out << std::endl;
@@ -211,7 +211,7 @@ void Generator::generateType(const std::filesystem::path& dir,
       //out << "### " << name;
       out << "<a name=\"" << sanitize(name) << "\"></a>" << std::endl;
       out << std::endl;
-      out << "!!! info \"" << htmlize(line(child.decl)) << '"' << std::endl;
+      out << "!!! variable \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
       out << indent(child.docs) << std::endl;
       out << std::endl;
@@ -228,7 +228,7 @@ void Generator::generateType(const std::filesystem::path& dir,
         out << "<a name=\"" << sanitize(name) << "\"></a>" << std::endl;
         out << std::endl;
       }
-      out << "!!! note \"" << htmlize(line(child.decl)) << '"' << std::endl;
+      out << "!!! function \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
       out << indent(child.docs) << std::endl;
       out << std::endl;
@@ -245,7 +245,7 @@ void Generator::generateType(const std::filesystem::path& dir,
         //out << "### " << name;
         out << "<a name=\"" << sanitize(name) << "\"></a>" << std::endl;
       }
-      out << "!!! abstract \"" << htmlize(line(child.decl)) << '"' << std::endl;
+      out << "!!! function \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
       out << indent(child.docs) << std::endl;
       out << std::endl;
@@ -266,7 +266,7 @@ void Generator::generateVariable(const std::filesystem::path& dir,
 
   out << "# " << node.name << std::endl;
   out << std::endl;
-  out << "!!! info \"" << htmlize(line(node.decl)) << '"' << std::endl;
+  out << "!!! variable \"" << htmlize(line(node.decl)) << '"' << std::endl;
   out << std::endl;
   out << indent(node.docs) << std::endl;
   out << std::endl;
@@ -288,7 +288,7 @@ void Generator::generateFunction(const std::filesystem::path& dir,
   out << std::endl;
   for (auto iter = first; iter != last; ++iter) {
     auto& node = iter->second;
-    out << "!!! note \"" << htmlize(line(node.decl)) << '"' << std::endl;
+    out << "!!! function \"" << htmlize(line(node.decl)) << '"' << std::endl;
     out << std::endl;
     out << indent(node.docs) << std::endl;
     out << std::endl;
@@ -311,7 +311,7 @@ void Generator::generateOperator(const std::filesystem::path& dir,
   out << std::endl;
   for (auto iter = first; iter != last; ++iter) {
     auto& node = iter->second;
-    out << "!!! abstract \"" << htmlize(line(node.decl)) << '"' << std::endl;
+    out << "!!! function \"" << htmlize(line(node.decl)) << '"' << std::endl;
     out << std::endl;
     out << indent(node.docs) << std::endl;
     out << std::endl;
