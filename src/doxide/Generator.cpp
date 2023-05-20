@@ -32,12 +32,24 @@ void Generator::generateGroup(const std::filesystem::path& dir,
     out << node.docs << std::endl;
     out << std::endl;
   }
+
   if (node.namespaces.size() > 0) {
     out << "## Namespaces" << std::endl;
     out << std::endl;
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : node.namespaces) {
+      out << "| [" << name << "](" << sanitize(name) << "/) | ";
+      out << brief(child.docs) << " |" << std::endl;
+    }
+    out << "" << std::endl;
+  }
+  if (node.macros.size() > 0) {
+    out << "## Macros" << std::endl;
+    out << std::endl;
+    out << "| Name | Description |" << std::endl;
+    out << "| ---- | ----------- |" << std::endl;
+    for (auto& [name, child] : node.macros) {
       out << "| [" << name << "](" << sanitize(name) << "/) | ";
       out << brief(child.docs) << " |" << std::endl;
     }
@@ -95,6 +107,9 @@ void Generator::generateGroup(const std::filesystem::path& dir,
   for (auto& [name, child] : node.namespaces) {
     generateGroup(dir / sanitize(node.name), child);
   }
+  for (auto& [name, child] : node.macros) {
+    generateMacro(dir / sanitize(node.name), child);
+  }
   for (auto& [name, child] : node.types) {
     generateType(dir / sanitize(node.name) / "types", child);
   }
@@ -115,6 +130,24 @@ void Generator::generateGroup(const std::filesystem::path& dir,
     } while (iter != node.functions.end() && iter->first == first->first);
     generateFunction(dir / sanitize(node.name) / "functions", first, iter);
   }
+}
+
+void Generator::generateMacro(const std::filesystem::path& dir,
+    const Node& node) {
+  std::filesystem::create_directories(dir);
+  std::ofstream out(dir / (sanitize(node.name) + ".md"));
+
+  /* use YAML frontmatter to ensure correct capitalization of the title */
+  out << "title: " << node.name << std::endl;
+  out << "---" << std::endl;
+  out << std::endl;
+
+  out << "# " << node.name << std::endl;
+  out << std::endl;
+  out << "!!! info \"" << htmlize(line(node.decl)) << '"' << std::endl;
+  out << std::endl;
+  out << indent(node.docs) << std::endl;
+  out << std::endl;
 }
 
 void Generator::generateType(const std::filesystem::path& dir,
