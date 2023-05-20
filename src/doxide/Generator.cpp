@@ -25,6 +25,16 @@ void Generator::generateGroup(const std::filesystem::path& dir,
     out << std::endl;
   }
 
+  /* groups */
+  if (node.groups.size() > 0) {
+    out << "## Groups" << std::endl;
+    for (auto& [name, child] : node.groups) {
+      out << ":material-view-module-outline: [" << name << "](" << sanitize(name) << "/)" << std::endl;
+      out << ":   " << child.docs << std::endl;
+      out << std::endl;
+    }
+  }
+
   if (node.type == NodeType::NAMESPACE) {
     /* namespace page */
     out << "**" << htmlize(line(node.decl)) << "**" << std::endl;
@@ -42,7 +52,7 @@ void Generator::generateGroup(const std::filesystem::path& dir,
       out << "| [" << name << "](" << sanitize(name) << "/) | ";
       out << brief(child.docs) << " |" << std::endl;
     }
-    out << "" << std::endl;
+    out << std::endl;
   }
   if (node.macros.size() > 0) {
     out << "## Macros" << std::endl;
@@ -53,7 +63,7 @@ void Generator::generateGroup(const std::filesystem::path& dir,
       out << "| [" << name << "](" << sanitize(name) << "/) | ";
       out << brief(child.docs) << " |" << std::endl;
     }
-    out << "" << std::endl;
+    out << std::endl;
   }
   if (node.types.size() > 0) {
     out << "## Types" << std::endl;
@@ -64,7 +74,7 @@ void Generator::generateGroup(const std::filesystem::path& dir,
       out << "| [" << name << "](types/" << sanitize(name) << "/) | ";
       out << brief(child.docs) << " |" << std::endl;
     }
-    out << "" << std::endl;
+    out << std::endl;
   }
   if (node.variables.size() > 0) {
     out << "## Variables" << std::endl;
@@ -75,7 +85,7 @@ void Generator::generateGroup(const std::filesystem::path& dir,
       out << "| [" << name << "](variables/" << sanitize(name) << "/) | ";
       out << brief(child.docs) << " |" << std::endl;
     }
-    out << "" << std::endl;
+    out << std::endl;
   }
   if (node.operators.size() > 0) {
     out << "## Operators" << std::endl;
@@ -86,7 +96,7 @@ void Generator::generateGroup(const std::filesystem::path& dir,
       out << "| [" << name << "](operators/" << sanitize(name) << "/) | ";
       out << brief(child.docs) << " |" << std::endl;
     }
-    out << "" << std::endl;
+    out << std::endl;
   }
   if (node.functions.size() > 0) {
     out << "## Functions" << std::endl;

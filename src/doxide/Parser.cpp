@@ -2,8 +2,6 @@
 #include "doxide/Tokenizer.hpp"
 
 extern "C" const TSLanguage* tree_sitter_cpp();
-void parseNode(const char* src, TSTreeCursor& cursor, Node& parent);
-void interpret(const std::string_view& comment, Node& o);
 
 const Node& Parser::root() const {
   return global;
@@ -30,7 +28,7 @@ void Parser::parse(const std::string& file) {
   parseNode(source.c_str(), cursor, global);
 }
 
-void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
+void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
   TSNode node = ts_tree_cursor_current_node(&cursor);
   Node o;
 
@@ -70,8 +68,6 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
           }
           o.name = std::string_view{src + i, j - i};
           o.decl = std::string_view{src + k, l - k};
-
-          parent.add(o);
         }
       } else if (!ts_node_is_null(decl) &&
           (strcmp(ts_node_type(decl), "class_specifier") == 0 ||
@@ -97,7 +93,6 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
           parseNode(src, cursor, o);
           ts_tree_cursor_goto_parent(&cursor);
         }
-        parent.add(o);
       } else if (!ts_node_is_null(decl) &&
           strcmp(ts_node_type(node), "type_definition") == 0) {
         /* class template */
@@ -111,8 +106,6 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
         o.type = NodeType::TYPE;
         o.name = std::string_view{src + i, j - i};
         o.decl = std::string_view{src + k, l - k};
-
-        parent.add(o);
       }
     }
   } else if (strcmp(ts_node_type(node), "namespace_definition") == 0) {
@@ -173,7 +166,6 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
       parseNode(src, cursor, o);
       ts_tree_cursor_goto_parent(&cursor);
     }
-    parent.add(o);
   } else if (strcmp(ts_node_type(node), "declaration") == 0 ||
       strcmp(ts_node_type(node), "function_definition") == 0) {
     TSNode decl = ts_node_child_by_field_name(node, "declarator", 10);
@@ -189,8 +181,6 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
       o.type = NodeType::VARIABLE;
       o.name = std::string_view{src + i, j - i};
       o.decl = std::string_view{src + k, l - k};
-
-      parent.add(o);
     } else if (strcmp(ts_node_type(decl), "init_declarator") == 0) {
       /* global or namespace variable */
       TSNode name = ts_node_child_by_field_name(decl, "declarator", 10);
@@ -203,8 +193,6 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
       o.type = NodeType::VARIABLE;
       o.name = std::string_view{src + i, j - i};
       o.decl = std::string_view{src + k, l - k};
-
-      parent.add(o);
     } else if (strcmp(ts_node_type(decl), "function_declarator") == 0) {
       /* global or namespace function */
       TSNode name = ts_node_child_by_field_name(decl, "declarator", 10);
@@ -221,8 +209,6 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
       }
       o.name = std::string_view{src + i, j - i};
       o.decl = std::string_view{src + k, l - k};
-
-      parent.add(o);
     }
   } else if (strcmp(ts_node_type(node), "field_declaration") == 0) {
     /* member variable */
@@ -236,8 +222,6 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
     o.type = NodeType::VARIABLE;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-
-    parent.add(o);
   } else if (strcmp(ts_node_type(node), "enumerator") == 0) {
     /* enumerator */
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
@@ -250,8 +234,6 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
     o.type = NodeType::ENUMERATOR;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-
-    parent.add(o);
   } else if (strcmp(ts_node_type(node), "preproc_def") == 0) {
     /* macro */
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
@@ -264,8 +246,6 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
     o.type = NodeType::MACRO;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-
-    parent.add(o);
   } else if (strcmp(ts_node_type(node), "preproc_function_def") == 0) {
     /* macro definition with arguments */
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
@@ -279,13 +259,20 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
     o.type = NodeType::MACRO;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-
-    parent.add(o);
   } else {
     /* continue depth-first search */
     if (ts_tree_cursor_goto_first_child(&cursor)) {
       parseNode(src, cursor, parent);
       ts_tree_cursor_goto_parent(&cursor);
+    }
+  }
+
+  /* register node */
+  if (o.type != NodeType::NONE) {
+    if (o.ingroup.empty()) {
+      parent.add(o);
+    } else {
+      global.add(o);
     }
   }
 
@@ -295,7 +282,7 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
   }
 }
 
-void interpret(const std::string_view& comment, Node& o) {
+void Parser::interpret(const std::string_view& comment, Node& o) {
   int indent = 0;
   Tokenizer tokenizer(comment);
   Token token = tokenizer.next();
@@ -360,12 +347,12 @@ void interpret(const std::string_view& comment, Node& o) {
           Node group;
           group.type = NodeType::GROUP;
           group.name = tokenizer.consume(WORD).str();
-          o.add(group);
-          o.docs.append(":material-view-module-outline: **Group** [");
-          o.docs.append(group.name);
-          o.docs.append("](");
-          o.docs.append(group.name);
-          o.docs.append("/)\n:   ");
+          auto first = tokenizer.consume(~WHITESPACE);
+          auto last = tokenizer.consume(DOC_PARA|DOC_CLOSE);
+          if (first.type && last.type) {
+            group.docs.append(first.first, last.first);
+          }
+          global.add(group);
         } else if (token.substr(1) == "ingroup") {
           o.ingroup = tokenizer.consume(WORD).str();
 

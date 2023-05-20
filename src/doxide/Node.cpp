@@ -41,8 +41,7 @@ Node& Node::ns(const std::string& name) {
     Node node;
     node.type = NodeType::NAMESPACE;
     node.name = name;
-    namespaces.insert({name, node});
-    return ns(name);
+    return namespaces.insert({name, node}).first->second;
   }
 }
 
@@ -54,7 +53,6 @@ Node& Node::group(const std::string& name) {
     Node node;
     node.type = NodeType::GROUP;
     node.name = name;
-    groups.insert({name, node});
-    return group(name);
+    return groups.insert({name, node}).first->second;
   }
 }

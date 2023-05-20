@@ -29,8 +29,8 @@ static auto regexes = {
   std::make_pair(DOC_CLOSE, std::regex("\\*/")),
   std::make_pair(DOC_COMMAND, std::regex("[@\\\\](?:param(?:\\[(?:in|out|in,out)\\])?|\\w+|f[\\$\\[\\]])")),
   std::make_pair(DOC_ESCAPE, std::regex("[\\\\%]\\S")),
-  std::make_pair(DOC_PARA, std::regex("(?:(?:^|\\n)[ \t]*\\*(?!/)[ \t]*){2}")),
-  std::make_pair(DOC_LINE, std::regex("(?:^|\\n)[ \t]*\\*(?!/)[ \t]*")),
+  std::make_pair(DOC_PARA, std::regex("\\s*\\n[ \t]*(?:\\*(?!/))?[ \t]*\\n[ \t]*(?:\\*(?!/))?[ \t]*")),
+  std::make_pair(DOC_LINE, std::regex("\\s*\\n[ \t]*(?:\\*(?!/))?[ \t]*")),
   std::make_pair(SENTENCE, std::regex("[.!?]")),
   std::make_pair(WORD, std::regex("\\S+")),
   std::make_pair(WHITESPACE, std::regex("\\s+"))

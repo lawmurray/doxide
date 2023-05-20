@@ -17,7 +17,7 @@ Token Tokenizer::next() {
         return token;
       }
     }
-    error("unrecognized token starting: " << std::string(iter, iter + 20));
+    error("unrecognized token starting: " << std::string(iter, iter + 40) << "...");
   }
   return token;
 }

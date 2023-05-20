@@ -19,6 +19,9 @@ public:
   const Node& root() const;
 
 private:
+  void parseNode(const char* src, TSTreeCursor& cursor, Node& parent);
+  void interpret(const std::string_view& comment, Node& o);
+
   /**
    * Global namespace.
    */
