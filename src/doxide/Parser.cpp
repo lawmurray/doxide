@@ -35,6 +35,7 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
   Node o;
   
   if (strcmp(ts_node_type(node), "comment") == 0) {
+    /* possibly a documentation comment */
     uint32_t i = ts_node_start_byte(node);
     uint32_t j = ts_node_end_byte(node);
     interpret(std::string_view(src + i, j - i), o);
@@ -44,6 +45,7 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     node = ts_tree_cursor_current_node(cursor);
   }
   if (strcmp(ts_node_type(node), "namespace_definition") == 0) {
+    /* namespace */
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
     TSNode body = ts_node_child_by_field_name(node, "body", 4);
 
@@ -62,6 +64,7 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     }
     parent->add(o);
   } else if (strcmp(ts_node_type(node), "class_specifier") == 0) {
+    /* class */
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
     TSNode body = ts_node_child_by_field_name(node, "body", 4);
 
@@ -79,8 +82,23 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
       ts_tree_cursor_goto_parent(cursor);
     }
     parent->add(o);
-  } else if (strcmp(ts_node_type(node), "field_declaration") == 0 ||
-      strcmp(ts_node_type(node), "declaration") == 0) {
+  } else if (strcmp(ts_node_type(node), "declaration") == 0) {
+    /* global or namespace variable */
+    TSNode name = ts_node_child_by_field_name(ts_node_child_by_field_name(
+        node, "declarator", 10), "declarator", 10);
+
+    uint32_t i = ts_node_start_byte(name);
+    uint32_t j = ts_node_end_byte(name);
+    uint32_t k = ts_node_start_byte(node);
+    uint32_t l = ts_node_end_byte(node);
+
+    o.type = NodeType::VARIABLE;
+    o.name = std::string_view{src + i, j - i};
+    o.decl = std::string_view{src + k, l - k};
+
+    parent->add(o);
+  } else if (strcmp(ts_node_type(node), "field_declaration") == 0) {
+    /* member variable */
     TSNode name = ts_node_child_by_field_name(node, "declarator", 10);
 
     uint32_t i = ts_node_start_byte(name);
@@ -94,7 +112,9 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
 
     parent->add(o);
   } else if (strcmp(ts_node_type(node), "function_definition") == 0) {
-    TSNode name = ts_node_child_by_field_name(ts_node_child_by_field_name(node, "declarator", 10), "declarator", 10);
+    /* global, namespace or member function */
+    TSNode name = ts_node_child_by_field_name(ts_node_child_by_field_name(
+        node, "declarator", 10), "declarator", 10);
     TSNode body = ts_node_child_by_field_name(node, "body", 4);
 
     uint32_t i = ts_node_start_byte(name);
@@ -112,6 +132,7 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
 
     parent->add(o);
   } else if (strcmp(ts_node_type(node), "preproc_def") == 0) {
+    /* macro definition */
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
 
     uint32_t i = ts_node_start_byte(name);
@@ -125,6 +146,7 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
 
     parent->add(o);
   } else if (strcmp(ts_node_type(node), "preproc_function_def") == 0) {
+    /* macro definition with arguments */
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
     TSNode params = ts_node_child_by_field_name(node, "parameters", 10);
 
