@@ -40,6 +40,11 @@ struct Node {
   void merge(const Node& node);
 
   /**
+   * Get a namespace node, creating it if necessary.
+   */
+  Node& ns(const std::string& name);
+
+  /**
    * Get a group node, creating it if necessary.
    */
   Node& group(const std::string& name);

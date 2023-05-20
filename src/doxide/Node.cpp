@@ -47,6 +47,19 @@ void Node::merge(const Node& node) {
   groups.insert(node.groups.begin(), node.groups.end());
 }
 
+Node& Node::ns(const std::string& name) {
+  auto iter = namespaces.find(name);
+  if (iter != namespaces.end()) {
+    return iter->second;
+  } else {
+    Node node;
+    node.type = NodeType::NAMESPACE;
+    node.name = name;
+    add(node);
+    return ns(name);
+  }
+}
+
 Node& Node::group(const std::string& name) {
   auto iter = groups.find(name);
   if (iter != groups.end()) {
