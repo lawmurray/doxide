@@ -1,7 +1,7 @@
 #include "doxide/Parser.hpp"
 
 extern "C" const TSLanguage* tree_sitter_cpp();
-void parseNode(const char* src, TSNode node, Node& parent);
+void parseNode(const char* src, TSTreeCursor* cursor, Node* parent);
 
 const Node& Parser::root() const {
   return global;
@@ -24,10 +24,13 @@ void Parser::parse(const std::string& file) {
       source.size());
 
   /* traverse syntax tree */
-  parseNode(source.c_str(), ts_tree_root_node(tree), global);
+  TSTreeCursor cursor = ts_tree_cursor_new(ts_tree_root_node(tree));
+  parseNode(source.c_str(), &cursor, &global);
 }
 
-void parseNode(const char* src, TSNode node, Node& parent) {
+void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
+  TSNode node = ts_tree_cursor_current_node(cursor);
+
   if (strcmp(ts_node_type(node), "namespace_definition") == 0) {
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
     TSNode body = ts_node_child_by_field_name(node, "body", 4);
@@ -41,12 +44,13 @@ void parseNode(const char* src, TSNode node, Node& parent) {
     o.type = NodeType::NAMESPACE;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-    parent.add(o);
+    parent->add(o);
 
     std::cerr << "namespace " << o.name << ": " << o.decl << std::endl;
 
-    for (uint32_t i = 0; i < ts_node_named_child_count(node); ++i) {
-      parseNode(src, ts_node_named_child(node, i), o);
+    if (ts_tree_cursor_goto_first_child(cursor)) {
+      parseNode(src, cursor, &o);
+      ts_tree_cursor_goto_parent(cursor);
     }
   } else if (strcmp(ts_node_type(node), "class_specifier") == 0) {
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
@@ -61,12 +65,13 @@ void parseNode(const char* src, TSNode node, Node& parent) {
     o.type = NodeType::TYPE;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-    parent.add(o);
+    parent->add(o);
 
     std::cerr << "class " << o.name << ": " << o.decl << std::endl;
 
-    for (uint32_t i = 0; i < ts_node_named_child_count(node); ++i) {
-      parseNode(src, ts_node_named_child(node, i), o);
+    if (ts_tree_cursor_goto_first_child(cursor)) {
+      parseNode(src, cursor, &o);
+      ts_tree_cursor_goto_parent(cursor);
     }
   } else if (strcmp(ts_node_type(node), "field_declaration") == 0 ||
       strcmp(ts_node_type(node), "declaration") == 0) {
@@ -81,7 +86,7 @@ void parseNode(const char* src, TSNode node, Node& parent) {
     o.type = NodeType::VARIABLE;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-    parent.add(o);
+    parent->add(o);
 
     std::cerr << "variable " << o.name << ": " << o.decl << std::endl;
   } else if (strcmp(ts_node_type(node), "function_definition") == 0) {
@@ -101,7 +106,7 @@ void parseNode(const char* src, TSNode node, Node& parent) {
     }
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-    parent.add(o);
+    parent->add(o);
 
     if (strcmp(ts_node_type(name), "operator_name") == 0) {
       std::cerr << "operator " << o.name << ": " << o.decl << std::endl;
@@ -120,7 +125,7 @@ void parseNode(const char* src, TSNode node, Node& parent) {
     o.type = NodeType::MACRO;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-    parent.add(o);
+    parent->add(o);
 
     std::cerr << "macro " << o.name << ": " << o.decl << std::endl;
   } else if (strcmp(ts_node_type(node), "preproc_function_def") == 0) {
@@ -136,14 +141,20 @@ void parseNode(const char* src, TSNode node, Node& parent) {
     o.type = NodeType::MACRO;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-    parent.add(o);
+    parent->add(o);
 
     std::cerr << "macro " << o.name << ": " << o.decl << std::endl;
   } else {
-    /* keep searching */
-    for (uint32_t i = 0; i < ts_node_named_child_count(node); ++i) {
-      parseNode(src, ts_node_named_child(node, i), parent);
+    /* continue depth-first search */
+    if (ts_tree_cursor_goto_first_child(cursor)) {
+      parseNode(src, cursor, parent);
+      ts_tree_cursor_goto_parent(cursor);
     }
+  }
+
+  /* next sibling */
+  if (ts_tree_cursor_goto_next_sibling(cursor)) {
+    parseNode(src, cursor, parent);
   }
 }
 
