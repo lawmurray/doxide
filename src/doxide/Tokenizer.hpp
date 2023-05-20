@@ -9,9 +9,11 @@
 class Tokenizer {
 public:
   /**
-   * Load a file.
+   * Constructor.
+   * 
+   * @param comment Comment to tokenize.
    */
-  void load(const std::string& file);
+  Tokenizer(const std::string_view& source);
   
   /**
    * Get the next token.
@@ -25,14 +27,29 @@ public:
    */
   Token next();
 
+  /**
+   * Consume tokens until stopping criterion.
+   * 
+   * @param stop Bitmask giving the token type on which to stop and return.
+   * 
+   * @return Last token consumed.
+   * 
+   * Tokens are consumed until one is encountered with a type in @p stop,
+   * which is then returned. If @p stop is `ANY` then the next token is
+   * returned.
+   * 
+   * @see interpret()
+   */
+  Token consume(const int stop = ANY);
+
 private:
   /**
-   * File contents.
+   * Iterator over source.
    */
-  std::string source;
+  std::string_view::const_iterator iter;
 
   /**
-   * Iterator over file contents.
+   * End of source.
    */
-  std::string::const_iterator iter;
+  std::string_view::const_iterator end;
 };
