@@ -55,7 +55,6 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     o.type = NodeType::NAMESPACE;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-    parent->add(o);
 
     std::cerr << o.docs << std::endl;
     std::cerr << "namespace " << o.name << ": " << o.decl << std::endl;
@@ -64,6 +63,7 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
       parseNode(src, cursor, &o);
       ts_tree_cursor_goto_parent(cursor);
     }
+    parent->add(o);
   } else if (strcmp(ts_node_type(node), "class_specifier") == 0) {
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
     TSNode body = ts_node_child_by_field_name(node, "body", 4);
@@ -76,7 +76,6 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     o.type = NodeType::TYPE;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
-    parent->add(o);
 
     std::cerr << o.docs << std::endl;
     std::cerr << "class " << o.name << ": " << o.decl << std::endl;
@@ -85,6 +84,7 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
       parseNode(src, cursor, &o);
       ts_tree_cursor_goto_parent(cursor);
     }
+    parent->add(o);
   } else if (strcmp(ts_node_type(node), "field_declaration") == 0 ||
       strcmp(ts_node_type(node), "declaration") == 0) {
     TSNode name = ts_node_child_by_field_name(node, "declarator", 10);
