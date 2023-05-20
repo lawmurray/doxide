@@ -62,8 +62,6 @@ private:
    */
   Node interpret();
 
-  Node parseEntity(const Token& first);
-
   /**
    * Tokenizer.
    */
@@ -73,9 +71,4 @@ private:
    * Global namespace.
    */
   Node global;
-
-  /**
-   * Last word token read.
-   */
-  Token word;
 };

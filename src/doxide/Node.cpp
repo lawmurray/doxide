@@ -25,6 +25,8 @@ void Node::add(const Node& node) {
       functions.insert({node.name, node});
     } else if (node.type == NodeType::OPERATOR) {
       operators.insert({node.name, node});
+    } else if (node.type == NodeType::MACRO) {
+      macros.insert({node.name, node});
     } else if (node.type == NodeType::GROUP) {
       groups.insert({node.name, node});
     } else if (node.type == NodeType::FILE) {

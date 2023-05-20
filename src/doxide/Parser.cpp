@@ -1,145 +1,154 @@
 #include "doxide/Parser.hpp"
 
+extern "C" const TSLanguage* tree_sitter_cpp();
+void parseNode(const char* src, TSNode node, Node& parent);
+
 const Node& Parser::root() const {
   return global;
 }
 
 void Parser::parse(const std::string& file) {
-  tokenizer.load(file);
-
-  Token token = consume(NAMESPACE|DOC);
-  while (token.type && token.type & (NAMESPACE|DOC)) {
-    global.add(parseEntity(token));
-    token = consume(NAMESPACE|DOC);
+  /* read file */
+  std::string source;
+  std::ifstream in(file);
+  char buffer[16384];
+  while (in.read(buffer, sizeof(buffer))) {
+    source.append(buffer, sizeof(buffer));
   }
+  source.append(buffer, in.gcount());
+
+  /* set up parser */
+  TSParser* parser = ts_parser_new();
+  ts_parser_set_language(parser, tree_sitter_cpp());
+  TSTree *tree = ts_parser_parse_string(parser, NULL, source.c_str(),
+      source.size());
+
+  /* traverse syntax tree */
+  parseNode(source.c_str(), ts_tree_root_node(tree), global);
 }
 
-Node Parser::parseEntity(const Token& first) {
-  static const auto useful =
-      NAMESPACE|TYPE|TILDE|EQUALS|BRACE|SEMICOLON|PAREN|OPERATOR;
+void parseNode(const char* src, TSNode node, Node& parent) {
+  if (strcmp(ts_node_type(node), "namespace_definition") == 0) {
+    TSNode name = ts_node_child_by_field_name(node, "name", 4);
+    TSNode body = ts_node_child_by_field_name(node, "body", 4);
 
-  Node node;
-  Token from = first, scan = first;
-  if (first.type & DOC) {
-    /* consume the documentation comment first */
-    node = interpret();
-    if (node.type == NodeType::FILE) {  // skip @file
-      return node;
+    uint32_t i = ts_node_start_byte(name);
+    uint32_t j = ts_node_end_byte(name);
+    uint32_t k = ts_node_start_byte(node);
+    uint32_t l = ts_node_start_byte(body);
+
+    Node o;
+    o.type = NodeType::NAMESPACE;
+    o.name = std::string_view{src + i, j - i};
+    o.decl = std::string_view{src + k, l - k};
+    parent.add(o);
+
+    std::cerr << "namespace " << o.name << ": " << o.decl << std::endl;
+
+    for (uint32_t i = 0; i < ts_node_named_child_count(node); ++i) {
+      parseNode(src, ts_node_named_child(node, i), o);
     }
-    from = consume(~WHITESPACE);
-    scan = (from.type & useful) ? from : consume(useful);
+  } else if (strcmp(ts_node_type(node), "class_specifier") == 0) {
+    TSNode name = ts_node_child_by_field_name(node, "name", 4);
+    TSNode body = ts_node_child_by_field_name(node, "body", 4);
+
+    uint32_t i = ts_node_start_byte(name);
+    uint32_t j = ts_node_end_byte(name);
+    uint32_t k = ts_node_start_byte(node);
+    uint32_t l = ts_node_start_byte(body);
+
+    Node o;
+    o.type = NodeType::TYPE;
+    o.name = std::string_view{src + i, j - i};
+    o.decl = std::string_view{src + k, l - k};
+    parent.add(o);
+
+    std::cerr << "class " << o.name << ": " << o.decl << std::endl;
+
+    for (uint32_t i = 0; i < ts_node_named_child_count(node); ++i) {
+      parseNode(src, ts_node_named_child(node, i), o);
+    }
+  } else if (strcmp(ts_node_type(node), "field_declaration") == 0 ||
+      strcmp(ts_node_type(node), "declaration") == 0) {
+    TSNode name = ts_node_child_by_field_name(node, "declarator", 10);
+
+    uint32_t i = ts_node_start_byte(name);
+    uint32_t j = ts_node_end_byte(name);
+    uint32_t k = ts_node_start_byte(node);
+    uint32_t l = ts_node_end_byte(node);
+
+    Node o;
+    o.type = NodeType::VARIABLE;
+    o.name = std::string_view{src + i, j - i};
+    o.decl = std::string_view{src + k, l - k};
+    parent.add(o);
+
+    std::cerr << "variable " << o.name << ": " << o.decl << std::endl;
+  } else if (strcmp(ts_node_type(node), "function_definition") == 0) {
+    TSNode name = ts_node_child_by_field_name(ts_node_child_by_field_name(node, "declarator", 10), "declarator", 10);
+    TSNode body = ts_node_child_by_field_name(node, "body", 4);
+
+    uint32_t i = ts_node_start_byte(name);
+    uint32_t j = ts_node_end_byte(name);
+    uint32_t k = ts_node_start_byte(node);
+    uint32_t l = ts_node_start_byte(body);
+
+    Node o;
+    if (strcmp(ts_node_type(name), "operator_name") == 0) {
+      o.type = NodeType::OPERATOR;
+    } else {
+      o.type = NodeType::FUNCTION;
+    }
+    o.name = std::string_view{src + i, j - i};
+    o.decl = std::string_view{src + k, l - k};
+    parent.add(o);
+
+    if (strcmp(ts_node_type(name), "operator_name") == 0) {
+      std::cerr << "operator " << o.name << ": " << o.decl << std::endl;
+    } else {
+      std::cerr << "function " << o.name << ": " << o.decl << std::endl;
+    }
+  } else if (strcmp(ts_node_type(node), "preproc_def") == 0) {
+    TSNode name = ts_node_child_by_field_name(node, "name", 4);
+
+    uint32_t i = ts_node_start_byte(name);
+    uint32_t j = ts_node_end_byte(name);
+    uint32_t k = ts_node_start_byte(node);
+    uint32_t l = j;
+
+    Node o;
+    o.type = NodeType::MACRO;
+    o.name = std::string_view{src + i, j - i};
+    o.decl = std::string_view{src + k, l - k};
+    parent.add(o);
+
+    std::cerr << "macro " << o.name << ": " << o.decl << std::endl;
+  } else if (strcmp(ts_node_type(node), "preproc_function_def") == 0) {
+    TSNode name = ts_node_child_by_field_name(node, "name", 4);
+    TSNode params = ts_node_child_by_field_name(node, "parameters", 10);
+
+    uint32_t i = ts_node_start_byte(name);
+    uint32_t j = ts_node_end_byte(name);
+    uint32_t k = ts_node_start_byte(node);
+    uint32_t l = ts_node_end_byte(params);
+
+    Node o;
+    o.type = NodeType::MACRO;
+    o.name = std::string_view{src + i, j - i};
+    o.decl = std::string_view{src + k, l - k};
+    parent.add(o);
+
+    std::cerr << "macro " << o.name << ": " << o.decl << std::endl;
+  } else {
+    /* keep searching */
+    for (uint32_t i = 0; i < ts_node_named_child_count(node); ++i) {
+      parseNode(src, ts_node_named_child(node, i), parent);
+    }
   }
-
-  if (scan.type & NAMESPACE) {
-    /* namespace */
-    node.type = NodeType::NAMESPACE;
-
-    /* name */
-    scan = consume(WORD);
-    node.name = scan.str();
-
-    /* signature */
-    scan = consume(BRACE|SEMICOLON);
-    node.decl = std::string_view(from.first, scan.first);
-
-    /* members */
-    if (scan.type & BRACE) {
-      do {
-        scan = consume(NAMESPACE|DOC|BRACE_CLOSE);
-        if (scan.type & (NAMESPACE|DOC)) {
-          node.add(parseEntity(scan));
-        }
-      } while (scan.type && !(scan.type & BRACE_CLOSE));
-    }
-  } else if (scan.type & TYPE) {
-    /* type */
-    node.type = NodeType::TYPE;
-
-    /* name */
-    scan = consume(WORD);
-    node.name = scan.str();
-
-    /* signature */
-    scan = consume(BRACE|SEMICOLON);
-    node.decl = std::string_view(from.first, scan.first);
-
-    /* members */
-    if (scan.type & BRACE) {
-      do {
-        scan = consume(DOC|BRACE_CLOSE);
-        if (scan.type & DOC) {
-          node.add(parseEntity(scan));
-        }
-      } while (scan.type && !(scan.type & BRACE_CLOSE));
-    }
-  } else if (scan.type & (EQUALS|BRACE|SEMICOLON)) {
-    /* variable, e.g. int x; int x = 0; int x{0}; */
-    node.type = NodeType::VARIABLE;
-    node.name = word.str();
-    node.decl = std::string_view(from.first, scan.first);
-
-    if (scan.type & (EQUALS|BRACE)) {
-      /* skip to the end of the statement */
-      scan = consume(SEMICOLON);
-    }
-  } else if (scan.type & TILDE) {
-    /* destructor */
-    node.type = NodeType::FUNCTION;
-
-    /* name */
-    scan = consume(WORD);
-    node.name = "~";
-    node.name += scan.str();
-
-    /* signature */
-    scan = consume(SEMICOLON|BRACE|COLON);
-    node.decl = std::string_view(from.first, scan.first);
-
-    if (scan.type & BRACE) {
-      /* skip over the body */
-      scan = consume(BRACE_CLOSE);
-    }
-  } else if (scan.type & PAREN) {
-    /* function */
-    node.type = NodeType::FUNCTION;
-    node.name = word.str();
-
-    /* signature */
-    scan = consume(PAREN_CLOSE);
-    scan = consume(SEMICOLON|BRACE|COLON);
-    node.decl = std::string_view(from.first, scan.first);
-
-    if (scan.type & COLON) {
-      /* skip the initializer list */
-      scan = consume(BRACE);
-    }
-    if (scan.type & BRACE) {
-      /* skip the body */
-      scan = consume(BRACE_CLOSE);
-    }
-  } else if (scan.type & OPERATOR) {
-    /* operator */
-    node.type = NodeType::OPERATOR;
-    node.name = scan.str();
-
-    /* signature */
-    scan = consume(SEMICOLON|BRACE);
-    node.decl = std::string_view(from.first, scan.first);
-
-    if (scan.type & BRACE) {
-      /* skip the body */
-      scan = consume(BRACE_CLOSE);
-    }
-  }
-
-  return node;
 }
 
 Token Parser::consume(const uint64_t stop) {
   Token token = tokenizer.next();
-  if (token.type & WORD) {
-    word = token;
-  }
   while (token.type && !(token.type & stop)) {
     if (token.type & (BRACE|BRACKET|PAREN)) {
       /* consume to a matching close, which is one left shift away */
@@ -153,9 +162,6 @@ Token Parser::consume(const uint64_t stop) {
       }
     }
     token = tokenizer.next();
-    if (token.type & WORD) {
-      word = token;
-    }
   }
   return token;
 }

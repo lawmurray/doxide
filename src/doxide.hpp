@@ -17,6 +17,7 @@
 #include <getopt.h>
 #include <glob.h>
 #include <yaml.h>
+#include <tree_sitter/api.h>
 
 /**
  * Print a warning message.

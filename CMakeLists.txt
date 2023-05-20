@@ -5,7 +5,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 include_directories(src)
 add_compile_options(-g)
 add_library(libyaml SHARED IMPORTED)
+add_library(libtree-sitter SHARED IMPORTED)
 add_executable(doxide
+    src/parser.c
+    src/scanner.cc
     src/doxide.hpp
     src/doxide.cpp
     src/doxide/Config.hpp
@@ -21,4 +24,4 @@ add_executable(doxide
     src/doxide/Token.hpp
     src/doxide/Tokenizer.hpp
     src/doxide/Tokenizer.cpp)
-target_link_libraries(doxide yaml)
+target_link_libraries(doxide yaml tree-sitter)
