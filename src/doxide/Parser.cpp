@@ -30,7 +30,17 @@ void Parser::parse(const std::string& file) {
 
 void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
   TSNode node = ts_tree_cursor_current_node(cursor);
+  Node o;
+  
+  if (strcmp(ts_node_type(node), "comment") == 0) {
+    uint32_t i = ts_node_start_byte(node);
+    uint32_t j = ts_node_end_byte(node);
+    o.docs = std::string_view(src + i, j - i);
 
+    /* advance to next sibling to obtain documented entity */
+    ts_tree_cursor_goto_next_sibling(cursor);
+    node = ts_tree_cursor_current_node(cursor);
+  }
   if (strcmp(ts_node_type(node), "namespace_definition") == 0) {
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
     TSNode body = ts_node_child_by_field_name(node, "body", 4);
@@ -40,12 +50,12 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = ts_node_start_byte(body);
 
-    Node o;
     o.type = NodeType::NAMESPACE;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
     parent->add(o);
 
+    std::cerr << o.docs << std::endl;
     std::cerr << "namespace " << o.name << ": " << o.decl << std::endl;
 
     if (ts_tree_cursor_goto_first_child(cursor)) {
@@ -61,12 +71,12 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = ts_node_start_byte(body);
 
-    Node o;
     o.type = NodeType::TYPE;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
     parent->add(o);
 
+    std::cerr << o.docs << std::endl;
     std::cerr << "class " << o.name << ": " << o.decl << std::endl;
 
     if (ts_tree_cursor_goto_first_child(cursor)) {
@@ -82,12 +92,12 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = ts_node_end_byte(node);
 
-    Node o;
     o.type = NodeType::VARIABLE;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
     parent->add(o);
 
+    std::cerr << o.docs << std::endl;
     std::cerr << "variable " << o.name << ": " << o.decl << std::endl;
   } else if (strcmp(ts_node_type(node), "function_definition") == 0) {
     TSNode name = ts_node_child_by_field_name(ts_node_child_by_field_name(node, "declarator", 10), "declarator", 10);
@@ -98,7 +108,6 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = ts_node_start_byte(body);
 
-    Node o;
     if (strcmp(ts_node_type(name), "operator_name") == 0) {
       o.type = NodeType::OPERATOR;
     } else {
@@ -108,6 +117,7 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     o.decl = std::string_view{src + k, l - k};
     parent->add(o);
 
+    std::cerr << o.docs << std::endl;
     if (strcmp(ts_node_type(name), "operator_name") == 0) {
       std::cerr << "operator " << o.name << ": " << o.decl << std::endl;
     } else {
@@ -121,12 +131,12 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = j;
 
-    Node o;
     o.type = NodeType::MACRO;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
     parent->add(o);
 
+    std::cerr << o.docs << std::endl;
     std::cerr << "macro " << o.name << ": " << o.decl << std::endl;
   } else if (strcmp(ts_node_type(node), "preproc_function_def") == 0) {
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
@@ -137,12 +147,12 @@ void parseNode(const char* src, TSTreeCursor* cursor, Node* parent) {
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = ts_node_end_byte(params);
 
-    Node o;
     o.type = NodeType::MACRO;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
     parent->add(o);
 
+    std::cerr << o.docs << std::endl;
     std::cerr << "macro " << o.name << ": " << o.decl << std::endl;
   } else {
     /* continue depth-first search */
