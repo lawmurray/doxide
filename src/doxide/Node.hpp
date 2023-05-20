@@ -35,11 +35,6 @@ struct Node {
   void add(const Node& node);
 
   /**
-   * Merge another namespace node.
-   */
-  void merge(const Node& node);
-
-  /**
    * Get a namespace node, creating it if necessary.
    */
   Node& ns(const std::string& name);
