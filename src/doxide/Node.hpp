@@ -12,6 +12,7 @@ enum class NodeType {
   VARIABLE,
   FUNCTION,
   OPERATOR,
+  ENUMERATOR,
   MACRO,
   GROUP,
   FILE
@@ -68,6 +69,11 @@ struct Node {
    * Child operators.
    */
   multimap_type operators;
+
+  /**
+   * Child enumerators.
+   */
+  map_type enumerators;
 
   /**
    * Child macros.

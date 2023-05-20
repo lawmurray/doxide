@@ -168,6 +168,16 @@ void Generator::generateType(const std::filesystem::path& dir,
   out << node.docs << std::endl;
   out << std::endl;
 
+  /* for an enumerator, output the possible values */
+  if (node.enumerators.size() > 0) {
+    for (auto& [name, child] : node.enumerators) {
+      out << "**" << name << "**" << std::endl;
+      out << ":   " << child.docs << std::endl;
+      out << std::endl;
+    }
+    out << std::endl;
+  }
+
   /* brief descriptions */
   if (node.variables.size() > 0) {
     out << "## Member Variables" << std::endl;

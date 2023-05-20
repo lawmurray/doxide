@@ -77,6 +77,7 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
           (strcmp(ts_node_type(decl), "class_specifier") == 0 ||
           strcmp(ts_node_type(decl), "struct_specifier") == 0 ||
           strcmp(ts_node_type(decl), "union_specifier") == 0 ||
+          strcmp(ts_node_type(decl), "enum_specifier") == 0 ||
           strcmp(ts_node_type(decl), "alias_declaration") == 0)) {
         /* class template */
         TSNode name = ts_node_child_by_field_name(decl, "name", 4);
@@ -152,6 +153,7 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
   } else if (strcmp(ts_node_type(node), "class_specifier") == 0 ||
       strcmp(ts_node_type(node), "struct_specifier") == 0 ||
       strcmp(ts_node_type(node), "union_specifier") == 0 ||
+      strcmp(ts_node_type(node), "enum_specifier") == 0 ||
       strcmp(ts_node_type(node), "alias_declaration") == 0) {
     /* class */
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
@@ -236,8 +238,22 @@ void parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
     o.decl = std::string_view{src + k, l - k};
 
     parent.add(o);
+  } else if (strcmp(ts_node_type(node), "enumerator") == 0) {
+    /* enumerator */
+    TSNode name = ts_node_child_by_field_name(node, "name", 4);
+
+    uint32_t i = ts_node_start_byte(name);
+    uint32_t j = ts_node_end_byte(name);
+    uint32_t k = ts_node_start_byte(node);
+    uint32_t l = ts_node_end_byte(node);
+
+    o.type = NodeType::ENUMERATOR;
+    o.name = std::string_view{src + i, j - i};
+    o.decl = std::string_view{src + k, l - k};
+
+    parent.add(o);
   } else if (strcmp(ts_node_type(node), "preproc_def") == 0) {
-    /* macro definition */
+    /* macro */
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
 
     uint32_t i = ts_node_start_byte(name);

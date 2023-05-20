@@ -23,6 +23,8 @@ void Node::add(const Node& node) {
       operators.insert({node.name, node});
     } else if (node.type == NodeType::MACRO) {
       macros.insert({node.name, node});
+    } else if (node.type == NodeType::ENUMERATOR) {
+      enumerators.insert({node.name, node});
     } else if (node.type == NodeType::GROUP) {
       groups.insert({node.name, node});
     } else {
