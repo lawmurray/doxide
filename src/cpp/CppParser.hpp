@@ -2,6 +2,7 @@
 
 #include "doxide.hpp"
 #include "Entity.hpp"
+#include "doc/DocTranslator.hpp"
 
 /**
  * C++ source parser.
@@ -9,21 +10,33 @@
 class CppParser {
 public:
   /**
-   * Parse a source file.
+   * Parse C++ source code.
+   * 
+   * @param source C++ source code.
    */
-  void parse(const std::string& file);
+  void parse(const std::string_view& source);
 
   /**
    * Get the root node.
    */
-  const Entity& root() const;
+  const Entity& root() const {
+    return global;
+  }
 
 private:
-  void parseEntity(const char* src, TSTreeCursor& cursor, Entity& parent);
-  void interpret(const std::string_view& comment, Entity& o);
+  /**
+   * Parse the next entity.
+   */
+  void parseEntity(const std::string_view& source, TSTreeCursor& cursor,
+      Entity& parent);
 
   /**
    * Global namespace.
    */
   Entity global;
+
+  /**
+   * Translator for comments.
+   */
+  DocTranslator translator;
 };

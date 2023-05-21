@@ -37,6 +37,17 @@ static void copy_file_prompt(const fs::path& src, const fs::path& dst) {
   }
 }
 
+static std::string gulp(const fs::path& src) {
+  std::string contents;
+  std::ifstream in(src);
+  char buffer[4096];
+  while (in.read(buffer, sizeof(buffer))) {
+    contents.append(buffer, sizeof(buffer));
+  }
+  contents.append(buffer, in.gcount());
+  return contents;
+}
+
 static std::list<fs::path> glob(const std::string& pattern) {
   std::list<fs::path> results;
   glob_t matches;
@@ -120,7 +131,7 @@ void Driver::docs() {
   /* parse */
   CppParser parser;
   for (auto file: files) {
-    parser.parse(file);
+    parser.parse(gulp(file));
   }
 
   /* if a readme file exists, make it the front page; global entities are

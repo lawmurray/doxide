@@ -11,8 +11,8 @@ add_executable(doxide
     contrib/tree-sitter-cpp/src/scanner.cc
     src/doxide.cpp
     src/cpp/CppParser.cpp
-    src/doc/DocParser.cpp
     src/doc/DocTokenizer.cpp
+    src/doc/DocTranslator.cpp
     src/markdown/MarkdownGenerator.cpp
     src/yaml/YAMLNode.cpp
     src/yaml/YAMLParser.cpp
