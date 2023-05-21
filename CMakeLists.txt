@@ -7,21 +7,15 @@ add_compile_options(-g)
 add_library(libyaml SHARED IMPORTED)
 add_library(libtree-sitter SHARED IMPORTED)
 add_executable(doxide
-    src/parser.c
-    src/scanner.cc
-    src/doxide.hpp
+    contrib/tree-sitter-cpp/src/parser.c
+    contrib/tree-sitter-cpp/src/scanner.cc
     src/doxide.cpp
-    src/doxide/Config.hpp
-    src/doxide/Config.cpp
-    src/doxide/Driver.hpp
-    src/doxide/Driver.cpp
-    src/doxide/Generator.hpp
-    src/doxide/Generator.cpp
-    src/doxide/Node.cpp
-    src/doxide/Node.hpp
-    src/doxide/Parser.hpp
-    src/doxide/Parser.cpp
-    src/doxide/Token.hpp
-    src/doxide/Tokenizer.hpp
-    src/doxide/Tokenizer.cpp)
+    src/cpp/CppParser.cpp
+    src/doc/DocParser.cpp
+    src/doc/DocTokenizer.cpp
+    src/markdown/MarkdownGenerator.cpp
+    src/yaml/YAMLNode.cpp
+    src/yaml/YAMLParser.cpp
+    src/Driver.cpp
+    src/Entity.cpp)
 target_link_libraries(doxide yaml tree-sitter)

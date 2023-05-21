@@ -1,31 +1,31 @@
-#include "doxide/Node.hpp"
+#include "Entity.hpp"
 
-Node::Node() :
-   type(NodeType::NONE),
+Entity::Entity() :
+   type(EntityType::NONE),
    hide(false) {
   //
 }
 
-void Node::add(const Node& node) {
+void Entity::add(const Entity& node) {
   /* namespaces should not be added this way, instead retrieve with ns() */
-  assert(node.type != NodeType::NAMESPACE);
+  assert(node.type != EntityType::NAMESPACE);
 
   if (!node.hide) {
     if (!node.ingroup.empty() && node.ingroup != name) {
       group(node.ingroup).add(node);
-    } else if (node.type == NodeType::TYPE) {
+    } else if (node.type == EntityType::TYPE) {
       types.insert({node.name, node});
-    } else if (node.type == NodeType::VARIABLE) {
+    } else if (node.type == EntityType::VARIABLE) {
       variables.insert({node.name, node});
-    } else if (node.type == NodeType::FUNCTION) {
+    } else if (node.type == EntityType::FUNCTION) {
       functions.insert({node.name, node});
-    } else if (node.type == NodeType::OPERATOR) {
+    } else if (node.type == EntityType::OPERATOR) {
       operators.insert({node.name, node});
-    } else if (node.type == NodeType::MACRO) {
+    } else if (node.type == EntityType::MACRO) {
       macros.insert({node.name, node});
-    } else if (node.type == NodeType::ENUMERATOR) {
+    } else if (node.type == EntityType::ENUMERATOR) {
       enumerators.insert({node.name, node});
-    } else if (node.type == NodeType::GROUP) {
+    } else if (node.type == EntityType::GROUP) {
       groups.insert({node.name, node});
     } else {
       warn("unrecognized node type, ignoring");
@@ -33,25 +33,25 @@ void Node::add(const Node& node) {
   }
 }
 
-Node& Node::ns(const std::string& name) {
+Entity& Entity::ns(const std::string& name) {
   auto iter = namespaces.find(name);
   if (iter != namespaces.end()) {
     return iter->second;
   } else {
-    Node node;
-    node.type = NodeType::NAMESPACE;
+    Entity node;
+    node.type = EntityType::NAMESPACE;
     node.name = name;
     return namespaces.insert({name, node}).first->second;
   }
 }
 
-Node& Node::group(const std::string& name) {
+Entity& Entity::group(const std::string& name) {
   auto iter = groups.find(name);
   if (iter != groups.end()) {
     return iter->second;
   } else {
-    Node node;
-    node.type = NodeType::GROUP;
+    Entity node;
+    node.type = EntityType::GROUP;
     node.name = name;
     return groups.insert({name, node}).first->second;
   }

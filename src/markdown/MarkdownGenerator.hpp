@@ -1,12 +1,12 @@
 #pragma once
 
 #include "doxide.hpp"
-#include "doxide/Node.hpp"
+#include "Entity.hpp"
 
 /**
  * Markdown generator.
  */
-class Generator {
+class MarkdownGenerator {
 public:
   /**
    * Generate documentation.
@@ -14,13 +14,13 @@ public:
    * @param dir Output directory.
    * @param node Root node.
    */
-  void generate(const std::filesystem::path& dir, const Node& node);
+  void generate(const std::filesystem::path& dir, const Entity& node);
 
 private:
-  void generateGroup(const std::filesystem::path& dir, const Node& node);
-  void generateMacro(const std::filesystem::path& dir, const Node& node);
-  void generateType(const std::filesystem::path& dir, const Node& node);
-  void generateVariable(const std::filesystem::path& dir, const Node& node);
+  void generateGroup(const std::filesystem::path& dir, const Entity& node);
+  void generateMacro(const std::filesystem::path& dir, const Entity& node);
+  void generateType(const std::filesystem::path& dir, const Entity& node);
+  void generateVariable(const std::filesystem::path& dir, const Entity& node);
 
   template<class Iterator>
   void generateFunction(const std::filesystem::path& dir,

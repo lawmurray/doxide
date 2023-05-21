@@ -1,12 +1,12 @@
-#include "doxide/Generator.hpp"
+#include "markdown/MarkdownGenerator.hpp"
 
-void Generator::generate(const std::filesystem::path& dir,
-    const Node& global) {
+void MarkdownGenerator::generate(const std::filesystem::path& dir,
+    const Entity& global) {
   generateGroup(dir, global);
 }
 
-void Generator::generateGroup(const std::filesystem::path& dir,
-    const Node& node) {
+void MarkdownGenerator::generateGroup(const std::filesystem::path& dir,
+    const Entity& node) {
   std::ofstream out;
   if (node.name.empty()) {
     std::filesystem::create_directories(dir);
@@ -35,7 +35,7 @@ void Generator::generateGroup(const std::filesystem::path& dir,
     }
   }
 
-  if (node.type == NodeType::NAMESPACE) {
+  if (node.type == EntityType::NAMESPACE) {
     /* namespace page */
     out << "**" << htmlize(line(node.decl)) << "**" << std::endl;
     out << std::endl;
@@ -142,8 +142,8 @@ void Generator::generateGroup(const std::filesystem::path& dir,
   }
 }
 
-void Generator::generateMacro(const std::filesystem::path& dir,
-    const Node& node) {
+void MarkdownGenerator::generateMacro(const std::filesystem::path& dir,
+    const Entity& node) {
   std::filesystem::create_directories(dir);
   std::ofstream out(dir / (sanitize(node.name) + ".md"));
 
@@ -160,8 +160,8 @@ void Generator::generateMacro(const std::filesystem::path& dir,
   out << std::endl;
 }
 
-void Generator::generateType(const std::filesystem::path& dir,
-    const Node& node) {
+void MarkdownGenerator::generateType(const std::filesystem::path& dir,
+    const Entity& node) {
   std::filesystem::create_directories(dir);
   std::ofstream out(dir / (sanitize(node.name) + ".md"));
 
@@ -274,8 +274,8 @@ void Generator::generateType(const std::filesystem::path& dir,
   }
 }
 
-void Generator::generateVariable(const std::filesystem::path& dir,
-    const Node& node) {
+void MarkdownGenerator::generateVariable(const std::filesystem::path& dir,
+    const Entity& node) {
   std::filesystem::create_directories(dir);
   std::ofstream out(dir / (sanitize(node.name) + ".md"));
 
@@ -293,7 +293,7 @@ void Generator::generateVariable(const std::filesystem::path& dir,
 }
 
 template<class Iterator>
-void Generator::generateFunction(const std::filesystem::path& dir,
+void MarkdownGenerator::generateFunction(const std::filesystem::path& dir,
     const Iterator& first, const Iterator& last) {
   auto& node = first->second;
   std::filesystem::create_directories(dir);
@@ -316,7 +316,7 @@ void Generator::generateFunction(const std::filesystem::path& dir,
 }
 
 template<class Iterator>
-void Generator::generateOperator(const std::filesystem::path& dir,
+void MarkdownGenerator::generateOperator(const std::filesystem::path& dir,
     const Iterator& first, const Iterator& last) {
   auto& node = first->second;
   std::filesystem::create_directories(dir);
@@ -338,7 +338,7 @@ void Generator::generateOperator(const std::filesystem::path& dir,
   }
 }
 
-std::string Generator::brief(const std::string& str) {
+std::string MarkdownGenerator::brief(const std::string& str) {
   static const std::regex reg("^.*?[\\.\\?\\!]");
 
   std::string l = line(str);
@@ -350,17 +350,17 @@ std::string Generator::brief(const std::string& str) {
   }
 }
 
-std::string Generator::line(const std::string& str) {
+std::string MarkdownGenerator::line(const std::string& str) {
   static const std::regex newline("\\s*\\n\\s*");
   return std::regex_replace(str, newline, " ");
 }
 
-std::string Generator::indent(const std::string& str) {
+std::string MarkdownGenerator::indent(const std::string& str) {
   static const std::regex start("\\n");
   return "    " + std::regex_replace(str, start, "\n    ");
 }
 
-std::string Generator::htmlize(const std::string& str) {
+std::string MarkdownGenerator::htmlize(const std::string& str) {
   static const std::regex amp("&");
   static const std::regex lt("<");
   static const std::regex gt(">");
@@ -376,7 +376,7 @@ std::string Generator::htmlize(const std::string& str) {
   return r;
 }
 
-std::string Generator::sanitize(const std::string& str) {
+std::string MarkdownGenerator::sanitize(const std::string& str) {
   static const std::regex word("\\w");
 
   std::stringstream buf;

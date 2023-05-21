@@ -3,9 +3,9 @@
 #include "doxide.hpp"
 
 /**
- * Node types.
+ * Entity types.
  */
-enum class NodeType {
+enum class EntityType {
   NONE,
   NAMESPACE,
   TYPE,
@@ -19,31 +19,31 @@ enum class NodeType {
 };
 
 /**
- * Node.
+ * Entity.
  */
-struct Node {
-  using map_type = std::map<std::string,Node>;
-  using multimap_type = std::multimap<std::string,Node>;
+struct Entity {
+  using map_type = std::map<std::string,Entity>;
+  using multimap_type = std::multimap<std::string,Entity>;
 
   /**
    * Constructor.
   */
-  Node();
+  Entity();
 
   /**
    * Add a child node.
    */
-  void add(const Node& node);
+  void add(const Entity& node);
 
   /**
    * Get a namespace node, creating it if necessary.
    */
-  Node& ns(const std::string& name);
+  Entity& ns(const std::string& name);
 
   /**
    * Get a group node, creating it if necessary.
    */
-  Node& group(const std::string& name);
+  Entity& group(const std::string& name);
 
   /**
    * Child namespaces.
@@ -111,9 +111,9 @@ struct Node {
   std::string ingroup;
 
   /**
-   * Node type.
+   * Entity type.
    */
-  NodeType type;
+  EntityType type;
 
   /**
    * Hide this node?

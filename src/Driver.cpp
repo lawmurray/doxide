@@ -1,8 +1,7 @@
-#include "doxide/Driver.hpp"
-#include "doxide/Config.hpp"
-#include "doxide/Tokenizer.hpp"
-#include "doxide/Parser.hpp"
-#include "doxide/Generator.hpp"
+#include "Driver.hpp"
+#include "yaml/YAMLParser.hpp"
+#include "cpp/CppParser.hpp"
+#include "markdown/MarkdownGenerator.hpp"
 
 namespace fs = std::filesystem;
 
@@ -133,7 +132,7 @@ void Driver::docs() {
   }
 
   /* generate */
-  Generator generator;
+  MarkdownGenerator generator;
   generator.generate(output, parser.root());
 }
 
@@ -171,7 +170,7 @@ void Driver::help() {
 
 void Driver::config() {
   /* parse build configuration file */
-  Config parser;
+  YAMLParser parser;
   auto config = parser.parse();
   if (!config["name"].empty()) {
     name = config["name"].front();

@@ -1,4 +1,4 @@
-#include "doxide/Driver.hpp"
+#include "Driver.hpp"
 
 int main(int argc, char** argv) {
   /* first option (should be a command name) */

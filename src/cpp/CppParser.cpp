@@ -1,9 +1,10 @@
-#include "doxide/Parser.hpp"
-#include "doxide/Tokenizer.hpp"
+#include "cpp/CppParser.hpp"
+#include "doc/DocParser.hpp"
+#include "doc/DocTokenizer.hpp"
 
 extern "C" const TSLanguage* tree_sitter_cpp();
 
-const Node& Parser::root() const {
+const Entity& Parser::root() const {
   return global;
 }
 
@@ -25,12 +26,12 @@ void Parser::parse(const std::string& file) {
 
   /* traverse syntax tree */
   TSTreeCursor cursor = ts_tree_cursor_new(ts_tree_root_node(tree));
-  parseNode(source.c_str(), cursor, global);
+  parseEntity(source.c_str(), cursor, global);
 }
 
-void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
+void Parser::parseEntity(const char* src, TSTreeCursor& cursor, Entity& parent) {
   TSNode node = ts_tree_cursor_current_node(&cursor);
-  Node o;
+  Entity o;
 
   /* handle comments */
   while (strcmp(ts_node_type(node), "comment") == 0) {
@@ -62,9 +63,9 @@ void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
           uint32_t l = ts_node_end_byte(decl);
 
           if (strcmp(ts_node_type(name), "operator_name") == 0) {
-            o.type = NodeType::OPERATOR;
+            o.type = EntityType::OPERATOR;
           } else {
-            o.type = NodeType::FUNCTION;
+            o.type = EntityType::FUNCTION;
           }
           o.name = std::string_view{src + i, j - i};
           o.decl = std::string_view{src + k, l - k};
@@ -85,12 +86,12 @@ void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
         uint32_t l = ts_node_is_null(body) ?
             ts_node_end_byte(node) : ts_node_start_byte(body);
 
-        o.type = NodeType::TYPE;
+        o.type = EntityType::TYPE;
         o.name = std::string_view{src + i, j - i};
         o.decl = std::string_view{src + k, l - k};
 
         if (ts_tree_cursor_goto_first_child(&cursor)) {
-          parseNode(src, cursor, o);
+          parseEntity(src, cursor, o);
           ts_tree_cursor_goto_parent(&cursor);
         }
       } else if (!ts_node_is_null(decl) &&
@@ -103,7 +104,7 @@ void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
         uint32_t k = ts_node_start_byte(node);
         uint32_t l = ts_node_end_byte(node);
 
-        o.type = NodeType::TYPE;
+        o.type = EntityType::TYPE;
         o.name = std::string_view{src + i, j - i};
         o.decl = std::string_view{src + k, l - k};
       }
@@ -112,7 +113,7 @@ void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
     /* namespace */
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
     if (!ts_node_is_null(name)) {
-      Node* ns = &parent;
+      Entity* ns = &parent;
       if (strcmp(ts_node_type(name), "nested_namespace_specifier") == 0) {
         /* nested namespaces */
         uint32_t n = ts_node_named_child_count(name);
@@ -139,7 +140,7 @@ void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
       }
       ns->hide = ns->hide || o.hide;
       if (ts_tree_cursor_goto_first_child(&cursor)) {
-        parseNode(src, cursor, *ns);
+        parseEntity(src, cursor, *ns);
         ts_tree_cursor_goto_parent(&cursor);
       }
     }
@@ -158,12 +159,12 @@ void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
     uint32_t l = ts_node_is_null(body) ?
         ts_node_end_byte(node) : ts_node_start_byte(body);
 
-    o.type = NodeType::TYPE;
+    o.type = EntityType::TYPE;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
 
     if (ts_tree_cursor_goto_first_child(&cursor)) {
-      parseNode(src, cursor, o);
+      parseEntity(src, cursor, o);
       ts_tree_cursor_goto_parent(&cursor);
     }
   } else if (strcmp(ts_node_type(node), "declaration") == 0 ||
@@ -178,7 +179,7 @@ void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
       uint32_t k = ts_node_start_byte(node);
       uint32_t l = ts_node_end_byte(node);
 
-      o.type = NodeType::VARIABLE;
+      o.type = EntityType::VARIABLE;
       o.name = std::string_view{src + i, j - i};
       o.decl = std::string_view{src + k, l - k};
     } else if (strcmp(ts_node_type(decl), "init_declarator") == 0) {
@@ -190,7 +191,7 @@ void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
       uint32_t k = ts_node_start_byte(node);
       uint32_t l = ts_node_end_byte(node);
 
-      o.type = NodeType::VARIABLE;
+      o.type = EntityType::VARIABLE;
       o.name = std::string_view{src + i, j - i};
       o.decl = std::string_view{src + k, l - k};
     } else if (strcmp(ts_node_type(decl), "function_declarator") == 0) {
@@ -203,9 +204,9 @@ void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
       uint32_t l = ts_node_end_byte(decl);
 
       if (strcmp(ts_node_type(name), "operator_name") == 0) {
-        o.type = NodeType::OPERATOR;
+        o.type = EntityType::OPERATOR;
       } else {
-        o.type = NodeType::FUNCTION;
+        o.type = EntityType::FUNCTION;
       }
       o.name = std::string_view{src + i, j - i};
       o.decl = std::string_view{src + k, l - k};
@@ -219,7 +220,7 @@ void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = ts_node_end_byte(node);
 
-    o.type = NodeType::VARIABLE;
+    o.type = EntityType::VARIABLE;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
   } else if (strcmp(ts_node_type(node), "enumerator") == 0) {
@@ -231,7 +232,7 @@ void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = ts_node_end_byte(node);
 
-    o.type = NodeType::ENUMERATOR;
+    o.type = EntityType::ENUMERATOR;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
   } else if (strcmp(ts_node_type(node), "preproc_def") == 0) {
@@ -243,7 +244,7 @@ void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = j;
 
-    o.type = NodeType::MACRO;
+    o.type = EntityType::MACRO;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
   } else if (strcmp(ts_node_type(node), "preproc_function_def") == 0) {
@@ -256,19 +257,19 @@ void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = ts_node_end_byte(params);
 
-    o.type = NodeType::MACRO;
+    o.type = EntityType::MACRO;
     o.name = std::string_view{src + i, j - i};
     o.decl = std::string_view{src + k, l - k};
   } else {
     /* continue depth-first search */
     if (ts_tree_cursor_goto_first_child(&cursor)) {
-      parseNode(src, cursor, parent);
+      parseEntity(src, cursor, parent);
       ts_tree_cursor_goto_parent(&cursor);
     }
   }
 
   /* register node */
-  if (o.type != NodeType::NONE) {
+  if (o.type != EntityType::NONE) {
     if (o.ingroup.empty()) {
       parent.add(o);
     } else {
@@ -278,14 +279,14 @@ void Parser::parseNode(const char* src, TSTreeCursor& cursor, Node& parent) {
 
   /* next sibling */
   if (ts_tree_cursor_goto_next_sibling(&cursor)) {
-    parseNode(src, cursor, parent);
+    parseEntity(src, cursor, parent);
   }
 }
 
-void Parser::interpret(const std::string_view& comment, Node& o) {
+void Parser::interpret(const std::string_view& comment, Entity& o) {
   int indent = 0;
-  Tokenizer tokenizer(comment);
-  Token token = tokenizer.next();
+  DocTokenizer tokenizer(comment);
+  DocToken token = tokenizer.next();
   o.docs.clear();
   if (token.type & DOC) {  // otherwise not a documentation comment
     token = tokenizer.next();
@@ -344,8 +345,8 @@ void Parser::interpret(const std::string_view& comment, Node& o) {
           indent += 4;
           o.docs.append(indent, ' ');
         } else if (token.substr(1) == "group") {
-          Node group;
-          group.type = NodeType::GROUP;
+          Entity group;
+          group.type = EntityType::GROUP;
           group.name = tokenizer.consume(WORD).str();
           auto first = tokenizer.consume(~WHITESPACE);
           auto last = tokenizer.consume(DOC_PARA|DOC_CLOSE);
@@ -363,7 +364,7 @@ void Parser::interpret(const std::string_view& comment, Node& o) {
         } else if (token.substr(1) == "sa") {
           o.docs.append(":material-eye-outline: **See**\n:   ");
         } else if (token.substr(1) == "file") {
-          o.type = NodeType::FILE;
+          o.type = EntityType::FILE;
         } else if (token.substr(1) == "internal") {
           o.hide = true;
         } else if (token.substr(1) == "brief" ||

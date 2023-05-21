@@ -1,6 +1,6 @@
-#include "doxide/Config.hpp"
+#include "yaml/YAMLParser.hpp"
 
-Config::Config() {
+YAMLParser::YAMLParser() {
   std::filesystem::path path;
   if (std::filesystem::exists("doxide.yaml")) {
     path = "doxide.yaml";
@@ -19,11 +19,11 @@ Config::Config() {
   }  
 }
 
-Config::~Config() {
+YAMLParser::~YAMLParser() {
   fclose(file);
 }
 
-Config::map_type Config::parse() {
+YAMLParser::map_type YAMLParser::parse() {
   yaml_parser_initialize(&parser);
   yaml_parser_set_input_file(&parser, file);
   int done = 0;
@@ -45,7 +45,7 @@ Config::map_type Config::parse() {
   return contents;
 }
 
-void Config::parseMapping() {
+void YAMLParser::parseMapping() {
   yaml_event_delete(&event);
   int done = 0;
   while (!done) {
@@ -90,7 +90,7 @@ void Config::parseMapping() {
   }
 }
 
-void Config::parseSequence() {
+void YAMLParser::parseSequence() {
   yaml_event_delete(&event);
   int done = 0;
   while (!done) {
@@ -111,7 +111,7 @@ void Config::parseSequence() {
   }
 }
 
-void Config::parseScalar() {
+void YAMLParser::parseScalar() {
   auto data = (char*)event.data.scalar.value;
   auto length = event.data.scalar.length;
   std::string value(data, length);

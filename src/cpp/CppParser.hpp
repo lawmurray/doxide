@@ -1,7 +1,7 @@
 #pragma once
 
 #include "doxide.hpp"
-#include "doxide/Node.hpp"
+#include "Entity.hpp"
 
 /**
  * Parser.
@@ -16,14 +16,14 @@ public:
   /**
    * Get the root node.
    */
-  const Node& root() const;
+  const Entity& root() const;
 
 private:
-  void parseNode(const char* src, TSTreeCursor& cursor, Node& parent);
-  void interpret(const std::string_view& comment, Node& o);
+  void parseEntity(const char* src, TSTreeCursor& cursor, Entity& parent);
+  void interpret(const std::string_view& comment, Entity& o);
 
   /**
    * Global namespace.
    */
-  Node global;
+  Entity global;
 };

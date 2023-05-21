@@ -5,19 +5,19 @@
 /**
  * Parser for YAML config file.
  */
-class Config {
+class YAMLParser {
 public:
   using map_type = std::unordered_map<std::string,std::list<std::string>>;
 
   /**
    * Constructor.
    */
-  Config();
+  YAMLParser();
 
   /**
    * Destructor.
    */
-  ~Config();
+  ~YAMLParser();
 
   /**
    * Parse the file.

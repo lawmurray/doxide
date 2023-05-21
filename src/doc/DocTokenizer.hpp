@@ -1,31 +1,31 @@
 #pragma once
 
 #include "doxide.hpp"
-#include "doxide/Token.hpp"
+#include "doc/DocToken.hpp"
 
 /**
- * Tokenizer.
+ * DocTokenizer.
  */
-class Tokenizer {
+class DocTokenizer {
 public:
   /**
    * Constructor.
    * 
    * @param comment Comment to tokenize.
    */
-  Tokenizer(const std::string_view& source);
+  DocTokenizer(const std::string_view& source);
   
   /**
    * Get the next token.
    * 
    * @return Next token.
    * 
-   * The token is only valid for the lifetime of the Tokenizer, as it contains
+   * The token is only valid for the lifetime of the DocTokenizer, as it contains
    * a reference to a substring of the source file. If no tokens remain (i.e.
    * the end of the file is reached), a token with a type of `NONE` is
    * returned.
    */
-  Token next();
+  DocToken next();
 
   /**
    * Consume tokens until stopping criterion.
@@ -34,13 +34,13 @@ public:
    * 
    * @return Last token consumed.
    * 
-   * Tokens are consumed until one is encountered with a type in @p stop,
+   * DocTokens are consumed until one is encountered with a type in @p stop,
    * which is then returned. If @p stop is `ANY` then the next token is
    * returned.
    * 
    * @see interpret()
    */
-  Token consume(const int stop = ANY);
+  DocToken consume(const int stop = ANY);
 
 private:
   /**
