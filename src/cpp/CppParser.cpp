@@ -4,11 +4,11 @@
 
 extern "C" const TSLanguage* tree_sitter_cpp();
 
-const Entity& Parser::root() const {
+const Entity& CppParser::root() const {
   return global;
 }
 
-void Parser::parse(const std::string& file) {
+void CppParser::parse(const std::string& file) {
   /* read file */
   std::string source;
   std::ifstream in(file);
@@ -29,7 +29,7 @@ void Parser::parse(const std::string& file) {
   parseEntity(source.c_str(), cursor, global);
 }
 
-void Parser::parseEntity(const char* src, TSTreeCursor& cursor, Entity& parent) {
+void CppParser::parseEntity(const char* src, TSTreeCursor& cursor, Entity& parent) {
   TSNode node = ts_tree_cursor_current_node(&cursor);
   Entity o;
 
@@ -283,7 +283,7 @@ void Parser::parseEntity(const char* src, TSTreeCursor& cursor, Entity& parent) 
   }
 }
 
-void Parser::interpret(const std::string_view& comment, Entity& o) {
+void CppParser::interpret(const std::string_view& comment, Entity& o) {
   int indent = 0;
   DocTokenizer tokenizer(comment);
   DocToken token = tokenizer.next();

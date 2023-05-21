@@ -4,9 +4,9 @@
 #include "Entity.hpp"
 
 /**
- * Parser.
+ * C++ source parser.
  */
-class Parser {
+class CppParser {
 public:
   /**
    * Parse a source file.

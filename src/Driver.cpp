@@ -118,7 +118,7 @@ void Driver::docs() {
   config();
 
   /* parse */
-  Parser parser;
+  CppParser parser;
   for (auto file: files) {
     parser.parse(file);
   }
