@@ -127,6 +127,7 @@ void Driver::init() {
 
 void Driver::docs() {
   config();
+  clean();
 
   /* parse */
   CppParser parser;
@@ -235,6 +236,9 @@ void Driver::config() {
   }
   if (config.isValue("description")) {
     description = config.value("description");
+  }
+  if (config.isValue("output")) {
+    output = config.value("output");
   }
 
   /* expand file patterns in file list */
