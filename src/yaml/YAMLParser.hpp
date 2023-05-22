@@ -1,14 +1,13 @@
 #pragma once
 
 #include "doxide.hpp"
+#include "yaml/YAMLNode.hpp"
 
 /**
  * Parser for YAML config file.
  */
 class YAMLParser {
 public:
-  using map_type = std::unordered_map<std::string,std::list<std::string>>;
-
   /**
    * Constructor.
    */
@@ -24,12 +23,19 @@ public:
    * 
    * @return The contents of the file.
    */
-  map_type parse();
+  void parse(const std::string_view& contents);
+
+  /**
+   * Get the root node.
+   */
+  const YAMLNode& root() const {
+    return global;
+  }
 
 private:
-  void parseMapping();
-  void parseSequence();
-  void parseScalar();
+  void parseMapping(YAMLNode& node);
+  void parseSequence(YAMLNode& node);
+  void parseValue(YAMLNode& node);
 
   /**
    * LibYAML parser.
@@ -42,17 +48,7 @@ private:
   yaml_event_t event;
 
   /**
-   * File.
-   */
-  FILE* file;
-
-  /**
-   * Stack of dictionary keys.
-   */
-  std::stack<std::string> keys;
-
-  /**
    * Contents, populated during parse.
    */
-  map_type contents;
+  YAMLNode global;
 };

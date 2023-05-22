@@ -180,32 +180,52 @@ void Driver::help() {
 }
 
 void Driver::config() {
+  /* find the configuration file */
+  fs::path path;
+  if (std::filesystem::exists("doxide.yaml")) {
+    path = "doxide.yaml";
+  } else if (std::filesystem::exists("doxide.yml")) {
+    path = "doxide.yml";
+  } else if (std::filesystem::exists("doxide.json")) {
+    path = "doxide.json";
+  } else {
+    std::cerr << "no doxide configuration file, use 'doxide init' to get set up." << std::endl;
+    exit(EXIT_FAILURE);
+  }
+
   /* parse build configuration file */
   YAMLParser parser;
-  auto config = parser.parse();
-  if (!config["name"].empty()) {
-    name = config["name"].front();
+  parser.parse(gulp(path));
+  auto& config = parser.root();
+
+  if (config.isValue("name")) {
+    name = config.value("name");
   }
-  if (!config["version"].empty()) {
-    version = config["version"].front();
+  if (config.isValue("version")) {
+    version = config.value("version");
   }
-  if (!config["description"].empty()) {
-    description = config["description"].front();
+  if (config.isValue("description")) {
+    description = config.value("description");
   }
 
   /* expand file patterns in file list */
   files.clear();
-  for (auto pattern : config["files"]) {
-    auto paths = glob(pattern);
-    if (paths.empty()) {
-      /* print warning if pattern does not contain a wildcard '*' */
-      if (pattern.find('*') == std::string::npos) {
-        warn("no file matching '" + pattern + "' in configuration.");
-      }
-    } else for (auto path : paths) {
-      auto result = files.insert(path.string());
-      if (!result.second) {
-        warn("file " << path << " appears more than once in configuration.");
+  if (config.isSequence("files")) {
+    for (auto& node : config.sequence("files")) {
+      if (node->isValue()) {
+        auto& pattern = node->value();
+        auto paths = glob(pattern);
+        if (paths.empty()) {
+          /* print warning if pattern does not contain a wildcard '*' */
+          if (pattern.find('*') == std::string::npos) {
+            warn("no file matching '" + pattern + "' in configuration.");
+          }
+        } else for (auto path : paths) {
+          auto result = files.insert(path.string());
+          if (!result.second) {
+            warn("file " << path << " appears more than once in configuration.");
+          }
+        }
       }
     }
   }

@@ -2,14 +2,18 @@
 
 extern "C" const TSLanguage* tree_sitter_cpp();
 
-void CppParser::parse(const std::string_view& source) {
-  /* set up parser */
-  TSParser* parser = ts_parser_new();
+CppParser::CppParser() :
+    parser(ts_parser_new()) {
   ts_parser_set_language(parser, tree_sitter_cpp());
+}
+
+CppParser::~CppParser() {
+  ts_parser_delete(parser);
+}
+
+void CppParser::parse(const std::string_view& source) {
   TSTree *tree = ts_parser_parse_string(parser, NULL, source.data(),
       source.size());
-
-  /* traverse syntax tree */
   TSTreeCursor cursor = ts_tree_cursor_new(ts_tree_root_node(tree));
   parseEntity(source, cursor, global);
 }

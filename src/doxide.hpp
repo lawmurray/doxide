@@ -11,6 +11,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <variant>
 
 #include <cassert>
 

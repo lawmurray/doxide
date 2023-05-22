@@ -10,6 +10,16 @@
 class CppParser {
 public:
   /**
+   * Constructor.
+   */
+  CppParser();
+
+  /**
+   * Destructor.
+   */
+  ~CppParser();
+
+  /**
    * Parse C++ source code.
    * 
    * @param source C++ source code.
@@ -29,6 +39,11 @@ private:
    */
   void parseEntity(const std::string_view& source, TSTreeCursor& cursor,
       Entity& parent);
+
+  /**
+   * Tree-sitter parser.
+   */
+  TSParser* parser;
 
   /**
    * Global namespace.

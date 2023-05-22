@@ -1,52 +1,36 @@
 #include "yaml/YAMLParser.hpp"
 
 YAMLParser::YAMLParser() {
-  std::filesystem::path path;
-  if (std::filesystem::exists("doxide.yaml")) {
-    path = "doxide.yaml";
-  } else if (std::filesystem::exists("doxide.yml")) {
-    path = "doxide.yml";
-  } else if (std::filesystem::exists("doxide.json")) {
-    path = "doxide.json";
-  } else {
-    std::cerr << "no doxide configuration file, use 'doxide init' to get set up." << std::endl;
-    exit(EXIT_FAILURE);
-  }
-  file = fopen(path.string().c_str(), "r");
-  if (!file) {
-    std::cerr << "could not open file " << path.string() << std::endl;
-    exit(EXIT_FAILURE);
-  }  
+  yaml_parser_initialize(&parser);
 }
 
 YAMLParser::~YAMLParser() {
-  fclose(file);
+  yaml_parser_delete(&parser);
 }
 
-YAMLParser::map_type YAMLParser::parse() {
-  yaml_parser_initialize(&parser);
-  yaml_parser_set_input_file(&parser, file);
+void YAMLParser::parse(const std::string_view& contents) {
+  yaml_parser_set_input_string(&parser, (const unsigned char*)contents.data(),
+      contents.size());
   int done = 0;
   while (!done) {
     if (!yaml_parser_parse(&parser, &event)) {
-      std::cerr << "syntax error in build configuration file." << std::endl;
+      std::cerr << "syntax error in configuration file." << std::endl;
       exit(EXIT_FAILURE);
     }
     if (event.type == YAML_SEQUENCE_START_EVENT) {
-      parseSequence();
+      parseSequence(global);
     } else if (event.type == YAML_MAPPING_START_EVENT) {
-      parseMapping();
+      parseMapping(global);
     } else {
       done = event.type == YAML_STREAM_END_EVENT;
       yaml_event_delete(&event);
     }
   }
-  yaml_parser_delete(&parser);
-  return contents;
 }
 
-void YAMLParser::parseMapping() {
+void YAMLParser::parseMapping(YAMLNode& node) {
   yaml_event_delete(&event);
+  node.setMapping();
   int done = 0;
   while (!done) {
     /* read one name/value pair on each iteration */
@@ -58,31 +42,23 @@ void YAMLParser::parseMapping() {
       /* key */
       auto data = (char*)event.data.scalar.value;
       auto length = event.data.scalar.length;
-      std::string key(data, length);
+      auto key = std::string{data, length};
       yaml_event_delete(&event);
 
-      if (keys.empty()) {
-        keys.push(key);
-      } else {
-        keys.push(keys.top() + "." + key);
-      }
-      
       /* value */
       if (!yaml_parser_parse(&parser, &event)) {
         std::cerr << "syntax error in configuration file." << std::endl;
         exit(EXIT_FAILURE);
       }
       if (event.type == YAML_SCALAR_EVENT) {
-        parseScalar();
+        parseValue(node.insert(key));
       } else if (event.type == YAML_SEQUENCE_START_EVENT) {
-        parseSequence();
+        parseSequence(node.insert(key));
       } else if (event.type == YAML_MAPPING_START_EVENT) {
-        parseMapping();
+        parseMapping(node.insert(key));
       } else {
         yaml_event_delete(&event);
       }
-
-      keys.pop();
     } else {
       done = event.type == YAML_MAPPING_END_EVENT;
       yaml_event_delete(&event);
@@ -90,8 +66,9 @@ void YAMLParser::parseMapping() {
   }
 }
 
-void YAMLParser::parseSequence() {
+void YAMLParser::parseSequence(YAMLNode& node) {
   yaml_event_delete(&event);
+  node.setSequence();
   int done = 0;
   while (!done) {
     if (!yaml_parser_parse(&parser, &event)) {
@@ -99,11 +76,11 @@ void YAMLParser::parseSequence() {
       exit(EXIT_FAILURE);
     }
     if (event.type == YAML_SCALAR_EVENT) {
-      parseScalar();
+      parseValue(node.push());
     } else if (event.type == YAML_SEQUENCE_START_EVENT) {
-      parseSequence();
+      parseSequence(node.push());
     } else if (event.type == YAML_MAPPING_START_EVENT) {
-      parseMapping();
+      parseMapping(node.push());
     } else {
       done = event.type == YAML_SEQUENCE_END_EVENT;
       yaml_event_delete(&event);
@@ -111,10 +88,9 @@ void YAMLParser::parseSequence() {
   }
 }
 
-void YAMLParser::parseScalar() {
+void YAMLParser::parseValue(YAMLNode& node) {
   auto data = (char*)event.data.scalar.value;
   auto length = event.data.scalar.length;
-  std::string value(data, length);
-  contents[keys.top()].push_back(value);
+  node.set(std::string(data, length));
   yaml_event_delete(&event);
 }
