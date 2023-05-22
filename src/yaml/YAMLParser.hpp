@@ -4,7 +4,7 @@
 #include "yaml/YAMLNode.hpp"
 
 /**
- * Parser for YAML config file.
+ * Parser for YAML config files and YAML frontmatter of Markdown files.
  */
 class YAMLParser {
 public:

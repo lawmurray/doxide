@@ -31,6 +31,11 @@ private:
       const Iterator& first, const Iterator& last);
 
   /**
+   * Produce the YAML frontmatter for an entity.
+   */
+  static std::string frontmatter(const Entity& entity);
+
+  /**
    * Process a documentation comment to detailed description.
    */
   static std::string detailed(const std::string& str);

@@ -22,7 +22,10 @@ void YAMLParser::parse(const std::string_view& contents) {
     } else if (event.type == YAML_MAPPING_START_EVENT) {
       parseMapping(global);
     } else {
-      done = event.type == YAML_STREAM_END_EVENT;
+      /* YAML_STREAM_END_EVENT marks the end of file,
+       * YAML_DOCUMENT_END_EVENT marks the end of frontmatter */
+      done = event.type == YAML_STREAM_END_EVENT ||
+          event.type == YAML_DOCUMENT_END_EVENT;
       yaml_event_delete(&event);
     }
   }

@@ -148,7 +148,36 @@ void Driver::docs() {
 }
 
 void Driver::clean() {
-  fs::remove_all(output);
+  /* traverse the output directory, removing any Markdown files with
+   * 'generator: doxide' in their YAML frontmatter; these are files managed by
+   * Doxide */
+  for (auto& entry : fs::recursive_directory_iterator(output)) {
+    if (entry.is_regular_file() && entry.path().extension() == ".md") {
+      YAMLParser parser;
+      parser.parse(gulp(entry.path()));
+      auto& frontmatter = parser.root();
+      if (frontmatter.isValue("generator") &&
+          frontmatter.value("generator") == "doxide") {
+        fs::remove(entry.path());
+      }
+    }
+  }
+
+  /* traverse the output directory again, this time removing any empty
+   * directories; because removing a directory may make its parent directory
+   * empty, repeat until there are no further empty directories */
+  std::vector<fs::path> empty;
+  do {
+    empty.clear();
+    for (auto& entry : fs::recursive_directory_iterator(output)) {
+      if (entry.is_directory() && fs::is_empty(entry.path())) {
+        empty.push_back(entry.path());
+      }
+    }
+    for (auto& dir : empty) {
+      fs::remove(dir);
+    }    
+  } while (empty.size());
 }
 
 void Driver::help() {
