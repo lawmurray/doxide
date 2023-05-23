@@ -14,8 +14,7 @@ void YAMLParser::parse(const std::string_view& contents) {
   int done = 0;
   while (!done) {
     if (!yaml_parser_parse(&parser, &event)) {
-      std::cerr << "syntax error in configuration file." << std::endl;
-      exit(EXIT_FAILURE);
+      error("syntax error in configuration file.");
     }
     if (event.type == YAML_SEQUENCE_START_EVENT) {
       parseSequence(global);
@@ -38,8 +37,7 @@ void YAMLParser::parseMapping(YAMLNode& node) {
   while (!done) {
     /* read one name/value pair on each iteration */
     if (!yaml_parser_parse(&parser, &event)) {
-      std::cerr << "syntax error in configuration file." << std::endl;
-      exit(EXIT_FAILURE);
+      error("syntax error in configuration file.");
     }
     if (event.type == YAML_SCALAR_EVENT) {
       /* key */
@@ -50,8 +48,7 @@ void YAMLParser::parseMapping(YAMLNode& node) {
 
       /* value */
       if (!yaml_parser_parse(&parser, &event)) {
-        std::cerr << "syntax error in configuration file." << std::endl;
-        exit(EXIT_FAILURE);
+        error("syntax error in configuration file.");
       }
       if (event.type == YAML_SCALAR_EVENT) {
         parseValue(node.insert(key));
@@ -75,8 +72,7 @@ void YAMLParser::parseSequence(YAMLNode& node) {
   int done = 0;
   while (!done) {
     if (!yaml_parser_parse(&parser, &event)) {
-      std::cerr << "syntax error in configuration file." << std::endl;
-      exit(EXIT_FAILURE);
+      error("syntax error in configuration file.");
     }
     if (event.type == YAML_SCALAR_EVENT) {
       parseValue(node.push());
