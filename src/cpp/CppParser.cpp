@@ -105,7 +105,7 @@ void CppParser::parseEntity(const std::string_view& source,
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
     if (!ts_node_is_null(name)) {
       Entity* ns = &parent;
-      if (strcmp(ts_node_type(name), "namespace_definition_name") == 0) {
+      if (strcmp(ts_node_type(name), "nested_namespace_specifier") == 0) {
         /* nested namespaces */
         uint32_t n = ts_node_named_child_count(name);
         for (uint32_t i = 0; i < n; ++i) {
