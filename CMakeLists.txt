@@ -3,7 +3,6 @@ project(doxide)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 include_directories(src)
-add_compile_options(-g)
 add_library(libyaml SHARED IMPORTED)
 add_library(libtree-sitter SHARED IMPORTED)
 add_executable(doxide
@@ -19,3 +18,7 @@ add_executable(doxide
     src/Driver.cpp
     src/Entity.cpp)
 target_link_libraries(doxide yaml tree-sitter)
+
+include(GNUInstallDirs)
+install(TARGETS doxide)
+install(DIRECTORY share/ DESTINATION ${CMAKE_INSTALL_DATADIR}/doxide)
