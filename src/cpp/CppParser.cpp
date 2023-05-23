@@ -12,6 +12,7 @@ CppParser::~CppParser() {
 }
 
 void CppParser::parse(const std::string_view& source) {
+  ts_parser_reset(parser);
   TSTree *tree = ts_parser_parse_string(parser, NULL, source.data(),
       source.size());
   TSTreeCursor cursor = ts_tree_cursor_new(ts_tree_root_node(tree));
@@ -24,7 +25,7 @@ void CppParser::parseEntity(const std::string_view& source,
   Entity entity;
 
   /* handle comments */
-  while (strcmp(ts_node_type(node), "comment") == 0) {
+  if (strcmp(ts_node_type(node), "comment") == 0) {
     /* possibly a documentation comment */
     uint32_t i = ts_node_start_byte(node);
     uint32_t j = ts_node_end_byte(node);
@@ -158,61 +159,53 @@ void CppParser::parseEntity(const std::string_view& source,
       ts_tree_cursor_goto_parent(&cursor);
     }
   } else if (strcmp(ts_node_type(node), "declaration") == 0 ||
+      strcmp(ts_node_type(node), "field_declaration") == 0 ||
       strcmp(ts_node_type(node), "function_definition") == 0) {
     TSNode decl = ts_node_child_by_field_name(node, "declarator", 10);
-    if (strcmp(ts_node_type(decl), "identifier") == 0) {
-      /* global or namespace variable */
-      TSNode name = decl;
+    if (!ts_node_is_null(decl)) {
+      if (strcmp(ts_node_type(decl), "identifier") == 0 ||
+          strcmp(ts_node_type(decl), "field_identifier") == 0) {
+        /* global or namespace variable */
+        TSNode name = decl;
 
-      uint32_t i = ts_node_start_byte(name);
-      uint32_t j = ts_node_end_byte(name);
-      uint32_t k = ts_node_start_byte(node);
-      uint32_t l = ts_node_end_byte(node);
+        uint32_t i = ts_node_start_byte(name);
+        uint32_t j = ts_node_end_byte(name);
+        uint32_t k = ts_node_start_byte(node);
+        uint32_t l = ts_node_end_byte(node);
 
-      entity.type = EntityType::VARIABLE;
-      entity.name = source.substr(i, j - i);
-      entity.decl = source.substr(k, l - k);
-    } else if (strcmp(ts_node_type(decl), "init_declarator") == 0) {
-      /* global or namespace variable */
-      TSNode name = ts_node_child_by_field_name(decl, "declarator", 10);
+        entity.type = EntityType::VARIABLE;
+        entity.name = source.substr(i, j - i);
+        entity.decl = source.substr(k, l - k);
+      } else if (strcmp(ts_node_type(decl), "init_declarator") == 0) {
+        /* global or namespace variable */
+        TSNode name = ts_node_child_by_field_name(decl, "declarator", 10);
 
-      uint32_t i = ts_node_start_byte(name);
-      uint32_t j = ts_node_end_byte(name);
-      uint32_t k = ts_node_start_byte(node);
-      uint32_t l = ts_node_end_byte(node);
+        uint32_t i = ts_node_start_byte(name);
+        uint32_t j = ts_node_end_byte(name);
+        uint32_t k = ts_node_start_byte(node);
+        uint32_t l = ts_node_end_byte(node);
 
-      entity.type = EntityType::VARIABLE;
-      entity.name = source.substr(i, j - i);
-      entity.decl = source.substr(k, l - k);
-    } else if (strcmp(ts_node_type(decl), "function_declarator") == 0) {
-      /* global or namespace function */
-      TSNode name = ts_node_child_by_field_name(decl, "declarator", 10);
+        entity.type = EntityType::VARIABLE;
+        entity.name = source.substr(i, j - i);
+        entity.decl = source.substr(k, l - k);
+      } else if (strcmp(ts_node_type(decl), "function_declarator") == 0) {
+        /* global or namespace function */
+        TSNode name = ts_node_child_by_field_name(decl, "declarator", 10);
 
-      uint32_t i = ts_node_start_byte(name);
-      uint32_t j = ts_node_end_byte(name);
-      uint32_t k = ts_node_start_byte(node);
-      uint32_t l = ts_node_end_byte(decl);
+        uint32_t i = ts_node_start_byte(name);
+        uint32_t j = ts_node_end_byte(name);
+        uint32_t k = ts_node_start_byte(node);
+        uint32_t l = ts_node_end_byte(decl);
 
-      if (strcmp(ts_node_type(name), "operator_name") == 0) {
-        entity.type = EntityType::OPERATOR;
-      } else {
-        entity.type = EntityType::FUNCTION;
+        if (strcmp(ts_node_type(name), "operator_name") == 0) {
+          entity.type = EntityType::OPERATOR;
+        } else {
+          entity.type = EntityType::FUNCTION;
+        }
+        entity.name = source.substr(i, j - i);
+        entity.decl = source.substr(k, l - k);
       }
-      entity.name = source.substr(i, j - i);
-      entity.decl = source.substr(k, l - k);
     }
-  } else if (strcmp(ts_node_type(node), "field_declaration") == 0) {
-    /* member variable */
-    TSNode name = ts_node_child_by_field_name(node, "declarator", 10);
-
-    uint32_t i = ts_node_start_byte(name);
-    uint32_t j = ts_node_end_byte(name);
-    uint32_t k = ts_node_start_byte(node);
-    uint32_t l = ts_node_end_byte(node);
-
-    entity.type = EntityType::VARIABLE;
-    entity.name = source.substr(i, j - i);
-    entity.decl = source.substr(k, l - k);
   } else if (strcmp(ts_node_type(node), "enumerator") == 0) {
     /* enumerator */
     TSNode name = ts_node_child_by_field_name(node, "name", 4);
