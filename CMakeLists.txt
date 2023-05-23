@@ -21,4 +21,3 @@ target_link_libraries(doxide yaml tree-sitter)
 
 include(GNUInstallDirs)
 install(TARGETS doxide)
-install(DIRECTORY share/ DESTINATION ${CMAKE_INSTALL_DATADIR}/doxide)

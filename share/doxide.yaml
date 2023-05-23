@@ -1,9 +1,0 @@
-name:
-version:
-description:
-files:
-  - *.hpp
-  - */*.hpp
-  - */*/*.hpp
-  - */*/*/*.hpp
-  - */*/*/*/*.hpp

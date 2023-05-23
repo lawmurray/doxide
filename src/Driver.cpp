@@ -6,12 +6,18 @@
 namespace fs = std::filesystem;
 
 static void write_file(const std::string& contents, const fs::path& dst) {
+  if (dst.has_parent_path()) {
+    fs::create_directories(dst.parent_path());
+  }
   std::fstream stream(dst, std::ios::out);
   stream << contents << '\n';
   stream.close();
 }
 
 static void write_file_prompt(const std::string& contents, const fs::path& dst) {
+  if (dst.has_parent_path()) {
+    fs::create_directories(dst.parent_path());
+  }
   if (fs::exists(dst)) {
     std::cout << dst.string() << " already exists, overwrite? [y/N] ";
     std::string ans;
@@ -25,6 +31,9 @@ static void write_file_prompt(const std::string& contents, const fs::path& dst) 
 }
 
 static void copy_file_prompt(const fs::path& src, const fs::path& dst) {
+  if (dst.has_parent_path()) {
+    fs::create_directories(dst.parent_path());
+  }
   if (fs::exists(dst)) {
     std::cout << dst.string() << " already exists, overwrite? [y/N] ";
     std::string ans;
@@ -114,15 +123,11 @@ Driver::Driver(int argc, char** argv) :
 }
 
 void Driver::init() {
-  std::stringstream stream;
-  stream << "name: " << name << std::endl;
-  stream << "version: " << version << std::endl;
-  stream << "description: " << description << std::endl;
-  stream << "files: " << std::endl;
-  for (const auto& file : files) {
-    stream << "  - " << file << std::endl;
-  }
-  write_file_prompt(stream.str(), "doxide.yaml");
+  write_file_prompt(init_doxide_yaml, "doxide.yaml");
+  write_file_prompt(init_mkdocs_yaml, "mkdocs.yaml");
+  write_file_prompt(init_docs_javascripts_mathjax_js, "docs/javascripts/mathjax.js");
+  write_file_prompt(init_docs_stylesheets_doxide_css, "docs/stylesheets/doxide.css");
+  write_file_prompt(init_overrides_partials_copyright_html, "overrides/partials/copyright.html");
 }
 
 void Driver::docs() {
