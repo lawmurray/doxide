@@ -10,7 +10,7 @@ void Entity::add(const Entity& node) {
   /* namespaces should not be added this way, instead retrieve with ns() */
   assert(node.type != EntityType::NAMESPACE);
 
-  if (!node.hide) {
+  if (!node.hide && !node.docs.empty()) {
     if (!node.ingroup.empty() && node.ingroup != name) {
       group(node.ingroup).add(node);
     } else if (node.type == EntityType::TYPE) {
