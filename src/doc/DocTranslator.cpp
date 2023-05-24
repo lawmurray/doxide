@@ -62,6 +62,12 @@ void DocTranslator::translate(const std::string_view& comment,
           entity.docs.append(token.substr(1));
           indent += 4;
           entity.docs.append(indent, ' ');
+        } else if (token.substr(1) == "group") {
+          Entity group;
+          group.type = EntityType::GROUP;
+          group.name = tokenizer.consume(WORD).str();
+          group.docs = tokenizer.consume(DOC_PARA).str();
+          entity.add(group);
         } else if (token.substr(1) == "ingroup") {
           entity.ingroup = tokenizer.consume(WORD).str();
 

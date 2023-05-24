@@ -8,13 +8,13 @@
 enum class EntityType {
   NONE,
   NAMESPACE,
+  GROUP,
   TYPE,
   VARIABLE,
   FUNCTION,
   OPERATOR,
   ENUMERATOR,
   MACRO,
-  GROUP,
   FILE
 };
 
@@ -31,24 +31,24 @@ struct Entity {
   Entity();
 
   /**
-   * Add a child node.
+   * Add another entity as a child.
    */
-  void add(const Entity& node);
+  void add(const Entity& o);
 
   /**
-   * Get a namespace node, creating it if necessary.
+   * Merge the children of another entity into this one.
    */
-  Entity& ns(const std::string& name);
-
-  /**
-   * Get a group node, creating it if necessary.
-   */
-  Entity& group(const std::string& name);
+  void merge(const Entity& o);
 
   /**
    * Child namespaces.
    */
   map_type namespaces;
+
+  /**
+   * Child groups.
+   */
+  map_type groups;
 
   /**
    * Child types.
@@ -79,11 +79,6 @@ struct Entity {
    * Child macros.
    */
   map_type macros;
-
-  /**
-   * Child groups.
-   */
-  map_type groups;
 
   /**
    * Entity name (e.g. name of variable, function, class).

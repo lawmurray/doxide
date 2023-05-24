@@ -37,13 +37,18 @@ private:
   /**
    * Parse the next entity.
    */
-  void parseEntity(const std::string_view& source, TSTreeCursor& cursor,
-      Entity& parent);
+  void parseEntity(const std::string_view& source, TSNode& parentNode,
+      Entity& parentEntity);
 
   /**
    * Tree-sitter parser.
    */
   TSParser* parser;
+
+  /**
+   * Tree-sitter query.
+   */
+  TSQuery* query;
 
   /**
    * Global namespace.
