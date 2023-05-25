@@ -7,8 +7,8 @@ int main(int argc, char** argv) {
   Driver driver(argc - 1, argv + 1);
   if (prog.compare("init") == 0) {
     driver.init();
-  } else if (prog.compare("docs") == 0) {
-    driver.docs();
+  } else if (prog.compare("build") == 0) {
+    driver.build();
   } else if (prog.compare("clean") == 0) {
     driver.clean();
   } else if (prog.compare("help") == 0 || prog.compare("--help") == 0) {

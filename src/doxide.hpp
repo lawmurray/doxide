@@ -46,6 +46,11 @@ files:
   - "*/*/*.hpp"
   - "*/*/*/*.hpp"
   - "*/*/*/*/*.hpp"
+  - "*.h"
+  - "*/*.h"
+  - "*/*/*.h"
+  - "*/*/*/*.h"
+  - "*/*/*/*/*.h"
 )"""";
 
 /**
@@ -54,12 +59,9 @@ files:
 static const char* init_mkdocs_yaml =
 R""""(site_name:
 site_description: 
-site_url: https://example.com
-repo_url: https://github.com/lawmurray/doxide
-repo_name: lawmurray/doxide
 theme:
   name: material
-  custom_dir: overrides
+  custom_dir: docs/overrides
   features:
     - navigation.indexes
   palette:
@@ -78,35 +80,25 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
-  icon:
-    repo: material/github
 
 markdown_extensions:
   - def_list
   - attr_list
   - admonition
-  - footnotes
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_div_format
 plugins:
   - search
   - social
 extra_css:
   - stylesheets/doxide.css
-  - https://unpkg.com/mermaid@8.5.1/dist/mermaid.css
 extra_javascript:
   - javascripts/mathjax.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-  - https://unpkg.com/mermaid@8.5.1/dist/mermaid.min.js
 )"""";
 
 /**
@@ -177,9 +169,9 @@ R""""(:root {
 )"""";
 
 /**
- * Contents of initial overrides/partials/copyright.html
+ * Contents of initial docs/overrides/partials/copyright.html
  */
-static const char* init_overrides_partials_copyright_html =
+static const char* init_docs_overrides_partials_copyright_html =
 R""""(<div class="md-copyright">
   {% if config.copyright %}
     <div class="md-copyright__highlight">
