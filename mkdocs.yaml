@@ -6,8 +6,8 @@ repo_name: lawmurray/doxide
 theme:
   name: material
   custom_dir: docs/overrides
-  logo: assets/logowhite.svg
-  favicon: assets/logored2.svg
+  logo: assets/logo_white.svg
+  favicon: assets/logo_red.svg
   features:
     - navigation.indexes
   palette:
