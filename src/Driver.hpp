@@ -18,9 +18,9 @@ public:
   void init();
 
   /**
-   * Generate documentation.
+   * Build documentation.
    */
-  void docs();
+  void build();
 
   /**
    * Clean documentation.

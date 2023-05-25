@@ -127,10 +127,10 @@ void Driver::init() {
   write_file_prompt(init_mkdocs_yaml, "mkdocs.yaml");
   write_file_prompt(init_docs_javascripts_mathjax_js, "docs/javascripts/mathjax.js");
   write_file_prompt(init_docs_stylesheets_doxide_css, "docs/stylesheets/doxide.css");
-  write_file_prompt(init_overrides_partials_copyright_html, "overrides/partials/copyright.html");
+  write_file_prompt(init_docs_overrides_partials_copyright_html, "docs/overrides/partials/copyright.html");
 }
 
-void Driver::docs() {
+void Driver::build() {
   config();
   clean();
 
@@ -197,7 +197,7 @@ void Driver::help() {
   std::cout << "    --version (default 0.0.0): Version of the project." << std::endl;
   std::cout << "    --description (default empty): Description of the project." << std::endl;
   std::cout << std::endl;
-  std::cout << "doxide docs" << std::endl;
+  std::cout << "doxide build" << std::endl;
   std::cout << std::endl;
   std::cout << "   Build the project documentation." << std::endl;
   std::cout << std::endl;
