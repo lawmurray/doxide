@@ -133,8 +133,9 @@ void DocTranslator::translate(const std::string_view& comment,
           entity.docs.append("!!! quote \"Remark\"\n");
           indent += 4;
           entity.docs.append(indent, ' ');
-
-        /* unrecognized commands */
+        } else if (token.str().at(0) == '\\') {
+          /* treat as escape */
+          entity.docs.append(token.substr(1));
         } else {
           warn("unrecognized command: " << token.str());
           entity.docs.append(token.str());
