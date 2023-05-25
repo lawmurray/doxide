@@ -37,8 +37,7 @@ private:
   /**
    * Parse the next entity.
    */
-  void parseEntity(const std::string_view& source, TSNode& parentNode,
-      Entity& parentEntity);
+  void parseEntity(const std::string_view& source, const TSQueryMatch& match);
 
   /**
    * Tree-sitter parser.
