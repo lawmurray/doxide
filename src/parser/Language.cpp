@@ -38,7 +38,7 @@ const char* query_cpp = R""""(
   ((comment) @docs .
     (enum_specifier
       name: (type_identifier) @name
-      body: (field_declaration_list)? @body
+      body: (enumerator_list)? @body
       ) @type)
 
   ;; class template definition
