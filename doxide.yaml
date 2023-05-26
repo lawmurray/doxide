@@ -1,5 +1,4 @@
-name: Doxide
-version: 0.0.0
+title: Doxide
 description: Modern documentation for modern C++.
 files:
   - demo/test.hpp

@@ -46,14 +46,9 @@ private:
   void groups(YAMLNode& parentNode, Entity& parentEntity);
 
   /**
-   * Name.
+   * Title.
    */
-  std::string name;
-
-  /**
-   * Version.
-   */
-  std::string version;
+  std::string title;
 
   /**
    * Description.

@@ -17,50 +17,43 @@ public:
   void generate(const std::filesystem::path& dir, const Entity& node);
 
 private:
-  void generateMacro(const std::filesystem::path& dir, const Entity& node);
-  void generateType(const std::filesystem::path& dir, const Entity& node);
-  void generateVariable(const std::filesystem::path& dir, const Entity& node);
-
-  template<class Iterator>
-  void generateFunction(const std::filesystem::path& dir,
-      const Iterator& first, const Iterator& last);
-
-  template<class Iterator>
-  void generateOperator(const std::filesystem::path& dir,
-      const Iterator& first, const Iterator& last);
-
   /**
    * Produce the YAML frontmatter for an entity.
    */
   static std::string frontmatter(const Entity& entity);
 
   /**
-   * Process a documentation comment to detailed description.
+   * Produce title for an entity.
    */
-  static std::string detailed(const std::string& str);
+  static std::string title(const Entity& entity);
 
   /**
-   * Process a documentation comment to brief description.
+   * Produce brief description for an entity.
    */
-  static std::string brief(const std::string& str);
+  static std::string brief(const Entity& entity);
 
   /**
-   * Process a documentation comment to a single line.
+   * Reduce to a single line.
    */
   static std::string line(const std::string& str);
 
   /**
-   * Indent the lines of a strong.
+   * Indent lines.
    */
   static std::string indent(const std::string& str);
 
   /**
-   * Sanitize a string for HTML, replacing special characters with entities.
+   * Sanitize for a string, escaping double quotes and backslashes.
+   */
+  static std::string stringify(const std::string& str);
+
+  /**
+   * Sanitize for HTML, replacing special characters with entities.
    */
   static std::string htmlize(const std::string& str);
 
   /**
-   * Sanitize a string for a file name or internal anchor.
+   * Sanitize for a file name or internal anchor.
    */
   static std::string sanitize(const std::string& str);
 };

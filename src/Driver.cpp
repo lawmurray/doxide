@@ -71,24 +71,21 @@ static std::list<fs::path> glob(const std::string& pattern) {
 }
 
 Driver::Driver(int argc, char** argv) :
-    name("Untitled"),
-    version("0.0.0"),
+    title("Untitled"),
     output("docs") {
   /* read in config file first, so that command-line options can override */
   config();
 
   /* command-line options */
   enum {
-    NAME_ARG = 256,
-    VERSION_ARG,
+    TITLE_ARG = 256,
     DESCRIPTION_ARG,
     OUTPUT_ARG
   };
 
   int c, option_index;
   option long_options[] = {
-      { "name", required_argument, 0, NAME_ARG },
-      { "version", required_argument, 0, VERSION_ARG },
+      { "title", required_argument, 0, TITLE_ARG },
       { "description", required_argument, 0, DESCRIPTION_ARG },
       { "output", required_argument, 0, OUTPUT_ARG },
       { 0, 0, 0, 0 }
@@ -99,11 +96,8 @@ Driver::Driver(int argc, char** argv) :
   c = getopt_long_only(argc, argv, short_options, long_options, &option_index);
   while (c != -1) {
     switch (c) {
-    case NAME_ARG:
-      name = optarg;
-      break;
-    case VERSION_ARG:
-      version = optarg;
+    case TITLE_ARG:
+      title = optarg;
       break;
     case DESCRIPTION_ARG:
       description = optarg;
@@ -182,12 +176,11 @@ void Driver::clean() {
 void Driver::help() {
   std::cout << "Usage:" << std::endl;
   std::cout << std::endl;
-  std::cout << "doxide init --name Name --version Version --description Description" << std::endl;
+  std::cout << "doxide init --title Title --description Description" << std::endl;
   std::cout << std::endl;
   std::cout << "  Initialize the working directory for a new project." << std::endl;
   std::cout << std::endl;
-  std::cout << "    --name (default Untitled): Name of the project." << std::endl;
-  std::cout << "    --version (default 0.0.0): Version of the project." << std::endl;
+  std::cout << "    --title (default Untitled): Title of the project." << std::endl;
   std::cout << "    --description (default empty): Description of the project." << std::endl;
   std::cout << std::endl;
   std::cout << "doxide build" << std::endl;
@@ -224,11 +217,8 @@ void Driver::config() {
   YAMLParser parser;
   YAMLNode root = parser.parse(gulp(path));
 
-  if (root.isValue("name")) {
-    name = root.value("name");
-  }
-  if (root.isValue("version")) {
-    version = root.value("version");
+  if (root.isValue("title")) {
+    title = root.value("title");
   }
   if (root.isValue("description")) {
     description = root.value("description");
@@ -263,11 +253,7 @@ void Driver::config() {
   groups(root, global);
 
   /* initialize meta data */
-  global.decl = name;
-  if (!version.empty()) {
-    global.decl.append(" ");
-    global.decl.append(version);
-  }
+  global.title = title;
   global.docs = description;
 }
 
@@ -280,7 +266,7 @@ void Driver::groups(YAMLNode& parentNode, Entity& parentEntity) {
         entity.name = node->value("name");
       }
       if (node->isValue("title")) {
-        entity.decl = node->value("title");
+        entity.title = node->value("title");
       }
       if (node->isValue("description")) {
         entity.docs = node->value("description");

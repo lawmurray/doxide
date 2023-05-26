@@ -122,6 +122,11 @@ struct Entity {
   std::string docs;
 
   /**
+   * Entity title. This is used for the title of the page.
+   */
+  std::string title;
+
+  /**
    * Alternative brief description.
    */
   std::string brief;
