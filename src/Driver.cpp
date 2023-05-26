@@ -1,6 +1,6 @@
 #include "Driver.hpp"
 #include "yaml/YAMLParser.hpp"
-#include "cpp/CppParser.hpp"
+#include "parser/Parser.hpp"
 #include "markdown/MarkdownGenerator.hpp"
 
 namespace fs = std::filesystem;
@@ -74,6 +74,9 @@ Driver::Driver(int argc, char** argv) :
     name("Untitled"),
     version("0.0.0"),
     output("docs") {
+  /* read in config file first, so that command-line options can override */
+  config();
+
   /* command-line options */
   enum {
     NAME_ARG = 256,
@@ -131,26 +134,17 @@ void Driver::init() {
 }
 
 void Driver::build() {
-  config();
   clean();
 
   /* parse */
-  CppParser parser;
+  Parser parser;
   for (auto file: files) {
-    parser.parse(gulp(file));
-  }
-
-  /* if a readme file exists, make it the front page; global entities are
-   * appended to the page */
-  if (fs::exists("README.md")) {
-    fs::create_directories(output);
-    fs::copy_file("README.md", fs::path(output) / "index.md",
-        fs::copy_options::overwrite_existing);
+    parser.parse(gulp(file), global);
   }
 
   /* generate */
   MarkdownGenerator generator;
-  generator.generate(output, parser.root());
+  generator.generate(output, global);
 }
 
 void Driver::clean() {
@@ -160,8 +154,7 @@ void Driver::clean() {
   for (auto& entry : fs::recursive_directory_iterator(output)) {
     if (entry.is_regular_file() && entry.path().extension() == ".md") {
       YAMLParser parser;
-      parser.parse(gulp(entry.path()));
-      auto& frontmatter = parser.root();
+      YAMLNode frontmatter = parser.parse(gulp(entry.path()));
       if (frontmatter.isValue("generator") &&
           frontmatter.value("generator") == "doxide") {
         fs::remove(entry.path());
@@ -224,32 +217,30 @@ void Driver::config() {
   } else if (std::filesystem::exists("doxide.json")) {
     path = "doxide.json";
   } else {
-    std::cerr << "no doxide configuration file, use 'doxide init' to get set up." << std::endl;
-    exit(EXIT_FAILURE);
+    warn("no doxide configuration file, use 'doxide init' to get set up.");
   }
 
   /* parse build configuration file */
   YAMLParser parser;
-  parser.parse(gulp(path));
-  auto& config = parser.root();
+  YAMLNode root = parser.parse(gulp(path));
 
-  if (config.isValue("name")) {
-    name = config.value("name");
+  if (root.isValue("name")) {
+    name = root.value("name");
   }
-  if (config.isValue("version")) {
-    version = config.value("version");
+  if (root.isValue("version")) {
+    version = root.value("version");
   }
-  if (config.isValue("description")) {
-    description = config.value("description");
+  if (root.isValue("description")) {
+    description = root.value("description");
   }
-  if (config.isValue("output")) {
-    output = config.value("output");
+  if (root.isValue("output")) {
+    output = root.value("output");
   }
 
   /* expand file patterns in file list */
   files.clear();
-  if (config.isSequence("files")) {
-    for (auto& node : config.sequence("files")) {
+  if (root.isSequence("files")) {
+    for (auto& node : root.sequence("files")) {
       if (node->isValue()) {
         auto& pattern = node->value();
         auto paths = glob(pattern);
@@ -265,6 +256,37 @@ void Driver::config() {
           }
         }
       }
+    }
+  }
+
+  /* initialize groups */
+  groups(root, global);
+
+  /* initialize meta data */
+  global.decl = name;
+  if (!version.empty()) {
+    global.decl.append(" ");
+    global.decl.append(version);
+  }
+  global.docs = description;
+}
+
+void Driver::groups(YAMLNode& parentNode, Entity& parentEntity) {
+  if (parentNode.isSequence("groups")) {
+    for (auto& node : parentNode.sequence("groups")) {
+      Entity entity;
+      entity.type = EntityType::GROUP;
+      if (node->isValue("name")) {
+        entity.name = node->value("name");
+      }
+      if (node->isValue("title")) {
+        entity.decl = node->value("title");
+      }
+      if (node->isValue("description")) {
+        entity.docs = node->value("description");
+      }
+      groups(*node, entity);
+      parentEntity.add(entity);
     }
   }
 }

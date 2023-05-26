@@ -8,18 +8,19 @@ YAMLParser::~YAMLParser() {
   yaml_parser_delete(&parser);
 }
 
-void YAMLParser::parse(const std::string_view& contents) {
+YAMLNode YAMLParser::parse(const std::string_view& contents) {
   yaml_parser_set_input_string(&parser, (const unsigned char*)contents.data(),
       contents.size());
+  YAMLNode root;
   int done = 0;
   while (!done) {
     if (!yaml_parser_parse(&parser, &event)) {
       error("syntax error in configuration file.");
     }
     if (event.type == YAML_SEQUENCE_START_EVENT) {
-      parseSequence(global);
+      parseSequence(root);
     } else if (event.type == YAML_MAPPING_START_EVENT) {
-      parseMapping(global);
+      parseMapping(root);
     } else {
       /* YAML_STREAM_END_EVENT marks the end of file,
        * YAML_DOCUMENT_END_EVENT marks the end of frontmatter */
@@ -28,6 +29,7 @@ void YAMLParser::parse(const std::string_view& contents) {
       yaml_event_delete(&event);
     }
   }
+  return root;
 }
 
 void YAMLParser::parseMapping(YAMLNode& node) {

@@ -1,31 +1,23 @@
 #include "markdown/MarkdownGenerator.hpp"
 
 void MarkdownGenerator::generate(const std::filesystem::path& dir,
-    const Entity& global) {
-  generateGroup(dir, global);
-}
-
-void MarkdownGenerator::generateGroup(const std::filesystem::path& dir,
     const Entity& entity) {
   std::ofstream out;
-  if (entity.name.empty()) {
-    std::filesystem::create_directories(dir);
-    out.open(dir / "index.md", std::ios::app);
-  } else {
-    std::filesystem::create_directories(dir / sanitize(entity.name));
-    out.open(dir / sanitize(entity.name) / "index.md");
-    out << frontmatter(entity) << std::endl;
+  std::filesystem::create_directories(dir / sanitize(entity.name));
+  out.open(dir / sanitize(entity.name) / "index.md");
+  out << frontmatter(entity) << std::endl;
 
-    /* header */
-    out << "# " << entity.name << std::endl;
-    out << std::endl;
-  }
+  /* header */
+  out << "# " << entity.decl << std::endl;
+  out << std::endl;
+  out << entity.docs << std::endl;
+  out << std::endl;
 
   /* groups */
   if (entity.groups.size() > 0) {
-    out << "## Groups" << std::endl;
     for (auto& [name, child] : entity.groups) {
-      out << ":material-view-module-outline: [" << name << "](" << sanitize(name) << "/)" << std::endl;
+      out << ":material-view-module-outline: [" << child.decl << ']';
+      out << "(" << sanitize(name) << "/)" << std::endl;
       out << ":   " << child.docs << std::endl;
       out << std::endl;
     }
@@ -108,10 +100,10 @@ void MarkdownGenerator::generateGroup(const std::filesystem::path& dir,
 
   /* child pages */
   for (auto& [name, child] : entity.groups) {
-    generateGroup(dir / sanitize(entity.name), child);
+    generate(dir / sanitize(entity.name), child);
   }
   for (auto& [name, child] : entity.namespaces) {
-    generateGroup(dir / sanitize(entity.name), child);
+    generate(dir / sanitize(entity.name), child);
   }
   for (auto& [name, child] : entity.macros) {
     generateMacro(dir / sanitize(entity.name), child);

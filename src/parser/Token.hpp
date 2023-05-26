@@ -3,10 +3,10 @@
 #include "doxide.hpp"
 
 /**
- * DocToken types. Closing delimiters must be one shift left of their opening
+ * Token types. Closing delimiters must be one shift left of their opening
  * counterparts.
  */
-enum DocTokenType : int {
+enum TokenType : int {
   NONE = 0,
   DOC = 1 << 1,
   DOC_CLOSE = 1 << 2,
@@ -21,7 +21,7 @@ enum DocTokenType : int {
 };
 
 /**
- * DocToken patterns. Order is important, as match to an earlier pattern
+ * Token patterns. Order is important, as match to an earlier pattern
  * precludes a match to a later.
  */
 static auto regexes = {
@@ -37,17 +37,17 @@ static auto regexes = {
 };
 
 /**
- * DocToken.
+ * Token.
  * 
- * A token is only valid for the lifetime of the DocTokenizer that produced it,
+ * A token is only valid for the lifetime of the Tokenizer that produced it,
  * as it contains a reference to a substring of the source file.
  */
-class DocToken {
+class Token {
 public:
   /**
    * Constructor.
    */
-  DocToken(const DocTokenType& type = NONE,
+  Token(const TokenType& type = NONE,
       const std::string_view::const_iterator& first = {},
       const std::string_view::const_iterator& last = {}) :
       type(type),
@@ -73,9 +73,9 @@ public:
   }
 
   /**
-   * DocToken type.
+   * Token type.
    */
-  DocTokenType type;
+  TokenType type;
 
   /**
    * Iterator to first character.

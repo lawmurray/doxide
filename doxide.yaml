@@ -3,3 +3,11 @@ version: 0.0.0
 description: Modern documentation for modern C++.
 files:
   - demo/test.hpp
+groups:
+  - name: demo
+    title: Demonstration
+    description: Demonstration of Doxide features.
+    groups:
+      - name: subgroup
+        title: subgroup
+        description: Description of the subgroup.

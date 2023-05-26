@@ -9,9 +9,9 @@ add_executable(doxide
     contrib/tree-sitter-cpp/src/parser.c
     contrib/tree-sitter-cpp/src/scanner.cc
     src/doxide.cpp
-    src/cpp/CppParser.cpp
-    src/doc/DocTokenizer.cpp
-    src/doc/DocTranslator.cpp
+    src/parser/Language.cpp
+    src/parser/Parser.cpp
+    src/parser/Tokenizer.cpp
     src/markdown/MarkdownGenerator.cpp
     src/yaml/YAMLNode.cpp
     src/yaml/YAMLParser.cpp

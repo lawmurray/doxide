@@ -8,18 +8,12 @@ Entity::Entity() :
 
 void Entity::add(const Entity& o) {
   if (!o.hide) {
-    if (!o.ingroup.empty() && o.ingroup != name) {
-      auto& group = groups[o.ingroup];
-      group.name = o.ingroup;
-      group.add(o);
-    } else if (o.type == EntityType::NAMESPACE) {
+    if (o.type == EntityType::NAMESPACE) {
       auto& ns = namespaces[o.name];
       ns.name = o.name;  // just created if did not already exist
       ns.merge(o);
     } else if (o.type == EntityType::GROUP) {
-      auto& group = groups[o.name];
-      group.name = o.name;  // just created if did not already exist
-      group.merge(o);
+      groups.insert({o.name, o});
     } else if (o.type == EntityType::TYPE) {
       types.insert({o.name, o});
     } else if (o.type == EntityType::VARIABLE) {

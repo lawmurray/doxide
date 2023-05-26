@@ -23,14 +23,7 @@ public:
    * 
    * @return The contents of the file.
    */
-  void parse(const std::string_view& contents);
-
-  /**
-   * Get the root node.
-   */
-  const YAMLNode& root() const {
-    return global;
-  }
+  YAMLNode parse(const std::string_view& contents);
 
 private:
   void parseMapping(YAMLNode& node);
@@ -46,9 +39,4 @@ private:
    * LibYAML event.
    */
   yaml_event_t event;
-
-  /**
-   * Contents, populated during parse.
-   */
-  YAMLNode global;
 };

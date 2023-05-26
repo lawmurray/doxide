@@ -1,6 +1,8 @@
 #pragma once
 
 #include "doxide.hpp"
+#include "Entity.hpp"
+#include "yaml/YAMLNode.hpp"
 
 /**
  * Driver.
@@ -39,6 +41,11 @@ private:
   void config();
 
   /**
+   * Recursively read groups from the configuration file.
+   */
+  void groups(YAMLNode& parentNode, Entity& parentEntity);
+
+  /**
    * Name.
    */
   std::string name;
@@ -62,4 +69,9 @@ private:
    * Lists of files from config.
    */
   std::unordered_set<std::string> files;
+
+  /**
+   * Global namespace.
+   */
+  Entity global;
 };

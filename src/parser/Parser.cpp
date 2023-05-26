@@ -1,11 +1,124 @@
-#include "doc/DocTranslator.hpp"
-#include "doc/DocTokenizer.hpp"
+#include "parser/Parser.hpp"
+#include "parser/Tokenizer.hpp"
+#include "parser/Language.hpp"
 
-void DocTranslator::translate(const std::string_view& comment,
-    Entity& entity) {
+Parser::Parser() :
+    parser(nullptr),
+    query(nullptr) {
+  /* parser */
+  parser = ts_parser_new();
+  ts_parser_set_language(parser, tree_sitter_cpp());
+
+  /* query */
+  uint32_t error_offset;
+  TSQueryError error_type;
+  query = ts_query_new(tree_sitter_cpp(), query_cpp, strlen(query_cpp),
+      &error_offset, &error_type);
+  if (error_type != TSQueryErrorNone) {
+    std::string_view from(query_cpp + error_offset, 40);
+    error("invalid query starting " << from << "...");
+  }
+}
+
+Parser::~Parser() {
+  ts_query_delete(query);
+  ts_parser_delete(parser);
+}
+
+void Parser::parse(const std::string_view& source, Entity& global) {
+  /* parser */
+  ts_parser_reset(parser);
+  TSTree *tree = ts_parser_parse_string(parser, NULL, source.data(),
+      source.size());
+  TSNode node = ts_tree_root_node(tree);
+
+  /* initialize stacks */
+  std::stack<uint32_t> starts, ends;
+  std::stack<Entity> entities;
+  starts.push(ts_node_start_byte(node));
+  ends.push(ts_node_end_byte(node));
+  entities.push(std::move(global));
+
+  /* query */
+  TSQueryCursor* cursor = ts_query_cursor_new();
+  ts_query_cursor_exec(cursor, query, node);
+  TSQueryMatch match;
+  while (ts_query_cursor_next_match(cursor, &match)) {
+    Entity entity;
+    uint64_t start = 0, middle = 0, end = 0;
+    for (uint16_t i = 0; i < match.capture_count; ++i) {
+      node = match.captures[i].node;
+      uint32_t id = match.captures[i].index; 
+      uint32_t length = 0;
+      uint32_t k = ts_node_start_byte(node);
+      uint32_t l = ts_node_end_byte(node);
+      const char* name = ts_query_capture_name_for_id(query, id, &length);
+
+      if (strncmp(name, "docs", length) == 0) {
+        translate(source.substr(k, l - k), entity);
+      } else if (strncmp(name, "name", length) == 0) {
+        entity.name = source.substr(k, l - k);
+      } else if (strncmp(name, "body", length) == 0) {
+        middle = ts_node_start_byte(node);
+      } else if (strncmp(name, "value", length) == 0) {
+        middle = ts_node_start_byte(node);
+      } else {
+        start = ts_node_start_byte(node);
+        end = ts_node_end_byte(node);
+        middle = end;
+
+        if (strncmp(name, "namespace", length) == 0) {
+          entity.type = EntityType::NAMESPACE;
+        } else if (strncmp(name, "type", length) == 0) {
+          entity.type = EntityType::TYPE;
+        } else if (strncmp(name, "variable", length) == 0) {
+          entity.type = EntityType::VARIABLE;
+        } else if (strncmp(name, "function", length) == 0) {
+          entity.type = EntityType::FUNCTION;
+        } else if (strncmp(name, "operator", length) == 0) {
+          entity.type = EntityType::OPERATOR;
+        } else if (strncmp(name, "enumerator", length) == 0) {
+          entity.type = EntityType::ENUMERATOR;
+        } else if (strncmp(name, "macro", length) == 0) {
+          entity.type = EntityType::MACRO;
+        } else {
+          warn("unrecognized match");
+        }
+      }
+    }
+
+    /* declaration only */
+    entity.decl = source.substr(start, middle - start);
+
+    /* this node represents the whole entity, pop the stack until we find its
+     * direct parent, as indicated by nested byte ranges */
+    while (!(starts.top() <= start && end <= ends.top())) {
+      Entity top = std::move(entities.top());
+      entities.pop();
+      entities.top().add(top);
+      starts.pop();
+      ends.pop();
+    }
+    entities.push(std::move(entity));
+    starts.push(start);
+    ends.push(end);
+  }
+
+  /* finalize */
+  while (entities.size() > 1) {
+    Entity top = std::move(entities.top());
+    entities.pop();
+    entities.top().add(top);
+  }
+  global = std::move(entities.top());
+  entities.pop();
+  ts_query_cursor_delete(cursor);
+}
+
+void Parser::translate(const std::string_view& comment, Entity& entity) {
   int indent = 0;
-  DocTokenizer tokenizer(comment);
-  DocToken token = tokenizer.next();
+  Tokenizer tokenizer(comment);
+  Token token = tokenizer.next();
   if (token.type & DOC) {  // otherwise not a documentation comment
     token = tokenizer.next();
     while (token.type) {
@@ -62,12 +175,6 @@ void DocTranslator::translate(const std::string_view& comment,
           entity.docs.append(token.substr(1));
           indent += 4;
           entity.docs.append(indent, ' ');
-        } else if (token.substr(1) == "group") {
-          Entity group;
-          group.type = EntityType::GROUP;
-          group.name = tokenizer.consume(WORD).str();
-          group.docs = tokenizer.consume(DOC_PARA).str();
-          entity.add(group);
         } else if (token.substr(1) == "ingroup") {
           entity.ingroup = tokenizer.consume(WORD).str();
 

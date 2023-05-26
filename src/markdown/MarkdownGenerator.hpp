@@ -17,7 +17,6 @@ public:
   void generate(const std::filesystem::path& dir, const Entity& node);
 
 private:
-  void generateGroup(const std::filesystem::path& dir, const Entity& node);
   void generateMacro(const std::filesystem::path& dir, const Entity& node);
   void generateType(const std::filesystem::path& dir, const Entity& node);
   void generateVariable(const std::filesystem::path& dir, const Entity& node);
