@@ -7,6 +7,34 @@ Entity::Entity() :
 }
 
 void Entity::add(const Entity& o) {
+  if (!o.ingroup.empty()) {
+    if (addToGroup(o)) {
+      return;
+    } else {
+      warn("ignoring @ingroup " << o.ingroup << ", no such group");
+    }
+  }
+  addToThis(o);
+}
+
+bool Entity::addToGroup(const Entity& o) {
+  /* search for immediate child of given name */
+  auto iter = groups.find(o.ingroup);
+  if (iter != groups.end()) {
+    iter->second.addToThis(o);
+    return true;
+  }
+
+  /* search recursively for descendent of given name */
+  for (auto& [name, group] : groups) {
+    if (group.addToGroup(o)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+void Entity::addToThis(const Entity& o) {
   if (!o.hide) {
     if (o.type == EntityType::NAMESPACE) {
       auto& ns = namespaces[o.name];

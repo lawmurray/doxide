@@ -87,11 +87,11 @@ void Parser::parse(const std::string_view& source, Entity& global) {
       }
     }
 
-    /* declaration only */
+    /* entity declaration */
     entity.decl = source.substr(start, middle - start);
 
-    /* this node represents the whole entity, pop the stack until we find its
-     * direct parent, as indicated by nested byte ranges */
+    /* the final node represents the whole entity, pop the stack until we find
+     * its direct parent, as determined using nested byte ranges */
     while (!(starts.top() <= start && end <= ends.top())) {
       Entity top = std::move(entities.top());
       entities.pop();
@@ -99,6 +99,13 @@ void Parser::parse(const std::string_view& source, Entity& global) {
       starts.pop();
       ends.pop();
     }
+
+    /* override the ingroup for class members, as they cannot be moved out */
+    if (entities.top().type == EntityType::TYPE) {
+      entity.ingroup.clear();
+    }
+
+    /* push to stack */
     entities.push(std::move(entity));
     starts.push(start);
     ends.push(end);
