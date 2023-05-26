@@ -10,11 +10,11 @@ static const char* query_cpp = R""""(
       name: (namespace_identifier) @name
       body: (declaration_list)? @body) @namespace)
 
-  ;; nested namespace definition
+  ;; nested namespace definition---matches once for each @name
   ((comment)? @docs .
     (namespace_definition
       (nested_namespace_specifier
-        (namespace_identifier)+ @name .)
+        (namespace_identifier) @name)
       body: (declaration_list)? @body) @namespace)
 
   ;; class definition
