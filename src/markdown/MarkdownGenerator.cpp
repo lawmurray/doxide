@@ -10,6 +10,10 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
   /* header */
   out << "# " << title(entity) << std::endl;
   out << std::endl;
+  if (entity.type == EntityType::TYPE) {
+    out << "**" << htmlize(line(entity.decl)) << "**" << std::endl;
+    out << std::endl;
+  }
   out << entity.docs << std::endl;
   out << std::endl;
 
@@ -22,22 +26,6 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
       out << std::endl;
     }
   }
-
-  if (entity.type == EntityType::NAMESPACE) {
-    /* namespace page */
-    out << "**" << htmlize(line(entity.decl)) << "**" << std::endl;
-    out << std::endl;
-    out << entity.docs << std::endl;
-    out << std::endl;
-  }
-
-  /* type page */
-  out << "# " + entity.name << std::endl;
-  out << std::endl;
-  out << "**" << htmlize(line(entity.decl)) << "**" << std::endl;
-  out << std::endl;
-  out << entity.docs << std::endl;
-  out << std::endl;
 
   /* brief descriptions */
   if (entity.namespaces.size() > 0) {
@@ -57,7 +45,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : entity.types) {
-      out << "| [" << name << "](types/" << sanitize(name) << "/) | ";
+      out << "| [" << name << "](" << sanitize(name) << "/) | ";
       out << brief(child) << " |" << std::endl;
     }
     out << std::endl;
@@ -68,7 +56,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : entity.macros) {
-      out << "| [" << name << "](" << sanitize(name) << "/) | ";
+      out << "| [" << name << "](#" << sanitize(name) << ") | ";
       out << brief(child) << " |" << std::endl;
     }
     out << std::endl;
@@ -79,7 +67,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : entity.variables) {
-      out << "| [" << name << "](variables/" << sanitize(name) << "/) | ";
+      out << "| [" << name << "](#" << sanitize(name) << ") | ";
       out << brief(child) << " |" << std::endl;
     }
     out << std::endl;
@@ -90,7 +78,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : entity.operators) {
-      out << "| [" << name << "](operators/" << sanitize(name) << "/) | ";
+      out << "| [" << name << "](#" << sanitize(name) << ") | ";
       out << brief(child) << " |" << std::endl;
     }
     out << std::endl;
@@ -101,7 +89,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& [name, child] : entity.functions) {
-      out << "| [" << name << "](functions/" << sanitize(name) << "/) | ";
+      out << "| [" << name << "](#" << sanitize(name) << ") | ";
       out << brief(child) << " |" << std::endl;
     }
     out << std::endl;
