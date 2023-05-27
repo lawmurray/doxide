@@ -37,8 +37,7 @@
  * Contents of initial doxide.yaml
  */
 static const char* init_doxide_yaml =
-R""""(name:
-version:
+R""""(title:
 description:
 files:
   - "*.hpp"
@@ -85,6 +84,8 @@ markdown_extensions:
   - def_list
   - attr_list
   - admonition
+  - pymdownx.details
+  - pymdownx.superfences
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.emoji:
