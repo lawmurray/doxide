@@ -1,12 +1,13 @@
-title: Doxide
-description: Modern documentation for modern C++.
+title: Demonstration
+description: Demonstration of the features of Doxide.
 files:
-  - demo/test.hpp
+  - demo/parsing.hpp
+  - demo/presentation.hpp
+output: docs/demo
 groups:
-  - name: demo
-    title: Demonstration
-    description: Demonstration of Doxide features.
-    groups:
-      - name: subgroup
-        title: subgroup
-        description: Description of the subgroup.
+  - name: parsing
+    title: Parsing
+    description: Demonstration of some parsing capabilities, such as variables, functions, classes, enums, namespaces, templates, SFINAE, macros, etc.
+  - name: presentation
+    title: Presentation
+    description: Demonstration of some presentation elements.

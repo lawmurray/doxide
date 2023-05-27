@@ -3,6 +3,15 @@ site_description: Modern documentation for Modern C++
 site_url: https://doxide.org
 repo_url: https://github.com/lawmurray/doxide
 repo_name: lawmurray/doxide
+extra:
+  social:
+    - icon: material/mastodon 
+      link: https://fosstodon.org/@lawmurray
+    - icon: material/twitter
+      link: https://twitter.com/lawmurray
+    - icon: material/github
+      link: https://github.com/lawmurray
+
 theme:
   name: material
   custom_dir: docs/overrides
@@ -10,6 +19,7 @@ theme:
   favicon: assets/logo_red.svg
   features:
     - navigation.indexes
+    - announce.dismiss
   palette:
     # Palette toggle for light mode
     - scheme: default
@@ -54,3 +64,14 @@ extra_javascript:
   - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
   - https://unpkg.com/mermaid@8.5.1/dist/mermaid.min.js
+
+nav:
+  - index.md
+  - installing.md
+  - getting-started.md
+  - writing-documentation.md
+  - organizing-documentation.md
+  - configuring-documentation.md
+  - command-line.md
+  - questions-and-answers.md
+  - demo/index.md
