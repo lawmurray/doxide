@@ -176,7 +176,7 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
           entity.docs.append(tokenizer.consume(WORD).str());
           entity.docs.append("`");
         } else if (token.substr(1) == "return") {
-          entity.docs.append(":material-location-exit: **Return**\n:   ");
+          entity.docs.append(":material-keyboard-return: **Return**\n:   ");
         } else if (token.substr(1) == "pre") {
           entity.docs.append(":material-check-circle-outline: **Pre-condition**\n:   ");
         } else if (token.substr(1) == "post") {
