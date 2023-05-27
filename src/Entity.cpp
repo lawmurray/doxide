@@ -35,14 +35,14 @@ bool Entity::addToGroup(const Entity& o) {
 }
 
 void Entity::addToThis(const Entity& o) {
-  if (!o.hide) {
-    if (o.type == EntityType::NAMESPACE) {
-      auto& ns = namespaces[o.name];
-      ns.name = o.name;  // just created if did not already exist
-      ns.merge(o);
-    } else if (o.type == EntityType::GROUP) {
-      groups.insert({o.name, o});
-    } else if (o.type == EntityType::TYPE) {
+  if (o.type == EntityType::NAMESPACE) {
+    auto& ns = namespaces[o.name];
+    ns.name = o.name;  // just created if did not already exist
+    ns.merge(o);
+  } else if (o.type == EntityType::GROUP) {
+    groups.insert({o.name, o});
+  } else if (!o.hide && !o.docs.empty()) {
+    if (o.type == EntityType::TYPE) {
       types.push_back(o);
     } else if (o.type == EntityType::VARIABLE) {
       variables.push_back(o);
