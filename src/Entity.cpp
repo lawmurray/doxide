@@ -39,9 +39,15 @@ bool Entity::addToGroup(const Entity& o) {
 
 void Entity::addToThis(const Entity& o) {
   if (o.type == EntityType::NAMESPACE) {
-    auto& ns = namespaces[o.name];
-    ns.name = o.name;  // just created if did not already exist
-    ns.merge(o);
+    auto iter = std::find_if(namespaces.begin(), namespaces.end(),
+        [&o](const Entity& ns) {
+          return ns.name == o.name;
+        });
+    if (iter == namespaces.end()) {
+      namespaces.push_back(o);
+    } else {
+      iter->merge(o);
+    }
   } else if (o.type == EntityType::GROUP) {
     groups.push_back(o);
   } else if (!o.hide && !o.docs.empty()) {
@@ -64,7 +70,7 @@ void Entity::addToThis(const Entity& o) {
 }
 
 void Entity::merge(const Entity& o) {
-  namespaces.insert(o.namespaces.begin(), o.namespaces.end());
+  namespaces.insert(namespaces.end(), o.namespaces.begin(), o.namespaces.end());
   groups.insert(groups.end(), o.groups.begin(), o.groups.end());
   types.insert(types.end(), o.types.begin(), o.types.end());
   variables.insert(variables.end(), o.variables.begin(), o.variables.end());

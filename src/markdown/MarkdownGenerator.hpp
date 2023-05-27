@@ -58,7 +58,12 @@ private:
   static std::string sanitize(const std::string& str);
 
   /**
-   * Sort a list of entities.
+   * Convert a list of entities to a list of pointers to entities, optionally
+   * sorting by name.
+   * 
+   * @param entities List of entities.
+   * @param sort Sort by name?
    */
-  static std::list<Entity> sort(const std::list<Entity>& entities);
+  static std::list<const Entity*> view(const std::list<Entity>& entities,
+      const bool sort);
 };

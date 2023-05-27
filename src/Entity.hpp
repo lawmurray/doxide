@@ -22,7 +22,10 @@ enum class EntityType {
  * Entity.
  */
 struct Entity {
-  using map_type = std::map<std::string,Entity>;
+  /**
+   * Child entities are stored in a list, rather than map by name, to preserve
+   * declaration order. They may be sorted by name on output.
+   */
   using list_type = std::list<Entity>;
 
   /**
@@ -69,7 +72,7 @@ struct Entity {
   /**
    * Child namespaces.
    */
-  map_type namespaces;
+  list_type namespaces;
 
   /**
    * Child groups.
