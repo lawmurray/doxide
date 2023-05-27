@@ -1,4 +1,4 @@
-![Doxide: Modern documentation for modern C++](assets/title.svg)
+![Doxide: Modern documentation for modern C++](docs/assets/title.svg)
 
 Doxide generates documentation for C++ source code. It is configured with
 YAML, generates Markdown, and publishes HTML.
