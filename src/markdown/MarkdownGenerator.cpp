@@ -184,7 +184,9 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     generate(dir / sanitize(entity.name), child);
   }
   for (auto& child : entity.namespaces) {
-    generate(dir / sanitize(entity.name), child);
+    if (!child.empty()) {
+      generate(dir / sanitize(entity.name), child);
+    }
   }
   for (auto& child : entity.types) {
     generate(dir / sanitize(entity.name), child);
