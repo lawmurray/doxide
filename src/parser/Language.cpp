@@ -108,13 +108,15 @@ const char* query_cpp = R""""(
     (function_definition
       declarator: (function_declarator
         declarator: (identifier) @name)
-      body: (_) @body
+      ;; body or, in case of constructor, a field initializer list
+      [(field_initializer_list) body: (_)] @body
       ) @function)
   ((comment) @docs .
     (function_definition
       declarator: (function_declarator
         declarator: (field_identifier) @name)
-      body: (_) @body
+      ;; body or, in case of constructor, a field initializer list
+      [(field_initializer_list) body: (_)] @body
       ) @function)
 
   ;; function template
@@ -128,7 +130,8 @@ const char* query_cpp = R""""(
       (function_definition
         declarator: (function_declarator
           declarator: (identifier) @name)
-        body: (_) @body
+        ;; body or, in case of constructor, a field initializer list
+        [(field_initializer_list) body: (_)] @body
         )) @function)
 
   ;; operator
