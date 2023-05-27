@@ -108,11 +108,13 @@ const char* query_cpp = R""""(
     (function_definition
       declarator: (function_declarator
         declarator: (identifier) @name)
+      body: (_) @body
       ) @function)
   ((comment) @docs .
     (function_definition
       declarator: (function_declarator
         declarator: (field_identifier) @name)
+      body: (_) @body
       ) @function)
 
   ;; function template
@@ -126,6 +128,7 @@ const char* query_cpp = R""""(
       (function_definition
         declarator: (function_declarator
           declarator: (identifier) @name)
+        body: (_) @body
         )) @function)
 
   ;; operator
@@ -141,6 +144,7 @@ const char* query_cpp = R""""(
     (function_definition
       declarator: (function_declarator
         declarator: (operator_name) @name)
+      body: (_) @body
       ) @operator)
 
   ;; operator template
@@ -154,6 +158,7 @@ const char* query_cpp = R""""(
       (function_definition
         declarator: (function_declarator
           declarator: (operator_name) @name)
+        body: (_) @body
         )) @operator)
 
   ;; enumeration value
