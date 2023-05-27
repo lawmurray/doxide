@@ -44,8 +44,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     out << std::endl;
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
-    for (auto& [name, child] : entity.types) {
-      out << "| [" << name << "](" << sanitize(name) << "/) | ";
+    for (auto& child : entity.types) {
+      out << "| [" << child.name << "](" << sanitize(child.name) << "/) | ";
       out << brief(child) << " |" << std::endl;
     }
     out << std::endl;
@@ -55,8 +55,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     out << std::endl;
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
-    for (auto& [name, child] : entity.macros) {
-      out << "| [" << name << "](#" << sanitize(name) << ") | ";
+    for (auto& child : entity.macros) {
+      out << "| [" << child.name << "](#" << sanitize(child.name) << ") | ";
       out << brief(child) << " |" << std::endl;
     }
     out << std::endl;
@@ -66,8 +66,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     out << std::endl;
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
-    for (auto& [name, child] : entity.variables) {
-      out << "| [" << name << "](#" << sanitize(name) << ") | ";
+    for (auto& child : entity.variables) {
+      out << "| [" << child.name << "](#" << sanitize(child.name) << ") | ";
       out << brief(child) << " |" << std::endl;
     }
     out << std::endl;
@@ -77,8 +77,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     out << std::endl;
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
-    for (auto& [name, child] : entity.operators) {
-      out << "| [" << name << "](#" << sanitize(name) << ") | ";
+    for (auto& child : entity.operators) {
+      out << "| [" << child.name << "](#" << sanitize(child.name) << ") | ";
       out << brief(child) << " |" << std::endl;
     }
     out << std::endl;
@@ -88,16 +88,16 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     out << std::endl;
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
-    for (auto& [name, child] : entity.functions) {
-      out << "| [" << name << "](#" << sanitize(name) << ") | ";
+    for (auto& child : entity.functions) {
+      out << "| [" << child.name << "](#" << sanitize(child.name) << ") | ";
       out << brief(child) << " |" << std::endl;
     }
     out << std::endl;
   }
 
   /* for an enumerator, output the possible values */
-  if (entity.enumerators.size() > 0) {
-    for (auto& [name, child] : entity.enumerators) {
+  if (entity.enums.size() > 0) {
+    for (auto& child : entity.enums) {
       out << "**" << child.decl << "**" << std::endl;
       out << ":   " << child.docs << std::endl;
       out << std::endl;
@@ -109,9 +109,9 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
   if (entity.macros.size() > 0) {
     out << "## Macro Details" << std::endl;
     out << std::endl;
-    for (auto& [name, child] : entity.macros) {
-      //out << "### " << name;
-      out << "<a name=\"" << sanitize(name) << "\"></a>" << std::endl;
+    for (auto& child : sort(entity.macros)) {
+      out << "### " << child.name;
+      out << "<a name=\"" << sanitize(child.name) << "\"></a>" << std::endl;
       out << std::endl;
       out << "!!! macro \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
@@ -122,9 +122,9 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
   if (entity.variables.size() > 0) {
     out << "## Variable Details" << std::endl;
     out << std::endl;
-    for (auto& [name, child] : entity.variables) {
-      //out << "### " << name;
-      out << "<a name=\"" << sanitize(name) << "\"></a>" << std::endl;
+    for (auto& child : sort(entity.variables)) {
+      out << "### " << child.name;
+      out << "<a name=\"" << sanitize(child.name) << "\"></a>" << std::endl;
       out << std::endl;
       out << "!!! variable \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
@@ -136,35 +136,35 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     out << "## Operator Details" << std::endl;
     out << std::endl;
     std::string prev;
-    for (auto& [name, child] : entity.operators) {
-      if (name != prev) {
+    for (auto& child : sort(entity.operators)) {
+      if (child.name != prev) {
         /* heading only for the first overload of this name */
-        //out << "### " << name;
-        out << "<a name=\"" << sanitize(name) << "\"></a>" << std::endl;
+        out << "### " << child.name;
+        out << "<a name=\"" << sanitize(child.name) << "\"></a>" << std::endl;
         out << std::endl;
       }
       out << "!!! function \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
       out << indent(child.docs) << std::endl;
       out << std::endl;
-      prev = name;
+      prev = child.name;
     }
   }
   if (entity.functions.size() > 0) {
     out << "## Function Details" << std::endl;
     out << std::endl;
     std::string prev;
-    for (auto& [name, child] : entity.functions) {
-      if (name != prev) {
+    for (auto& child : sort(entity.functions)) {
+      if (child.name != prev) {
         /* heading only for the first overload of this name */
-        //out << "### " << name;
-        out << "<a name=\"" << sanitize(name) << "\"></a>" << std::endl;
+        out << "### " << child.name;
+        out << "<a name=\"" << sanitize(child.name) << "\"></a>" << std::endl;
       }
       out << "!!! function \"" << htmlize(line(child.decl)) << '"' << std::endl;
       out << std::endl;
       out << indent(child.docs) << std::endl;
       out << std::endl;
-      prev = name;
+      prev = child.name;
     }
   }
 
@@ -175,7 +175,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
   for (auto& [name, child] : entity.namespaces) {
     generate(dir / sanitize(entity.name), child);
   }
-  for (auto& [name, child] : entity.types) {
+  for (auto& child : entity.types) {
     generate(dir / sanitize(entity.name), child);
   }
 }
@@ -262,4 +262,12 @@ std::string MarkdownGenerator::sanitize(const std::string& str) {
     }
   }
   return buf.str();
+}
+
+std::list<Entity> MarkdownGenerator::sort(const std::list<Entity>& entities) {
+  std::list<Entity> sorted = entities;
+  sorted.sort([](const Entity& a, const Entity& b) {
+    return a.name < b.name;
+  });
+  return sorted;
 }

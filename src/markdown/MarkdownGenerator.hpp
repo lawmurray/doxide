@@ -56,4 +56,9 @@ private:
    * Sanitize for a file name or internal anchor.
    */
   static std::string sanitize(const std::string& str);
+
+  /**
+   * Sort a list of entities.
+   */
+  static std::list<Entity> sort(const std::list<Entity>& entities);
 };

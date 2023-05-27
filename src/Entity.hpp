@@ -23,7 +23,7 @@ enum class EntityType {
  */
 struct Entity {
   using map_type = std::map<std::string,Entity>;
-  using multimap_type = std::multimap<std::string,Entity>;
+  using list_type = std::list<Entity>;
 
   /**
    * Constructor.
@@ -79,32 +79,32 @@ struct Entity {
   /**
    * Child types.
    */
-  map_type types;
+  list_type types;
 
   /**
    * Child variables.
    */
-  map_type variables;
+  list_type variables;
 
   /**
    * Child functions.
    */
-  multimap_type functions;
+  list_type functions;
 
   /**
    * Child operators.
    */
-  multimap_type operators;
+  list_type operators;
 
   /**
    * Child enumerators.
    */
-  map_type enumerators;
+  list_type enums;
 
   /**
    * Child macros.
    */
-  map_type macros;
+  list_type macros;
 
   /**
    * Entity name (e.g. name of variable, function, class).

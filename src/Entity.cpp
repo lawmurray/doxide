@@ -43,17 +43,17 @@ void Entity::addToThis(const Entity& o) {
     } else if (o.type == EntityType::GROUP) {
       groups.insert({o.name, o});
     } else if (o.type == EntityType::TYPE) {
-      types.insert({o.name, o});
+      types.push_back(o);
     } else if (o.type == EntityType::VARIABLE) {
-      variables.insert({o.name, o});
+      variables.push_back(o);
     } else if (o.type == EntityType::FUNCTION) {
-      functions.insert({o.name, o});
+      functions.push_back(o);
     } else if (o.type == EntityType::OPERATOR) {
-      operators.insert({o.name, o});
+      operators.push_back(o);
     } else if (o.type == EntityType::ENUMERATOR) {
-      enumerators.insert({o.name, o});
+      enums.push_back(o);
     } else if (o.type == EntityType::MACRO) {
-      macros.insert({o.name, o});
+      macros.push_back(o);
     } else {
       warn("unrecognized entity type, ignoring");
     }
@@ -62,13 +62,13 @@ void Entity::addToThis(const Entity& o) {
 
 void Entity::merge(const Entity& o) {
   namespaces.insert(o.namespaces.begin(), o.namespaces.end());
-  types.insert(o.types.begin(), o.types.end());
-  variables.insert(o.variables.begin(), o.variables.end());
-  functions.insert(o.functions.begin(), o.functions.end());
-  operators.insert(o.operators.begin(), o.operators.end());
-  macros.insert(o.macros.begin(), o.macros.end());
-  enumerators.insert(o.enumerators.begin(), o.enumerators.end());
   groups.insert(o.groups.begin(), o.groups.end());
+  types.insert(types.end(), o.types.begin(), o.types.end());
+  variables.insert(variables.end(), o.variables.begin(), o.variables.end());
+  functions.insert(functions.end(), o.functions.begin(), o.functions.end());
+  operators.insert(operators.end(), o.operators.begin(), o.operators.end());
+  macros.insert(macros.end(), o.macros.begin(), o.macros.end());
+  enums.insert(enums.end(), o.enums.begin(), o.enums.end());
   name = o.name;
   decl = o.decl;
   docs += o.docs;
