@@ -147,11 +147,15 @@ void Driver::clean() {
    * Doxide */
   for (auto& entry : fs::recursive_directory_iterator(output)) {
     if (entry.is_regular_file() && entry.path().extension() == ".md") {
-      YAMLParser parser;
-      YAMLNode frontmatter = parser.parse(gulp(entry.path()));
-      if (frontmatter.isValue("generator") &&
-          frontmatter.value("generator") == "doxide") {
-        fs::remove(entry.path());
+      try {
+        YAMLParser parser;
+        YAMLNode frontmatter = parser.parse(gulp(entry.path()));
+        if (frontmatter.isValue("generator") &&
+            frontmatter.value("generator") == "doxide") {
+          fs::remove(entry.path());
+        }
+      } catch (const std::runtime_error& e) {
+        // ignore
       }
     }
   }
@@ -264,12 +268,14 @@ void Driver::groups(YAMLNode& parentNode, Entity& parentEntity) {
       entity.type = EntityType::GROUP;
       if (node->isValue("name")) {
         entity.name = node->value("name");
-      }
-      if (node->isValue("title")) {
-        entity.title = node->value("title");
-      }
-      if (node->isValue("description")) {
-        entity.docs = node->value("description");
+        if (node->isValue("title")) {
+          entity.title = node->value("title");
+        }
+        if (node->isValue("description")) {
+          entity.docs = node->value("description");
+        }
+      } else {
+        warn("a group is missing a name in the configuration file.")
       }
       groups(*node, entity);
       parentEntity.add(entity);
