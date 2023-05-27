@@ -22,27 +22,22 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
   out << std::endl;
 
   /* groups */
-  if (entity.groups.size() > 0) {
-    for (auto& child : entity.groups) {
-      out << ":material-format-section: [" << title(child) << ']';
-      out << "(" << sanitize(child.name) << "/)" << std::endl;
-      out << ":   " << brief(child) << std::endl;
-      out << std::endl;
-    }
+  for (auto& child : entity.groups) {
+    out << ":material-format-section: [" << title(child) << ']';
+    out << "(" << sanitize(child.name) << "/)" << std::endl;
+    out << ":   " << brief(child) << std::endl;
+    out << std::endl;
+  }
+
+  /* namespaces */
+  for (auto& child : view(entity.namespaces, true)) {
+    out << ":material-package: [" << child->name << ']';
+    out << "(" << sanitize(child->name) << "/)" << std::endl;
+    out << ":   " << brief(*child) << std::endl;
+    out << std::endl;
   }
 
   /* brief descriptions */
-  if (entity.namespaces.size() > 0) {
-    out << "## Namespaces" << std::endl;
-    out << std::endl;
-    out << "| Name | Description |" << std::endl;
-    out << "| ---- | ----------- |" << std::endl;
-    for (auto& child : view(entity.namespaces, true)) {
-      out << "| [" << child->name << "](" << sanitize(child->name) << "/) | ";
-      out << brief(*child) << " |" << std::endl;
-    }
-    out << std::endl;
-  }
   if (entity.types.size() > 0) {
     out << "## Types" << std::endl;
     out << std::endl;

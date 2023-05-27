@@ -26,20 +26,20 @@ Parser::~Parser() {
 }
 
 void Parser::parse(const std::string_view& source, Entity& global) {
-  /* parser */
+  /* initialize parser */
   ts_parser_reset(parser);
   TSTree *tree = ts_parser_parse_string(parser, NULL, source.data(),
       source.size());
   TSNode node = ts_tree_root_node(tree);
 
   /* initialize stacks */
-  std::stack<uint32_t> starts, ends;
-  std::stack<Entity> entities;
-  starts.push(ts_node_start_byte(node));
-  ends.push(ts_node_end_byte(node));
-  entities.push(std::move(global));
+  std::list<uint32_t> starts, ends;
+  std::list<Entity> entities;
+  starts.push_back(ts_node_start_byte(node));
+  ends.push_back(ts_node_end_byte(node));
+  entities.push_back(std::move(global));
 
-  /* query */
+  /* run query */
   TSQueryCursor* cursor = ts_query_cursor_new();
   ts_query_cursor_exec(cursor, query, node);
   TSQueryMatch match;
@@ -92,33 +92,41 @@ void Parser::parse(const std::string_view& source, Entity& global) {
 
     /* the final node represents the whole entity, pop the stack until we find
      * its direct parent, as determined using nested byte ranges */
-    while (!(starts.top() <= start && end <= ends.top())) {
-      Entity top = std::move(entities.top());
-      entities.pop();
-      entities.top().add(top);
-      starts.pop();
-      ends.pop();
+    while (!(starts.back() <= start && end <= ends.back())) {
+      Entity back = std::move(entities.back());
+      entities.pop_back();
+      if (back.ingroup.empty()) {
+        entities.back().add(back);
+      } else {
+        entities.front().add(back);
+      }
+      starts.pop_back();
+      ends.pop_back();
     }
 
     /* override the ingroup for class members, as they cannot be moved out */
-    if (entities.top().type == EntityType::TYPE) {
+    if (entities.back().type == EntityType::TYPE) {
       entity.ingroup.clear();
     }
 
     /* push to stack */
-    entities.push(std::move(entity));
-    starts.push(start);
-    ends.push(end);
+    entities.push_back(std::move(entity));
+    starts.push_back(start);
+    ends.push_back(end);
   }
 
   /* finalize */
   while (entities.size() > 1) {
-    Entity top = std::move(entities.top());
-    entities.pop();
-    entities.top().add(top);
+    Entity back = std::move(entities.back());
+    entities.pop_back();
+    if (back.ingroup.empty()) {
+      entities.back().add(back);
+    } else {
+      entities.front().add(back);
+    }
   }
-  global = std::move(entities.top());
-  entities.pop();
+  global = std::move(entities.back());
+  entities.pop_back();
   ts_query_cursor_delete(cursor);
 }
 

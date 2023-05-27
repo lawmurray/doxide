@@ -70,7 +70,12 @@ void Entity::addToThis(const Entity& o) {
 }
 
 void Entity::merge(const Entity& o) {
-  namespaces.insert(namespaces.end(), o.namespaces.begin(), o.namespaces.end());
+  /* add namespaces via the merging logic of addToThis() */
+  std::for_each(o.namespaces.begin(), o.namespaces.end(),
+      [this](const Entity& o) {
+        this->addToThis(o);
+      });
+
   groups.insert(groups.end(), o.groups.begin(), o.groups.end());
   types.insert(types.end(), o.types.begin(), o.types.end());
   variables.insert(variables.end(), o.variables.begin(), o.variables.end());

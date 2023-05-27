@@ -1,17 +1,24 @@
 const char* query_cpp = R""""(
 [
   ;; namespace definition
-  ((comment)? @docs .
+  ((comment) @docs .
     (namespace_definition
       name: (namespace_identifier) @name
       body: (declaration_list)? @body) @namespace)
+  ((namespace_definition
+    name: (namespace_identifier) @name
+    body: (declaration_list)? @body) @namespace)
 
   ;; nested namespace definition---matches once for each @name
-  ((comment)? @docs .
+  ((comment) @docs .
     (namespace_definition
       (nested_namespace_specifier
         (namespace_identifier) @name)
       body: (declaration_list)? @body) @namespace)
+  ((namespace_definition
+    (nested_namespace_specifier
+      (namespace_identifier) @name)
+    body: (declaration_list)? @body) @namespace)
 
   ;; class definition
   ((comment) @docs .
