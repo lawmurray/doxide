@@ -45,7 +45,7 @@ const char* query_cpp = R""""(
   ((comment) @docs .
     (template_declaration
       (class_specifier
-        name: (type_identifier) @name
+        name: [(type_identifier) (template_type)] @name
         body: (field_declaration_list)? @body
         )) @type)
 
@@ -53,7 +53,7 @@ const char* query_cpp = R""""(
   ((comment) @docs .
     (template_declaration
       (struct_specifier
-        name: (type_identifier) @name
+        name: [(type_identifier) (template_type)] @name
         body: (field_declaration_list)? @body
         )) @type)
 
@@ -61,7 +61,7 @@ const char* query_cpp = R""""(
   ((comment) @docs .
     (template_declaration
       (union_specifier
-        name: (type_identifier) @name
+        name: [(type_identifier) (template_type)] @name
         body: (field_declaration_list)? @body
         )) @type)
 
