@@ -20,7 +20,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
   /* groups */
   if (entity.groups.size() > 0) {
     for (auto& [name, child] : entity.groups) {
-      out << ":material-view-module-outline: [" << title(child) << ']';
+      out << ":material-format-section: [" << title(child) << ']';
       out << "(" << sanitize(name) << "/)" << std::endl;
       out << ":   " << brief(child) << std::endl;
       out << std::endl;

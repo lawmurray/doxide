@@ -126,10 +126,10 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
   int indent = 0;
   Tokenizer tokenizer(comment);
   Token token = tokenizer.next();
-  if (token.type & DOC) {  // otherwise not a documentation comment
+  if (token.type & OPEN) {  // otherwise not a documentation comment
     token = tokenizer.next();
     while (token.type) {
-      if (token.type & DOC_COMMAND) {
+      if (token.type & COMMAND) {
         /* non-legacy commands */
         if (token.substr(1) == "param" ||
             token.substr(1) == "param[in]") {
@@ -247,6 +247,20 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
           entity.docs.append("!!! quote \"Remark\"\n");
           indent += 4;
           entity.docs.append(indent, ' ');
+        } else if (token.substr(1) == "def" ||
+            token.substr(1) == "var" ||
+            token.substr(1) == "fn" ||
+            token.substr(1) == "class" ||
+            token.substr(1) == "struct" ||
+            token.substr(1) == "union" ||
+            token.substr(1) == "enum" ||
+            token.substr(1) == "typedef" ||
+            token.substr(1) == "namespace" ||
+            token.substr(1) == "interface" ||
+            token.substr(1) == "protocol" ||
+            token.substr(1) == "property") {
+          /* ignore, including following name */
+          tokenizer.consume(WORD);
         } else if (token.str().at(0) == '\\') {
           /* treat as escape */
           entity.docs.append(token.substr(1));
@@ -254,15 +268,15 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
           warn("unrecognized command: " << token.str());
           entity.docs.append(token.str());
         }
-      } else if (token.type & DOC_ESCAPE) {
+      } else if (token.type & ESCAPE) {
         entity.docs.append(token.substr(1));
-      } else if (token.type & DOC_PARA) {
+      } else if (token.type & PARA) {
         entity.docs.append("\n\n");
         indent = std::max(indent - 4, 0);
-      } else if (token.type & DOC_LINE) {
+      } else if (token.type & LINE) {
         entity.docs.append("\n");
         entity.docs.append(indent, ' ');
-      } else if (token.type & DOC_CLOSE) {
+      } else if (token.type & CLOSE) {
         //
       } else {
         entity.docs.append(token.str());
