@@ -105,6 +105,10 @@ const char* query_cpp = R""""(
       declarator: (function_declarator
         declarator: (field_identifier) @name)) @function)
   ((comment) @docs .
+    (field_declaration
+      declarator: (function_declarator
+        declarator: (destructor_name) @name)) @function)
+  ((comment) @docs .
     (function_definition
       declarator: (function_declarator
         declarator: (identifier) @name)
@@ -115,6 +119,13 @@ const char* query_cpp = R""""(
     (function_definition
       declarator: (function_declarator
         declarator: (field_identifier) @name)
+      ;; body or, in case of constructor, a field initializer list
+      [(field_initializer_list) body: (_)] @body
+      ) @function)
+  ((comment) @docs .
+    (function_definition
+      declarator: (function_declarator
+        declarator: (destructor_name) @name)
       ;; body or, in case of constructor, a field initializer list
       [(field_initializer_list) body: (_)] @body
       ) @function)
