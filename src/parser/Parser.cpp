@@ -87,6 +87,17 @@ void Parser::parse(const std::string_view& source, Entity& global) {
       }
     }
 
+    /* workaround for entity declaration logic catching the equals sign in
+     * a variable declaration with initialization like int x = 4; trim
+     * whitespace and equals signs */
+    while (middle > start && (source[middle - 1] == ' ' ||
+        source[middle - 1] == '\t' ||
+        source[middle - 1] == '\n' ||
+        source[middle - 1] == '\r' ||
+        source[middle - 1] == '=')) {
+      --middle;
+    }
+
     /* entity declaration */
     entity.decl = source.substr(start, middle - start);
 
