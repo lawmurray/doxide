@@ -99,7 +99,7 @@ const char* query_cpp = R""""(
   ((comment) @docs .
     (declaration
       declarator: (function_declarator
-        declarator: (identifier) @name)) @function)
+        declarator: [(identifier) (field_identifier) (destructor_name)] @name)) @function)
   ((comment) @docs .
     (field_declaration
       declarator: (function_declarator
@@ -148,10 +148,6 @@ const char* query_cpp = R""""(
   ;; operator
   ((comment) @docs .
     (declaration
-      declarator: (function_declarator
-        declarator: (operator_name) @name)) @operator)
-  ((comment) @docs .
-    (field_declaration
       declarator: (function_declarator
         declarator: (operator_name) @name)) @operator)
   ((comment) @docs .
