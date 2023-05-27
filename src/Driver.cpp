@@ -145,36 +145,38 @@ void Driver::clean() {
   /* traverse the output directory, removing any Markdown files with
    * 'generator: doxide' in their YAML frontmatter; these are files managed by
    * Doxide */
-  for (auto& entry : fs::recursive_directory_iterator(output)) {
-    if (entry.is_regular_file() && entry.path().extension() == ".md") {
-      try {
-        YAMLParser parser;
-        YAMLNode frontmatter = parser.parse(gulp(entry.path()));
-        if (frontmatter.isValue("generator") &&
-            frontmatter.value("generator") == "doxide") {
-          fs::remove(entry.path());
-        }
-      } catch (const std::runtime_error& e) {
-        // ignore
-      }
-    }
-  }
-
-  /* traverse the output directory again, this time removing any empty
-   * directories; because removing a directory may make its parent directory
-   * empty, repeat until there are no further empty directories */
-  std::vector<fs::path> empty;
-  do {
-    empty.clear();
+  if (fs::exists(output) && fs::is_directory(output)) {
     for (auto& entry : fs::recursive_directory_iterator(output)) {
-      if (entry.is_directory() && fs::is_empty(entry.path())) {
-        empty.push_back(entry.path());
+      if (entry.is_regular_file() && entry.path().extension() == ".md") {
+        try {
+          YAMLParser parser;
+          YAMLNode frontmatter = parser.parse(gulp(entry.path()));
+          if (frontmatter.isValue("generator") &&
+              frontmatter.value("generator") == "doxide") {
+            fs::remove(entry.path());
+          }
+        } catch (const std::runtime_error& e) {
+          // ignore
+        }
       }
     }
-    for (auto& dir : empty) {
-      fs::remove(dir);
-    }    
-  } while (empty.size());
+
+    /* traverse the output directory again, this time removing any empty
+    * directories; because removing a directory may make its parent directory
+    * empty, repeat until there are no further empty directories */
+    std::vector<fs::path> empty;
+    do {
+      empty.clear();
+      for (auto& entry : fs::recursive_directory_iterator(output)) {
+        if (entry.is_directory() && fs::is_empty(entry.path())) {
+          empty.push_back(entry.path());
+        }
+      }
+      for (auto& dir : empty) {
+        fs::remove(dir);
+      }    
+    } while (empty.size());
+  }
 }
 
 void Driver::help() {
