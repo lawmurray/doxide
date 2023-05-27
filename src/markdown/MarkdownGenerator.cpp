@@ -31,10 +31,12 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
 
   /* namespaces */
   for (auto& child : view(entity.namespaces, true)) {
-    out << ":material-package: [" << child->name << ']';
-    out << "(" << sanitize(child->name) << "/)" << std::endl;
-    out << ":   " << brief(*child) << std::endl;
-    out << std::endl;
+    if (!child->empty()) {
+      out << ":material-package: [" << child->name << ']';
+      out << "(" << sanitize(child->name) << "/)" << std::endl;
+      out << ":   " << brief(*child) << std::endl;
+      out << std::endl;
+    }
   }
 
   /* brief descriptions */

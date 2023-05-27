@@ -6,6 +6,25 @@ Entity::Entity() :
   //
 }
 
+bool Entity::empty() const {
+  bool result = true;
+  result = result && std::all_of(groups.begin(), groups.end(),
+      [](const Entity& g) {
+        return g.empty();
+      });
+  result = result && std::all_of(namespaces.begin(), namespaces.end(),
+      [](const Entity& ns) {
+        return ns.empty();
+      });
+  result = result && types.empty();
+  result = result && variables.empty();
+  result = result && functions.empty();
+  result = result && operators.empty();
+  result = result && enums.empty();
+  result = result && macros.empty();
+  return result;
+}
+
 void Entity::add(const Entity& o) {
   if (!o.ingroup.empty()) {
     if (addToGroup(o)) {

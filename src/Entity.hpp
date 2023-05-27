@@ -34,6 +34,11 @@ struct Entity {
   Entity();
 
   /**
+   * Is the entity empty? i.e. does it have no children.
+   */
+  bool empty() const;
+
+  /**
    * Add child entity.
    * 
    * @param o Child entity.
