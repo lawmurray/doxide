@@ -19,15 +19,18 @@ void Entity::add(const Entity& o) {
 
 bool Entity::addToGroup(const Entity& o) {
   /* search for immediate child of given name */
-  auto iter = groups.find(o.ingroup);
+  auto iter = std::find_if(groups.begin(), groups.end(),
+      [&o](const Entity& g) {
+        return g.name == o.ingroup;
+      });
   if (iter != groups.end()) {
-    iter->second.addToThis(o);
+    iter->addToThis(o);
     return true;
   }
 
   /* search recursively for descendent of given name */
-  for (auto& [name, group] : groups) {
-    if (group.addToGroup(o)) {
+  for (auto& g : groups) {
+    if (g.addToGroup(o)) {
       return true;
     }
   }
@@ -40,7 +43,7 @@ void Entity::addToThis(const Entity& o) {
     ns.name = o.name;  // just created if did not already exist
     ns.merge(o);
   } else if (o.type == EntityType::GROUP) {
-    groups.insert({o.name, o});
+    groups.push_back(o);
   } else if (!o.hide && !o.docs.empty()) {
     if (o.type == EntityType::TYPE) {
       types.push_back(o);
@@ -62,7 +65,7 @@ void Entity::addToThis(const Entity& o) {
 
 void Entity::merge(const Entity& o) {
   namespaces.insert(o.namespaces.begin(), o.namespaces.end());
-  groups.insert(o.groups.begin(), o.groups.end());
+  groups.insert(groups.end(), o.groups.begin(), o.groups.end());
   types.insert(types.end(), o.types.begin(), o.types.end());
   variables.insert(variables.end(), o.variables.begin(), o.variables.end());
   functions.insert(functions.end(), o.functions.begin(), o.functions.end());

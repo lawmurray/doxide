@@ -74,7 +74,7 @@ struct Entity {
   /**
    * Child groups.
    */
-  map_type groups;
+  list_type groups;
 
   /**
    * Child types.

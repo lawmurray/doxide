@@ -23,9 +23,9 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
 
   /* groups */
   if (entity.groups.size() > 0) {
-    for (auto& [name, child] : entity.groups) {
+    for (auto& child : entity.groups) {
       out << ":material-format-section: [" << title(child) << ']';
-      out << "(" << sanitize(name) << "/)" << std::endl;
+      out << "(" << sanitize(child.name) << "/)" << std::endl;
       out << ":   " << brief(child) << std::endl;
       out << std::endl;
     }
@@ -173,7 +173,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
   }
 
   /* child pages */
-  for (auto& [name, child] : entity.groups) {
+  for (auto& child : entity.groups) {
     generate(dir / sanitize(entity.name), child);
   }
   for (auto& [name, child] : entity.namespaces) {
