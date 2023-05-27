@@ -136,18 +136,22 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
           entity.docs.append(":material-location-enter: **Parameter** `");
           entity.docs.append(tokenizer.consume(WORD).str());
           entity.docs.append("`\n:   ");
+          indent = 4;
         } else if (token.substr(1) == "param[out]") {
           entity.docs.append(":material-location-exit: **Parameter** `");
           entity.docs.append(tokenizer.consume(WORD).str());
           entity.docs.append("`\n:   ");
+          indent = 4;
         } else if (token.substr(1) == "param[in,out]") {
           entity.docs.append(":material-location-enter::material-location-exit: **Parameter** `");
           entity.docs.append(tokenizer.consume(WORD).str());
           entity.docs.append("`\n:   ");
+          indent = 4;
         } else if (token.substr(1) == "tparam") {
           entity.docs.append(":material-code-tags: **Template parameter** `");
           entity.docs.append(tokenizer.consume(WORD).str());
           entity.docs.append("`\n:   ");
+          indent = 4;
         } else if (token.substr(1) == "p") {
           entity.docs.append("`");
           entity.docs.append(tokenizer.consume(WORD).str());
@@ -180,6 +184,7 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
             token.substr(1) == "quote") {
           entity.docs.append("!!! ");
           entity.docs.append(token.substr(1));
+          entity.docs.append("\n");
           indent += 4;
           entity.docs.append(indent, ' ');
         } else if (token.substr(1) == "ingroup") {
