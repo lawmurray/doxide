@@ -76,11 +76,11 @@ extra_javascript:
 
 nav:
   - index.md
-  - installing.md
+  - installation.md
   - getting-started.md
-  - writing-documentation.md
-  - organizing-documentation.md
-  - configuring-documentation.md
   - command-line.md
+  - writing.md
+  - organizing.md
+  - configuring.md
   - questions-and-answers.md
   - demo/index.md
