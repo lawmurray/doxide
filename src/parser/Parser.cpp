@@ -285,15 +285,18 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
             token.substr(1) == "property") {
           /* ignore, including following name */
           tokenizer.consume(WORD);
+        } else if (token.substr(1) == "@") {
+          entity.docs.append("@");
+        } else if (token.substr(1) == "/") {
+          entity.docs.append("/");
         } else if (token.str().at(0) == '\\') {
-          /* treat as escape */
-          entity.docs.append(token.substr(1));
+          /* unrecognized command starting with legacy backslash, could just
+           * be e.g. a LaTeX macro, output as is */
+          entity.docs.append(token.str());
         } else {
           warn("unrecognized command: " << token.str());
           entity.docs.append(token.str());
         }
-      } else if (token.type & ESCAPE) {
-        entity.docs.append(token.substr(1));
       } else if (token.type & PARA) {
         entity.docs.append("\n\n");
         indent = std::max(indent - 4, 0);
