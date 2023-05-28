@@ -14,7 +14,7 @@ Commands are:
 `doxide help`
 :   Print usage information.
 
-Command-line options are as follows. When provided, they override the same settings in the `doxide.yaml` file.
+Command-line options are as follows. When provided, they override the same settings in the [configuration file](/configuring).
 
 `--title`
 :   Main page title.
