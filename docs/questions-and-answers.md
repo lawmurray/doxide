@@ -2,7 +2,7 @@
 
 ## Why the name?
 
-The [Doxygen](https://doxygen.nl) portmanteau is worthy of a riff. An oxide is a molecule containing an oxygen atom.
+The [Doxygen](https://doxygen.nl) portmanteau is worthy of a riff.
 
 ## What does the logo represent?
 
