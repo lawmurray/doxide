@@ -93,7 +93,6 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
 plugins:
   - search
-  - social
 extra_css:
   - stylesheets/doxide.css
 extra_javascript:

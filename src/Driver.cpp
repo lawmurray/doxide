@@ -120,8 +120,22 @@ Driver::Driver(int argc, char** argv) :
 }
 
 void Driver::init() {
-  write_file_prompt(init_doxide_yaml, "doxide.yaml");
-  write_file_prompt(init_mkdocs_yaml, "mkdocs.yaml");
+  std::string doxide_yaml = init_doxide_yaml;
+  std::string mkdocs_yaml = init_mkdocs_yaml;
+
+  doxide_yaml = std::regex_replace(doxide_yaml, std::regex("title:"),
+      "title: " + title);
+  doxide_yaml = std::regex_replace(doxide_yaml, std::regex("description:"),
+      "description: " + description);
+  
+  mkdocs_yaml = std::regex_replace(mkdocs_yaml, std::regex("site_name:"),
+      "site_name: " + title);
+  mkdocs_yaml = std::regex_replace(mkdocs_yaml, std::regex("site_description:"),
+      "site_description: " + description);
+
+
+  write_file_prompt(doxide_yaml, "doxide.yaml");
+  write_file_prompt(mkdocs_yaml, "mkdocs.yaml");
   write_file_prompt(init_docs_javascripts_mathjax_js, "docs/javascripts/mathjax.js");
   write_file_prompt(init_docs_stylesheets_doxide_css, "docs/stylesheets/doxide.css");
   write_file_prompt(init_docs_overrides_partials_copyright_html, "docs/overrides/partials/copyright.html");
@@ -215,8 +229,6 @@ void Driver::config() {
     path = "doxide.yml";
   } else if (std::filesystem::exists("doxide.json")) {
     path = "doxide.json";
-  } else {
-    warn("no doxide configuration file, use 'doxide init' to get set up.");
   }
 
   /* parse build configuration file */
