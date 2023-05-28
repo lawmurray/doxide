@@ -49,26 +49,23 @@ The suggestion is to use Markdown wherever possible when writing documentation c
 | `@see`                                                       | Add a paragraph of "see also" references. The references themselves can be formatted in Markdown, using links if desired. |
 | `@anchor name`                                               | Insert anchor that can be linked to from elsewhere with the Markdown syntax `[text](#name)`. |
 | `@ingroup name`                                              | Add the entity to the group `name`. See [organizing](/organizing) for more information.        |
+| `@@`                                                         | Escape: replaced with a single `@`.                                                               |
+| `@/`                                                         | Escape: replaced with a single `/`.                                                               |
 
-## Escapes
-
-The backslash character `\` may be used as an escape for any character. For example `\@command` will be interpreted as the literal text `@command` and not as an actual command. Within documentation comments, string literals, code, and mathematical formulae are parsed to avoid interpreting any backslash characters that they contain as escapes (e.g. LaTeX macros are denoted with a backslash).
-
-As a particular use case, comments within documentation comments are possible by escaping a closing sequence `*/` as `*\/`. This is useful, for example, when providing example code within a documentation comment.
+!!! tip
+    As a particular use case, comments within documentation comments are possible by escaping the closing sequence `*/` as `*@/`. This can be useful when providing example code within a documentation comment.
 
 ## Migration support
 
 To assist in the migration of existing code bases to Doxide from other documentation tools, some additional support is provided:
 
-- The character `\` may be used as an alternative to `@` to denote commands. If `\word` is a recognized command, it is interpreted as such, otherwise the backslash `\` is interpreted as an escape.
-- The character `%` may be used as an alternative to `\` for an escape.
+- The character `\` may be used as an alternative to `@` to denote commands. When `\` is used, unlike when `@` is used, no warning is given if the command is not found, and the command is output as-is. This is necessary to support LaTeX macros in mathematics without warning overload.
+
+- The character `%` may be used as an escape for a single non-whitespace character (it is used to break automatic linking in Doxygen).
     
-The following alternative handling of commands is supported.
+The following behaviors are implemented to assist in the migration of existing code bases. Recommended alternatives are provided for new code bases.
 
-!!! tip
-    This is intended mostly for existing code bases. The suggested alternatives below are recommended for new code bases.
-
-| Command(s)                                                   | Doxide behavior                               | Suggested alternative                                        |
+| Command(s)                                                   | Doxide behavior                               | Recommended alternative                                        |
 | ------------------------------------------------------------ | --------------------------------------------- | ------------------------------------------------------------ |
 | `@e word`, `@em word`, `@a word`                             | Replace with Markdown.                        | Use Markdown emphasis: `*word*`                              |
 | `@b word`                                                    | Replace with Markdown.                        | Use Markdown bold: `**word**`                                |
