@@ -5,12 +5,16 @@ repo_url: https://github.com/lawmurray/doxide
 repo_name: lawmurray/doxide
 extra:
   social:
+    - icon: material/github
+      link: https://github.com/lawmurray
     - icon: material/mastodon 
       link: https://fosstodon.org/@lawmurray
     - icon: material/twitter
       link: https://twitter.com/lawmurray
-    - icon: material/github
-      link: https://github.com/lawmurray
+    - icon: material/web
+      link: https://indii.org
+    - icon: material/email
+      link: mailto:lawrence@indii.org
 
 theme:
   name: material
@@ -19,6 +23,7 @@ theme:
   favicon: assets/logo_red.svg
   features:
     - navigation.indexes
+    - navigation.footer
     - announce.dismiss
   palette:
     # Palette toggle for light mode
@@ -43,6 +48,8 @@ markdown_extensions:
   - def_list
   - attr_list
   - admonition
+  - toc:
+      permalink: true
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.emoji:
@@ -53,6 +60,8 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_div_format
+  - pymdownx.tabbed:
+      alternate_style: true 
 plugins:
   - search
   - social
