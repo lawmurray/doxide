@@ -2,39 +2,30 @@
 
 ## Initializing
 
-To initialize Doxide files, use the following, typically in the root directory of your source code repository:
-
-```bash
+Run, from within your source code directory:
+```
 doxide init
 ```
+This will create a `doxide.yaml` configuration file, as well as some
+additional files for publishing with [Material for
+MkDocs](https://squidfunk.github.io/mkdocs-material/). To start, it is not
+necessary to modify any of these.
 
-Or, if you wish to specify some meta information:
+Add at least `doxide.yaml` to version control, and the other files if you intend to use Material for MkDocs (highly recommended for a quick start---you can always try something else later).
 
-```
-doxide --name Example --version 0.0.0 --description "An example project."
-```
-
-This will produce the essential configuration file `doxide.yaml` for configuring Doxide. It will also produce the optional configuration file `mkdocs.yaml` for configuring MkDocs and Material for MkDocs, as well as a few theme files in the subdirectory `docs`.
-
-Add at least `doxide.yaml` to version control, and the other files if you intend to use MkDocs and Material for MkDocs (highly recommended for a quick start---you can always try something else later).
-
-## Configuring
-
-The default `doxide.yaml` file is usually fine for a quick start. It will find all `*.hpp` and `*.h` files in any subdirectories. For details on its various options, see [Configurating documentation](/configuring-documentation).
-
-Likewise, the default `mkdocs.yaml` is also fine for a quick start. It can be modified later to change the theme, colors, etc.
 
 ## Building
 
-To build your documentation, use:
+Build the Markdown documentation with:
 ```
 doxide build
 ```
-This will populate the `docs` subdirectory with Markdown files.
+This will populate the output directory (default: `docs`).
+
 
 ## Publishing
 
-To publish your documentation with MkDocs and Material for MkDocs, use:
+To publish your documentation with Material for MkDocs, use:
 ```
 mkdocs build
 ```

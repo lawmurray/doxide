@@ -80,17 +80,21 @@ Build the Markdown:
 ```
 doxide build
 ```
+This will populate the output directory (default: `docs`).
+
 Build the HTML:
 ```
 mkdocs build
 ```
+This will populate the `site` directory.
+
 Serve the HTML:
 ```
 mkdocs serve
 ```
-then point your browser to `localhost:8000`.
+(and point your browser to `localhost:8000`).
 
 
 ## Further information
 
-See the website [doxide.org](https://doxide.org).
+For further information, see [doxide.org](https://doxide.org).
