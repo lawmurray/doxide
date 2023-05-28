@@ -30,7 +30,7 @@ License. You may obtain a copy of the License at
 <http://www.apache.org/licenses/LICENSE-2.0>.
 
 
-## Installing
+## Installation
 
 Packages are on the way. Windows support is on the way. In the meantime, it is
 necessary to install from source on Linux and Mac, and if that's you, use
@@ -91,6 +91,6 @@ mkdocs serve
 then point your browser to `localhost:8000`.
 
 
-## For more information
+## Further information
 
 See the website [doxide.org](https://doxide.org).
