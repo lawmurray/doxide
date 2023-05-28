@@ -32,6 +32,10 @@ License. You may obtain a copy of the License at
 
 ## Installing
 
+Packages are on the way. Windows support is on the way. In the meantime, it is
+necessary to install from source on Linux and Mac, and if that's you, use
+Windows Subsystem for Linux.
+
 Clone the Doxide source with:
 ```
 git clone https://github.com/lawmurray/doxide --recurse-submodules
@@ -59,6 +63,32 @@ pip install mkdocs-material
 ```
 For more information see [Material for
 MkDocs](https://squidfunk.github.io/mkdocs-material/).
+
+
+## Quick start
+
+Run, from within your source code directory:
+```
+doxide init
+```
+This will create a `doxide.yaml` configuration file, as well as some
+additional files for publishing with [Material for
+MkDocs](https://squidfunk.github.io/mkdocs-material/). To start, it is not
+necessary to modify any of these.
+
+Build the Markdown:
+```
+doxide build
+```
+Build the HTML:
+```
+mkdocs build
+```
+Serve the HTML:
+```
+mkdocs serve
+```
+then point your browser to `localhost:8000`.
 
 
 ## For more information
