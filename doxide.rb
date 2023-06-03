@@ -10,9 +10,9 @@ class Doxide < Formula
   depends_on "tree-sitter"
 
   def install
-    system "cmake", "-DCMAKE_BUILD_TYPE=Release", "."
-    system "cmake", "--build", ".", "--config", "Release"
-    system "cmake", "--install", ".", "--config", "Release", "--prefix", "#{prefix}"
+    system "cmake", "-DCMAKE_BUILD_TYPE=Release", ".", "--verbose"
+    system "cmake", "--build", ".", "--config", "Release", "--verbose"
+    system "cmake", "--install", ".", "--config", "Release", "--prefix", "#{prefix}", "--verbose"
   end
 
   test do
