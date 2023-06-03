@@ -1,0 +1,18 @@
+Source: doxide
+Section: devel
+Priority: optional
+Maintainer: Lawrence Murray <lawrence@indii.org>
+Build-Depends: debhelper, debhelper-compat (= 11), cmake, libyaml-dev, libtree-sitter-dev
+Standards-Version: 4.6.1.1
+Homepage: https://doxide.org
+
+Package: doxide
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: modern documentation for modern C++
+ Doxide generates documentation for C++ source code. It is configured with
+ YAML, generates Markdown, and publishes HTML. Entities in the source code are
+ documented with special comments containing commands, as with the classic
+ tool Doxygen. The source code is parsed and documentation processed into
+ Markdown then HTML. Doxide aims at online documentation with a modern look
+ and responsive design for desktop and mobile devices.
