@@ -5,10 +5,10 @@ project(doxide
     HOMEPAGE_URL "https://doxide.org")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-include_directories(src)
+include_directories(src contrib/tree-sitter/lib/include)
 add_library(libyaml SHARED IMPORTED)
-add_library(libtree-sitter SHARED IMPORTED)
 add_executable(doxide
+    contrib/tree-sitter/lib/src/lib.c
     contrib/tree-sitter-cpp/src/parser.c
     contrib/tree-sitter-cpp/src/scanner.cc
     src/doxide.cpp
