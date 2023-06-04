@@ -1,5 +1,5 @@
 site_name: Doxide
-site_description: Modern documentation for Modern C++
+site_description: Modern documentation for Modern C++. Configure with YAML, output Markdown.
 site_url: https://doxide.org
 repo_url: https://github.com/lawmurray/doxide
 repo_name: lawmurray/doxide
@@ -64,7 +64,6 @@ markdown_extensions:
       alternate_style: true 
 plugins:
   - search
-  - social
 extra_css:
   - stylesheets/doxide.css
   - https://unpkg.com/mermaid@8.5.1/dist/mermaid.css

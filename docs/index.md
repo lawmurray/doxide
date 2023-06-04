@@ -1,8 +1,3 @@
----
-title: Doxide
-description: Modern documentation for modern C++. Configure with YAML and output Markdown.
----
-
 <style>
   .md-typeset h1,
   .md-content__button {
