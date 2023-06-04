@@ -7,11 +7,7 @@ License: Apache-2.0
 Group: Development/Languages/C and C++
 URL: https://doxide.org
 Source0: %{name}-%{version}.tar.gz
-%if 0%{?fedora} || 0%{?rhel_version} || 0%{?centos_version}
-BuildRequires: gcc-c++ cmake libyaml-devel libtree-sitter-devel
-%else
-BuildRequires: gcc-c++ cmake libyaml-devel tree-sitter-devel
-%endif
+BuildRequires: gcc-c++ cmake libyaml-devel
 
 %description
 
