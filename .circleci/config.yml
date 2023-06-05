@@ -54,6 +54,7 @@ jobs:
       - environment
       - checkout
       - run:
+          name: Checkout submodules
           command: git submodule update --init --recursive --depth 1
       - build
       - test
