@@ -9,7 +9,7 @@ class Doxide < Formula
   depends_on "libyaml"
 
   def install
-    system "cmake", "-DCMAKE_BUILD_TYPE=Release", ".", "--verbose"
+    system "cmake", "-DCMAKE_BUILD_TYPE=Release", "."
     system "cmake", "--build", ".", "--config", "Release", "--verbose"
     system "cmake", "--install", ".", "--config", "Release", "--prefix", "#{prefix}", "--verbose"
   end
