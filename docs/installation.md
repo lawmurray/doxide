@@ -84,19 +84,6 @@ Follow the instructions below for your operating system.
     pip install mkdocs mkdocs-material
     ```
 
-??? info "Debian 10 Buster (amd64)"
-    Install Doxide:
-    ```
-    echo 'deb http://download.indii.org/deb buster main' | sudo tee /etc/apt/sources.list.d/indii.list
-    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.gpg > /dev/null
-    sudo apt update
-    sudo apt install doxide
-    ```
-    Install [MkDocs][mkdocs] and [Material for MkDocs][material]:
-    ```
-    pip install mkdocs mkdocs-material
-    ```
-
 ## :fontawesome-brands-fedora: Fedora
 
 ??? info "Fedora 38 (x86_64)"
@@ -161,30 +148,6 @@ Follow the instructions below for your operating system.
     pip install mkdocs mkdocs-material
     ```
 
-??? info "openSUSE Leap 15.5 (x86_64)"
-    Install Doxide:
-    ```
-    sudo zypper addrepo https://download.indii.org/rpm/opensuse/leap/15.5/indii.repo
-    sudo zypper refresh
-    sudo zypper install doxide
-    ```
-    Install [MkDocs][mkdocs] and [Material for MkDocs][material]:
-    ```
-    pip install mkdocs mkdocs-material
-    ```
-
-??? info "openSUSE Leap 15.4 (x86_64)"
-    Install Doxide:
-    ```
-    sudo zypper addrepo https://download.indii.org/rpm/opensuse/leap/15.4/indii.repo
-    sudo zypper refresh
-    sudo zypper install doxide
-    ```
-    Install [MkDocs][mkdocs] and [Material for MkDocs][material]:
-    ```
-    pip install mkdocs mkdocs-material
-    ```
-
 ## :fontawesome-brands-linux: Mageia
 
 ??? info "Mageia 8 (x86_64)"
@@ -204,7 +167,7 @@ Follow the instructions below for your operating system.
 ??? info "Homebrew"
     Install [Homebrew](https://brew.sh) if not already. Add the tap:
     ```sh
-    brew tap download.indii.org/brew https://download.indii.org/brew
+    brew tap lawmurray/all
     brew install doxide
     ```
     Install [MkDocs][mkdocs] and [Material for MkDocs][material]:
