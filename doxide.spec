@@ -7,7 +7,7 @@ License: Apache-2.0
 Group: Development/Languages/C and C++
 URL: https://doxide.org
 Source0: %{name}-%{version}.tar.gz
-BuildRequires: gcc-c++ cmake libyaml-devel
+BuildRequires: gcc-c++ cmake libyaml-devel libicu-devel
 
 %description
 
