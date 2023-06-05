@@ -53,6 +53,8 @@ jobs:
     steps:
       - environment
       - checkout
+      - run:
+          command: git submodule update --init --recursive --depth 1
       - build
       - test
 
