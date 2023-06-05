@@ -30,6 +30,7 @@ cmake --install . --config Release --prefix %{_prefix} --verbose
 
 %files
 %license LICENSE
+%{_bindir}/%{name}
 
 %changelog
 * Sat Jun 3 2023 Lawrence Murray <lawrence@indii.org> - 1:0.0.0-1
