@@ -1,0 +1,64 @@
+version: 2.1
+
+executors:
+  default:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: small
+
+commands:
+
+  environment:
+    steps:
+      - run:
+          name: Install dependencies
+          command: |
+              sudo apt update --assume-yes
+              sudo apt upgrade --assume-yes
+              sudo apt install --assume-yes --no-install-recommends \
+                cmake \
+                g++ \
+                lcov \
+                libyaml-dev
+              sudo rm -rf /var/lib/apt/lists/*
+
+  build:
+    steps:
+      - run:
+          name: Build
+          command: |
+              mkdir build
+              cd build
+              cmake ..
+              cmake --build .
+              sudo cmake --install .
+
+  test:
+    steps:
+      - run:
+          name: Init test
+          command: |
+            mkdir hello
+            cd hello
+            doxide init
+      - run:
+          name: Build test
+          command: |
+            doxide build
+
+jobs:
+
+  all:
+    executor: default
+    steps:
+      - environment
+      - checkout
+      - build
+      - test
+
+workflows:
+
+  version: 2
+  all:
+    jobs:
+      - all
