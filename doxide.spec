@@ -23,11 +23,10 @@ responsive design for desktop and mobile devices.
 
 %build
 %cmake
-%make_build
-strip --strip-unneeded %{name}
+%cmake_build
 
 %install
-%make_install
+%cmake_install
 
 %files
 %license LICENSE
