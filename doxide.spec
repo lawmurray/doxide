@@ -26,7 +26,7 @@ cmake -DCMAKE_BUILD_TYPE=Release .
 cmake --build . --config Release --verbose %{?_smp_mflags}
 
 %install
-cmake --install . --config Release --prefix #{prefix} --verbose 
+cmake --install . --config Release --prefix %{_prefix} --verbose 
 
 %files
 %license LICENSE
