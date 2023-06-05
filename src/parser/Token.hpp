@@ -65,7 +65,10 @@ public:
    * Get token as string.
    */
   std::string_view str() const {
-    return std::string_view(first, last);
+    /* std::string_view(first, last) ought to work with C++20 support, but
+     * using the below overload of the constructor extends support to some
+     * older compilers, such as gcc with gnu++2a support only */
+    return std::string_view(first, std::distance(first, last));
   }
 
   /**
@@ -74,7 +77,7 @@ public:
    * @param pos Position of the first character.
    */
   std::string_view substr(size_t pos = 0) const {
-    return std::string_view(first, last).substr(pos);
+    return str().substr(pos);
   }
 
   /**
