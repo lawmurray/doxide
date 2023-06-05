@@ -4,7 +4,7 @@ executors:
   default:
     machine:
       image: ubuntu-2204:current
-    resource_class: small
+    resource_class: medium
 
 commands:
 
