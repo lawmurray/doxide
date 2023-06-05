@@ -22,11 +22,12 @@ responsive design for desktop and mobile devices.
 %setup -q -n %{name}-%{version}
 
 %build
-cmake -DCMAKE_BUILD_TYPE=Release .
-cmake --build . --config Release --verbose %{?_smp_mflags}
+%cmake
+%make_build
+strip --strip-unneeded %{name}
 
 %install
-cmake --install . --config Release --prefix %{_prefix} --verbose 
+%make_install
 
 %files
 %license LICENSE
