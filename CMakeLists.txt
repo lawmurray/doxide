@@ -20,7 +20,6 @@ add_executable(doxide
     src/yaml/YAMLParser.cpp
     src/Driver.cpp
     src/Entity.cpp)
-target_link_libraries(doxide yaml tree-sitter)
-
+target_link_libraries(doxide yaml)
 include(GNUInstallDirs)
-install(TARGETS doxide)
+install(TARGETS doxide RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
