@@ -7,8 +7,8 @@ Follow the instructions below for your operating system.
 ??? info "Ubuntu 23.04 Lunar Lobster (amd64)"
     Install Doxide:
     ```
-    echo 'deb http://download.indii.org/deb lunar main' | sudo tee /etc/apt/sources.list.d/indii.list
-    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.gpg > /dev/null
+    echo 'deb http://download.indii.org/deb lunar main' | sudo tee /etc/apt/sources.list.d/indii.org.list
+    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.org.gpg > /dev/null
     sudo apt update
     sudo apt install doxide
     ```
@@ -20,8 +20,8 @@ Follow the instructions below for your operating system.
 ??? info "Ubuntu 22.10 Kinetic Kudu (amd64)"
     Install Doxide:
     ```
-    echo 'deb http://download.indii.org/deb kinetic main' | sudo tee /etc/apt/sources.list.d/indii.list
-    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.gpg > /dev/null
+    echo 'deb http://download.indii.org/deb kinetic main' | sudo tee /etc/apt/sources.list.d/indii.org.list
+    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.org.gpg > /dev/null
     sudo apt update
     sudo apt install doxide
     ```
@@ -33,8 +33,8 @@ Follow the instructions below for your operating system.
 ??? info "Ubuntu 22.04 Jammy Jellyfish (amd64)"
     Install Doxide:
     ```
-    echo 'deb http://download.indii.org/deb jammy main' | sudo tee /etc/apt/sources.list.d/indii.list
-    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.gpg > /dev/null
+    echo 'deb http://download.indii.org/deb jammy main' | sudo tee /etc/apt/sources.list.d/indii.org.list
+    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.org.gpg > /dev/null
     sudo apt update
     sudo apt install doxide
     ```
@@ -46,8 +46,8 @@ Follow the instructions below for your operating system.
 ??? info "Ubuntu 20.04 Focal Fossa (amd64)"
     Install Doxide:
     ```
-    echo 'deb http://download.indii.org/deb focal main' | sudo tee /etc/apt/sources.list.d/indii.list
-    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.gpg > /dev/null
+    echo 'deb http://download.indii.org/deb focal main' | sudo tee /etc/apt/sources.list.d/indii.org.list
+    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.org.gpg > /dev/null
     sudo apt update
     sudo apt install doxide
     ```
@@ -61,8 +61,8 @@ Follow the instructions below for your operating system.
 ??? info "Debian 12 Bookworm (amd64)"
     Install Doxide:
     ```
-    echo 'deb http://download.indii.org/deb bookworm main' | sudo tee /etc/apt/sources.list.d/indii.list
-    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.gpg > /dev/null
+    echo 'deb http://download.indii.org/deb bookworm main' | sudo tee /etc/apt/sources.list.d/indii.org.list
+    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.org.gpg > /dev/null
     sudo apt update
     sudo apt install doxide
     ```
@@ -74,8 +74,8 @@ Follow the instructions below for your operating system.
 ??? info "Debian 11 Bullseye (amd64)"
     Install Doxide:
     ```
-    echo 'deb http://download.indii.org/deb bullseye main' | sudo tee /etc/apt/sources.list.d/indii.list
-    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.gpg > /dev/null
+    echo 'deb http://download.indii.org/deb bullseye main' | sudo tee /etc/apt/sources.list.d/indii.org.list
+    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.org.gpg > /dev/null
     sudo apt update
     sudo apt install doxide
     ```
@@ -89,7 +89,7 @@ Follow the instructions below for your operating system.
 ??? info "Fedora 38 (x86_64)"
     Install Doxide:
     ```
-    sudo dnf config-manager --add-repo https://download.indii.org/rpm/fedora/38/indii.repo
+    sudo dnf config-manager --add-repo https://download.indii.org/rpm/fedora/38/indii.org.repo
     sudo dnf update
     sudo dnf install doxide
     ```
@@ -101,7 +101,7 @@ Follow the instructions below for your operating system.
 ??? info "Fedora 37 (x86_64)"
     Install Doxide:
     ```
-    sudo dnf config-manager --add-repo https://download.indii.org/rpm/fedora/37/indii.repo
+    sudo dnf config-manager --add-repo https://download.indii.org/rpm/fedora/37/indii.org.repo
     sudo dnf update
     sudo dnf install doxide
     ```
@@ -113,7 +113,7 @@ Follow the instructions below for your operating system.
 ??? info "Fedora 36 (x86_64)"
     Install Doxide:
     ```
-    sudo dnf config-manager --add-repo https://download.indii.org/rpm/fedora/36/indii.repo
+    sudo dnf config-manager --add-repo https://download.indii.org/rpm/fedora/36/indii.org.repo
     sudo dnf update
     sudo dnf install doxide
     ```
@@ -125,7 +125,7 @@ Follow the instructions below for your operating system.
 ??? info "Fedora 35 (x86_64)"
     Install Doxide:
     ```
-    sudo dnf config-manager --add-repo https://download.indii.org/rpm/fedora/35/indii.repo
+    sudo dnf config-manager --add-repo https://download.indii.org/rpm/fedora/35/indii.org.repo
     sudo dnf update
     sudo dnf install doxide
     ```
@@ -139,7 +139,7 @@ Follow the instructions below for your operating system.
 ??? info "openSUSE Tumbleweed (x86_64)"
     Install Doxide:
     ```
-    sudo zypper addrepo https://download.indii.org/rpm/opensuse/tumbleweed/indii.repo
+    sudo zypper addrepo https://download.indii.org/rpm/opensuse/tumbleweed/indii.org.repo
     sudo zypper refresh
     sudo zypper install doxide
     ```
@@ -153,7 +153,7 @@ Follow the instructions below for your operating system.
 ??? info "Mageia 8 (x86_64)"
     Install Doxide:
     ```
-    sudo dnf config-manager --add-repo https://download.indii.org/rpm/mageia/8/indii.repo
+    sudo dnf config-manager --add-repo https://download.indii.org/rpm/mageia/8/indii.org.repo
     sudo dnf update
     sudo dnf install doxide
     ```
