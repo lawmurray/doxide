@@ -6,7 +6,7 @@
 </style>
 
 <div style="text-align:center;">
-<img src="assets/title.svg" width="256" alt="Doxide: Modern documentation for modern C++">
+<img src="assets/title.svg" width="256" height="384" alt="Doxide: Modern documentation for modern C++">
 </div>
 
 Doxide generates documentation for C++ source code. It is configured with YAML, generates Markdown, and publishes HTML.
