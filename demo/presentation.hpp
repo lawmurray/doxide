@@ -36,14 +36,6 @@
  * void f(int x, int y);
  * ```
  * 
- * #### Mathematics
- * 
- * Inline math: $y = Ax + \epsilon$. Display math:
- * 
- * $$
- * y = Ax + \epsilon.
- * $$
- * 
  * #### Images
  * 
  * ![Doxide logo](/assets/logo_red.svg){width="256"}
