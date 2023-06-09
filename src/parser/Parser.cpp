@@ -223,7 +223,6 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
             token.substr(1) == "short") {
           auto first = tokenizer.consume(~WHITESPACE);
           auto last = tokenizer.consume(SENTENCE);
-          std::cerr << first.first << ' ' << last.last << std::endl;
           entity.brief.append(first.first, last.last);
         } else if (token.substr(1) == "e" ||
             token.substr(1) == "em" ||
