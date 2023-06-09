@@ -59,9 +59,37 @@ jobs:
       - build
       - test
 
+  deploy:
+    executor: default
+    steps:
+      - run:
+          name: Trigger package update
+          command: |
+              curl -X POST https://circleci.com/api/v2/project/gh/lawmurray/download.indii.org/pipeline \
+                --header "Circle-Token: $CIRCLE_TOKEN" \
+                --header "content-type: application/json" \
+                --data '{"branch":"<your-branch-name>"}'
+
 workflows:
 
   version: 2
   all:
     jobs:
       - all
+
+      - hold:
+          type: approval
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+
+      - deploy:
+          requires:
+            - hold
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
