@@ -25,7 +25,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
   for (auto& child : entity.groups) {
     out << ":material-format-section: [" << title(child) << ']';
     out << "(" << sanitize(child.name) << "/)" << std::endl;
-    out << ":   " << brief(child) << std::endl;
+    out << ":   " << line(brief(child)) << std::endl;
     out << std::endl;
   }
 
@@ -34,7 +34,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     if (!child->empty()) {
       out << ":material-package: [" << child->name << ']';
       out << "(" << sanitize(child->name) << "/)" << std::endl;
-      out << ":   " << brief(*child) << std::endl;
+      out << ":   " << line(brief(*child)) << std::endl;
       out << std::endl;
     }
   }
@@ -49,7 +49,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
         entity.type == EntityType::NAMESPACE ||
         entity.type == EntityType::GROUP)) {
       out << "| [" << child->name << "](" << sanitize(child->name) << "/) | ";
-      out << brief(*child) << " |" << std::endl;
+      out << line(brief(*child)) << " |" << std::endl;
     }
     out << std::endl;
   }
@@ -62,7 +62,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
         entity.type == EntityType::NAMESPACE ||
         entity.type == EntityType::GROUP)) {
       out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
-      out << brief(*child) << " |" << std::endl;
+      out << line(brief(*child)) << " |" << std::endl;
     }
     out << std::endl;
   }
@@ -75,7 +75,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
         entity.type == EntityType::NAMESPACE ||
         entity.type == EntityType::GROUP)) {
       out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
-      out << brief(*child) << " |" << std::endl;
+      out << line(brief(*child)) << " |" << std::endl;
     }
     out << std::endl;
   }
@@ -88,7 +88,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
         entity.type == EntityType::NAMESPACE ||
         entity.type == EntityType::GROUP)) {
       out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
-      out << brief(*child) << " |" << std::endl;
+      out << line(brief(*child)) << " |" << std::endl;
     }
     out << std::endl;
   }
@@ -101,7 +101,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
         entity.type == EntityType::NAMESPACE ||
         entity.type == EntityType::GROUP)) {
       out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
-      out << brief(*child) << " |" << std::endl;
+      out << line(brief(*child)) << " |" << std::endl;
     }
     out << std::endl;
   }
@@ -198,7 +198,7 @@ std::string MarkdownGenerator::frontmatter(const Entity& entity) {
    * mark as managed by Doxide */
   std::stringstream buf;
   buf << "title: " << title(entity) << std::endl;
-  buf << "description: " << brief(entity) << std::endl;
+  buf << "description: " << line(brief(entity)) << std::endl;
   buf << "generator: doxide" << std::endl;
   buf << "---" << std::endl;
   buf << std::endl;
