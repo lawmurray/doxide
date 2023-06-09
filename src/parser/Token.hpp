@@ -52,9 +52,9 @@ public:
   /**
    * Constructor.
    */
-  Token(const TokenType& type = NONE,
-      const std::string_view::const_iterator& first = {},
-      const std::string_view::const_iterator& last = {}) :
+  Token(const TokenType& type,
+      const std::string_view::const_iterator& first,
+      const std::string_view::const_iterator& last) :
       type(type),
       first(first),
       last(last) {

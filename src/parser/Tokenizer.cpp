@@ -6,14 +6,13 @@ Tokenizer::Tokenizer(const std::string_view& source) {
 }
 
 Token Tokenizer::next() {
-  Token token;
+  Token token(NONE, iter, iter);
   if (iter != end) {
     for (auto& [type, regex] : regexes) {
       std::match_results<std::string_view::const_iterator> match;
       if (std::regex_search(iter, end, match, regex,
           std::regex_constants::match_continuous)) {
-        Token token{type, iter, iter + match.length()};
-        iter += match.length();
+        token.last += match.length();
         return token;
       }
     }
@@ -23,9 +22,9 @@ Token Tokenizer::next() {
 }
 
 Token Tokenizer::consume(const int stop) {
-  Token token;
-  do {
+  Token token = next();
+  while (token.type && !(token.type & stop)) {
     token = next();
-  } while (token.type && !(token.type & stop));
+  }    
   return token;
 }
