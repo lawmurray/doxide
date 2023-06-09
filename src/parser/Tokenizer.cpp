@@ -12,7 +12,9 @@ Token Tokenizer::next() {
       std::match_results<std::string_view::const_iterator> match;
       if (std::regex_search(iter, end, match, regex,
           std::regex_constants::match_continuous)) {
-        token.last += match.length();
+        iter += match.length();
+        token.type = type;
+        token.last = iter;
         return token;
       }
     }
