@@ -66,7 +66,7 @@ jobs:
           name: Trigger package update
           command: |
               curl -X POST https://circleci.com/api/v2/project/gh/lawmurray/download.indii.org/pipeline \
-                --header "Circle-Token: $CIRCLE_TOKEN" \
+                --header "Circle-Token: $GITHUB_PASSWORD" \
                 --header "content-type: application/json" \
                 --data '{"branch": "main"}'
 
