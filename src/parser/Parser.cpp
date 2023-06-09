@@ -222,8 +222,14 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
         } else if (token.substr(1) == "brief" ||
             token.substr(1) == "short") {
           auto first = tokenizer.consume(~WHITESPACE);
-          auto last = tokenizer.consume(SENTENCE);
-          entity.brief.append(first.first, last.last);
+          auto last = tokenizer.consume(SENTENCE|PARA);
+          if (last.type == PARA) {
+            /* exclude the last token */
+            entity.brief.append(first.first, last.first);
+          } else {
+            /* include the last token */
+            entity.brief.append(first.first, last.last);
+          }
         } else if (token.substr(1) == "e" ||
             token.substr(1) == "em" ||
             token.substr(1) == "a") {
