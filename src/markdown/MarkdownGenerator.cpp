@@ -265,16 +265,24 @@ std::string MarkdownGenerator::htmlize(const std::string& str) {
 
 std::string MarkdownGenerator::sanitize(const std::string& str) {
   static const std::regex word("\\w");
+  static const std::regex space("\\s");
 
   std::stringstream buf;
   for (auto iter = str.begin(); iter != str.end(); ++iter) {
     if (std::regex_match(iter, iter + 1, word)) {
       buf << *iter;
+    } else if (std::regex_match(iter, iter + 1, space)) {
+      // skip whitespace
     } else {
+      /* encode non-word and non-space characters */
       buf << "_u" << std::setfill('0') << std::setw(4) << std::hex << int(*iter);
     }
   }
-  return buf.str();
+
+  /* on Linux and Mac, the maximum file name length is 255 bytes, plus leave
+   * room for a four-character file extension (e.g. .html); on Windows it is
+   * 260 bytes, so use the minimum */
+  return buf.str().substr(0, 255 - 5);
 }
 
 std::list<const Entity*> MarkdownGenerator::view(
