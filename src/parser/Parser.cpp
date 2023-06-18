@@ -25,12 +25,18 @@ Parser::~Parser() {
   ts_parser_delete(parser);
 }
 
-void Parser::parse(const std::string_view& source, Entity& global) {
+bool Parser::parse(const std::string_view& source, Entity& global) {
   /* initialize parser */
   ts_parser_reset(parser);
   TSTree *tree = ts_parser_parse_string(parser, NULL, source.data(),
       source.size());
+  if (!tree) {
+    return false;
+  }
   TSNode node = ts_tree_root_node(tree);
+  if (ts_node_has_error(node)) {
+    return false;
+  }
 
   /* initialize stacks */
   std::list<uint32_t> starts, ends;
@@ -139,6 +145,8 @@ void Parser::parse(const std::string_view& source, Entity& global) {
   global = std::move(entities.back());
   entities.pop_back();
   ts_query_cursor_delete(cursor);
+
+  return true;
 }
 
 void Parser::translate(const std::string_view& comment, Entity& entity) {

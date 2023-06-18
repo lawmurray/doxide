@@ -147,7 +147,9 @@ void Driver::build() {
   /* parse */
   Parser parser;
   for (auto file: files) {
-    parser.parse(gulp(file), global);
+    if (!parser.parse(gulp(file), global)) {
+      warn("parse error in " << file << ", skipping");
+    }
   }
 
   /* generate */
