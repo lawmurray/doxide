@@ -3,10 +3,11 @@
 void MarkdownGenerator::generate(const std::filesystem::path& dir,
     const Entity& entity) {
   std::ofstream out;
-  std::filesystem::create_directories(dir / sanitize(entity.name));
   if (entity.type == EntityType::TYPE) {
+    std::filesystem::create_directories(dir);
     out.open(dir / (sanitize(entity.name) + ".md"));
   } else {
+    std::filesystem::create_directories(dir / sanitize(entity.name));
     out.open(dir / sanitize(entity.name) / "index.md");
   }
   out << frontmatter(entity) << std::endl;
