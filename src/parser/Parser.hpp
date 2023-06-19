@@ -21,12 +21,10 @@ public:
   /**
    * Parse C++ source code.
    * 
-   * @param source C++ source code.
+   * @param file C++ source file name.
    * @param global Global namespace.
-   * 
-   * @return Was parsing successful?
    */
-  bool parse(const std::string_view& source, Entity& global);
+  void parse(const std::string& file, Entity& global);
 
   /**
    * Translate documentation comment.

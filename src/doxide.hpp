@@ -58,3 +58,29 @@ extern const char* init_docs_stylesheets_doxide_css ;
  * Contents of initial docs/overrides/partials/copyright.html
  */
 extern const char* init_docs_overrides_partials_copyright_html;
+
+/**
+ * Write a whole file.
+ */
+void write_file(const std::string& contents, const std::filesystem::path& dst);
+
+/**
+ * Write a whole file, prompting to confirm overwrite if it already exists.
+ */
+void write_file_prompt(const std::string& contents, const std::filesystem::path& dst);
+
+/**
+ * Copy a file, prompting to confirm overwrite if the destination already
+ * exists.
+ */
+void copy_file_prompt(const std::filesystem::path& src, const std::filesystem::path& dst);
+
+/**
+ * Read in a whole file.
+ */
+std::string gulp(const std::filesystem::path& src);
+
+/**
+ * Return list of paths matching a glob pattern.
+ */
+std::list<std::filesystem::path> glob(const std::string& pattern);

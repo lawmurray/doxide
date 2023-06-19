@@ -75,7 +75,7 @@ const char* query_cpp = R""""(
   ;; typedef
   ((comment) @docs .
      (type_definition
-       declarator: (type_identifier) @name) @type)
+       declarator: (type_identifier) @name .) @type)
 
   ;; type alias
   ((comment) @docs .

@@ -157,8 +157,79 @@ int main(int argc, char** argv) {
   } else if (prog.compare("help") == 0 || prog.compare("--help") == 0) {
     driver.help();
   } else {
-    std::cerr << "unrecognized command '" << prog << "', see 'doxide help' for usage." << std::endl;
+    std::cerr << "unrecognized command '" << prog <<
+        "', see 'doxide help' for usage." << std::endl;
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;
+}
+
+void write_file(const std::string& contents,
+    const std::filesystem::path& dst) {
+  if (dst.has_parent_path()) {
+    std::filesystem::create_directories(dst.parent_path());
+  }
+  std::fstream stream(dst, std::ios::out);
+  stream << contents << '\n';
+  stream.close();
+}
+
+void write_file_prompt(const std::string& contents,
+    const std::filesystem::path& dst) {
+  if (dst.has_parent_path()) {
+    std::filesystem::create_directories(dst.parent_path());
+  }
+  if (std::filesystem::exists(dst)) {
+    std::cout << dst.string() << " already exists, overwrite? [y/N] ";
+    std::string ans;
+    std::getline(std::cin, ans);
+    if (ans.length() > 0 && (ans[0] == 'y' || ans[0] == 'Y')) {
+      write_file(contents, dst);
+    }
+  } else {
+    write_file(contents, dst);
+  }
+}
+
+void copy_file_prompt(const std::filesystem::path& src,
+    const std::filesystem::path& dst) {
+  if (dst.has_parent_path()) {
+    std::filesystem::create_directories(dst.parent_path());
+  }
+  if (std::filesystem::exists(dst)) {
+    std::cout << dst.string() << " already exists, overwrite? [y/N] ";
+    std::string ans;
+    std::getline(std::cin, ans);
+    if (ans.length() > 0 && (ans[0] == 'y' || ans[0] == 'Y')) {
+      std::filesystem::copy_file(src, dst,
+          std::filesystem::copy_options::overwrite_existing);
+    }
+  } else {
+    std::filesystem::copy_file(src, dst,
+        std::filesystem::copy_options::overwrite_existing);
+  }
+}
+
+std::string gulp(const std::filesystem::path& src) {
+  std::string contents;
+  std::ifstream in(src);
+  char buffer[4096];
+  while (in.read(buffer, sizeof(buffer))) {
+    contents.append(buffer, sizeof(buffer));
+  }
+  contents.append(buffer, in.gcount());
+  return contents;
+}
+
+std::list<std::filesystem::path> glob(const std::string& pattern) {
+  std::list<std::filesystem::path> results;
+  glob_t matches;
+  int rescode = glob(pattern.c_str(), 0, 0, &matches);
+  if (rescode == 0) {
+    for (int i = 0; i < (int)matches.gl_pathc; ++i) {
+      results.push_back(matches.gl_pathv[i]);
+    }
+  }
+  globfree(&matches);
+  return results;
 }

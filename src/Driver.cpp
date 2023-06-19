@@ -5,71 +5,6 @@
 
 namespace fs = std::filesystem;
 
-static void write_file(const std::string& contents, const fs::path& dst) {
-  if (dst.has_parent_path()) {
-    fs::create_directories(dst.parent_path());
-  }
-  std::fstream stream(dst, std::ios::out);
-  stream << contents << '\n';
-  stream.close();
-}
-
-static void write_file_prompt(const std::string& contents, const fs::path& dst) {
-  if (dst.has_parent_path()) {
-    fs::create_directories(dst.parent_path());
-  }
-  if (fs::exists(dst)) {
-    std::cout << dst.string() << " already exists, overwrite? [y/N] ";
-    std::string ans;
-    std::getline(std::cin, ans);
-    if (ans.length() > 0 && (ans[0] == 'y' || ans[0] == 'Y')) {
-      write_file(contents, dst);
-    }
-  } else {
-    write_file(contents, dst);
-  }
-}
-
-static void copy_file_prompt(const fs::path& src, const fs::path& dst) {
-  if (dst.has_parent_path()) {
-    fs::create_directories(dst.parent_path());
-  }
-  if (fs::exists(dst)) {
-    std::cout << dst.string() << " already exists, overwrite? [y/N] ";
-    std::string ans;
-    std::getline(std::cin, ans);
-    if (ans.length() > 0 && (ans[0] == 'y' || ans[0] == 'Y')) {
-      fs::copy_file(src, dst, fs::copy_options::overwrite_existing);
-    }
-  } else {
-    fs::copy_file(src, dst, fs::copy_options::overwrite_existing);
-  }
-}
-
-static std::string gulp(const fs::path& src) {
-  std::string contents;
-  std::ifstream in(src);
-  char buffer[4096];
-  while (in.read(buffer, sizeof(buffer))) {
-    contents.append(buffer, sizeof(buffer));
-  }
-  contents.append(buffer, in.gcount());
-  return contents;
-}
-
-static std::list<fs::path> glob(const std::string& pattern) {
-  std::list<fs::path> results;
-  glob_t matches;
-  int rescode = glob(pattern.c_str(), 0, 0, &matches);
-  if (rescode == 0) {
-    for (int i = 0; i < (int)matches.gl_pathc; ++i) {
-      results.push_back(matches.gl_pathv[i]);
-    }
-  }
-  globfree(&matches);
-  return results;
-}
-
 Driver::Driver(int argc, char** argv) :
     title("Untitled"),
     output("docs") {
@@ -147,9 +82,7 @@ void Driver::build() {
   /* parse */
   Parser parser;
   for (auto file: files) {
-    if (!parser.parse(gulp(file), global)) {
-      warn("parse error in " << file << ", skipping");
-    }
+    parser.parse(file, global);
   }
 
   /* generate */
@@ -161,15 +94,15 @@ void Driver::clean() {
   /* traverse the output directory, removing any Markdown files with
    * 'generator: doxide' in their YAML frontmatter; these are files managed by
    * Doxide */
-  if (fs::exists(output) && fs::is_directory(output)) {
-    for (auto& entry : fs::recursive_directory_iterator(output)) {
+  if (std::filesystem::exists(output) && std::filesystem::is_directory(output)) {
+    for (auto& entry : std::filesystem::recursive_directory_iterator(output)) {
       if (entry.is_regular_file() && entry.path().extension() == ".md") {
         try {
           YAMLParser parser;
-          YAMLNode frontmatter = parser.parse(gulp(entry.path()));
+          YAMLNode frontmatter = parser.parse(entry.path());
           if (frontmatter.isValue("generator") &&
               frontmatter.value("generator") == "doxide") {
-            fs::remove(entry.path());
+            std::filesystem::remove(entry.path());
           }
         } catch (const std::runtime_error& e) {
           // ignore
@@ -180,16 +113,16 @@ void Driver::clean() {
     /* traverse the output directory again, this time removing any empty
     * directories; because removing a directory may make its parent directory
     * empty, repeat until there are no further empty directories */
-    std::vector<fs::path> empty;
+    std::vector<std::filesystem::path> empty;
     do {
       empty.clear();
-      for (auto& entry : fs::recursive_directory_iterator(output)) {
-        if (entry.is_directory() && fs::is_empty(entry.path())) {
+      for (auto& entry : std::filesystem::recursive_directory_iterator(output)) {
+        if (entry.is_directory() && std::filesystem::is_empty(entry.path())) {
           empty.push_back(entry.path());
         }
       }
       for (auto& dir : empty) {
-        fs::remove(dir);
+        std::filesystem::remove(dir);
       }    
     } while (empty.size());
   }
@@ -224,7 +157,7 @@ void Driver::help() {
 
 void Driver::config() {
   /* find the configuration file */
-  fs::path path;
+  std::filesystem::path path;
   if (std::filesystem::exists("doxide.yaml")) {
     path = "doxide.yaml";
   } else if (std::filesystem::exists("doxide.yml")) {
@@ -235,7 +168,7 @@ void Driver::config() {
 
   /* parse build configuration file */
   YAMLParser parser;
-  YAMLNode root = parser.parse(gulp(path));
+  YAMLNode root = parser.parse(path);
 
   if (root.isValue("title")) {
     title = root.value("title");

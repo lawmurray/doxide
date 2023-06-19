@@ -25,17 +25,22 @@ Parser::~Parser() {
   ts_parser_delete(parser);
 }
 
-bool Parser::parse(const std::string_view& source, Entity& global) {
+void Parser::parse(const std::string& file, Entity& global) {
+  /* read file */
+  auto source = gulp(file);
+
   /* initialize parser */
   ts_parser_reset(parser);
   TSTree *tree = ts_parser_parse_string(parser, NULL, source.data(),
       source.size());
   if (!tree) {
-    return false;
+    warn("cannot parse " << file << ", skipping");
   }
   TSNode node = ts_tree_root_node(tree);
   if (ts_node_has_error(node)) {
-    return false;
+    warn("parse error in " << file << " but attempting recovery, this may " <<
+        "occur if the code is not syntactically valid without macro " <<
+        "expansion");
   }
 
   /* initialize stacks */
@@ -145,8 +150,6 @@ bool Parser::parse(const std::string_view& source, Entity& global) {
   global = std::move(entities.back());
   entities.pop_back();
   ts_query_cursor_delete(cursor);
-
-  return true;
 }
 
 void Parser::translate(const std::string_view& comment, Entity& entity) {

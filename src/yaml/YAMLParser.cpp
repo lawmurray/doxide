@@ -8,14 +8,15 @@ YAMLParser::~YAMLParser() {
   yaml_parser_delete(&parser);
 }
 
-YAMLNode YAMLParser::parse(const std::string_view& contents) {
+YAMLNode YAMLParser::parse(const std::string& file) {
+  auto contents = gulp(file);
   yaml_parser_set_input_string(&parser, (const unsigned char*)contents.data(),
       contents.size());
   YAMLNode root;
   int done = 0;
   while (!done) {
     if (!yaml_parser_parse(&parser, &event)) {
-      throw std::runtime_error("YAML syntax error");
+      throw std::runtime_error("syntax error in doxide.yaml");
     }
     if (event.type == YAML_SEQUENCE_START_EVENT) {
       parseSequence(root);

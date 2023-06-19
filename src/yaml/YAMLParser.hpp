@@ -19,11 +19,13 @@ public:
   ~YAMLParser();
 
   /**
-   * Parse the file.
+   * Parse a file.
+   * 
+   * @param file File name.
    * 
    * @return The contents of the file.
    */
-  YAMLNode parse(const std::string_view& contents);
+  YAMLNode parse(const std::string& file);
 
 private:
   void parseMapping(YAMLNode& node);
