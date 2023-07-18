@@ -93,7 +93,7 @@ const char* query_cpp = R""""(
     (template_declaration
       (concept_definition
         name: (identifier) @name
-        (template_function))) @concept)
+        (_))) @concept)
 
   ;; variable
   ((comment) @docs .
