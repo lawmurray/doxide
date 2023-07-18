@@ -3,7 +3,7 @@
 void MarkdownGenerator::generate(const std::filesystem::path& dir,
     const Entity& entity) {
   std::ofstream out;
-  if (entity.type == EntityType::TYPE || entity.type == EntityType::CONCEPT) {
+  if (entity.type == EntityType::TYPE) {
     std::filesystem::create_directories(dir);
     out.open(dir / (sanitize(entity.name) + ".md"));
   } else {
@@ -15,7 +15,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
   /* header */
   out << "# " << title(entity) << std::endl;
   out << std::endl;
-  if (entity.type == EntityType::TYPE || entity.type == EntityType::CONCEPT) {
+  if (entity.type == EntityType::TYPE) {
     out << "**" << htmlize(line(entity.decl)) << "**" << std::endl;
     out << std::endl;
   }
@@ -62,7 +62,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     for (auto& child : view(entity.concepts,
         entity.type == EntityType::NAMESPACE ||
         entity.type == EntityType::GROUP)) {
-      out << "| [" << child->name << "](" << sanitize(child->name) << "/) | ";
+      out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
       out << line(brief(*child)) << " |" << std::endl;
     }
     out << std::endl;
@@ -131,6 +131,19 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
   }
 
   /* detailed descriptions */
+  if (entity.concepts.size() > 0) {
+    out << "## Concept Details" << std::endl;
+    out << std::endl;
+    for (auto& child : view(entity.concepts, true)) {
+      out << "### " << child->name;
+      out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
+      out << std::endl;
+      out << "!!! concept \"" << htmlize(line(child->decl)) << '"' << std::endl;
+      out << std::endl;
+      out << indent(child->docs) << std::endl;
+      out << std::endl;
+    }
+  }
   if (entity.macros.size() > 0) {
     out << "## Macro Details" << std::endl;
     out << std::endl;
@@ -203,9 +216,6 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     }
   }
   for (auto& child : entity.types) {
-    generate(dir / sanitize(entity.name), child);
-  }
-  for (auto& child : entity.concepts) {
     generate(dir / sanitize(entity.name), child);
   }
 }
