@@ -82,6 +82,8 @@ void Parser::parse(const std::string& file, Entity& global) {
           entity.type = EntityType::NAMESPACE;
         } else if (strncmp(name, "type", length) == 0) {
           entity.type = EntityType::TYPE;
+        } else if (strncmp(name, "concept", length) == 0) {
+          entity.type = EntityType::CONCEPT;
         } else if (strncmp(name, "variable", length) == 0) {
           entity.type = EntityType::VARIABLE;
         } else if (strncmp(name, "function", length) == 0) {

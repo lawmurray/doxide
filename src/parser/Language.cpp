@@ -88,6 +88,13 @@ const char* query_cpp = R""""(
       (alias_declaration
         name: (type_identifier) @name)) @type)
 
+  ;; concept
+  ((comment) @docs .
+    (template_declaration
+      (concept_definition
+        name: (identifier) @name
+        (template_function))) @concept)
+
   ;; variable
   ((comment) @docs .
     (declaration

@@ -10,6 +10,7 @@ enum class EntityType {
   NAMESPACE,
   GROUP,
   TYPE,
+  CONCEPT,
   VARIABLE,
   FUNCTION,
   OPERATOR,
@@ -88,6 +89,11 @@ struct Entity {
    * Child types.
    */
   list_type types;
+
+  /**
+   * Child concepts.
+   */
+  list_type concepts;
 
   /**
    * Child variables.

@@ -17,6 +17,7 @@ bool Entity::empty() const {
         return ns.empty();
       });
   result = result && types.empty();
+  result = result && concepts.empty();
   result = result && variables.empty();
   result = result && functions.empty();
   result = result && operators.empty();
@@ -72,6 +73,8 @@ void Entity::addToThis(const Entity& o) {
   } else if (!o.hide && !o.docs.empty()) {
     if (o.type == EntityType::TYPE) {
       types.push_back(o);
+    } else if (o.type == EntityType::CONCEPT) {
+      concepts.push_back(o);
     } else if (o.type == EntityType::VARIABLE) {
       variables.push_back(o);
     } else if (o.type == EntityType::FUNCTION) {
@@ -97,6 +100,7 @@ void Entity::merge(const Entity& o) {
 
   groups.insert(groups.end(), o.groups.begin(), o.groups.end());
   types.insert(types.end(), o.types.begin(), o.types.end());
+  concepts.insert(concepts.end(), o.concepts.begin(), o.concepts.end());
   variables.insert(variables.end(), o.variables.begin(), o.variables.end());
   functions.insert(functions.end(), o.functions.begin(), o.functions.end());
   operators.insert(operators.end(), o.operators.begin(), o.operators.end());

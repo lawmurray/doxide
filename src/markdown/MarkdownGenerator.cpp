@@ -3,7 +3,7 @@
 void MarkdownGenerator::generate(const std::filesystem::path& dir,
     const Entity& entity) {
   std::ofstream out;
-  if (entity.type == EntityType::TYPE) {
+  if (entity.type == EntityType::TYPE || entity.type == EntityType::CONCEPT) {
     std::filesystem::create_directories(dir);
     out.open(dir / (sanitize(entity.name) + ".md"));
   } else {
@@ -15,7 +15,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
   /* header */
   out << "# " << title(entity) << std::endl;
   out << std::endl;
-  if (entity.type == EntityType::TYPE) {
+  if (entity.type == EntityType::TYPE || entity.type == EntityType::CONCEPT) {
     out << "**" << htmlize(line(entity.decl)) << "**" << std::endl;
     out << std::endl;
   }
@@ -47,6 +47,19 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     out << "| Name | Description |" << std::endl;
     out << "| ---- | ----------- |" << std::endl;
     for (auto& child : view(entity.types,
+        entity.type == EntityType::NAMESPACE ||
+        entity.type == EntityType::GROUP)) {
+      out << "| [" << child->name << "](" << sanitize(child->name) << "/) | ";
+      out << line(brief(*child)) << " |" << std::endl;
+    }
+    out << std::endl;
+  }
+  if (entity.concepts.size() > 0) {
+    out << "## Concepts" << std::endl;
+    out << std::endl;
+    out << "| Name | Description |" << std::endl;
+    out << "| ---- | ----------- |" << std::endl;
+    for (auto& child : view(entity.concepts,
         entity.type == EntityType::NAMESPACE ||
         entity.type == EntityType::GROUP)) {
       out << "| [" << child->name << "](" << sanitize(child->name) << "/) | ";
@@ -190,6 +203,9 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     }
   }
   for (auto& child : entity.types) {
+    generate(dir / sanitize(entity.name), child);
+  }
+  for (auto& child : entity.concepts) {
     generate(dir / sanitize(entity.name), child);
   }
 }
