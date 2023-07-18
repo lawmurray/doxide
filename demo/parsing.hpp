@@ -231,6 +231,22 @@ template<class T>
 using TypeAliasTemplate = int;
 
 /**
+ * Test concept.
+ * 
+ * @ingroup parsing
+ */
+template<class T>
+concept Concept = std::is_arithmetic_v<T>;
+
+/**
+ * Test trivial concept.
+ * 
+ * @ingroup parsing
+ */
+template<class T>
+concept TrivialConcept = true;
+
+/**
  * Test enumeration.
  * 
  * @ingroup parsing
