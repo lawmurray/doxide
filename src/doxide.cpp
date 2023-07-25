@@ -230,16 +230,3 @@ std::string gulp(const std::filesystem::path& src) {
   contents.append(buffer, in.gcount());
   return contents;
 }
-
-std::list<std::filesystem::path> glob(const std::string& pattern) {
-  std::list<std::filesystem::path> results;
-  glob_t matches;
-  int rescode = glob(pattern.c_str(), 0, 0, &matches);
-  if (rescode == 0) {
-    for (int i = 0; i < (int)matches.gl_pathc; ++i) {
-      results.push_back(matches.gl_pathv[i]);
-    }
-  }
-  globfree(&matches);
-  return results;
-}

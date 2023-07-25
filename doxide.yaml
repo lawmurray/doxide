@@ -1,8 +1,7 @@
 title: Demo
 description: Demonstration of the features of Doxide.
 files:
-  - demo/parsing.hpp
-  - demo/presentation.hpp
+  - "**.hpp"
 output: docs/demo
 groups:
   - name: parsing

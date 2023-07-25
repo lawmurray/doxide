@@ -17,9 +17,9 @@
 #include <cassert>
 
 #include <getopt.h>
-#include <glob.h>
 #include <yaml.h>
 #include <tree_sitter/api.h>
+#include <glob/glob.hpp>
 
 /**
  * Print a warning message.
@@ -79,8 +79,3 @@ void copy_file_prompt(const std::filesystem::path& src, const std::filesystem::p
  * Read in a whole file.
  */
 std::string gulp(const std::filesystem::path& src);
-
-/**
- * Return list of paths matching a glob pattern.
- */
-std::list<std::filesystem::path> glob(const std::string& pattern);

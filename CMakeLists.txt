@@ -4,7 +4,7 @@ project(doxide
     DESCRIPTION "Modern documentation for modern C++"
     HOMEPAGE_URL "https://doxide.org")
 set(CMAKE_CXX_STANDARD 20)
-include_directories(src contrib/tree-sitter/lib/include)
+include_directories(src contrib/tree-sitter/lib/include contrib/glob/single_include)
 add_library(libyaml SHARED IMPORTED)
 add_executable(doxide
     contrib/tree-sitter/lib/src/lib.c

@@ -186,7 +186,7 @@ void Driver::config() {
     for (auto& node : root.sequence("files")) {
       if (node->isValue()) {
         auto& pattern = node->value();
-        auto paths = glob(pattern);
+        auto paths = glob::rglob(pattern);
         if (paths.empty()) {
           /* print warning if pattern does not contain a wildcard '*' */
           if (pattern.find('*') == std::string::npos) {
