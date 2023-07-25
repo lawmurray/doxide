@@ -12,7 +12,7 @@ public:
   /**
    * Constructor.
    */
-  Driver(int argc, char** argv);
+  Driver();
 
   /**
    * Create a new configuration file.
@@ -30,22 +30,6 @@ public:
   void clean();
 
   /**
-   * Print help message.
-   */
-  void help();
-
-private:
-  /**
-   * Read in the configuration file.
-   */
-  void config();
-
-  /**
-   * Recursively read groups from the configuration file.
-   */
-  void groups(YAMLNode& parentNode, Entity& parentEntity);
-
-  /**
    * Title.
    */
   std::string title;
@@ -59,6 +43,17 @@ private:
    * Output directory.
    */
   std::string output;
+
+private:
+  /**
+   * Read in the configuration file.
+   */
+  void config();
+
+  /**
+   * Recursively read groups from the configuration file.
+   */
+  void groups(YAMLNode& parentNode, Entity& parentEntity);
 
   /**
    * Lists of files from config.

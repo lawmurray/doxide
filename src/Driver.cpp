@@ -3,55 +3,10 @@
 #include "parser/Parser.hpp"
 #include "markdown/MarkdownGenerator.hpp"
 
-namespace fs = std::filesystem;
-
-Driver::Driver(int argc, char** argv) :
+Driver::Driver() :
     title("Untitled"),
     output("docs") {
-  /* read in config file first, so that command-line options can override */
   config();
-
-  /* command-line options */
-  enum {
-    TITLE_ARG = 256,
-    DESCRIPTION_ARG,
-    OUTPUT_ARG
-  };
-
-  int c, option_index;
-  option long_options[] = {
-      { "title", required_argument, 0, TITLE_ARG },
-      { "description", required_argument, 0, DESCRIPTION_ARG },
-      { "output", required_argument, 0, OUTPUT_ARG },
-      { 0, 0, 0, 0 }
-  };
-  const char* short_options = "-";  // treats non-options as short option 1
-
-  opterr = 0;  // handle error reporting ourselves
-  c = getopt_long_only(argc, argv, short_options, long_options, &option_index);
-  while (c != -1) {
-    switch (c) {
-    case TITLE_ARG:
-      title = optarg;
-      break;
-    case DESCRIPTION_ARG:
-      description = optarg;
-      break;
-    case OUTPUT_ARG:
-      output = optarg;
-      break;
-    case '?':  // unknown option
-    case 1:  // not an option
-      error("unrecognized option " << argv[optind - 1]);
-      break;
-    }
-    c = getopt_long_only(argc, argv, short_options, long_options, &option_index);
-  }
-
-  /* some error checking */
-  if (output.empty()) {
-    error("--output cannot be empty");
-  }
 }
 
 void Driver::init() {
@@ -126,33 +81,6 @@ void Driver::clean() {
       }    
     } while (empty.size());
   }
-}
-
-void Driver::help() {
-  std::cout << "Usage:" << std::endl;
-  std::cout << std::endl;
-  std::cout << "doxide init --title Title --description Description" << std::endl;
-  std::cout << std::endl;
-  std::cout << "  Initialize the working directory for a new project." << std::endl;
-  std::cout << std::endl;
-  std::cout << "    --title (default Untitled): Title of the project." << std::endl;
-  std::cout << "    --description (default empty): Description of the project." << std::endl;
-  std::cout << std::endl;
-  std::cout << "doxide build" << std::endl;
-  std::cout << std::endl;
-  std::cout << "   Build the project documentation." << std::endl;
-  std::cout << std::endl;
-  std::cout << "    --output (default docs): Output directory." << std::endl;
-  std::cout << std::endl;
-  std::cout << "doxide clean" << std::endl;
-  std::cout << std::endl;
-  std::cout << "    --output (default docs): Output directory." << std::endl;
-  std::cout << std::endl;
-  std::cout << "  Remove generated files." << std::endl;
-  std::cout << std::endl;
-  std::cout << "doxide help" << std::endl;
-  std::cout << std::endl;
-  std::cout << "  Print this help message." << std::endl;
 }
 
 void Driver::config() {

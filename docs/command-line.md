@@ -3,7 +3,7 @@
 Commands are:
 
 `doxide init`
-:   Create configuration and theme files. Will prompt before replacing any existing files.
+:   Initialize configuration files. Will prompt before replacing any existing files.
 
 `doxide build`
 :   Build documentation in the output directory.
@@ -16,7 +16,7 @@ Commands are:
 
 Command-line options are as follows. When provided, they override the same settings in the [configuration file](/configuring).
 
-`--title`
+`--title` (default `Untitled`)
 :   Main page title.
 
 `--description`

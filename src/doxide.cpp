@@ -148,24 +148,31 @@ R""""(<div class="md-copyright">
 )"""";
 
 int main(int argc, char** argv) {
-  /* first option (should be a command name) */
-  std::string prog = argc > 1 ? argv[1]: "help";
-
-  Driver driver(argc - 1, argv + 1);
-  if (prog.compare("init") == 0) {
-    driver.init();
-  } else if (prog.compare("build") == 0) {
-    driver.build();
-  } else if (prog.compare("clean") == 0) {
-    driver.clean();
-  } else if (prog.compare("help") == 0 || prog.compare("--help") == 0) {
-    driver.help();
-  } else {
-    std::cerr << "unrecognized command '" << prog <<
-        "', see 'doxide help' for usage." << std::endl;
-    return EXIT_FAILURE;
-  }
-  return EXIT_SUCCESS;
+  Driver driver;
+  CLI::App app{"Modern documentation for modern C++.\n"};
+  app.get_formatter()->column_width(30);
+  app.add_option("--title",
+      driver.title,
+      "Main page title.");
+  app.add_option("--description",
+      driver.description,
+      "Main page description.");
+  app.add_option("--output", driver.output,
+      "Output directory.");
+  app.add_subcommand("init",
+      "Initialize configuration files.")->
+      fallthrough()->
+      callback([&]() { driver.init(); });
+  app.add_subcommand("build",
+      "Build documentation in output directory.")->
+      fallthrough()->
+      callback([&]() { driver.build(); });
+  app.add_subcommand("clean",
+      "Clean output directory.")->
+      fallthrough()->
+      callback([&]() { driver.clean(); });
+  app.require_subcommand(1);
+  CLI11_PARSE(app, argc, argv);
 }
 
 void write_file(const std::string& contents,

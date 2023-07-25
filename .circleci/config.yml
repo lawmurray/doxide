@@ -19,7 +19,8 @@ commands:
                 cmake \
                 g++ \
                 lcov \
-                libyaml-dev
+                libyaml-dev \
+                libcli11-dev
               sudo rm -rf /var/lib/apt/lists/*
 
   build:

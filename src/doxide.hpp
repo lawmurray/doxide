@@ -16,10 +16,10 @@
 
 #include <cassert>
 
-#include <getopt.h>
 #include <yaml.h>
 #include <tree_sitter/api.h>
 #include <glob/glob.hpp>
+#include <CLI/CLI.hpp>
 
 /**
  * Print a warning message.
