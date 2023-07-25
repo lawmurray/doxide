@@ -12,7 +12,18 @@ The `doxide.yaml` configuration file supports the following entries.
 :   Output directory. Overruled by [command-line](/command-line) option `--output`.
 
 `files`
-:   List of source files from which to extract documentation. The wildcard `*` may be used to match multiple files, e.g. `*/*.hpp` will match all files in all subdirectories (non-recursively) that have a file extension of `.hpp`.
+:   List of source files from which to extract documentation. The following wildcards are supported for pattern matching:
+
+    | Pattern | Description                                           |
+    | ------- | ----------------------------------------------------- |
+    | `?`     | Any single character.                                 |
+    | `*`     | Zero or more characters, without directory recursion. |
+    | `**`    | Zero or more characters, with directory recursion.    |
+    | `[]`    | Any characters between the square brackets.           |
+    | `[!]`   | Any characters *not* between the square brackets.     |
+    | `[a-z]` | Any characters in the range `a` to `z`.               |
+
+    For example, `*.hpp` will match all files in the root directory with a file extension of `.hpp`, while `**/*.hpp` will match all files in subdirectories, recursively, with a file extension of `.hpp`.
 
 `groups`
 :   List of groups used to [organize](/organizing) documentation. Each element of the list can further contain the keys:
