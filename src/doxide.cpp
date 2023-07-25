@@ -4,16 +4,8 @@ const char* init_doxide_yaml =
 R""""(title:
 description:
 files:
-  - "*.hpp"
-  - "*/*.hpp"
-  - "*/*/*.hpp"
-  - "*/*/*/*.hpp"
-  - "*/*/*/*/*.hpp"
-  - "*.h"
-  - "*/*.h"
-  - "*/*/*.h"
-  - "*/*/*/*.h"
-  - "*/*/*/*/*.h"
+  - "**.hpp"
+  - "**.h"
 )"""";
 
 const char* init_mkdocs_yaml =
