@@ -7,3 +7,9 @@
 [submodule "contrib/glob"]
 	path = contrib/glob
 	url = https://github.com/p-ranav/glob
+[submodule "contrib/CLI11"]
+	path = contrib/CLI11
+	url = https://github.com/CLIUtils/CLI11
+[submodule "contrib/libyaml"]
+	path = contrib/libyaml
+	url = https://github.com/yaml/libyaml

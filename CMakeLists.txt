@@ -4,8 +4,33 @@ project(doxide
     DESCRIPTION "Modern documentation for modern C++"
     HOMEPAGE_URL "https://doxide.org")
 set(CMAKE_CXX_STANDARD 20)
-include_directories(src contrib/tree-sitter/lib/include contrib/glob/single_include)
-add_library(libyaml SHARED IMPORTED)
+
+if(MSVC)
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+endif()
+
+if(WIN32)
+    # on Windows, dependencies are built locally from submodules
+    add_compile_definitions(YAML_DECLARE_STATIC)
+    include_directories(
+        contrib/CLI11/include
+        contrib/libyaml/include)
+    link_directories(
+        contrib/libyaml/build/Debug
+    )
+else()
+   # on other platforms, dependencies are provided by package manager
+   add_library(libyaml SHARED IMPORTED)
+endif()
+
+include_directories(
+    src
+    contrib/tree-sitter/lib/include
+    contrib/glob/single_include
+    contrib/CLI11/include
+    contrib/libyaml/include
+)
+
 add_executable(doxide
     contrib/tree-sitter/lib/src/lib.c
     contrib/tree-sitter-cpp/src/parser.c
@@ -18,7 +43,9 @@ add_executable(doxide
     src/yaml/YAMLNode.cpp
     src/yaml/YAMLParser.cpp
     src/Driver.cpp
-    src/Entity.cpp)
+    src/Entity.cpp
+)
 target_link_libraries(doxide yaml)
+
 include(GNUInstallDirs)
 install(TARGETS doxide RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
