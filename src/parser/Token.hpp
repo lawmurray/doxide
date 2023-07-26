@@ -67,8 +67,8 @@ public:
   std::string_view str() const {
     /* std::string_view(first, last) ought to work with C++20 support, but
      * using the below overload of the constructor extends support to some
-     * older compilers, such as gcc with gnu++2a support only */
-    return std::string_view(first, std::distance(first, last));
+     * older compilers, such as gcc with gnu++2a support only, and MSVC 2022 */
+    return std::string_view(&*first, std::distance(first, last));
   }
 
   /**

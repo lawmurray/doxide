@@ -54,7 +54,7 @@ void Driver::clean() {
       if (entry.is_regular_file() && entry.path().extension() == ".md") {
         try {
           YAMLParser parser;
-          YAMLNode frontmatter = parser.parse(entry.path());
+          YAMLNode frontmatter = parser.parse(entry.path().string());
           if (frontmatter.isValue("generator") &&
               frontmatter.value("generator") == "doxide") {
             std::filesystem::remove(entry.path());
@@ -85,7 +85,7 @@ void Driver::clean() {
 
 void Driver::config() {
   /* find the configuration file */
-  std::filesystem::path path;
+  std::string path;
   if (std::filesystem::exists("doxide.yaml")) {
     path = "doxide.yaml";
   } else if (std::filesystem::exists("doxide.yml")) {

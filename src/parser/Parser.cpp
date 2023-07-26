@@ -44,7 +44,7 @@ void Parser::parse(const std::string& file, Entity& global) {
   }
 
   /* initialize stacks */
-  std::list<uint32_t> starts, ends;
+  std::list<uint64_t> starts, ends;
   std::list<Entity> entities;
   starts.push_back(ts_node_start_byte(node));
   ends.push_back(ts_node_end_byte(node));
