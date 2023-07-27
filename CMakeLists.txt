@@ -16,7 +16,7 @@ if(WIN32)
         contrib/CLI11/include
         contrib/libyaml/include)
     link_directories(
-        contrib/libyaml/build/Debug
+        contrib/libyaml/build/Release
     )
 else()
    # on other platforms, dependencies are provided by package manager
@@ -49,3 +49,33 @@ target_link_libraries(doxide yaml)
 
 include(GNUInstallDirs)
 install(TARGETS doxide RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/nsis ${CMAKE_MODULE_PATH})
+
+set(CPACK_PACKAGE_NAME "Doxide")
+set(CPACK_PACKAGE_VENDOR, "Lawrence Murray")
+set(CPACK_PACKAGE_DESCRIPTION, "Modern documentation for modern C++")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY, "Modern documentation for modern C++")
+set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION}")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_NAME}")
+
+set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_NAME}")
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+set(CPACK_NSIS_MODIFY_PATH ON)
+set(CPACK_NSIS_MANIFEST_DPI_AWARE ON)
+set(CPACK_NSIS_IGNORE_LICENSE_PAGE ON)
+
+string(REPLACE "/" "\\\\" NATIVE_SOURCE_DIR "${CMAKE_SOURCE_DIR}")
+set(CPACK_NSIS_MUI_ICON "${NATIVE_SOURCE_DIR}\\\\nsis\\\\icon.ico")
+set(CPACK_NSIS_MUI_UNIICON "${NATIVE_SOURCE_DIR}\\\\nsis\\\\icon.ico")
+set(CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${NATIVE_SOURCE_DIR}\\\\nsis\\\\welcome2x.bmp")
+set(CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP "${NATIVE_SOURCE_DIR}\\\\nsis\\\\welcome2x.bmp")
+set(CPACK_NSIS_MUI_HEADERIMAGE "${NATIVE_SOURCE_DIR}\\\\nsis\\\\header2x.bmp")
+
+#string(REPLACE "\\" "\\\\" CPACK_NSIS_MUI_ICON "${CPACK_NSIS_MUI_ICON}")
+#string(REPLACE "\\" "\\\\" CPACK_NSIS_MUI_UNIICON "${CPACK_NSIS_MUI_UNIICON}")
+#string(REPLACE "\\" "\\\\" CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP}")
+#string(REPLACE "\\" "\\\\" CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP "${CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP}")
+#string(REPLACE "\\" "\\\\" CPACK_NSIS_MUI_HEADERIMAGE "${CPACK_NSIS_MUI_HEADERIMAGE}")
+
+include(CPack)
