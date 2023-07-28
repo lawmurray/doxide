@@ -1,37 +1,60 @@
 version: 2.1
 
 executors:
-  default:
+  linux:
     machine:
       image: ubuntu-2204:current
     resource_class: medium
 
+  mac:
+    macos:
+      xcode: 14.2.0
+    resource_class: macos.x86.medium.gen2
+
 commands:
 
   environment:
+    parameters: 
+      os:
+        type: string
     steps:
-      - run:
-          name: Install dependencies
-          command: |
-              sudo apt update --assume-yes
-              sudo apt install --assume-yes --no-install-recommends \
-                cmake \
-                g++ \
-                lcov \
-                libyaml-dev \
-                libcli11-dev
-              sudo rm -rf /var/lib/apt/lists/*
+      - when:
+          condition:
+            equal: [<< parameters.os >>, linux]
+          steps:
+            - run:
+                name: Install dependencies
+                command: |
+                  sudo apt update --assume-yes
+                  sudo apt install --assume-yes --no-install-recommends \
+                    cmake \
+                    g++ \
+                    lcov \
+                    libyaml-dev \
+                    libcli11-dev
+      - when:
+          condition:
+            equal: [<< parameters.os >>, mac]
+          steps:
+            - run:
+                name: Install dependencies
+                command: |
+                  HOMEBREW_NO_AUTO_UPDATE=1 brew install \
+                    cmake \
+                    lcov \
+                    libyaml \
+                    cli11
 
   build:
     steps:
       - run:
           name: Build
           command: |
-              mkdir build
-              cd build
-              cmake ..
-              cmake --build .
-              sudo cmake --install .
+            mkdir build
+            cd build
+            cmake ..
+            cmake --build .
+            sudo cmake --install .
 
   test:
     steps:
@@ -49,9 +72,13 @@ commands:
 jobs:
 
   all:
-    executor: default
+    parameters: 
+      os:
+        type: string
+    executor: << parameters.os >>
     steps:
-      - environment
+      - environment:
+          os: << parameters.os >>
       - checkout
       - run:
           name: Checkout submodules
@@ -60,7 +87,7 @@ jobs:
       - test
 
   deploy:
-    executor: default
+    executor: linux
     steps:
       - run:
           name: Trigger package update
@@ -75,19 +102,16 @@ workflows:
   version: 2
   all:
     jobs:
-      - all
-
-      - hold:
-          type: approval
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+      - all:
+          matrix:
+            parameters:
+              os:
+                - linux
+                - mac
 
       - deploy:
           requires:
-            - hold
+            - all
           filters:
             tags:
               only: /^v.*/
