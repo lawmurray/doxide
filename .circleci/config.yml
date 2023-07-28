@@ -61,6 +61,10 @@ commands:
                 command: |
                   choco install -y cmake --installargs 'ADD_CMAKE_TO_PATH=System'
                   choco install -y mkdocs mkdocs-material
+                  refreshenv
+            - run:
+                name: Install libyaml
+                command: |
                   cd contrib/libyaml
                   mkdir build
                   cd build
