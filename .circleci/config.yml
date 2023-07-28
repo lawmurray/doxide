@@ -7,14 +7,11 @@ executors:
   linux:
     machine:
       image: ubuntu-2204:current
+    resource_class: medium
 
   mac:
     macos:
       xcode: 14.2.0
-
-  win:
-    machine:
-      image: windows-default
 
 commands:
 
@@ -23,6 +20,9 @@ commands:
       os:
         type: string
     steps:
+      - run:
+          name: Checkout submodules
+          command: git submodule update --init --recursive --depth 1
       - when:
           condition:
             equal: [<< parameters.os >>, linux]
@@ -51,19 +51,21 @@ commands:
                     cli11
       - when:
           condition:
-            equal: [<< parameters.os >>, win]
+            equal: [<< parameters.os >>, win/default]
           steps:
             - run:
                 name: Install dependencies
                 command: |
                   choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
                   choco install git nsis mkdocs mkdocs-material
+                  cd contrib/libyaml
+                  mkdir build
+                  cd build
+                  cmake ..
+                  cmake --build .
 
   build:
     steps:
-      - run:
-          name: Checkout submodules
-          command: git submodule update --init --recursive --depth 1
       - run:
           name: Build
           command: |
@@ -122,7 +124,7 @@ workflows:
               os:
                 - linux
                 - mac
-                - win
+                - win/default
 
       - deploy:
           requires:
