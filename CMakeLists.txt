@@ -16,6 +16,7 @@ if(MSVC OR XCODE)
         contrib/libyaml/include)
     link_directories(
         contrib/libyaml/build/${CONFIG}
+        contrib/libyaml/build
     )
 else()
    # on other platforms, dependencies are provided by package manager
