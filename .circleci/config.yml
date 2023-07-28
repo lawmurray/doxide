@@ -56,8 +56,8 @@ commands:
             - run:
                 name: Install dependencies
                 command: |
-                  choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
-                  choco install git nsis mkdocs mkdocs-material
+                  choco install -y cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+                  choco install -y git nsis mkdocs mkdocs-material
                   cd contrib/libyaml
                   mkdir build
                   cd build
