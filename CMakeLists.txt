@@ -8,9 +8,8 @@ set(CMAKE_CXX_STANDARD 20)
 if(MSVC)
     add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 endif()
-
-if(WIN32)
-    # on Windows, dependencies are built locally from submodules
+if(MSVC OR XCODE)
+    # when building with Visual Studio or Xcode, dependencies built locally
     add_compile_definitions(YAML_DECLARE_STATIC)
     include_directories(
         contrib/CLI11/include

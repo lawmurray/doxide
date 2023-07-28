@@ -46,10 +46,7 @@ commands:
                 name: Install dependencies
                 command: |
                   HOMEBREW_NO_AUTO_UPDATE=1 brew install \
-                    cmake \
-                    lcov \
-                    libyaml \
-                    cli11
+                    cmake
                   pip3 install mkdocs mkdocs-material
       - when:
           condition:
@@ -60,6 +57,11 @@ commands:
                 command: |
                   choco install -y cmake --installargs 'ADD_CMAKE_TO_PATH=System'
                   choco install -y mkdocs mkdocs-material
+      - when:
+          condition:
+            not:
+              equal: [<< parameters.os >>, linux]
+          steps:
             - run:
                 name: Install libyaml
                 command: |
