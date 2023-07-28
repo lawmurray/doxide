@@ -57,6 +57,8 @@ commands:
                 command: |
                   choco install -y cmake --installargs 'ADD_CMAKE_TO_PATH=System'
                   choco install -y mkdocs mkdocs-material
+                  Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
+                  refreshenv
       - when:
           condition:
             not:
