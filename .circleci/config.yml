@@ -68,7 +68,7 @@ commands:
                   mkdir build
                   cd build
                   cmake ..
-                  cmake --build .
+                  cmake --build . --verbose
 
   build:
     steps:
@@ -78,8 +78,8 @@ commands:
             mkdir build
             cd build
             cmake ..
-            cmake --build .
-            sudo cmake --install .
+            cmake --build . --verbose
+            sudo cmake --install . --verbose
 
   test:
     steps:
