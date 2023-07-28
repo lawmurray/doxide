@@ -16,7 +16,7 @@ if(WIN32)
         contrib/CLI11/include
         contrib/libyaml/include)
     link_directories(
-        contrib/libyaml/build/Release
+        contrib/libyaml/build/${CONFIG}
     )
 else()
    # on other platforms, dependencies are provided by package manager
@@ -73,11 +73,5 @@ set(CPACK_NSIS_MUI_UNIICON "${NATIVE_SOURCE_DIR}\\\\nsis\\\\icon.ico")
 set(CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${NATIVE_SOURCE_DIR}\\\\nsis\\\\welcome2x.bmp")
 set(CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP "${NATIVE_SOURCE_DIR}\\\\nsis\\\\welcome2x.bmp")
 set(CPACK_NSIS_MUI_HEADERIMAGE "${NATIVE_SOURCE_DIR}\\\\nsis\\\\header2x.bmp")
-
-#string(REPLACE "\\" "\\\\" CPACK_NSIS_MUI_ICON "${CPACK_NSIS_MUI_ICON}")
-#string(REPLACE "\\" "\\\\" CPACK_NSIS_MUI_UNIICON "${CPACK_NSIS_MUI_UNIICON}")
-#string(REPLACE "\\" "\\\\" CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP}")
-#string(REPLACE "\\" "\\\\" CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP "${CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP}")
-#string(REPLACE "\\" "\\\\" CPACK_NSIS_MUI_HEADERIMAGE "${CPACK_NSIS_MUI_HEADERIMAGE}")
 
 include(CPack)
