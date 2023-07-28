@@ -37,6 +37,7 @@ commands:
                     lcov \
                     libyaml-dev \
                     libcli11-dev
+                  sudo pip3 install mkdocs mkdocs-material
       - when:
           condition:
             equal: [<< parameters.os >>, mac]
@@ -49,6 +50,7 @@ commands:
                     lcov \
                     libyaml \
                     cli11
+                  pip3 install mkdocs mkdocs-material
       - when:
           condition:
             equal: [<< parameters.os >>, win/default]
@@ -57,7 +59,7 @@ commands:
                 name: Install dependencies
                 command: |
                   choco install -y cmake --installargs 'ADD_CMAKE_TO_PATH=System'
-                  choco install -y git nsis mkdocs mkdocs-material
+                  choco install -y mkdocs mkdocs-material
                   cd contrib/libyaml
                   mkdir build
                   cd build
@@ -87,6 +89,10 @@ commands:
           name: Build test
           command: |
             doxide build
+      - run:
+          name: MkDocs test
+          command: |
+            mkdocs build
 
 jobs:
 
