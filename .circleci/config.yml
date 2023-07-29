@@ -24,7 +24,7 @@ executors:
   win:
     machine:
       image: 'windows-server-2022-gui:current'
-      shell: 'powershell.exe -ExecutionPolicy Bypass'
+      shell: bash.exe
     resource_class: 'windows.medium'
     environment:
       INSTALL_PREFIX: c:\ProgramData\chocolatey
