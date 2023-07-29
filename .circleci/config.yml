@@ -84,8 +84,8 @@ commands:
             - run:
                 name: Install CLI11
                 command: |
-                  mkdir "c:/Program Files/CLI11"
-                  cp -r contrib/CLI11/include "c:/Program Files/CLI11/"
+                  sudo mkdir "c:/Program Files/CLI11"
+                  sudo cp -r contrib/CLI11/include "c:/Program Files/CLI11/"
 
   build:
     steps:
