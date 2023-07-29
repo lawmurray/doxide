@@ -8,12 +8,6 @@ set(CMAKE_CXX_STANDARD 20)
 if(MSVC)
     add_compile_definitions(_CRT_SECURE_NO_WARNINGS YAML_DECLARE_STATIC)
 endif()
-include_directories(
-    src
-    contrib/tree-sitter/lib/include
-    contrib/glob/single_include
-)
-add_library(libyaml SHARED IMPORTED)
 
 add_executable(doxide
     contrib/tree-sitter/lib/src/lib.c
@@ -29,7 +23,14 @@ add_executable(doxide
     src/Driver.cpp
     src/Entity.cpp
 )
-target_link_libraries(doxide yaml)
+target_include_directories(doxide
+    src
+    contrib/tree-sitter/lib/include
+    contrib/glob/single_include
+)
+target_link_libraries(doxide
+    yaml
+)
 
 include(GNUInstallDirs)
 install(TARGETS doxide RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
