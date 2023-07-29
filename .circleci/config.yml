@@ -6,7 +6,7 @@ executors:
       image: ubuntu-2204:current
     resource_class: medium
     environment:
-      DESTDIR: /usr/local
+      INSTALL_PREFIX: /usr/local
       VERBOSE: 1
       CMAKE_CONFIG_TYPE: Release  # otherwise cmake install fails
 
@@ -15,7 +15,7 @@ executors:
       xcode: 14.2.0
     resource_class: macos.x86.medium.gen2
     environment:
-      DESTDIR: /usr/local
+      INSTALL_PREFIX: /usr/local
       CPATH: /usr/local/include
       LIBRARY_PATH: /usr/local/lib
       VERBOSE: 1
@@ -27,7 +27,7 @@ executors:
       shell: bash.exe
     resource_class: 'windows.medium'
     environment:
-      DESTDIR: c:\ProgramData\chocolatey
+      INSTALL_PREFIX: c:\ProgramData\chocolatey
       CXXFLAGS: /I "c:\ProgramData\chocolatey\include"
       LDFLAGS: /LIBPATH:"c:\ProgramData\chocolatey\lib"
       VERBOSE: 1
@@ -98,8 +98,8 @@ commands:
               cd << parameters.dir >>
               mkdir build
               cd build
-              cmake .. -DCMAKE_INSTALL_PREFIX=""  # DESTDIR set in executor instead
-              cmake --build .
+              cmake .. -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX
+              cmake --build . --config $CMAKE_CONFIG_TYPE
               sudo cmake --install .
 
   test:
