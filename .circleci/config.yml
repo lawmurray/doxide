@@ -23,6 +23,7 @@ executors:
       CL: /I contrib\libyaml\include /I contrib\CLI11\include
       LIB: c:\Program Files\yaml\lib
       PATH: c:\Program Files\doxide\bin
+      CMAKE_GENERATOR: Visual Studio 17 2022
       CMAKE_GENERATOR_PLATFORM: x64
       CMAKE_CONFIG_TYPE: Debug
 
@@ -71,11 +72,6 @@ commands:
                 name: Install dependencies
                 command: |
                   choco install -y cmake.portable mkdocs mkdocs-material sudo
-                  echo $CL
-                  echo $LIB
-                  echo $PATH
-                  echo $CMAKE_GENERATOR_PLATFORM
-                  echo $CMAKE_CONFIG_TYPE
             - run:
                 name: Install libyaml
                 command: |
