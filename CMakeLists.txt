@@ -23,7 +23,7 @@ add_executable(doxide
     src/Driver.cpp
     src/Entity.cpp
 )
-target_include_directories(doxide
+target_include_directories(doxide PRIVATE
     src
     contrib/tree-sitter/lib/include
     contrib/glob/single_include
