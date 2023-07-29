@@ -20,7 +20,7 @@ executors:
       shell: 'powershell.exe -ExecutionPolicy Bypass'
     resource_class: 'windows.medium'
     environment:
-      CMAKE_INCLUDE_PATH: "c:\Program Files\yaml\include";"c:\Program Files\CLI11\include"
+      CMAKE_INCLUDE_PATH: '"c:\Program Files\yaml\include";"c:\Program Files\CLI11\include"'
       CMAKE_LIBRARY_PATH: c:\Program Files\yaml\lib
       CMAKE_GENERATOR: Visual Studio 17 2022
       CMAKE_GENERATOR_PLATFORM: x64
