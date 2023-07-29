@@ -87,6 +87,7 @@ commands:
                   cmake ..
                   cmake --build .
                   sudo cmake --install .
+                  ls -l "c:\Program Files"
             - run:
                 name: Install CLI11
                 command: |
