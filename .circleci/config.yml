@@ -87,7 +87,7 @@ commands:
                   cmake ..
                   cmake --build .
                   sudo cmake --install .
-                  env
+                  gci env:*
             - run:
                 name: Install CLI11
                 command: |
