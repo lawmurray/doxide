@@ -20,7 +20,7 @@ executors:
       shell: 'powershell.exe -ExecutionPolicy Bypass'
     resource_class: 'windows.medium'
     environment:
-      INCLUDE: contrib\libyaml\include;contrib\CLI11\include
+      CL: /I contrib\libyaml\include /I contrib\CLI11\include
       LIB: c:\Program Files\yaml\lib
       PATH: c:\Program Files\doxide\bin
 
