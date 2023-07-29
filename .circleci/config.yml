@@ -6,18 +6,20 @@ executors:
       image: ubuntu-2204:current
     resource_class: medium
     environment:
-      INSTALL_PATH: /usr/local
+      INSTALL_PREFIX: /usr/local
       VERBOSE: 1
+      CMAKE_CONFIG_TYPE: Release  # otherwise cmake install fails
 
   mac:
     macos:
       xcode: 14.2.0
     resource_class: macos.x86.medium.gen2
     environment:
-      INSTALL_PATH: /usr/local
+      INSTALL_PREFIX: /usr/local
       CPATH: /usr/local/include
       LIBRARY_PATH: /usr/local/lib
       VERBOSE: 1
+      CMAKE_CONFIG_TYPE: Release  # otherwise cmake install fails
 
   win:
     machine:
@@ -25,7 +27,7 @@ executors:
       shell: 'powershell.exe -ExecutionPolicy Bypass'
     resource_class: 'windows.medium'
     environment:
-      INSTALL_PATH: /usr/local
+      INSTALL_PREFIX: /usr/local
       CXXFLAGS: /I /usr/local/include
       LDFLAGS: /LIBPATH:/usr/local/lib
       VERBOSE: 1
@@ -96,9 +98,9 @@ commands:
               cd << parameters.dir >>
               mkdir build
               cd build
-              cmake .. -DCMAKE_BUILD_TYPE=Release
-              cmake --build . --config Release
-              cmake --install . --config Release --prefix $INSTALL_PATH
+              cmake .. -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX
+              cmake --build .
+              cmake --install .
 
   test:
     steps:
