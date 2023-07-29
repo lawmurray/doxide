@@ -23,6 +23,8 @@ executors:
       CL: /I contrib\libyaml\include /I contrib\CLI11\include
       LIB: c:\Program Files\yaml\lib
       PATH: c:\Program Files\doxide\bin
+      CMAKE_GENERATOR_PLATFORM: x64
+      CMAKE_CONFIG_TYPE: Debug
 
 commands:
 
@@ -75,7 +77,7 @@ commands:
                   cd contrib/libyaml
                   mkdir build
                   cd build
-                  cmake .. -DCMAKE_GENERATOR_PLATFORM=x64
+                  cmake ..
                   cmake --build . --verbose
                   sudo cmake --install . --verbose
 
@@ -86,7 +88,7 @@ commands:
           command: |
             mkdir build
             cd build
-            cmake .. -DCMAKE_GENERATOR_PLATFORM=x64
+            cmake ..
             cmake --build . --verbose
             sudo cmake --install . --verbose
 
