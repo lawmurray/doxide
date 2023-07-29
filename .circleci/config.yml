@@ -71,6 +71,11 @@ commands:
                 name: Install dependencies
                 command: |
                   choco install -y cmake.portable mkdocs mkdocs-material sudo
+                  echo $CL
+                  echo $LIB
+                  echo $PATH
+                  echo $CMAKE_GENERATOR_PLATFORM
+                  echo $CMAKE_CONFIG_TYPE
             - run:
                 name: Install libyaml
                 command: |
