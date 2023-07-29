@@ -22,6 +22,7 @@ executors:
     environment:
       INCLUDE: contrib/libyaml/include:contrib/CLI11/include
       LIB: contrib/libyaml/build/Debug
+      PATH: c:/Program Files/doxide/bin
 
 commands:
 
