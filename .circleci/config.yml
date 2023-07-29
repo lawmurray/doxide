@@ -67,7 +67,7 @@ commands:
             - run:
                 name: Install dependencies
                 command: |
-                  choco install -y cmake.portable mkdocs mkdocs-material
+                  choco install -y cmake.portable mkdocs mkdocs-material sudo
             - run:
                 name: Install libyaml
                 command: |
