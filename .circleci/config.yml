@@ -27,7 +27,7 @@ executors:
       CMAKE_LIBRARY_PATH: c:\Program Files\yaml\lib
       CMAKE_GENERATOR: Visual Studio 17 2022
       CMAKE_GENERATOR_PLATFORM: x64
-      CMAKE_CONFIG_TYPE: Debug
+      CMAKE_CONFIG_TYPE: Release  # otherwise cmake install fails
       CXXFLAGS: /I "c:\Program Files\yaml\include" /I "c:\Program Files\CLI11\include"
       LDFLAGS: /LIBPATH:"c:\Program Files\yaml\lib"
       PATH: c:\Program Files\doxide\bin
@@ -87,7 +87,6 @@ commands:
                   cmake ..
                   cmake --build .
                   sudo cmake --install .
-                  gci env:*
             - run:
                 name: Install CLI11
                 command: |
