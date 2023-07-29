@@ -78,31 +78,27 @@ commands:
                 name: Install dependencies
                 command: |
                   choco install -y cmake.portable mkdocs mkdocs-material sudo
-            - run:
-                name: Install libyaml
-                command: |
-                  cd contrib/libyaml
-                  mkdir build
-                  cd build
-                  cmake ..
-                  cmake --build .
-                  sudo cmake --install . --prefix $PREFIX
-            - run:
-                name: Install CLI11
-                command: |
-                  sudo mkdir "c:/Program Files/CLI11"
-                  sudo cp -r contrib/CLI11/include "c:/Program Files/CLI11/"
+            - build:
+                dir: contrib/libyaml
+            - build:
+                dir: contrib/CLI11
 
   build:
+    description: Build a package
+    parameters:
+      dir:
+        description: Directory containing the package
+        type: string
     steps:
       - run:
-          name: Build
+          name: Build << parameters.dir >>
           command: |
-            mkdir build
-            cd build
-            cmake ..
-            cmake --build .
-            sudo cmake --install . --prefix $PREFIX
+              cd << parameters.dir >>
+              mkdir build
+              cd build
+              cmake .. -DCMAKE_BUILD_TYPE=Release
+              cmake --build . --config Release
+              cmake --install . --config Release --prefix $PREFIX
 
   test:
     steps:
@@ -132,7 +128,8 @@ jobs:
       - checkout
       - environment:
           os: << parameters.os >>
-      - build
+      - build:
+          dir: .
       - test
 
   deploy:
