@@ -20,9 +20,9 @@ executors:
       shell: 'powershell.exe -ExecutionPolicy Bypass'
     resource_class: 'windows.medium'
     environment:
-      INCLUDE: contrib/libyaml/include;contrib/CLI11/include
-      LIB: contrib/libyaml/build/Debug
-      PATH: c:/Program Files/doxide/bin
+      INCLUDE: contrib\libyaml\include;contrib\CLI11\include
+      LIB: c:\Program Files\yaml\lib
+      PATH: c:\Program Files\doxide\bin
 
 commands:
 
@@ -75,8 +75,9 @@ commands:
                   cd contrib/libyaml
                   mkdir build
                   cd build
-                  cmake ..
+                  cmake .. -A x64
                   cmake --build . --verbose
+                  sudo cmake --install . --verbose
 
   build:
     steps:
@@ -85,7 +86,7 @@ commands:
           command: |
             mkdir build
             cd build
-            cmake ..
+            cmake .. -A x64
             cmake --build . --verbose
             sudo cmake --install . --verbose
 
