@@ -27,9 +27,9 @@ executors:
       shell: 'powershell.exe -ExecutionPolicy Bypass'
     resource_class: 'windows.medium'
     environment:
-      INSTALL_PREFIX: /usr/local
-      CXXFLAGS: /I /usr/local/include
-      LDFLAGS: /LIBPATH:/usr/local/lib
+      INSTALL_PREFIX: \usr\local
+      CXXFLAGS: /I \usr\local\include
+      LDFLAGS: /LIBPATH:\usr\local\lib
       VERBOSE: 1
       CMAKE_GENERATOR: Visual Studio 17 2022
       CMAKE_GENERATOR_PLATFORM: x64
