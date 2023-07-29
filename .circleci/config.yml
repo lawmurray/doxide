@@ -5,8 +5,6 @@ executors:
     machine:
       image: ubuntu-2204:current
     resource_class: medium
-    environment:
-      SUDO: sudo
 
   mac:
     macos:
@@ -15,7 +13,6 @@ executors:
     environment:
       CPATH: /usr/local/include
       LIBRARY_PATH: /usr/local/lib
-      SUDO: ""
 
   win:
     machine:
@@ -25,7 +22,6 @@ executors:
     environment:
       INCLUDE: contrib/libyaml/include:contrib/CLI11/include
       LIB: contrib/libyaml/build/Debug
-      SUDO: ""
 
 commands:
 
@@ -44,14 +40,14 @@ commands:
             - run:
                 name: Install dependencies
                 command: |
-                  $SUDO apt update --assume-yes
-                  $SUDO apt install --assume-yes --no-install-recommends \
+                  sudo apt update --assume-yes
+                  sudo apt install --assume-yes --no-install-recommends \
                     cmake \
                     g++ \
                     lcov \
                     libyaml-dev \
                     libcli11-dev
-                  $SUDO pip3 install mkdocs mkdocs-material
+                  sudo pip3 install mkdocs mkdocs-material
       - when:
           condition:
             equal: [<< parameters.os >>, mac]
@@ -90,7 +86,7 @@ commands:
             cd build
             cmake ..
             cmake --build . --verbose
-            $SUDO cmake --install . --verbose
+            sudo cmake --install . --verbose
 
   test:
     steps:
