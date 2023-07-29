@@ -6,6 +6,7 @@ executors:
       image: ubuntu-2204:current
     resource_class: medium
     environment:
+      PREFIX: /usr/local
       VERBOSE: 1
 
   mac:
@@ -13,6 +14,7 @@ executors:
       xcode: 14.2.0
     resource_class: macos.x86.medium.gen2
     environment:
+      PREFIX: /usr/local
       CPATH: /usr/local/include
       LIBRARY_PATH: /usr/local/lib
       VERBOSE: 1
@@ -23,15 +25,13 @@ executors:
       shell: 'powershell.exe -ExecutionPolicy Bypass'
     resource_class: 'windows.medium'
     environment:
-      CMAKE_INCLUDE_PATH: c:\Program Files\yaml\include;c:\Program Files\CLI11\include
-      CMAKE_LIBRARY_PATH: c:\Program Files\yaml\lib
+      PREFIX: /usr/local
+      CXXFLAGS: /I /usr/local/include
+      LDFLAGS: /LIBPATH:/usr/local/lib
+      VERBOSE: 1
       CMAKE_GENERATOR: Visual Studio 17 2022
       CMAKE_GENERATOR_PLATFORM: x64
       CMAKE_CONFIG_TYPE: Release  # otherwise cmake install fails
-      CXXFLAGS: /I "c:\Program Files\yaml\include" /I "c:\Program Files\CLI11\include"
-      LDFLAGS: /LIBPATH:"c:\Program Files\yaml\lib"
-      PATH: c:\Program Files\doxide\bin
-      VERBOSE: 1
 
 commands:
 
@@ -86,7 +86,7 @@ commands:
                   cd build
                   cmake ..
                   cmake --build .
-                  sudo cmake --install .
+                  sudo cmake --install . --prefix $PREFIX
             - run:
                 name: Install CLI11
                 command: |
@@ -102,7 +102,7 @@ commands:
             cd build
             cmake ..
             cmake --build .
-            sudo cmake --install .
+            sudo cmake --install . --prefix $PREFIX
 
   test:
     steps:
