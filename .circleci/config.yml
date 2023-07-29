@@ -100,7 +100,7 @@ commands:
               cd build
               cmake .. -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX
               cmake --build .
-              cmake --install .
+              sudo cmake --install .
 
   test:
     steps:
