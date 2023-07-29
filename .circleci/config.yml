@@ -1,17 +1,29 @@
 version: 2.1
 
-orbs:
-  win: circleci/windows@5.0
-
 executors:
   linux:
     machine:
       image: ubuntu-2204:current
     resource_class: medium
+    environment:
+      SUDO: sudo
 
   mac:
     macos:
       xcode: 14.2.0
+    resource_class: macos.x86.medium.gen2
+    environment:
+      CPATH: /usr/local/include
+      DYLD_LIBRARY_PATH: /usr/local/lib
+
+  win:
+    machine:
+      image: 'windows-server-2022-gui:current'
+      shell: 'powershell.exe -ExecutionPolicy Bypass'
+    resource_class: 'windows.medium'
+    environment:
+      INCLUDE: contrib/libyaml/include:contrib/CLI11/include
+      LIB: contrib/libyaml/build/Debug
 
 commands:
 
@@ -30,14 +42,14 @@ commands:
             - run:
                 name: Install dependencies
                 command: |
-                  sudo apt update --assume-yes
-                  sudo apt install --assume-yes --no-install-recommends \
+                  $(SUDO) apt update --assume-yes
+                  $(SUDO) apt install --assume-yes --no-install-recommends \
                     cmake \
                     g++ \
                     lcov \
                     libyaml-dev \
                     libcli11-dev
-                  sudo pip3 install mkdocs mkdocs-material
+                  $(SUDO) pip3 install mkdocs mkdocs-material
       - when:
           condition:
             equal: [<< parameters.os >>, mac]
@@ -46,24 +58,18 @@ commands:
                 name: Install dependencies
                 command: |
                   HOMEBREW_NO_AUTO_UPDATE=1 brew install \
-                    cmake
+                    cmake \
+                    libyaml \
+                    cli11
                   pip3 install mkdocs mkdocs-material
       - when:
           condition:
-            equal: [<< parameters.os >>, win/default]
+            equal: [<< parameters.os >>, win]
           steps:
             - run:
                 name: Install dependencies
                 command: |
-                  choco install -y cmake --installargs 'ADD_CMAKE_TO_PATH=System'
-                  choco install -y mkdocs mkdocs-material
-                  Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
-                  refreshenv
-      - when:
-          condition:
-            not:
-              equal: [<< parameters.os >>, linux]
-          steps:
+                  choco install -y cmake.portable mkdocs mkdocs-material
             - run:
                 name: Install libyaml
                 command: |
@@ -82,7 +88,7 @@ commands:
             cd build
             cmake ..
             cmake --build . --verbose
-            sudo cmake --install . --verbose
+            $(SUDO) cmake --install . --verbose
 
   test:
     steps:
@@ -137,7 +143,7 @@ workflows:
               os:
                 - linux
                 - mac
-                - win/default
+                - win
 
       - deploy:
           requires:
