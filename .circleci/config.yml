@@ -82,8 +82,10 @@ commands:
                   choco install -y cmake.portable mkdocs mkdocs-material sudo
             - build:
                 dir: contrib/libyaml
-            - build:
-                dir: contrib/CLI11
+            - run:
+                name: Install contrib/CLI11
+                command: |
+                  cp -r contrib/CLI11/include/CLI11 /usr/local/include
 
   build:
     description: Build a package
