@@ -18,6 +18,7 @@ executors:
   win:
     machine:
       image: 'windows-server-2022-gui:current'
+      shell: powershell.exe -ExecutionPolicy Bypass
     resource_class: 'windows.medium'
     environment:
       CXXFLAGS: /I "c:\ProgramData\chocolatey\include"
