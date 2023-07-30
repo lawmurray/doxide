@@ -5,104 +5,26 @@ executors:
     machine:
       image: ubuntu-2204:current
     resource_class: medium
-    environment:
-      INSTALL_PREFIX: /usr/local
-      VERBOSE: 1
-      CMAKE_CONFIG_TYPE: Release  # otherwise cmake install fails
 
   mac:
     macos:
       xcode: 14.2.0
     resource_class: macos.x86.medium.gen2
     environment:
-      INSTALL_PREFIX: /usr/local
       CPATH: /usr/local/include
       LIBRARY_PATH: /usr/local/lib
-      VERBOSE: 1
-      CMAKE_CONFIG_TYPE: Release  # otherwise cmake install fails
 
   win:
     machine:
       image: 'windows-server-2022-gui:current'
-      shell: bash.exe
     resource_class: 'windows.medium'
     environment:
-      INSTALL_PREFIX: c:\ProgramData\chocolatey
       CXXFLAGS: /I "c:\ProgramData\chocolatey\include"
       LDFLAGS: /LIBPATH:"c:\ProgramData\chocolatey\lib"
-      VERBOSE: 1
       CMAKE_GENERATOR: Visual Studio 17 2022
       CMAKE_GENERATOR_PLATFORM: x64
-      CMAKE_CONFIG_TYPE: Release  # otherwise cmake install fails
 
 commands:
-
-  environment:
-    parameters:
-      os:
-        type: string
-    steps:
-      - run:
-          name: Checkout submodules
-          command: git submodule update --init --recursive --depth 1
-      - when:
-          condition:
-            equal: [<< parameters.os >>, linux]
-          steps:
-            - run:
-                name: Install dependencies
-                command: |
-                  sudo apt update --assume-yes
-                  sudo apt install --assume-yes --no-install-recommends \
-                    cmake \
-                    g++ \
-                    lcov \
-                    libyaml-dev \
-                    libcli11-dev
-                  sudo pip3 install mkdocs mkdocs-material
-      - when:
-          condition:
-            equal: [<< parameters.os >>, mac]
-          steps:
-            - run:
-                name: Install dependencies
-                command: |
-                  HOMEBREW_NO_AUTO_UPDATE=1 brew install \
-                    cmake \
-                    libyaml \
-                    cli11
-                  pip3 install mkdocs mkdocs-material
-      - when:
-          condition:
-            equal: [<< parameters.os >>, win]
-          steps:
-            - run:
-                name: Install dependencies
-                command: |
-                  choco install -y cmake.portable mkdocs mkdocs-material sudo
-            - build:
-                dir: contrib/libyaml
-            - run:
-                name: Install contrib/CLI11
-                command: |
-                  cp -r contrib/CLI11/include/CLI11 /usr/local/include
-
-  build:
-    description: Build a package
-    parameters:
-      dir:
-        description: Directory containing the package
-        type: string
-    steps:
-      - run:
-          name: Build << parameters.dir >>
-          command: |
-              cd << parameters.dir >>
-              mkdir build
-              cd build
-              cmake .. -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX
-              cmake --build . --config $CMAKE_CONFIG_TYPE
-              sudo cmake --install .
 
   test:
     steps:
@@ -123,17 +45,85 @@ commands:
 
 jobs:
 
-  all:
-    parameters: 
-      os:
-        type: string
-    executor: << parameters.os >>
+  linux:
+    executor: linux
     steps:
       - checkout
-      - environment:
-          os: << parameters.os >>
-      - build:
-          dir: .
+      - run:
+          name: Checkout submodules
+          command: git submodule update --init --recursive --depth 1
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt update --assume-yes
+            sudo apt install --assume-yes --no-install-recommends \
+              cmake \
+              g++ \
+              lcov \
+              libyaml-dev \
+              libcli11-dev
+            sudo pip3 install mkdocs mkdocs-material
+      - run:
+          name: Build
+          command: |
+              mkdir build
+              cd build
+              cmake .. -DCMAKE_CONFIG_TYPE=Release
+              cmake --build .
+              sudo cmake --install .
+      - test
+
+  mac:
+    executor: mac
+    steps:
+      - checkout
+      - run:
+          name: Checkout submodules
+          command: git submodule update --init --recursive --depth 1
+      - run:
+          name: Install dependencies
+          command: |
+            HOMEBREW_NO_AUTO_UPDATE=1 brew install \
+              cmake \
+              libyaml \
+              cli11
+            pip3 install mkdocs mkdocs-material
+      - run:
+          name: Build
+          command: |
+              mkdir build
+              cd build
+              cmake .. -DCMAKE_INSTALL_PREFIX=Release
+              cmake --build .
+              sudo cmake --install .
+      - test
+
+  win:
+    executor: win
+    steps:
+      - checkout
+      - run:
+          name: Checkout submodules
+          command: git submodule update --init --recursive --depth 1
+      - run:
+          name: Install dependencies
+          command: |
+            choco install -y cmake.portable mkdocs mkdocs-material sudo
+            cp -r contrib/CLI11/include/CLI11 c:\ProgramData\chocolatey\include\.
+            cd contrib/libyaml
+            mkdir build
+            cd build
+            cmake ..
+            cmake --build . --config Release
+            sudo cmake --install . --prefix c:\ProgramData\chocolatey
+      - run:
+          name: Build
+          command: |
+              mkdir build
+              cd build
+              cmake ..
+              cmake --build . --config Release
+              sudo cmake --install . --prefix c:\ProgramData\chocolatey
       - test
 
   deploy:
@@ -152,17 +142,15 @@ workflows:
   version: 2
   all:
     jobs:
-      - all:
-          matrix:
-            parameters:
-              os:
-                - linux
-                - mac
-                - win
+      - linux
+      - mac
+      - win
 
       - deploy:
           requires:
-            - all
+            - linux
+            - mac
+            - win
           filters:
             tags:
               only: /^v.*/
