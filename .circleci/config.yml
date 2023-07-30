@@ -70,7 +70,7 @@ jobs:
               mkdir build
               cd build
               cmake ..
-              cmake --build .
+              cmake --build . --config Debug
               sudo cmake --install . --config Debug
       - test
 
@@ -95,7 +95,7 @@ jobs:
               mkdir build
               cd build
               cmake ..
-              cmake --build .
+              cmake --build . --config Debug
               sudo cmake --install . --config Debug
       - test
 
@@ -110,21 +110,21 @@ jobs:
           name: Install dependencies
           command: |
             choco install -y cmake.portable mkdocs mkdocs-material sudo
-            sudo mkdir -p c:\ProgramData\chocolatey\include
-            sudo cp -r contrib/CLI11/include/CLI c:\ProgramData\chocolatey\include\.
-            cd contrib/libyaml
+            cd contrib\libyaml
             mkdir build
             cd build
             cmake .. -DCMAKE_INSTALL_PREFIX=c:\ProgramData\chocolatey
-            cmake --build .
+            cmake --build . --config Debug
             sudo cmake --install . --config Debug
+            cd ..\..\..
+            sudo cp -r contrib\CLI11\include\CLI c:\ProgramData\chocolatey\include\.
       - run:
           name: Build
           command: |
               mkdir build
               cd build
               cmake .. -DCMAKE_INSTALL_PREFIX=c:\ProgramData\chocolatey
-              cmake --build .
+              cmake --build . --config Debug
               sudo cmake --install . --config Debug
       - test
 
