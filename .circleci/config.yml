@@ -1,6 +1,7 @@
 version: 2.1
 
 executors:
+
   linux:
     machine:
       image: ubuntu-2204:current
@@ -68,9 +69,9 @@ jobs:
           command: |
               mkdir build
               cd build
-              cmake .. -DCMAKE_CONFIG_TYPE=Release
+              cmake ..
               cmake --build .
-              sudo cmake --install .
+              sudo cmake --install . --config Debug
       - test
 
   mac:
@@ -93,9 +94,9 @@ jobs:
           command: |
               mkdir build
               cd build
-              cmake .. -DCMAKE_INSTALL_PREFIX=Release
+              cmake ..
               cmake --build .
-              sudo cmake --install .
+              sudo cmake --install . --config Debug
       - test
 
   win:
@@ -109,7 +110,8 @@ jobs:
           name: Install dependencies
           command: |
             choco install -y cmake.portable mkdocs mkdocs-material sudo
-            cp -r contrib/CLI11/include/CLI11 c:\ProgramData\chocolatey\include\.
+            sudo mkdir -p c:\ProgramData\chocolatey\include
+            sudo cp -r contrib/CLI11/include/CLI c:\ProgramData\chocolatey\include\.
             cd contrib/libyaml
             mkdir build
             cd build
@@ -122,8 +124,8 @@ jobs:
               mkdir build
               cd build
               cmake ..
-              cmake --build . --config Release
-              sudo cmake --install . --prefix c:\ProgramData\chocolatey
+              cmake --build .
+              sudo cmake --install . --config Debug --prefix c:\ProgramData\chocolatey
       - test
 
   deploy:
