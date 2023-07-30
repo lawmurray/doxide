@@ -115,17 +115,17 @@ jobs:
             cd contrib/libyaml
             mkdir build
             cd build
-            cmake ..
-            cmake --build . --config Release
-            sudo cmake --install . --prefix c:\ProgramData\chocolatey
+            cmake .. -DCMAKE_INSTALL_PREFIX=c:\ProgramData\chocolatey
+            cmake --build .
+            sudo cmake --install . --config Debug
       - run:
           name: Build
           command: |
               mkdir build
               cd build
-              cmake ..
+              cmake .. -DCMAKE_INSTALL_PREFIX=c:\ProgramData\chocolatey
               cmake --build .
-              sudo cmake --install . --config Debug --prefix c:\ProgramData\chocolatey
+              sudo cmake --install . --config Debug
       - test
 
   deploy:
