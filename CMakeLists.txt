@@ -27,6 +27,7 @@ target_include_directories(doxide PRIVATE
     src
     contrib/tree-sitter/lib/include
     contrib/glob/single_include
+    contrib/CLI11/include
 )
 target_link_libraries(doxide
     yaml

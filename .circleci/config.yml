@@ -117,8 +117,6 @@ jobs:
             cmake .. -DCMAKE_INSTALL_PREFIX=c:\ProgramData\chocolatey
             cmake --build . --config Debug
             sudo cmake --install . --config Debug
-            cd ..\..\..
-            sudo cp -r contrib\CLI11\include\CLI c:\ProgramData\chocolatey\include\.
       - run:
           name: Build
           command: |
