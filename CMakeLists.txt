@@ -23,6 +23,10 @@ add_executable(doxide
     src/Driver.cpp
     src/Entity.cpp
 )
+if(WIN32)
+  # add icon
+  target_sources(doxide PRIVATE win/icon.rc)
+endif()
 target_include_directories(doxide PRIVATE
     src
     contrib/tree-sitter/lib/include
@@ -36,10 +40,10 @@ target_link_libraries(doxide
 include(GNUInstallDirs)
 install(TARGETS doxide RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/nsis ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/win ${CMAKE_MODULE_PATH})
 string(REPLACE "/" "\\\\" NATIVE_SOURCE_DIR "${CMAKE_SOURCE_DIR}")
 set(CPACK_PACKAGE_NAME "Doxide")
-set(CPACK_PACKAGE_ICON "${NATIVE_SOURCE_DIR}\\\\nsis\\\\icon.ico")
+set(CPACK_PACKAGE_ICON "${NATIVE_SOURCE_DIR}\\\\win\\\\icon.ico")
 set(CPACK_PACKAGE_VENDOR "Lawrence Murray")
 set(CPACK_PACKAGE_DESCRIPTION "Modern documentation for modern C++")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Modern documentation for modern C++")
@@ -50,9 +54,9 @@ set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 set(CPACK_NSIS_MODIFY_PATH ON)
 set(CPACK_NSIS_MANIFEST_DPI_AWARE ON)
 set(CPACK_NSIS_IGNORE_LICENSE_PAGE ON)
-set(CPACK_NSIS_MUI_ICON "${NATIVE_SOURCE_DIR}\\\\nsis\\\\icon.ico")
-set(CPACK_NSIS_MUI_UNIICON "${NATIVE_SOURCE_DIR}\\\\nsis\\\\icon.ico")
-set(CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${NATIVE_SOURCE_DIR}\\\\nsis\\\\welcome2x.bmp")
-set(CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP "${NATIVE_SOURCE_DIR}\\\\nsis\\\\welcome2x.bmp")
-set(CPACK_NSIS_MUI_HEADERIMAGE "${NATIVE_SOURCE_DIR}\\\\nsis\\\\header2x.bmp")
+set(CPACK_NSIS_MUI_ICON "${NATIVE_SOURCE_DIR}\\\\win\\\\icon.ico")
+set(CPACK_NSIS_MUI_UNIICON "${NATIVE_SOURCE_DIR}\\\\win\\\\icon.ico")
+set(CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${NATIVE_SOURCE_DIR}\\\\win\\\\welcome2x.bmp")
+set(CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP "${NATIVE_SOURCE_DIR}\\\\win\\\\welcome2x.bmp")
+set(CPACK_NSIS_MUI_HEADERIMAGE "${NATIVE_SOURCE_DIR}\\\\win\\\\header2x.bmp")
 include(CPack)
