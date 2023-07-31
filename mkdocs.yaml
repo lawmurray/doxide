@@ -73,8 +73,8 @@ nav:
   - demo/index.md
   - installation.md
   - getting-started.md
-  - command-line.md
   - writing.md
   - organizing.md
   - configuring.md
+  - command-line.md
   - questions-and-answers.md
