@@ -1,4 +1,4 @@
-# Download & Installation
+# Download
 
 Follow the instructions below for your operating system.
 

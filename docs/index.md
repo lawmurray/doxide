@@ -10,7 +10,8 @@
 </div>
 
 <div style="text-align:center;">
-<p><a href="/installation" class="md-button md-button--primary">Download</a></p>
+<p><a href="/demo" class="md-button md-button--primary">Demo</a>
+<a href="/installation" class="md-button md-button--primary">Download</a></p>
 </div>
 
 Doxide is a documentation generator for C++.
