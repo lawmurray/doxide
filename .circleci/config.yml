@@ -1,6 +1,7 @@
 version: 2.1
 
 executors:
+
   linux:
     machine:
       image: ubuntu-2204:current
@@ -10,51 +11,22 @@ executors:
     macos:
       xcode: 14.2.0
     resource_class: macos.x86.medium.gen2
+    environment:
+      CPATH: /usr/local/include
+      LIBRARY_PATH: /usr/local/lib
+
+  win:
+    machine:
+      image: 'windows-server-2022-gui:current'
+      shell: powershell.exe -ExecutionPolicy Bypass
+    resource_class: 'windows.medium'
+    environment:
+      CXXFLAGS: /I "c:\ProgramData\chocolatey\include"
+      LDFLAGS: /LIBPATH:"c:\ProgramData\chocolatey\lib"
+      CMAKE_GENERATOR: Visual Studio 17 2022
+      CMAKE_GENERATOR_PLATFORM: x64
 
 commands:
-
-  environment:
-    parameters: 
-      os:
-        type: string
-    steps:
-      - when:
-          condition:
-            equal: [<< parameters.os >>, linux]
-          steps:
-            - run:
-                name: Install dependencies
-                command: |
-                  sudo apt update --assume-yes
-                  sudo apt install --assume-yes --no-install-recommends \
-                    cmake \
-                    g++ \
-                    lcov \
-                    libyaml-dev \
-                    libcli11-dev
-      - when:
-          condition:
-            equal: [<< parameters.os >>, mac]
-          steps:
-            - run:
-                name: Install dependencies
-                command: |
-                  HOMEBREW_NO_AUTO_UPDATE=1 brew install \
-                    cmake \
-                    lcov \
-                    libyaml \
-                    cli11
-
-  build:
-    steps:
-      - run:
-          name: Build
-          command: |
-            mkdir build
-            cd build
-            cmake ..
-            cmake --build .
-            sudo cmake --install .
 
   test:
     steps:
@@ -68,22 +40,91 @@ commands:
           name: Build test
           command: |
             doxide build
+      - run:
+          name: MkDocs test
+          command: |
+            mkdocs build
 
 jobs:
 
-  all:
-    parameters: 
-      os:
-        type: string
-    executor: << parameters.os >>
+  linux:
+    executor: linux
     steps:
-      - environment:
-          os: << parameters.os >>
       - checkout
       - run:
           name: Checkout submodules
           command: git submodule update --init --recursive --depth 1
-      - build
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt update --assume-yes
+            sudo apt install --assume-yes --no-install-recommends \
+              cmake \
+              g++ \
+              lcov \
+              libyaml-dev \
+              libcli11-dev
+            sudo pip3 install mkdocs mkdocs-material
+      - run:
+          name: Build
+          command: |
+              mkdir build
+              cd build
+              cmake ..
+              cmake --build . --config Debug
+              sudo cmake --install . --config Debug
+      - test
+
+  mac:
+    executor: mac
+    steps:
+      - checkout
+      - run:
+          name: Checkout submodules
+          command: git submodule update --init --recursive --depth 1
+      - run:
+          name: Install dependencies
+          command: |
+            HOMEBREW_NO_AUTO_UPDATE=1 brew install \
+              cmake \
+              libyaml \
+              cli11
+            pip3 install mkdocs mkdocs-material
+      - run:
+          name: Build
+          command: |
+              mkdir build
+              cd build
+              cmake ..
+              cmake --build . --config Debug
+              sudo cmake --install . --config Debug
+      - test
+
+  win:
+    executor: win
+    steps:
+      - checkout
+      - run:
+          name: Checkout submodules
+          command: git submodule update --init --recursive --depth 1
+      - run:
+          name: Install dependencies
+          command: |
+            choco install -y cmake.portable mkdocs mkdocs-material sudo
+            cd contrib\libyaml
+            mkdir build
+            cd build
+            cmake .. -DCMAKE_INSTALL_PREFIX=c:\ProgramData\chocolatey
+            cmake --build . --config Debug
+            sudo cmake --install . --config Debug
+      - run:
+          name: Build
+          command: |
+              mkdir build
+              cd build
+              cmake .. -DCMAKE_INSTALL_PREFIX=c:\ProgramData\chocolatey
+              cmake --build . --config Debug
+              sudo cmake --install . --config Debug
       - test
 
   deploy:
@@ -102,16 +143,15 @@ workflows:
   version: 2
   all:
     jobs:
-      - all:
-          matrix:
-            parameters:
-              os:
-                - linux
-                - mac
+      - linux
+      - mac
+      - win
 
       - deploy:
           requires:
-            - all
+            - linux
+            - mac
+            - win
           filters:
             tags:
               only: /^v.*/

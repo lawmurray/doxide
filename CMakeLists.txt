@@ -3,33 +3,11 @@ project(doxide
     VERSION 0.0.0
     DESCRIPTION "Modern documentation for modern C++"
     HOMEPAGE_URL "https://doxide.org")
+
 set(CMAKE_CXX_STANDARD 20)
-
 if(MSVC)
-    add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS YAML_DECLARE_STATIC)
 endif()
-
-if(WIN32)
-    # on Windows, dependencies are built locally from submodules
-    add_compile_definitions(YAML_DECLARE_STATIC)
-    include_directories(
-        contrib/CLI11/include
-        contrib/libyaml/include)
-    link_directories(
-        contrib/libyaml/build/${CONFIG}
-    )
-else()
-   # on other platforms, dependencies are provided by package manager
-   add_library(libyaml SHARED IMPORTED)
-endif()
-
-include_directories(
-    src
-    contrib/tree-sitter/lib/include
-    contrib/glob/single_include
-    contrib/CLI11/include
-    contrib/libyaml/include
-)
 
 add_executable(doxide
     contrib/tree-sitter/lib/src/lib.c
@@ -49,33 +27,36 @@ if(WIN32)
   # add icon
   target_sources(doxide PRIVATE win/icon.rc)
 endif()
-target_link_libraries(doxide yaml)
+target_include_directories(doxide PRIVATE
+    src
+    contrib/tree-sitter/lib/include
+    contrib/glob/single_include
+    contrib/CLI11/include
+)
+target_link_libraries(doxide
+    yaml
+)
 
 include(GNUInstallDirs)
 install(TARGETS doxide RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/win ${CMAKE_MODULE_PATH})
-
 string(REPLACE "/" "\\\\" NATIVE_SOURCE_DIR "${CMAKE_SOURCE_DIR}")
-
 set(CPACK_PACKAGE_NAME "Doxide")
 set(CPACK_PACKAGE_ICON "${NATIVE_SOURCE_DIR}\\\\win\\\\icon.ico")
 set(CPACK_PACKAGE_VENDOR "Lawrence Murray")
 set(CPACK_PACKAGE_DESCRIPTION "Modern documentation for modern C++")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Modern documentation for modern C++")
-set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION}")
+set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-installer")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_NAME}")
-
 set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_NAME}")
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 set(CPACK_NSIS_MODIFY_PATH ON)
 set(CPACK_NSIS_MANIFEST_DPI_AWARE ON)
 set(CPACK_NSIS_IGNORE_LICENSE_PAGE ON)
-
 set(CPACK_NSIS_MUI_ICON "${NATIVE_SOURCE_DIR}\\\\win\\\\icon.ico")
 set(CPACK_NSIS_MUI_UNIICON "${NATIVE_SOURCE_DIR}\\\\win\\\\icon.ico")
 set(CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${NATIVE_SOURCE_DIR}\\\\win\\\\welcome2x.bmp")
 set(CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP "${NATIVE_SOURCE_DIR}\\\\win\\\\welcome2x.bmp")
 set(CPACK_NSIS_MUI_HEADERIMAGE "${NATIVE_SOURCE_DIR}\\\\win\\\\header2x.bmp")
-
 include(CPack)

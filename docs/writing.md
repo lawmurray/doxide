@@ -1,6 +1,6 @@
 # Writing
 
-*Entities* (e.g. classes, functions, operators, variables, macros) are documented by adding a *documentation comment* immediately preceding their declaration, typically in a header file. A documentation comment begins with `/**` rather than the usual `/*`, but ends with the usual `*/`. New lines may optionally start with an extra `*` character.
+Entities in C++ source code (e.g. classes, functions, operators, variables, macros) are documented by adding a *documentation comment* immediately preceding their declaration, typically in a header file. A documentation comment begins with `/**` rather than the usual `/*`, but ends with the usual `*/`. New lines may optionally start with an extra `*` character.
 
 The documentation can be formatted with Markdown, and include *commands* using the syntax `@command`.
 

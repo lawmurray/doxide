@@ -70,11 +70,11 @@ extra_css:
 
 nav:
   - index.md
+  - demo/index.md
   - installation.md
   - getting-started.md
-  - command-line.md
   - writing.md
   - organizing.md
   - configuring.md
+  - command-line.md
   - questions-and-answers.md
-  - demo/index.md

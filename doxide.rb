@@ -5,7 +5,8 @@ class Doxide < Formula
   version "0.0.0"
   sha256 "0000000000000000000000000000000000000000000000000000000000000000"
   license "Apache-2.0"
-  depends_on "cmake" => [:build]
+  depends_on "cmake" => :build
+  depends_on "cli11" => :build
   depends_on "libyaml"
 
   def install

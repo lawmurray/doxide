@@ -8,7 +8,7 @@ arch=('x86_64')
 url="https://doxide.org"
 license=('Apache-2.0')
 depends=('libyaml')
-makedepends=('cmake')
+makedepends=('cmake', 'cli11')
 source=("$pkgname-$pkgver.tar.gz")
 md5sums=('SKIP')
 
@@ -25,5 +25,5 @@ check() {
 
 package() {
         cd "$srcdir/$pkgname-$pkgver"
-        DESTDIR="$pkgdir" cmake --install .
+        DESTDIR="$pkgdir" cmake --install . --config Release --verbose
 }
