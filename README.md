@@ -2,24 +2,16 @@
 <img src="docs/assets/title.svg" width="256" height="384" alt="Doxide: Modern documentation for modern C++">
 </p>
 
-Doxide generates documentation for C++ source code. It is configured with
-YAML, generates Markdown, and publishes HTML.
+Doxide is a documentation generator for C++.
 
-Entities in the source code are documented with special `/** comments */`
-containing `@commands`, as with the classic tool
-[Doxygen](https://doxygen.nl/). The source code is parsed and documentation
-processed into Markdown then HTML. Doxide aims at online documentation with a
-modern look and responsive design for desktop and mobile devices.
+* It is configured with YAML, generates Markdown, and publishes HTML with a modern look and responsive design for desktop and mobile devices.
+* It is open source under an Apache 2.0 license, and runs on Linux, Mac, and Windows.
+* It is written in C++ so that its primary users, C++ developers, can readily contribute.
+* C++ source code is documented with `/** comments */` containing `@commands`, as with the classic tool [Doxygen](https://doxygen.nl/){target="_blank"}. Many commands from Doxygen are already supported.
+* C++ source code is parsed with [Tree-sitter](https://tree-sitter.github.io){target="_blank"}, the same parser used by many syntax highlighters.
 
-Doxide is open source software written in C++. It depends on
-[libyaml](https://pyyaml.org/wiki/LibYAML) to parse YAML configuration files
-and [Tree-sitter](https://tree-sitter.github.io) to parse source code. By
-generating Markdown, it opens a whole wide world of static site generation
-tools. There is particular support for [MkDocs](https://www.mkdocs.org/) and
-the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme.
-A little extra effort enables alternatives such as
-[Jekyll](https://jekyllrb.com/) and [Hugo](https://gohugo.io/). Other formats
-such as PDF are possible too, via [Pandoc](https://pandoc.org/).
+
+By generating Markdown, Doxide opens C++ documentation to the whole wide world of static site generation tools and themes. There is particular support for [MkDocs](https://www.mkdocs.org/){target="_blank"} and the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/){target="_blank"} theme, as on the Doxide website. A little extra effort enables alternatives such as [Jekyll](https://jekyllrb.com/){target="_blank"} and [Hugo](https://gohugo.io/){target="_blank"}. Other formats such as PDF are possible too, via [Pandoc](https://pandoc.org/){target="_blank"}.
 
 
 ## License
@@ -32,16 +24,13 @@ License. You may obtain a copy of the License at
 
 ## Installation
 
-Packages are on the way. Windows support is on the way. In the meantime, it is
-necessary to install from source on Linux and Mac, and if that's you, use
-Windows Subsystem for Linux.
+See the [website](https://doxide.org/installation) for packages for Linux, Mac, and Windows.
 
-Clone the Doxide source with:
+To install from source, clone the Doxide repo with:
 ```
 git clone https://github.com/lawmurray/doxide --recurse-submodules
 ```
-The `--recurse-submodules` is necessary to bring in the dependency
-[tree-sitter-cpp](https://github.com/tree-sitter/tree-sitter-cpp).
+The `--recurse-submodules` is necessary to bring in some dependencies that are not universally available in package managers.
 
 Build and install with:
 ```
