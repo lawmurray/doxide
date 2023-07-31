@@ -7,11 +7,11 @@ Doxide is a documentation generator for C++.
 * It is configured with YAML, generates Markdown, and publishes HTML with a modern look and responsive design for desktop and mobile devices.
 * It is open source under an Apache 2.0 license, and runs on Linux, Mac, and Windows.
 * It is written in C++ so that its primary users, C++ developers, can readily contribute.
-* C++ source code is documented with `/** comments */` containing `@commands`, as with the classic tool [Doxygen](https://doxygen.nl/){target="_blank"}. Many commands from Doxygen are already supported.
-* C++ source code is parsed with [Tree-sitter](https://tree-sitter.github.io){target="_blank"}, the same parser used by many syntax highlighters.
+* C++ source code is documented with `/** comments */` containing `@commands`, as with the classic tool [Doxygen](https://doxygen.nl/). Many commands from Doxygen are already supported.
+* C++ source code is parsed with [Tree-sitter](https://tree-sitter.github.io), the same parser used by many syntax highlighters.
 
 
-By generating Markdown, Doxide opens C++ documentation to the whole wide world of static site generation tools and themes. There is particular support for [MkDocs](https://www.mkdocs.org/){target="_blank"} and the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/){target="_blank"} theme, as on the Doxide website. A little extra effort enables alternatives such as [Jekyll](https://jekyllrb.com/){target="_blank"} and [Hugo](https://gohugo.io/){target="_blank"}. Other formats such as PDF are possible too, via [Pandoc](https://pandoc.org/){target="_blank"}.
+By generating Markdown, Doxide opens C++ documentation to the whole wide world of static site generation tools and themes. There is particular support for [MkDocs](https://www.mkdocs.org/) and the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme, as on the Doxide website. A little extra effort enables alternatives such as [Jekyll](https://jekyllrb.com/) and [Hugo](https://gohugo.io/). Other formats such as PDF are possible too, via [Pandoc](https://pandoc.org/).
 
 
 ## License
@@ -45,13 +45,12 @@ somewhere local:
 cmake --install . --prefix $HOME/.local
 ```
 
-Material for MkDocs is recommended for publishing your documentation. It is
-distributed as a Python package. Install it with:
+[Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) is
+recommended for publishing your documentation. It is distributed as a Python
+package. Install it with:
 ``` 
 pip install mkdocs-material
 ```
-For more information see [Material for
-MkDocs](https://squidfunk.github.io/mkdocs-material/).
 
 
 ## Quick start
@@ -61,8 +60,7 @@ Run, from within your source code directory:
 doxide init
 ```
 This will create a `doxide.yaml` configuration file, as well as some
-additional files for publishing with [Material for
-MkDocs](https://squidfunk.github.io/mkdocs-material/). To start, it is not
+additional files for publishing with Material for MkDocs. To start, it is not
 necessary to modify any of these.
 
 Build the Markdown:
@@ -81,7 +79,7 @@ Serve the HTML:
 ```
 mkdocs serve
 ```
-(and point your browser to `localhost:8000`).
+and point your browser to `localhost:8000`.
 
 
 ## Further information
