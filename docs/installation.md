@@ -164,22 +164,39 @@ Follow the instructions below for your operating system.
 
 ## :fontawesome-brands-apple: Mac
 
-??? info "Homebrew"
-    Install [Homebrew](https://brew.sh) if not already. Add the tap:
-    ```sh
-    brew tap lawmurray/all
-    brew install doxide
-    ```
-    Install [MkDocs][mkdocs] and [Material for MkDocs][material]:
-    ```
-    pip install mkdocs mkdocs-material
-    ```
+Install [Homebrew](https://brew.sh) if not already. Add the tap:
+```sh
+brew tap lawmurray/all
+brew install doxide
+```
+Install [MkDocs][mkdocs] and [Material for MkDocs][material]:
+```
+pip install mkdocs mkdocs-material
+```
 
 ## :fontawesome-brands-windows: Windows
 
-Native support is not yet provided, but you can install [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install) with one of the Linux distributions above and follow the instructions for it.
+Download and install Doxide, using the installer:
 
-If you are particularly interested in Windows support for Doxide, see [this ticket](https://github.com/lawmurray/doxide/issues/3) for ways to help.
+[:material-download: Doxide installer](https://download.indii.org/win/doxide-installer.exe)
+
+or just download the `doxide.exe` executable and put it somewhere in your `PATH`, such as your working directory:
+
+[:material-download: Doxide executable](https://download.indii.org/win/doxide.exe)
+
+If you have a working [Python](https://python.org) environment, install [MkDocs][mkdocs] and [Material for MkDocs][material] with `pip`:
+```
+pip install mkdocs mkdocs-material
+```
+Or, if you have a working [Chocolatey](https://chocolatey.org) environment, install [MkDocs][mkdocs] and [Material for MkDocs][material] with `choco`:
+```
+choco install mkdocs mkdocs-material
+```
+
+Alternatively, you can use [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install) with one of the Linux distributions above and follow the instructions for it.
+
+!!! tip
+    If you would like to contribute a Chocolatey package for Doxide, please see [this ticket](https://github.com/lawmurray/doxide/issues/14).
 
 ## :fontawesome-solid-file-zipper: Others: Install from source
 
