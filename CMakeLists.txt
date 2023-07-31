@@ -45,6 +45,10 @@ add_executable(doxide
     src/Driver.cpp
     src/Entity.cpp
 )
+if(WIN32)
+  # add icon
+  target_sources(doxide PRIVATE nsis/icon.rc)
+endif()
 target_link_libraries(doxide yaml)
 
 include(GNUInstallDirs)
