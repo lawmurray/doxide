@@ -2,7 +2,7 @@
 
 Follow the instructions below for your operating system.
 
-## :fontawesome-brands-ubuntu: Ubuntu
+## :simple-ubuntu: Ubuntu
 
 ??? info "Ubuntu 23.04 Lunar Lobster (amd64)"
     Install Doxide:
@@ -84,7 +84,7 @@ Follow the instructions below for your operating system.
     pip install mkdocs mkdocs-material
     ```
 
-## :fontawesome-brands-fedora: Fedora
+## :simple-fedora: Fedora
 
 ??? info "Fedora 38 (x86_64)"
     Install Doxide:
@@ -148,7 +148,7 @@ Follow the instructions below for your operating system.
     pip install mkdocs mkdocs-material
     ```
 
-## :fontawesome-brands-linux: Mageia
+## :simple-linux: Mageia
 
 ??? info "Mageia 8 (x86_64)"
     Install Doxide:
@@ -162,7 +162,11 @@ Follow the instructions below for your operating system.
     pip install mkdocs mkdocs-material
     ```
 
-## :fontawesome-brands-apple: Mac
+## :simple-archlinux: Arch
+
+Available from the [Arch User Repository (AUR)](https://aur.archlinux.org/packages/doxide).
+
+## :simple-apple: Mac
 
 Install [Homebrew](https://brew.sh) if not already. Add the tap:
 ```sh
@@ -174,7 +178,7 @@ Install [MkDocs][mkdocs] and [Material for MkDocs][material]:
 pip install mkdocs mkdocs-material
 ```
 
-## :fontawesome-brands-windows: Windows
+## :simple-windows: Windows
 
 Download and install Doxide, using the installer:
 
