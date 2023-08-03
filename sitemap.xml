@@ -121,6 +121,26 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://doxide.org/demo/parsing/ClassWithMembers/InnerClass/</loc>
+         <lastmod>2023-08-03</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://doxide.org/demo/parsing/ClassWithMembers/InnerEnum/</loc>
+         <lastmod>2023-08-03</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://doxide.org/demo/parsing/ClassWithMembers/InnerTypeAlias/</loc>
+         <lastmod>2023-08-03</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://doxide.org/demo/parsing/ClassWithMembers/InnerTypeDef/</loc>
+         <lastmod>2023-08-03</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://doxide.org/demo/presentation/</loc>
          <lastmod>2023-08-03</lastmod>
          <changefreq>daily</changefreq>
