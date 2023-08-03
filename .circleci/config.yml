@@ -146,12 +146,7 @@ workflows:
       - linux
       - mac
       - win
-
       - deploy:
-          requires:
-            - linux
-            - mac
-            - win
           filters:
             tags:
               only: /^v.*/
