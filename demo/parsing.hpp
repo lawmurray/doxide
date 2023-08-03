@@ -348,6 +348,46 @@ enum struct EnumStruct {
 class ClassWithMembers {
 public:
   /**
+   * Inner class.
+   */
+  class InnerClass {
+    /**
+     * Test member variable of inner class.
+     */
+    int w;
+  };
+
+  /**
+   * Inner enumeration.
+   */
+  enum InnerEnum {
+    /**
+     * First possibility.
+     */
+    FIRST,
+
+    /**
+     * Second possibility.
+     */
+    SECOND,
+
+    /**
+     * Third possibility.
+     */
+    THIRD
+  };
+
+  /**
+   * Inner typedef.
+   */
+  typedef int InnerTypeDef;
+
+  /**
+   * Inner type alias.
+   */
+  using InnerTypeAlias = int;
+
+  /**
    * Test member variable.
    */
   int w;

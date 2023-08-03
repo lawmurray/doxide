@@ -26,6 +26,11 @@ const char* query_cpp = R""""(
       name: (type_identifier) @name
       body: (field_declaration_list)? @body
       ) @type)
+  ((comment) @docs .
+    (_ (class_specifier
+      name: (type_identifier) @name
+      body: (field_declaration_list)? @body
+      )) @type)
 
   ;; struct definition
   ((comment) @docs .
@@ -33,6 +38,11 @@ const char* query_cpp = R""""(
       name: (type_identifier) @name
       body: (field_declaration_list)? @body
       ) @type)
+  ((comment) @docs .
+    (_ (struct_specifier
+      name: (type_identifier) @name
+      body: (field_declaration_list)? @body
+      )) @type)
 
   ;; union definition
   ((comment) @docs .
@@ -40,6 +50,11 @@ const char* query_cpp = R""""(
       name: (type_identifier) @name
       body: (field_declaration_list)? @body
       ) @type)
+  ((comment) @docs .
+    (_ (union_specifier
+      name: (type_identifier) @name
+      body: (field_declaration_list)? @body
+      )) @type)
 
   ;; enum definition
   ((comment) @docs .
@@ -47,6 +62,11 @@ const char* query_cpp = R""""(
       name: (type_identifier) @name
       body: (enumerator_list)? @body
       ) @type)
+  ((comment) @docs .
+    (_ (enum_specifier
+      name: (type_identifier) @name
+      body: (enumerator_list)? @body
+      )) @type)
 
   ;; class template definition
   ((comment) @docs .
@@ -55,6 +75,12 @@ const char* query_cpp = R""""(
         name: [(type_identifier) (template_type)] @name
         body: (field_declaration_list)? @body
         )) @type)
+  ((comment) @docs .
+    (_ (template_declaration
+      (class_specifier
+        name: [(type_identifier) (template_type)] @name
+        body: (field_declaration_list)? @body
+        ))) @type)
 
   ;; struct template definition
   ((comment) @docs .
@@ -63,6 +89,12 @@ const char* query_cpp = R""""(
         name: [(type_identifier) (template_type)] @name
         body: (field_declaration_list)? @body
         )) @type)
+  ((comment) @docs .
+    (_ (template_declaration
+      (struct_specifier
+        name: [(type_identifier) (template_type)] @name
+        body: (field_declaration_list)? @body
+        ))) @type)
 
   ;; union template definition
   ((comment) @docs .
@@ -71,22 +103,38 @@ const char* query_cpp = R""""(
         name: [(type_identifier) (template_type)] @name
         body: (field_declaration_list)? @body
         )) @type)
+  ((comment) @docs .
+    (_ (template_declaration
+      (union_specifier
+        name: [(type_identifier) (template_type)] @name
+        body: (field_declaration_list)? @body
+        ))) @type)
 
   ;; typedef
   ((comment) @docs .
      (type_definition
        declarator: (type_identifier) @name .) @type)
+  ((comment) @docs .
+     (_ (type_definition
+       declarator: (type_identifier) @name .)) @type)
 
   ;; type alias
   ((comment) @docs .
     (alias_declaration
       name: (type_identifier) @name) @type)
+  ((comment) @docs .
+    (_ (alias_declaration
+      name: (type_identifier) @name)) @type)
 
   ;; type alias template
   ((comment) @docs .
     (template_declaration
       (alias_declaration
         name: (type_identifier) @name)) @type)
+  ((comment) @docs .
+    (_ (template_declaration
+      (alias_declaration
+        name: (type_identifier) @name))) @type)
 
   ;; concept
   ((comment) @docs .
@@ -94,6 +142,11 @@ const char* query_cpp = R""""(
       (concept_definition
         name: (identifier) @name
         (_))) @concept)
+  ((comment) @docs .
+    (_ (template_declaration
+      (concept_definition
+        name: (identifier) @name
+        (_)))) @concept)
 
   ;; variable
   ((comment) @docs .
