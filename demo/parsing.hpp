@@ -48,11 +48,39 @@ int y(0);
 int z{0};
 
 /**
+ * Test variable of reference type.
+ * 
+ * @ingroup parsing
+ */
+int& ref = x;
+
+/**
+ * Test variable of pointer type.
+ * 
+ * @ingroup parsing
+ */
+int* ptr = &x;
+
+/**
  * Test function.
  * 
  * @ingroup parsing
  */
 int f(int x, int y);
+
+/**
+ * Test function that returns a reference.
+ * 
+ * @ingroup parsing
+ */
+int& f(int x, int y);
+
+/**
+ * Test function that returns a pointer.
+ * 
+ * @ingroup parsing
+ */
+int* f(int x, int y);
 
 /**
  * Test function template.
@@ -335,9 +363,29 @@ public:
   int z{0};
 
   /**
+   * Test member variable of reference type.
+   */
+  int& ref = x;
+
+  /**
+   * Test member variable of pointer type.
+   */
+  int* ptr = &x;
+
+  /**
    * Test member function.
    */
   int f(int x, int y);
+
+  /**
+   * Test member function that returns a reference.
+   */
+  int& f(int x, int y);
+
+  /**
+   * Test member function that returns a pointer.
+   */
+  int* f(int x, int y);
 
   /**
    * Test member function template.

@@ -97,93 +97,163 @@ const char* query_cpp = R""""(
 
   ;; variable
   ((comment) @docs .
-    (declaration
-      declarator: (identifier) @name) @variable)
+    (_
+      declarator: [
+        (identifier) @name
+        (reference_declarator (identifier) @name)
+        (pointer_declarator (identifier) @name)
+        (field_identifier) @name
+        (reference_declarator (field_identifier) @name)
+        (pointer_declarator (field_identifier) @name)
+      ]
+      default_value: (_)? @value
+    ) @variable
+  )
   ((comment) @docs .
-    (field_declaration
-      declarator: (field_identifier) @name
-      default_value: (_)? @value) @variable)
-  ((comment) @docs .
-    (declaration
+    (_
       (init_declarator
-        declarator: (identifier) @name
-        value: (_) @value)) @variable)
+        declarator: [
+          (identifier) @name
+          (reference_declarator (identifier) @name)
+          (pointer_declarator (identifier) @name)
+          (field_identifier) @name
+          (reference_declarator (field_identifier) @name)
+          (pointer_declarator (field_identifier) @name)
+        ]
+        value: (_) @value
+      )
+    ) @variable
+  )
 
   ;; function
   ((comment) @docs .
-    (declaration
+    (_
       declarator: (function_declarator
-        declarator: [(identifier) (field_identifier) (destructor_name)] @name)) @function)
+        declarator: [
+          (identifier) @name
+          (field_identifier) @name
+          (destructor_name) @name
+        ]
+      )
+      [
+        (field_initializer_list)
+        body: (_)
+      ]? @body
+    ) @function
+  )
   ((comment) @docs .
-    (field_declaration
-      declarator: (function_declarator
-        declarator: (field_identifier) @name)) @function)
-  ((comment) @docs .
-    (field_declaration
-      declarator: (function_declarator
-        declarator: (destructor_name) @name)) @function)
-  ((comment) @docs .
-    (function_definition
-      declarator: (function_declarator
-        declarator: (identifier) @name)
-      ;; body or, in case of constructor, a field initializer list
-      [(field_initializer_list) body: (_)] @body
-      ) @function)
-  ((comment) @docs .
-    (function_definition
-      declarator: (function_declarator
-        declarator: (field_identifier) @name)
-      ;; body or, in case of constructor, a field initializer list
-      [(field_initializer_list) body: (_)] @body
-      ) @function)
-  ((comment) @docs .
-    (function_definition
-      declarator: (function_declarator
-        declarator: (destructor_name) @name)
-      ;; body or, in case of constructor, a field initializer list
-      [(field_initializer_list) body: (_)] @body
-      ) @function)
+    (_
+      declarator: (_ (function_declarator
+        ;; wildcard above is reference_declarator or pointer_declarator
+        declarator: [
+          (identifier) @name
+          (field_identifier) @name
+        ]
+        [
+          (field_initializer_list)
+          body: (_)
+        ]? @body
+      ))
+    ) @function
+  )
 
   ;; function template
   ((comment) @docs .
     (template_declaration
-      (declaration
+      (_
         declarator: (function_declarator
-          declarator: (identifier) @name))) @function)
+          declarator: [
+            (identifier) @name
+            (field_identifier) @name
+            (destructor_name) @name
+          ]
+        )
+        [
+          (field_initializer_list)
+          body: (_)
+        ]? @body
+      )
+    ) @function
+  )
   ((comment) @docs .
     (template_declaration
-      (function_definition
-        declarator: (function_declarator
-          declarator: (identifier) @name)
-        ;; body or, in case of constructor, a field initializer list
-        [(field_initializer_list) body: (_)] @body
-        )) @function)
+      (_
+        declarator: (_ (function_declarator
+          ;; wildcard above is reference_declarator or pointer_declarator
+          declarator: [
+            (identifier) @name
+            (field_identifier) @name
+          ]
+          [
+            (field_initializer_list)
+            body: (_)
+          ]? @body
+        ))
+      )
+    ) @function
+  )
 
   ;; operator
   ((comment) @docs .
-    (declaration
+    (_
       declarator: (function_declarator
-        declarator: (operator_name) @name)) @operator)
+        declarator: [
+          (operator_name) @name
+        ]
+      )
+      [
+        (field_initializer_list)
+        body: (_)
+      ]? @body
+    ) @operator
+  )
   ((comment) @docs .
-    (function_definition
-      declarator: (function_declarator
-        declarator: (operator_name) @name)
-      body: (_) @body
-      ) @operator)
+    (_
+      declarator: (_ (function_declarator
+        ;; wildcard above is reference_declarator or pointer_declarator
+        declarator: [
+          (operator_name) @name
+        ]
+        [
+          (field_initializer_list)
+          body: (_)
+        ]? @body
+      ))
+    ) @operator
+  )
 
   ;; operator template
   ((comment) @docs .
     (template_declaration
-      (declaration
+      (_
         declarator: (function_declarator
-          declarator: (operator_name) @name))) @operator)
+          declarator: [
+            (operator_name) @name
+          ]
+        )
+        [
+          (field_initializer_list)
+          body: (_)
+        ]? @body
+      )
+    ) @operator
+  )
   ((comment) @docs .
     (template_declaration
-      (function_definition
-        declarator: (function_declarator
-          declarator: (operator_name) @name)
-        body: (_) @body
-        )) @operator)
+      (_
+        declarator: (_ (function_declarator
+          ;; wildcard above is reference_declarator or pointer_declarator
+          declarator: [
+            (operator_name) @name
+          ]
+          [
+            (field_initializer_list)
+            body: (_)
+          ]? @body
+        ))
+      )
+    ) @operator
+  )
 
   ;; enumeration value
   ((comment) @docs .
