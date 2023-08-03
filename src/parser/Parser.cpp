@@ -100,14 +100,15 @@ void Parser::parse(const std::string& file, Entity& global) {
       }
     }
 
-    /* workaround for entity declaration logic catching the equals sign in
-     * a variable declaration with initialization like int x = 4; trim
-     * whitespace and equals signs */
+    /* workaround for entity declaration logic catching punctuation, e.g.
+     * ending semicolon in declaration, the equals sign in a variable
+     * declaration with initialization, or whitespace */
     while (middle > start && (source[middle - 1] == ' ' ||
         source[middle - 1] == '\t' ||
         source[middle - 1] == '\n' ||
         source[middle - 1] == '\r' ||
-        source[middle - 1] == '=')) {
+        source[middle - 1] == '=' ||
+        source[middle - 1] == ';')) {
       --middle;
     }
 
