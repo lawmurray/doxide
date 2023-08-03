@@ -500,6 +500,20 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#ptr" class="md-nav__link">
+    ptr
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ref" class="md-nav__link">
+    ref
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#w" class="md-nav__link">
     w
   </a>
@@ -708,6 +722,14 @@
 </thead>
 <tbody>
 <tr>
+<td><a href="#ptr">ptr</a></td>
+<td>Test variable of pointer type.</td>
+</tr>
+<tr>
+<td><a href="#ref">ref</a></td>
+<td>Test variable of reference type.</td>
+</tr>
+<tr>
 <td><a href="#w">w</a></td>
 <td>Test variable.</td>
 </tr>
@@ -775,6 +797,14 @@
 </tr>
 <tr>
 <td><a href="#f">f</a></td>
+<td>Test function that returns a reference.</td>
+</tr>
+<tr>
+<td><a href="#f">f</a></td>
+<td>Test function that returns a pointer.</td>
+</tr>
+<tr>
+<td><a href="#f">f</a></td>
 <td>Test function template.</td>
 </tr>
 <tr>
@@ -798,12 +828,12 @@
 <h2 id="concept-details">Concept Details<a class="headerlink" href="#concept-details" title="Permanent link">&para;</a></h2>
 <h3 id="concept">Concept<a name="Concept"></a><a class="headerlink" href="#concept" title="Permanent link">&para;</a></h3>
 <div class="admonition concept">
-<p class="admonition-title">template&lt;class T&gt; concept Concept = std::is_arithmetic_v&lt;T&gt;;</p>
+<p class="admonition-title">template&lt;class T&gt; concept Concept = std::is_arithmetic_v&lt;T&gt;</p>
 <p>Test concept.</p>
 </div>
 <h3 id="trivialconcept">TrivialConcept<a name="TrivialConcept"></a><a class="headerlink" href="#trivialconcept" title="Permanent link">&para;</a></h3>
 <div class="admonition concept">
-<p class="admonition-title">template&lt;class T&gt; concept TrivialConcept = true;</p>
+<p class="admonition-title">template&lt;class T&gt; concept TrivialConcept = true</p>
 <p>Test trivial concept.</p>
 </div>
 <h2 id="macro-details">Macro Details<a class="headerlink" href="#macro-details" title="Permanent link">&para;</a></h2>
@@ -818,9 +848,19 @@
 <p>Test macro with arguments.</p>
 </div>
 <h2 id="variable-details">Variable Details<a class="headerlink" href="#variable-details" title="Permanent link">&para;</a></h2>
+<h3 id="ptr">ptr<a name="ptr"></a><a class="headerlink" href="#ptr" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">int* ptr</p>
+<p>Test variable of pointer type.</p>
+</div>
+<h3 id="ref">ref<a name="ref"></a><a class="headerlink" href="#ref" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">int&amp; ref</p>
+<p>Test variable of reference type.</p>
+</div>
 <h3 id="w">w<a name="w"></a><a class="headerlink" href="#w" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
-<p class="admonition-title">int w;</p>
+<p class="admonition-title">int w</p>
 <p>Test variable.</p>
 </div>
 <h3 id="x">x<a name="x"></a><a class="headerlink" href="#x" title="Permanent link">&para;</a></h3>
@@ -841,15 +881,15 @@
 <h2 id="operator-details">Operator Details<a class="headerlink" href="#operator-details" title="Permanent link">&para;</a></h2>
 <h3 id="operator">operator+<a name="operator_u002b"></a><a class="headerlink" href="#operator" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">int operator+(int x, int y);</p>
+<p class="admonition-title">int operator+(int x, int y)</p>
 <p>Test operator.</p>
 </div>
 <div class="admonition function">
-<p class="admonition-title">template&lt;class T&gt; T operator+(T x, T y);</p>
+<p class="admonition-title">template&lt;class T&gt; T operator+(T x, T y)</p>
 <p>Test operator template.</p>
 </div>
 <div class="admonition function">
-<p class="admonition-title">template&lt;class T, std::enable_if_t&lt;std::is_integral_v&lt;T&gt;, int&gt; = 0&gt; T operator+(T x, T y);</p>
+<p class="admonition-title">template&lt;class T, std::enable_if_t&lt;std::is_integral_v&lt;T&gt;, int&gt; = 0&gt; T operator+(T x, T y)</p>
 <p>Test operator template with SFINAE.</p>
 </div>
 <div class="admonition function">
@@ -867,15 +907,23 @@
 <h2 id="function-details">Function Details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
 <h3 id="f">f<a name="f"></a><a class="headerlink" href="#f" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">int f(int x, int y);</p>
+<p class="admonition-title">int f(int x, int y)</p>
 <p>Test function.</p>
 </div>
 <div class="admonition function">
-<p class="admonition-title">template&lt;class T&gt; T f(T x, T y);</p>
+<p class="admonition-title">int&amp; f(int x, int y)</p>
+<p>Test function that returns a reference.</p>
+</div>
+<div class="admonition function">
+<p class="admonition-title">int* f(int x, int y)</p>
+<p>Test function that returns a pointer.</p>
+</div>
+<div class="admonition function">
+<p class="admonition-title">template&lt;class T&gt; T f(T x, T y)</p>
 <p>Test function template.</p>
 </div>
 <div class="admonition function">
-<p class="admonition-title">template&lt;class T, std::enable_if_t&lt;std::is_integral_v&lt;T&gt;, int&gt; = 0&gt; T f(T x, T y);</p>
+<p class="admonition-title">template&lt;class T, std::enable_if_t&lt;std::is_integral_v&lt;T&gt;, int&gt; = 0&gt; T f(T x, T y)</p>
 <p>Test function template with SFINAE.</p>
 </div>
 <div class="admonition function">

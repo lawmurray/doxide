@@ -432,6 +432,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#ptr" class="md-nav__link">
+    ptr
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ref" class="md-nav__link">
+    ref
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#w" class="md-nav__link">
     w
   </a>
@@ -541,6 +555,14 @@
 <td>Test member variable with brace initializer.</td>
 </tr>
 <tr>
+<td><a href="#ref">ref</a></td>
+<td>Test member variable of reference type.</td>
+</tr>
+<tr>
+<td><a href="#ptr">ptr</a></td>
+<td>Test member variable of pointer type.</td>
+</tr>
+<tr>
 <td><a href="#escapee">escapee</a></td>
 <td>Attempt to move a member out of its class with <code>@ingroup</code>, but should remain in <code>ClassWithMembers</code>.</td>
 </tr>
@@ -555,6 +577,10 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><a href="#operator_u002b">operator+</a></td>
+<td>Test member operator.</td>
+</tr>
 <tr>
 <td><a href="#operator_u002b">operator+</a></td>
 <td>Test member operator template.</td>
@@ -592,6 +618,14 @@
 </tr>
 <tr>
 <td><a href="#f">f</a></td>
+<td>Test member function that returns a reference.</td>
+</tr>
+<tr>
+<td><a href="#f">f</a></td>
+<td>Test member function that returns a pointer.</td>
+</tr>
+<tr>
+<td><a href="#f">f</a></td>
 <td>Test member function template.</td>
 </tr>
 <tr>
@@ -615,13 +649,23 @@
 <h2 id="variable-details">Variable Details<a class="headerlink" href="#variable-details" title="Permanent link">&para;</a></h2>
 <h3 id="escapee">escapee<a name="escapee"></a><a class="headerlink" href="#escapee" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
-<p class="admonition-title">int escapee;</p>
+<p class="admonition-title">int escapee</p>
 <p>Attempt to move a member out of its class with <code>@ingroup</code>, but should
 remain in <code>ClassWithMembers</code>.</p>
 </div>
+<h3 id="ptr">ptr<a name="ptr"></a><a class="headerlink" href="#ptr" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">int* ptr</p>
+<p>Test member variable of pointer type.</p>
+</div>
+<h3 id="ref">ref<a name="ref"></a><a class="headerlink" href="#ref" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">int&amp; ref</p>
+<p>Test member variable of reference type.</p>
+</div>
 <h3 id="w">w<a name="w"></a><a class="headerlink" href="#w" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
-<p class="admonition-title">int w;</p>
+<p class="admonition-title">int w</p>
 <p>Test member variable.</p>
 </div>
 <h3 id="x">x<a name="x"></a><a class="headerlink" href="#x" title="Permanent link">&para;</a></h3>
@@ -637,11 +681,15 @@ remain in <code>ClassWithMembers</code>.</p>
 <h2 id="operator-details">Operator Details<a class="headerlink" href="#operator-details" title="Permanent link">&para;</a></h2>
 <h3 id="operator">operator+<a name="operator_u002b"></a><a class="headerlink" href="#operator" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">template&lt;class T&gt; T operator+(T x, T y);</p>
+<p class="admonition-title">int operator+(int x, int y)</p>
+<p>Test member operator.</p>
+</div>
+<div class="admonition function">
+<p class="admonition-title">template&lt;class T&gt; T operator+(T x, T y)</p>
 <p>Test member operator template.</p>
 </div>
 <div class="admonition function">
-<p class="admonition-title">template&lt;class T, std::enable_if_t&lt;std::is_integral_v&lt;T&gt;, int&gt; = 0&gt; T operator+(T x, T y);</p>
+<p class="admonition-title">template&lt;class T, std::enable_if_t&lt;std::is_integral_v&lt;T&gt;, int&gt; = 0&gt; T operator+(T x, T y)</p>
 <p>Test member function template with SFINAE.</p>
 </div>
 <div class="admonition function">
@@ -659,15 +707,23 @@ remain in <code>ClassWithMembers</code>.</p>
 <h2 id="function-details">Function Details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
 <h3 id="f">f<a name="f"></a><a class="headerlink" href="#f" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">int f(int x, int y);</p>
+<p class="admonition-title">int f(int x, int y)</p>
 <p>Test member function.</p>
 </div>
 <div class="admonition function">
-<p class="admonition-title">template&lt;class T&gt; T f(T x, T y);</p>
+<p class="admonition-title">int&amp; f(int x, int y)</p>
+<p>Test member function that returns a reference.</p>
+</div>
+<div class="admonition function">
+<p class="admonition-title">int* f(int x, int y)</p>
+<p>Test member function that returns a pointer.</p>
+</div>
+<div class="admonition function">
+<p class="admonition-title">template&lt;class T&gt; T f(T x, T y)</p>
 <p>Test member function template.</p>
 </div>
 <div class="admonition function">
-<p class="admonition-title">template&lt;class T, std::enable_if_t&lt;std::is_integral_v&lt;T&gt;, int&gt; = 0&gt; T f(T x, T y);</p>
+<p class="admonition-title">template&lt;class T, std::enable_if_t&lt;std::is_integral_v&lt;T&gt;, int&gt; = 0&gt; T f(T x, T y)</p>
 <p>Test member function template with SFINAE.</p>
 </div>
 <div class="admonition function">
