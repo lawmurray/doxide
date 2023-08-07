@@ -1,0 +1,11 @@
+﻿VERIFICATION
+Verification is intended to assist the Chocolatey moderators and community
+in verifying that this package's contents are trustworthy.
+
+The binary and its associated checksum are from download.indii.org, as linked
+from the project website at doxide.org:
+
+https://download.indii.org/win/doxide-installer.exe
+https://download.indii.org/win/doxide-installer.exe.sha256
+
+This Chocolatey package is prepared by the software vendor.
