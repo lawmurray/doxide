@@ -180,27 +180,23 @@ pip install mkdocs mkdocs-material
 
 ## :simple-windows: Windows
 
-Download and install Doxide, using the installer:
+Either use the installer or download the `doxide.exe` program only and put it somewhere in your `PATH`:
 
-[:material-download: Doxide installer](https://download.indii.org/win/doxide-installer.exe)
+[:material-download: Doxide installer](https://download.indii.org/win/doxide-installer.exe){ .md-button } [:material-download: Doxide program only](https://download.indii.org/win/doxide.exe){ .md-button }
 
-or just download the `doxide.exe` executable and put it somewhere in your `PATH`, such as your working directory:
+- [Checksum for Doxide installer](https://download.indii.org/win/doxide-installer.exe.sha256)
+- [Checksum for Doxide program only](https://download.indii.org/win/doxide.exe.sha256)
 
-[:material-download: Doxide executable](https://download.indii.org/win/doxide.exe)
-
-If you have a working [Python](https://python.org) environment, install [MkDocs][mkdocs] and [Material for MkDocs][material] with `pip`:
+If you have a working [Python](https://python.org) environment, install [MkDocs][mkdocs] and [Material for MkDocs][material] with:
 ```
 pip install mkdocs mkdocs-material
 ```
-Or, if you have a working [Chocolatey](https://chocolatey.org) environment, install [MkDocs][mkdocs] and [Material for MkDocs][material] with `choco`:
+Or, if you have a working [Chocolatey](https://chocolatey.org) environment, install [MkDocs][mkdocs] and [Material for MkDocs][material] with:
 ```
 choco install mkdocs mkdocs-material
 ```
 
 Alternatively, you can use [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install) with one of the Linux distributions above and follow the instructions for it.
-
-!!! tip
-    If you would like to contribute a Chocolatey package for Doxide, please see [this ticket](https://github.com/lawmurray/doxide/issues/14).
 
 ## :fontawesome-solid-file-zipper: Others: Install from source
 
