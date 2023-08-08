@@ -20,7 +20,4 @@
       <dependency id="doxide.portable" version="[0.0.0]" />
     </dependencies>
   </metadata>
-  <files>
-    <file src="tools\**" target="tools" />
-  </files>
 </package>

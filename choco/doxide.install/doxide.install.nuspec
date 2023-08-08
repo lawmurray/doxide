@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
-    <id>doxide.portable</id>
+    <id>doxide.install</id>
     <version>0.0.0</version>
     <packageSourceUrl>https://github.com/lawmurray/doxide/tree/main/choco/doxide.install</packageSourceUrl>
     <owners>Lawrence Murray</owners>
