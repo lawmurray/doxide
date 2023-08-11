@@ -280,6 +280,7 @@ std::string MarkdownGenerator::htmlize(const std::string& str) {
   static const std::regex gt(">");
   static const std::regex quot("\"");
   static const std::regex apos("'");
+  static const std::regex ptr("\\*");
 
   std::string r = str;
   r = std::regex_replace(r, amp, "&amp;");  // must go first or new & replaced
@@ -287,6 +288,7 @@ std::string MarkdownGenerator::htmlize(const std::string& str) {
   r = std::regex_replace(r, gt, "&gt;");
   r = std::regex_replace(r, quot, "&quot;");
   r = std::regex_replace(r, apos, "&apos;");
+  r = std::regex_replace(r, ptr, "&#42;");
   return r;
 }
 

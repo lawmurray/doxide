@@ -48,7 +48,8 @@ private:
   static std::string stringify(const std::string& str);
 
   /**
-   * Sanitize for HTML, replacing special characters with entities.
+   * Sanitize for HTML, replacing special characters with entities. Also
+   * replaces some characters that might trigger Markdown formatting.
    */
   static std::string htmlize(const std::string& str);
 
