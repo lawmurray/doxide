@@ -202,11 +202,11 @@ const char* query_cpp = R""""(
           (identifier) @name
           (field_identifier) @name
         ]
-        [
-          (field_initializer_list)
-          body: (_)
-        ]? @body
       ))
+      [
+        (field_initializer_list)
+        body: (_)
+      ]? @body
     ) @function
   )
 
@@ -237,11 +237,11 @@ const char* query_cpp = R""""(
             (identifier) @name
             (field_identifier) @name
           ]
-          [
-            (field_initializer_list)
-            body: (_)
-          ]? @body
         ))
+        [
+          (field_initializer_list)
+          body: (_)
+        ]? @body
       )
     ) @function
   )
@@ -250,28 +250,18 @@ const char* query_cpp = R""""(
   ((comment) @docs .
     (_
       declarator: (function_declarator
-        declarator: [
-          (operator_name) @name
-        ]
+        declarator: (operator_name) @name
       )
-      [
-        (field_initializer_list)
-        body: (_)
-      ]? @body
+      body: (_)? @body
     ) @operator
   )
   ((comment) @docs .
     (_
       declarator: (_ (function_declarator
         ;; wildcard above is reference_declarator or pointer_declarator
-        declarator: [
-          (operator_name) @name
-        ]
-        [
-          (field_initializer_list)
-          body: (_)
-        ]? @body
+        declarator: (operator_name) @name
       ))
+      body: (_)? @body
     ) @operator
   )
 
@@ -280,14 +270,9 @@ const char* query_cpp = R""""(
     (template_declaration
       (_
         declarator: (function_declarator
-          declarator: [
-            (operator_name) @name
-          ]
+          declarator: (operator_name) @name
         )
-        [
-          (field_initializer_list)
-          body: (_)
-        ]? @body
+        body: (_)? @body
       )
     ) @operator
   )
@@ -296,14 +281,9 @@ const char* query_cpp = R""""(
       (_
         declarator: (_ (function_declarator
           ;; wildcard above is reference_declarator or pointer_declarator
-          declarator: [
-            (operator_name) @name
-          ]
-          [
-            (field_initializer_list)
-            body: (_)
-          ]? @body
+          declarator: (operator_name) @name
         ))
+        body: (_)? @body
       )
     ) @operator
   )
