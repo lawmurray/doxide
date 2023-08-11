@@ -14,8 +14,10 @@ enum TokenType : int {
   PARA = 1 << 4,
   LINE = 1 << 5,
   SENTENCE = 1 << 6,
-  WHITESPACE = 1 << 8,
-  WORD = 1 << 7,
+  WHITESPACE = 1 << 7,
+  WORD = 1 << 8,
+  STAR = 1 << 9,
+  SLASH = 1 << 10,
   ANY = ~0
 };
 
@@ -38,7 +40,9 @@ static auto regexes = {
 
   std::make_pair(SENTENCE, std::regex("[.!?]")),
   std::make_pair(WHITESPACE, std::regex("\\s+")),
-  std::make_pair(WORD, std::regex("[^@\\s]+"))
+  std::make_pair(WORD, std::regex("[^@\\s\\*/]+")),
+  std::make_pair(STAR, std::regex("\\*")),
+  std::make_pair(SLASH, std::regex("/"))
 };
 
 /**

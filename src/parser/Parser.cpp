@@ -236,7 +236,7 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
         } else if (token.substr(1) == "brief" ||
             token.substr(1) == "short") {
           auto first = tokenizer.consume(~WHITESPACE);
-          auto last = tokenizer.consume(PARA);
+          auto last = tokenizer.consume(PARA|CLOSE);
           entity.brief.append(first.first, last.first);
           entity.docs.append(first.first, last.first);
           entity.docs.append("\n\n");
