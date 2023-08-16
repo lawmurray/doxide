@@ -168,35 +168,47 @@ Available from the [Arch User Repository (AUR)](https://aur.archlinux.org/packag
 
 ## :simple-apple: Mac
 
-Install [Homebrew](https://brew.sh) if not already. Add the tap:
-```sh
-brew tap lawmurray/all
-brew install doxide
-```
-Install [MkDocs][mkdocs] and [Material for MkDocs][material]:
-```
-pip install mkdocs mkdocs-material
-```
+??? info "Homebrew"
+    Install [Homebrew](https://brew.sh) if not already, then:
+    ```sh
+    brew tap lawmurray/all
+    brew install doxide
+    ```
+    Also install [MkDocs][mkdocs] and [Material for MkDocs][material]:
+    ```
+    pip install mkdocs mkdocs-material
+    ```
 
 ## :simple-windows: Windows
 
-Either use the installer or download the `doxide.exe` program only and put it somewhere in your `PATH`:
+??? info "Chocolatey (recommended)"
+    Install [Chocolatey](https://chocolatey.org) if not already, then:
+    ```sh
+    choco install doxide mkdocs mkdocs-material
+    ```
+    
+??? info "Installer"
+    [:material-download: Download Doxide installer](https://download.indii.org/win/doxide-installer.exe){ .md-button }
+    
+    If you have a working [Python](https://python.org) environment, install [MkDocs][mkdocs] and [Material for MkDocs][material] with:
+    ```
+    pip install mkdocs mkdocs-material
+    ```
+    [Checksum](https://download.indii.org/win/doxide-installer.exe.sha256) for the download above.
 
-[:material-download: Doxide installer](https://download.indii.org/win/doxide-installer.exe){ .md-button } [:material-download: Doxide program only](https://download.indii.org/win/doxide.exe){ .md-button }
+??? info "Standalone program"
+    Download the program and put it somewhere on your `PATH` environment variable, so that you can access it from a terminal.
 
-- [Checksum for Doxide installer](https://download.indii.org/win/doxide-installer.exe.sha256)
-- [Checksum for Doxide program only](https://download.indii.org/win/doxide.exe.sha256)
+    [:material-download: Download Doxide standalone program](https://download.indii.org/win/doxide.exe){ .md-button }
 
-If you have a working [Python](https://python.org) environment, install [MkDocs][mkdocs] and [Material for MkDocs][material] with:
-```
-pip install mkdocs mkdocs-material
-```
-Or, if you have a working [Chocolatey](https://chocolatey.org) environment, install [MkDocs][mkdocs] and [Material for MkDocs][material] with:
-```
-choco install mkdocs mkdocs-material
-```
+    If you have a working [Python](https://python.org) environment, install [MkDocs][mkdocs] and [Material for MkDocs][material] with:
+    ```
+    pip install mkdocs mkdocs-material
+    ```
+    [Checksum](https://download.indii.org/win/doxide.exe.sha256) for the download above.
 
-Alternatively, you can use [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install) with one of the Linux distributions above and follow the instructions for it.
+??? info "Windows Subsystem for Linux"
+    You can use [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install) with one of the Linux distributions above and follow the instructions for it.
 
 ## :fontawesome-solid-file-zipper: Others: Install from source
 
