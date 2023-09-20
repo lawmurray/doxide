@@ -3,13 +3,8 @@
 void MarkdownGenerator::generate(const std::filesystem::path& dir,
     const Entity& entity) {
   std::ofstream out;
-  if (entity.type == EntityType::TYPE) {
-    std::filesystem::create_directories(dir);
-    out.open(dir / (sanitize(entity.name) + ".md"));
-  } else {
-    std::filesystem::create_directories(dir / sanitize(entity.name));
-    out.open(dir / sanitize(entity.name) / "index.md");
-  }
+  std::filesystem::create_directories(dir / sanitize(entity.name));
+  out.open(dir / sanitize(entity.name) / "index.md");
   out << frontmatter(entity) << std::endl;
 
   /* header */
@@ -25,7 +20,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
   /* groups */
   for (auto& child : entity.groups) {
     out << ":material-format-section: [" << title(child) << ']';
-    out << "(" << sanitize(child.name) << "/)" << std::endl;
+    out << "(" << sanitize(child.name) << "/index.md)" << std::endl;
     out << ":   " << line(brief(child)) << std::endl;
     out << std::endl;
   }
@@ -34,7 +29,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
   for (auto& child : view(entity.namespaces, true)) {
     if (!child->empty()) {
       out << ":material-package: [" << child->name << ']';
-      out << "(" << sanitize(child->name) << "/)" << std::endl;
+      out << "(" << sanitize(child->name) << "/index.md)" << std::endl;
       out << ":   " << line(brief(*child)) << std::endl;
       out << std::endl;
     }
@@ -49,7 +44,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     for (auto& child : view(entity.types,
         entity.type == EntityType::NAMESPACE ||
         entity.type == EntityType::GROUP)) {
-      out << "| [" << child->name << "](" << sanitize(child->name) << "/) | ";
+      out << "| [" << child->name << "](" << sanitize(child->name) <<
+          "/index.md) | ";
       out << line(brief(*child)) << " |" << std::endl;
     }
     out << std::endl;
