@@ -37,7 +37,7 @@ The documentation can be formatted with Markdown, and include *commands* using t
 
 ## Commands
 
-The suggestion is to use Markdown wherever possible when writing documentation comments. Doxide provides a small set of commands that can be used to [organize](/organizing) documentation (e.g. `@ingroup`) and to ensure consistent formatting for common elements (e.g. `@param`).
+The suggestion is to use Markdown wherever possible when writing documentation comments. Doxide provides a small set of commands that can be used to [organize](organizing.md) documentation (e.g. `@ingroup`) and to ensure consistent formatting for common elements (e.g. `@param`).
 
 | Command                                                      | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -48,7 +48,7 @@ The suggestion is to use Markdown wherever possible when writing documentation c
 | `@throw name`                                                | Document an exception `name` with the following paragraph.   |
 | `@see`                                                       | Add a paragraph of "see also" references. The references themselves can be formatted in Markdown, using links if desired. |
 | `@anchor name`                                               | Insert anchor that can be linked to from elsewhere with the Markdown syntax `[text](#name)`. |
-| `@ingroup name`                                              | Add the entity to the group `name`. See [organizing](/organizing) for more information.        |
+| `@ingroup name`                                              | Add the entity to the group `name`. See [organizing](organizing.md) for more information.        |
 | `@@`                                                         | Escape: replaced with a single `@`.                                                               |
 | `@/`                                                         | Escape: replaced with a single `/`.                                                               |
 

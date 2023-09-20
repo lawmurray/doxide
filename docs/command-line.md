@@ -14,7 +14,7 @@ Commands are:
 `doxide help`
 :   Print usage information.
 
-Command-line options are as follows. When provided, they override the same settings in the [configuration file](/configuring).
+Command-line options are as follows. When provided, they override the same settings in the [configuration file](configuring.md).
 
 `--title` (default `Untitled`)
 :   Main page title.

@@ -62,6 +62,13 @@ int& ref = x;
 int* ptr = &x;
 
 /**
+ * Test variable with unicode character.
+ * 
+ * @ingroup parsing
+ */
+int λ;
+
+/**
  * Test function.
  * 
  * @ingroup parsing
@@ -411,6 +418,13 @@ public:
    * Test member variable of pointer type.
    */
   int* ptr = &x;
+
+/**
+ * Test member variable with unicode character.
+ * 
+ * @ingroup parsing
+ */
+int λ;
 
   /**
    * Test member function.

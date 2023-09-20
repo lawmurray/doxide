@@ -38,7 +38,7 @@
  * 
  * #### Images
  * 
- * ![Doxide logo](/assets/logo_red.svg){width="256"}
+ * ![Doxide logo](../../assets/logo_red.svg){width="256"}
  * 
  * #### Admonitions
  * 

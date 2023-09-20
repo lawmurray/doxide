@@ -6,7 +6,7 @@ Organizing by namespace is not always appropriate. An additional (or alternative
 
 ## Groups
 
-Groups are for organizing documentation. A hierarchy of groups can be created by adding a  `groups` section to the `doxide.yaml` [configuration file](/configuring). Individual entities can then be assigne to a group by using the `@ingroup` command.
+Groups are for organizing documentation. A hierarchy of groups can be created by adding a  `groups` section to the `doxide.yaml` [configuration file](configuring.md). Individual entities can then be assigne to a group by using the `@ingroup` command.
 
 !!! example
     Create a group by adding the following to the `doxide.yaml` configuration file:
@@ -34,7 +34,7 @@ If the assignment of groups leaves a namespace empty, it is removed from the fin
 
 Extra pages can be added to the documentation simply by adding extra Markdown files to the output directory (default: `docs`).
 
-Doxide distinguishes its own output files in the output directory by adding `generator: doxide` to the YAML frontmatter. When running the [commands](/command-line) `doxide build` and `doxide clean`, it deletes or overwrites such files without prompting. It will not touch other files.
+Doxide distinguishes its own output files in the output directory by adding `generator: doxide` to the YAML frontmatter. When running the [commands](command-line.md) `doxide build` and `doxide clean`, it deletes or overwrites such files without prompting. It will not touch other files.
 
 !!! danger
     Clearly, you do not want to put `generator: doxide` in your extra pages, or they will be deleted!

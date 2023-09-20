@@ -3,13 +3,13 @@
 The `doxide.yaml` configuration file supports the following entries.
 
 `title`
-:   Main page title. Overruled by [command-line](/command-line) option `--title`.
+:   Main page title. Overruled by [command-line](command-line.md) option `--title`.
 
 `description`
-:   Main page description. Overruled by [command-line](/command-line) option `--description`.
+:   Main page description. Overruled by [command-line](command-line.md) option `--description`.
 
 `output` (default `docs`)
-:   Output directory. Overruled by [command-line](/command-line) option `--output`.
+:   Output directory. Overruled by [command-line](command-line.md) option `--output`.
 
 `files`
 :   List of source files from which to extract documentation. The following wildcards are supported for pattern matching:
@@ -26,7 +26,7 @@ The `doxide.yaml` configuration file supports the following entries.
     For example, `*.hpp` will match all files in the root directory with a file extension of `.hpp`, while `**/*.hpp` will match all files in subdirectories, recursively, with a file extension of `.hpp`.
 
 `groups`
-:   List of groups used to [organize](/organizing) documentation. Each element of the list can further contain the keys:
+:   List of groups used to [organize](organizing.md) documentation. Each element of the list can further contain the keys:
 
     `name`
     : Name of the group. This is used to assign entities to the group using the `@ingroup` command.
