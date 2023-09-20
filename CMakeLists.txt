@@ -12,7 +12,7 @@ endif()
 add_executable(doxide
     contrib/tree-sitter/lib/src/lib.c
     contrib/tree-sitter-cpp/src/parser.c
-    contrib/tree-sitter-cpp/src/scanner.cc
+    contrib/tree-sitter-cpp/src/scanner.c
     src/doxide.cpp
     src/parser/Language.cpp
     src/parser/Parser.cpp
