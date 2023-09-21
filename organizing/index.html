@@ -483,7 +483,7 @@
 <p>Doxide organizes documentation by creating a main page, and one additional page for each namespace and type, organized hierarchically. Variables, functions and operators are added to the page of the namespace or class to which they belong. Macros are added to the main page. Only entities with documentation comments are included, with the exception of namespaces, which are included as long as they are non-empty.</p>
 <p>Organizing by namespace is not always appropriate. An additional (or alternative) structure may be provided with <a href="#groups">groups</a>. It is also possible to add arbitrary <a href="#extra-pages">extra pages</a>.</p>
 <h2 id="groups">Groups<a class="headerlink" href="#groups" title="Permanent link">&para;</a></h2>
-<p>Groups are for organizing documentation. A hierarchy of groups can be created by adding a  <code>groups</code> section to the <code>doxide.yaml</code> <a href="/configuring">configuration file</a>. Individual entities can then be assigne to a group by using the <code>@ingroup</code> command.</p>
+<p>Groups are for organizing documentation. A hierarchy of groups can be created by adding a  <code>groups</code> section to the <code>doxide.yaml</code> <a href="../configuring/">configuration file</a>. Individual entities can then be assigne to a group by using the <code>@ingroup</code> command.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <p>Create a group by adding the following to the <code>doxide.yaml</code> configuration file:
@@ -505,7 +505,7 @@ Assign an entity to the group using the <code>@ingroup</code> command in its doc
 <p>If the assignment of groups leaves a namespace empty, it is removed from the final documentation. This allows organizing with groups to completely replace organizing with namespaces.</p>
 <h2 id="extra-pages">Extra pages<a class="headerlink" href="#extra-pages" title="Permanent link">&para;</a></h2>
 <p>Extra pages can be added to the documentation simply by adding extra Markdown files to the output directory (default: <code>docs</code>).</p>
-<p>Doxide distinguishes its own output files in the output directory by adding <code>generator: doxide</code> to the YAML frontmatter. When running the <a href="/command-line">commands</a> <code>doxide build</code> and <code>doxide clean</code>, it deletes or overwrites such files without prompting. It will not touch other files.</p>
+<p>Doxide distinguishes its own output files in the output directory by adding <code>generator: doxide</code> to the YAML frontmatter. When running the <a href="../command-line/">commands</a> <code>doxide build</code> and <code>doxide clean</code>, it deletes or overwrites such files without prompting. It will not touch other files.</p>
 <div class="admonition danger">
 <p class="admonition-title">Danger</p>
 <p>Clearly, you do not want to put <code>generator: doxide</code> in your extra pages, or they will be deleted!</p>
