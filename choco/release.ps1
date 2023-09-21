@@ -15,7 +15,31 @@ function Update-Package {
     Find-Replace -Path "$Package\$Package.nuspec" 0.0.0 $version
 }
 
+function Build-Package {
+    param($Package)
+    Set-Location -Path $Package
+    choco pack
+    choco install $Package --debug --verbose --force --source .
+    Set-Location -Path ..
+}
+
+function Release-Package {
+    param($Package, $Version)
+    Set-Location -Path $Package
+    choco push $Package.$Version.nupkg --source "https://push.chocolatey.org/"
+    Set-Location -Path ..
+}
+
 $version=$(git describe --tags --abbrev=0).Substring(1)
+
 Update-Package -Package doxide.portable -Download doxide.exe
 Update-Package -Package doxide.install -Download doxide-installer.exe
 Update-Package -Package doxide
+
+Build-Package -Package doxide.portable
+Build-Package -Package doxide.install
+Build-Package -Package doxide
+
+Release-Package -Package doxide.portable -Version $version
+Release-Package -Package doxide.install -Version $version
+Release-Package -Package doxide -Version $version
