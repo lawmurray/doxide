@@ -23,6 +23,14 @@ function Build-Package {
     Set-Location -Path ..
 }
 
+function Test-Package {
+    param($Package)
+    Set-Location -Path $Package
+    choco install $Package --debug --verbose --source .
+    choco uninstall $Package
+    Set-Location -Path ..
+}
+
 function Release-Package {
     param($Package, $Version)
     Set-Location -Path $Package
@@ -39,6 +47,10 @@ Update-Package -Package doxide
 Build-Package -Package doxide.portable
 Build-Package -Package doxide.install
 Build-Package -Package doxide
+
+Test-Package -Package doxide.portable
+Test-Package -Package doxide.install
+Test-Package -Package doxide
 
 Release-Package -Package doxide.portable -Version $version
 Release-Package -Package doxide.install -Version $version
