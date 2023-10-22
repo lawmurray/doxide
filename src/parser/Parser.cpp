@@ -65,8 +65,17 @@ void Parser::parse(const std::string& file, Entity& global) {
       uint32_t l = ts_node_end_byte(node);
       const char* name = ts_query_capture_name_for_id(query, id, &length);
 
+      /* workaround for possible tree-sitter bug, where empty /// at the end
+       * of a documentation comment is matched as e.g. a variable rather than
+       * part of the documentation */
+      if (source.substr(k, l - k) == "///") {
+        name = "docs";
+      }
+
       if (strncmp(name, "docs", length) == 0) {
-        translate(source.substr(k, l - k), entity);
+        translate(source.substr(k, l - k), entity, false);
+      } else if (strncmp(name, "after_docs", length) == 0) {
+        translate(source.substr(k, l - k), entity, true);
       } else if (strncmp(name, "name", length) == 0) {
         entity.name = source.substr(k, l - k);
       } else if (strncmp(name, "body", length) == 0) {
@@ -134,10 +143,20 @@ void Parser::parse(const std::string& file, Entity& global) {
       entity.ingroup.clear();
     }
 
-    /* push to stack */
-    entities.push_back(std::move(entity));
-    starts.push_back(start);
-    ends.push_back(end);
+    if (entity.type == EntityType::NAMESPACE ||
+        entity.type == EntityType::TYPE) {
+      /* push to stack, as may have nested entities */
+      entities.push_back(std::move(entity));
+      starts.push_back(start);
+      ends.push_back(end);
+    } else if (entity.type != EntityType::NONE) {
+      /* may be null in case of workaround for empty ///, see above */
+      if (entity.ingroup.empty()) {
+        entities.back().add(entity);
+      } else {
+        entities.front().add(entity);
+      }
+    }
   }
 
   /* finalize */
@@ -155,10 +174,12 @@ void Parser::parse(const std::string& file, Entity& global) {
   ts_query_cursor_delete(cursor);
 }
 
-void Parser::translate(const std::string_view& comment, Entity& entity) {
+void Parser::translate(const std::string_view& comment, Entity& entity,
+    const bool after) {
   int indent = 0;
   Tokenizer tokenizer(comment);
   Token token = tokenizer.next();
+  const int OPEN = after ? AFTER_OPEN : BEFORE_OPEN;  
   if (token.type & OPEN) {  // otherwise not a documentation comment
     token = tokenizer.next();
     while (token.type) {

@@ -31,9 +31,10 @@ public:
    * 
    * @param comment Documentation comment.
    * @param entity Entity to document.
+   * @param after Does the documentation comment appear after the entity?
    */
-  void translate(const std::string_view& comment, Entity& entity);
-
+  void translate(const std::string_view& comment, Entity& entity,
+      const bool after = false);
 
 private:
   /**

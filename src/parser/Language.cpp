@@ -177,6 +177,32 @@ const char* query_cpp = R""""(
       )
     ) @variable
   )
+  ((_
+      declarator: [
+        (identifier) @name
+        (reference_declarator (identifier) @name)
+        (pointer_declarator (identifier) @name)
+        (field_identifier) @name
+        (reference_declarator (field_identifier) @name)
+        (pointer_declarator (field_identifier) @name)
+      ]
+      default_value: (_)? @value
+    ) @variable . (comment)+ @after_docs
+  )
+  ((_
+      (init_declarator
+        declarator: [
+          (identifier) @name
+          (reference_declarator (identifier) @name)
+          (pointer_declarator (identifier) @name)
+          (field_identifier) @name
+          (reference_declarator (field_identifier) @name)
+          (pointer_declarator (field_identifier) @name)
+        ]
+        value: (_) @value
+      )
+    ) @variable . (comment)+ @after_docs
+  )
 
   ;; function
   ((comment)+ @docs .
@@ -292,6 +318,8 @@ const char* query_cpp = R""""(
   ((comment)+ @docs .
      (enumerator
        name: (identifier) @name) @enumerator)
+  ((enumerator
+       name: (identifier) @name) @enumerator . (comment)+ @after_docs)
 
   ;; macro
   ((comment)+ @docs .
@@ -302,6 +330,12 @@ const char* query_cpp = R""""(
      (preproc_function_def
        name: (identifier) @name
        value: (_) @value) @macro)
+  ((preproc_def
+       name: (identifier) @name
+       value: (_) @value) @macro . (comment)+ @after_docs)
+  ((preproc_function_def
+       name: (identifier) @name
+       value: (_) @value) @macro . (comment)+ @after_docs)
 
 ]
 )"""";

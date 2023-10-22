@@ -8,31 +8,33 @@
  */
 enum TokenType : int {
   NONE = 0,
-  OPEN = 1 << 1,
-  CLOSE = 1 << 2,
-  COMMAND = 1 << 3,
-  PARA = 1 << 4,
-  LINE = 1 << 5,
-  SENTENCE = 1 << 6,
-  WHITESPACE = 1 << 7,
-  WORD = 1 << 8,
-  STAR = 1 << 9,
-  SLASH = 1 << 10,
+  AFTER_OPEN = 1 << 1,
+  BEFORE_OPEN = 1 << 2,
+  CLOSE = 1 << 3,
+  COMMAND = 1 << 4,
+  PARA = 1 << 5,
+  LINE = 1 << 6,
+  SENTENCE = 1 << 7,
+  WHITESPACE = 1 << 8,
+  WORD = 1 << 9,
+  STAR = 1 << 10,
+  SLASH = 1 << 11,
   ANY = ~0
 };
 
 /**
- * Token patterns. Order is important, as match to an earlier pattern
+ * Token patterns. Order is important, as a match to an earlier pattern
  * precludes a match to a later.
  */
 static auto regexes = {
-  std::make_pair(OPEN, std::regex("/\\*\\*|/\\*!|///|//!")),
+  std::make_pair(AFTER_OPEN, std::regex("(?:/\\*\\*|/\\*!|///|//!)<")),
+  std::make_pair(BEFORE_OPEN, std::regex("(?:/\\*\\*|/\\*!|///|//!)")),
   std::make_pair(CLOSE, std::regex("\\*/")),
   std::make_pair(COMMAND, std::regex("[@\\\\](?:param(?:\\[(?:in|out|in,out)\\])?|\\w+|@|/|f[\\$\\[\\]])")),
 
   /* the end of a paragraph is either two new lines or one new line with a
    * command to come */
-  std::make_pair(PARA, std::regex("\\s*\\n[ \t]*(?:\\*(?!/)|///|//!)?[ \t]*(?:(?=@)|\\n[ \t]*(?:\\*(?!/))?[ \t]*)")),
+  std::make_pair(PARA, std::regex("\\s*\\n[ \t]*(?:\\*(?!/))?[ \t]*(?:(?=@)|\\n[ \t]*(?:\\*(?!/))?[ \t]*)")),
 
   /* the end of a line is one new line, as long as there is not a command to
    * come (which would denote the end of a paragraph instead) */

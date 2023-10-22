@@ -12,6 +12,14 @@
  */
 #define MACRO_WITH_ARGS(x, y) (x + y)
 
+#define MACRO_AFTER 0
+///< Test macro, documented after entity with `///` comment
+///< @ingroup parsing
+
+#define MACRO_WITH_ARGS_AFTER(x, y) (x + y)
+///< Test macro with arguments, documented after entity with `///` comment
+///< @ingroup parsing
+
 /**
  * Forward class declaration.
  * 
@@ -36,6 +44,8 @@ int b;
 /// @ingroup parsing
 ///
 int c;
+
+int d;  ///< Documented after entity with `///` comment @ingroup parsing
 
 /**
  * Test variable.
@@ -322,6 +332,17 @@ enum Enum {
 };
 
 /**
+ * Test enumeration with values documented after.
+ * 
+ * @ingroup parsing
+ */
+enum EnumAfter {
+  FIRST,   ///< First possibility, document after with `///` comment
+  SECOND,  ///< Second possibility, document after with `///` comment
+  THIRD    ///< Third possibility, document after with `///` comment
+};
+
+/**
  * Test scoped enumeration.
  * 
  * @ingroup parsing
@@ -565,4 +586,3 @@ namespace parent {
 namespace parent::nested {
   //
 }
-
