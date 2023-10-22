@@ -1,8 +1,6 @@
 # Writing
 
-Entities in C++ source code (e.g. classes, functions, operators, variables, macros) are documented by adding a *documentation comment* immediately preceding their declaration, typically in a header file. A documentation comment begins with `/**` rather than the usual `/*`, but ends with the usual `*/`. New lines may optionally start with an extra `*` character.
-
-The documentation can be formatted with Markdown, and include *commands* using the syntax `@command`.
+Entities in C++ source code (e.g. classes, functions, operators, variables, macros) are documented by adding a *documentation comment* immediately before or after their declaration. Various conventions are supported to distinguish documentation comments from regular comments. The most basic is to put the comment immediately before the declaration style it as `/** ... */` rather than `/* ... */`. The contents of the documentation can be formatted with Markdown, and include various [commands](#commands) using the syntax `@command`.
 
 !!! example
     ```c++
@@ -34,6 +32,30 @@ The documentation can be formatted with Markdown, and include *commands* using t
     int f(int x, int y);
     ```
 
+If the documentation is placed immediately before the declaration of an entity, the following styles are supported:
+
+- `/** ... */`
+- `/*! ... */`
+- `/// ...`
+- `//! ...`
+
+If the documentation is placed immediately after the declaration, e.g. as an end-of-line comment, the following styles are supported:
+
+- `/**< ... */`
+- `/*!< ... */`
+- `///< ...`
+- `//!< ...`
+
+Putting the documentation after the declaration is currently only supported for variables, macros, and enumeration values.
+
+!!! example
+    ```c++
+    enum Example {
+      FIRST,   ///< First possible value
+      SECOND,  ///< Second possible value
+      THIRD,   ///< Third possible value
+    };
+    ```
 
 ## Commands
 
