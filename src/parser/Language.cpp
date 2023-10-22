@@ -1,7 +1,7 @@
 const char* query_cpp = R""""(
 [
   ;; namespace definition
-  ((comment) @docs .
+  ((comment)+ @docs .
     (namespace_definition
       name: (namespace_identifier) @name
       body: (declaration_list)? @body) @namespace)
@@ -10,7 +10,7 @@ const char* query_cpp = R""""(
     body: (declaration_list)? @body) @namespace)
 
   ;; nested namespace definition---matches once for each @name
-  ((comment) @docs .
+  ((comment)+ @docs .
     (namespace_definition
       (nested_namespace_specifier
         (namespace_identifier) @name)
@@ -21,61 +21,61 @@ const char* query_cpp = R""""(
     body: (declaration_list)? @body) @namespace)
 
   ;; class definition
-  ((comment) @docs .
+  ((comment)+ @docs .
     (class_specifier
       name: (type_identifier) @name
       body: (field_declaration_list)? @body
       ) @type)
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_ (class_specifier
       name: (type_identifier) @name
       body: (field_declaration_list)? @body
       )) @type)
 
   ;; struct definition
-  ((comment) @docs .
+  ((comment)+ @docs .
     (struct_specifier
       name: (type_identifier) @name
       body: (field_declaration_list)? @body
       ) @type)
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_ (struct_specifier
       name: (type_identifier) @name
       body: (field_declaration_list)? @body
       )) @type)
 
   ;; union definition
-  ((comment) @docs .
+  ((comment)+ @docs .
     (union_specifier
       name: (type_identifier) @name
       body: (field_declaration_list)? @body
       ) @type)
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_ (union_specifier
       name: (type_identifier) @name
       body: (field_declaration_list)? @body
       )) @type)
 
   ;; enum definition
-  ((comment) @docs .
+  ((comment)+ @docs .
     (enum_specifier
       name: (type_identifier) @name
       body: (enumerator_list)? @body
       ) @type)
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_ (enum_specifier
       name: (type_identifier) @name
       body: (enumerator_list)? @body
       )) @type)
 
   ;; class template definition
-  ((comment) @docs .
+  ((comment)+ @docs .
     (template_declaration
       (class_specifier
         name: [(type_identifier) (template_type)] @name
         body: (field_declaration_list)? @body
         )) @type)
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_ (template_declaration
       (class_specifier
         name: [(type_identifier) (template_type)] @name
@@ -83,13 +83,13 @@ const char* query_cpp = R""""(
         ))) @type)
 
   ;; struct template definition
-  ((comment) @docs .
+  ((comment)+ @docs .
     (template_declaration
       (struct_specifier
         name: [(type_identifier) (template_type)] @name
         body: (field_declaration_list)? @body
         )) @type)
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_ (template_declaration
       (struct_specifier
         name: [(type_identifier) (template_type)] @name
@@ -97,13 +97,13 @@ const char* query_cpp = R""""(
         ))) @type)
 
   ;; union template definition
-  ((comment) @docs .
+  ((comment)+ @docs .
     (template_declaration
       (union_specifier
         name: [(type_identifier) (template_type)] @name
         body: (field_declaration_list)? @body
         )) @type)
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_ (template_declaration
       (union_specifier
         name: [(type_identifier) (template_type)] @name
@@ -111,45 +111,45 @@ const char* query_cpp = R""""(
         ))) @type)
 
   ;; typedef
-  ((comment) @docs .
+  ((comment)+ @docs .
      (type_definition
        declarator: (type_identifier) @name .) @type)
-  ((comment) @docs .
+  ((comment)+ @docs .
      (_ (type_definition
        declarator: (type_identifier) @name .)) @type)
 
   ;; type alias
-  ((comment) @docs .
+  ((comment)+ @docs .
     (alias_declaration
       name: (type_identifier) @name) @type)
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_ (alias_declaration
       name: (type_identifier) @name)) @type)
 
   ;; type alias template
-  ((comment) @docs .
+  ((comment)+ @docs .
     (template_declaration
       (alias_declaration
         name: (type_identifier) @name)) @type)
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_ (template_declaration
       (alias_declaration
         name: (type_identifier) @name))) @type)
 
   ;; concept
-  ((comment) @docs .
+  ((comment)+ @docs .
     (template_declaration
       (concept_definition
         name: (identifier) @name
         (_))) @concept)
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_ (template_declaration
       (concept_definition
         name: (identifier) @name
         (_)))) @concept)
 
   ;; variable
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_
       declarator: [
         (identifier) @name
@@ -162,7 +162,7 @@ const char* query_cpp = R""""(
       default_value: (_)? @value
     ) @variable
   )
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_
       (init_declarator
         declarator: [
@@ -179,7 +179,7 @@ const char* query_cpp = R""""(
   )
 
   ;; function
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_
       declarator: (function_declarator
         declarator: [
@@ -194,7 +194,7 @@ const char* query_cpp = R""""(
       ]? @body
     ) @function
   )
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_
       declarator: (_ (function_declarator
         ;; wildcard above is reference_declarator or pointer_declarator
@@ -211,7 +211,7 @@ const char* query_cpp = R""""(
   )
 
   ;; function template
-  ((comment) @docs .
+  ((comment)+ @docs .
     (template_declaration
       (_
         declarator: (function_declarator
@@ -228,7 +228,7 @@ const char* query_cpp = R""""(
       )
     ) @function
   )
-  ((comment) @docs .
+  ((comment)+ @docs .
     (template_declaration
       (_
         declarator: (_ (function_declarator
@@ -247,7 +247,7 @@ const char* query_cpp = R""""(
   )
 
   ;; operator
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_
       declarator: (function_declarator
         declarator: (operator_name) @name
@@ -255,7 +255,7 @@ const char* query_cpp = R""""(
       body: (_)? @body
     ) @operator
   )
-  ((comment) @docs .
+  ((comment)+ @docs .
     (_
       declarator: (_ (function_declarator
         ;; wildcard above is reference_declarator or pointer_declarator
@@ -266,7 +266,7 @@ const char* query_cpp = R""""(
   )
 
   ;; operator template
-  ((comment) @docs .
+  ((comment)+ @docs .
     (template_declaration
       (_
         declarator: (function_declarator
@@ -276,7 +276,7 @@ const char* query_cpp = R""""(
       )
     ) @operator
   )
-  ((comment) @docs .
+  ((comment)+ @docs .
     (template_declaration
       (_
         declarator: (_ (function_declarator
@@ -289,16 +289,16 @@ const char* query_cpp = R""""(
   )
 
   ;; enumeration value
-  ((comment) @docs .
+  ((comment)+ @docs .
      (enumerator
        name: (identifier) @name) @enumerator)
 
   ;; macro
-  ((comment) @docs .
+  ((comment)+ @docs .
      (preproc_def
        name: (identifier) @name
        value: (_) @value) @macro)
-  ((comment) @docs .
+  ((comment)+ @docs .
      (preproc_function_def
        name: (identifier) @name
        value: (_) @value) @macro)

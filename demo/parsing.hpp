@@ -20,6 +20,24 @@
 class ForwardClass;
 
 /**
+ * Documented with `/** ... *@/` style preceding comment.
+ * 
+ * @ingroup parsing
+ */
+int a;
+
+/// Documented with `///` style preceding comment. @ingroup parsing
+int b;
+
+///
+/// Documented with `///` style preceding comment that wraps across multiple
+/// lines.
+///
+/// @ingroup parsing
+///
+int c;
+
+/**
  * Test variable.
  * 
  * @ingroup parsing
@@ -419,12 +437,12 @@ public:
    */
   int* ptr = &x;
 
-/**
- * Test member variable with unicode character.
- * 
- * @ingroup parsing
- */
-int λ;
+  /**
+   * Test member variable with unicode character.
+   * 
+   * @ingroup parsing
+   */
+  int λ;
 
   /**
    * Test member function.
