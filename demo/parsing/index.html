@@ -480,8 +480,22 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#macro_after" class="md-nav__link">
+    MACRO_AFTER
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#macro_with_args" class="md-nav__link">
     MACRO_WITH_ARGS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#macro_with_args_after" class="md-nav__link">
+    MACRO_WITH_ARGS_AFTER
   </a>
   
 </li>
@@ -498,6 +512,34 @@
   
     <nav class="md-nav" aria-label="Variable Details">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a" class="md-nav__link">
+    a
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b" class="md-nav__link">
+    b
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c" class="md-nav__link">
+    c
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d" class="md-nav__link">
+    d
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#ptr" class="md-nav__link">
@@ -640,6 +682,10 @@
 <td>Test enumeration.</td>
 </tr>
 <tr>
+<td><a href="EnumAfter/">EnumAfter</a></td>
+<td>Test enumeration with values documented after.</td>
+</tr>
+<tr>
 <td><a href="EnumClass/">EnumClass</a></td>
 <td>Test scoped enumeration.</td>
 </tr>
@@ -714,8 +760,16 @@
 <td>Test macro.</td>
 </tr>
 <tr>
+<td><a href="#MACRO_AFTER">MACRO_AFTER</a></td>
+<td>Test macro, documented after entity with <code>///</code> comment</td>
+</tr>
+<tr>
 <td><a href="#MACRO_WITH_ARGS">MACRO_WITH_ARGS</a></td>
 <td>Test macro with arguments.</td>
+</tr>
+<tr>
+<td><a href="#MACRO_WITH_ARGS_AFTER">MACRO_WITH_ARGS_AFTER</a></td>
+<td>Test macro with arguments, documented after entity with <code>///</code> comment</td>
 </tr>
 </tbody>
 </table>
@@ -728,6 +782,22 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><a href="#a">a</a></td>
+<td>Documented with `/** .</td>
+</tr>
+<tr>
+<td><a href="#b">b</a></td>
+<td>Documented with <code>///</code> style preceding comment.</td>
+</tr>
+<tr>
+<td><a href="#c">c</a></td>
+<td>Documented with <code>///</code> style preceding comment that wraps across multiple lines.</td>
+</tr>
+<tr>
+<td><a href="#d">d</a></td>
+<td>Documented after entity with <code>///</code> comment</td>
+</tr>
 <tr>
 <td><a href="#ptr">ptr</a></td>
 <td>Test variable of pointer type.</td>
@@ -853,12 +923,42 @@
 <p class="admonition-title">#define MACRO</p>
 <p>Test macro.</p>
 </div>
+<h3 id="macro_after">MACRO_AFTER<a name="MACRO_AFTER"></a><a class="headerlink" href="#macro_after" title="Permanent link">&para;</a></h3>
+<div class="admonition macro">
+<p class="admonition-title">#define MACRO_AFTER</p>
+<p>Test macro, documented after entity with <code>///</code> comment </p>
+</div>
 <h3 id="macro_with_args">MACRO_WITH_ARGS<a name="MACRO_WITH_ARGS"></a><a class="headerlink" href="#macro_with_args" title="Permanent link">&para;</a></h3>
 <div class="admonition macro">
 <p class="admonition-title">#define MACRO_WITH_ARGS(x, y)</p>
 <p>Test macro with arguments.</p>
 </div>
+<h3 id="macro_with_args_after">MACRO_WITH_ARGS_AFTER<a name="MACRO_WITH_ARGS_AFTER"></a><a class="headerlink" href="#macro_with_args_after" title="Permanent link">&para;</a></h3>
+<div class="admonition macro">
+<p class="admonition-title">#define MACRO_WITH_ARGS_AFTER(x, y)</p>
+<p>Test macro with arguments, documented after entity with <code>///</code> comment </p>
+</div>
 <h2 id="variable-details">Variable Details<a class="headerlink" href="#variable-details" title="Permanent link">&para;</a></h2>
+<h3 id="a">a<a name="a"></a><a class="headerlink" href="#a" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">int a</p>
+<p>Documented with <code>/** ... */</code> style preceding comment.</p>
+</div>
+<h3 id="b">b<a name="b"></a><a class="headerlink" href="#b" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">int b</p>
+<p>Documented with <code>///</code> style preceding comment. </p>
+</div>
+<h3 id="c">c<a name="c"></a><a class="headerlink" href="#c" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">int c</p>
+<p>Documented with <code>///</code> style preceding comment that wraps across multiple lines. </p>
+</div>
+<h3 id="d">d<a name="d"></a><a class="headerlink" href="#d" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">int d</p>
+<p>Documented after entity with <code>///</code> comment </p>
+</div>
 <h3 id="ptr">ptr<a name="ptr"></a><a class="headerlink" href="#ptr" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
 <p class="admonition-title">int&#42; ptr</p>
