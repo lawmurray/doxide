@@ -246,7 +246,7 @@ std::string MarkdownGenerator::brief(const Entity& entity) {
     if (std::regex_search(l, match, reg)) {
       return match.str();
     } else {
-      return "";
+      return l;
     }
   }
 }
