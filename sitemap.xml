@@ -2,152 +2,152 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://doxide.org/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/command-line/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/configuring/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/getting-started/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/installation/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/organizing/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/questions-and-answers/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/writing/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/Class/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ClassTemplate/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ClassWithMembers/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ClassWithMembers/InnerClass/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ClassWithMembers/InnerEnum/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ClassWithMembers/InnerTypeAlias/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ClassWithMembers/InnerTypeDef/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/Enum/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/EnumAfter/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/EnumClass/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/EnumStruct/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ForwardClass/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/Struct/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/StructTemplate/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/TypeAlias/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/TypeAliasTemplate/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/TypeDef/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/Union/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/UnionTemplate/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://doxide.org/demo/presentation/</loc>
-         <lastmod>2023-10-23</lastmod>
+         <lastmod>2023-10-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
