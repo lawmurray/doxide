@@ -48,7 +48,7 @@ void Parser::parse(const std::string& file, Entity& global) {
   std::list<Entity> entities;
   starts.push_back(ts_node_start_byte(node));
   ends.push_back(ts_node_end_byte(node));
-  entities.push_back(std::move(global));
+  entities.emplace_back(std::move(global));
 
   /* run query */
   TSQueryCursor* cursor = ts_query_cursor_new();
@@ -108,50 +108,50 @@ void Parser::parse(const std::string& file, Entity& global) {
         }
       }
     }
-
-    /* workaround for entity declaration logic catching punctuation, e.g.
-     * ending semicolon in declaration, the equals sign in a variable
-     * declaration with initialization, or whitespace */
-    while (middle > start && (source[middle - 1] == ' ' ||
-        source[middle - 1] == '\t' ||
-        source[middle - 1] == '\n' ||
-        source[middle - 1] == '\r' ||
-        source[middle - 1] == '=' ||
-        source[middle - 1] == ';')) {
-      --middle;
-    }
-
-    /* entity declaration */
-    entity.decl = source.substr(start, middle - start);
-
-    /* the final node represents the whole entity, pop the stack until we find
-     * its direct parent, as determined using nested byte ranges */
-    while (!(starts.back() <= start && end <= ends.back())) {
-      Entity back = std::move(entities.back());
-      entities.pop_back();
-      if (back.ingroup.empty()) {
-        entities.back().add(back);
-      } else {
-        entities.front().add(back);
-      }
-      starts.pop_back();
-      ends.pop_back();
-    }
-
-    /* override the ingroup for class members, as they cannot be moved out */
-    if (entities.back().type == EntityType::TYPE) {
-      entity.ingroup.clear();
-    }
-
-    if (entity.type == EntityType::NAMESPACE ||
-        entity.type == EntityType::TYPE) {
-      /* push to stack, as may have nested entities */
-      entities.push_back(std::move(entity));
-      starts.push_back(start);
-      ends.push_back(end);
-    } else if (entity.type != EntityType::NONE) {
+    if (entity.type != EntityType::NONE) {
       /* may be null in case of workaround for empty ///, see above */
-      if (entity.ingroup.empty()) {
+
+      /* workaround for entity declaration logic catching punctuation, e.g.
+      * ending semicolon in declaration, the equals sign in a variable
+      * declaration with initialization, or whitespace */
+      while (middle > start && (source[middle - 1] == ' ' ||
+          source[middle - 1] == '\t' ||
+          source[middle - 1] == '\n' ||
+          source[middle - 1] == '\r' ||
+          source[middle - 1] == '=' ||
+          source[middle - 1] == ';')) {
+        --middle;
+      }
+
+      /* entity declaration */
+      entity.decl = source.substr(start, middle - start);
+
+      /* the final node represents the whole entity, pop the stack until we find
+      * its direct parent, as determined using nested byte ranges */
+      while (!(starts.back() <= start && end <= ends.back())) {
+        Entity back = std::move(entities.back());
+        entities.pop_back();
+        if (back.ingroup.empty()) {
+          entities.back().add(back);
+        } else {
+          entities.front().add(back);
+        }
+        starts.pop_back();
+        ends.pop_back();
+      }
+
+      /* override the ingroup for class members, as they cannot be moved out */
+      if (entities.back().type == EntityType::TYPE) {
+        entity.ingroup.clear();
+      }
+
+      if (entity.type == EntityType::NAMESPACE ||
+          entity.type == EntityType::TYPE) {
+        /* push to stack, as may have nested entities */
+        entities.emplace_back(std::move(entity));
+        starts.push_back(start);
+        ends.push_back(end);
+      } else if (entity.ingroup.empty()) {
         entities.back().add(entity);
       } else {
         entities.front().add(entity);
