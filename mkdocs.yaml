@@ -9,8 +9,6 @@ extra:
       link: https://github.com/lawmurray
     - icon: material/mastodon 
       link: https://fosstodon.org/@lawmurray
-    - icon: material/twitter
-      link: https://twitter.com/lawmurray
     - icon: material/web
       link: https://indii.org
     - icon: material/email
