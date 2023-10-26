@@ -46,8 +46,6 @@ If the documentation is placed immediately after the declaration, e.g. as an end
 - `///< ...`
 - `//!< ...`
 
-Putting the documentation after the declaration is currently only supported for variables, macros, and enumeration values.
-
 !!! example
     ```c++
     enum Example {
