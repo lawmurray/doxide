@@ -175,6 +175,7 @@ void Parser::parse(const std::string& file, Entity& global) {
   assert(ends.empty());
 
   ts_query_cursor_delete(cursor);
+  ts_tree_delete(tree);
 }
 
 void Parser::translate(const std::string_view& comment, Entity& entity) {
