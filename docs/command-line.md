@@ -1,4 +1,4 @@
-# Running
+# Running Doxide
 
 Commands are:
 

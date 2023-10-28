@@ -1,6 +1,4 @@
-# Starting
-
-## Initializing
+# Initializing Doxide
 
 Run, from within your source code directory:
 ```
@@ -14,16 +12,11 @@ necessary to modify any of these.
 Add at least `doxide.yaml` to version control, and the other files if you intend to use Material for MkDocs (highly recommended for a quick start---you can always try something else later).
 
 
-## Building
-
 Build the Markdown documentation with:
 ```
 doxide build
 ```
 This will populate the output directory (default: `docs`).
-
-
-## Publishing
 
 To publish your documentation with Material for MkDocs, use:
 ```

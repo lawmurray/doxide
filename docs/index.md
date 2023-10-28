@@ -9,9 +9,8 @@
 <img src="assets/title.svg" width="256" height="384" alt="Doxide: Modern documentation for modern C++">
 </div>
 
-<div style="text-align:center;">
-<p><a href="/demo" class="md-button md-button--primary">Demo</a>
-<a href="/installation" class="md-button md-button--primary">Download</a></p>
+<div style="text-align:center;padding-bottom:1em;">
+<a href="/installation" class="md-button md-button--primary">Get Started</a></p>
 </div>
 
 Doxide is a documentation generator for C++.
@@ -22,6 +21,45 @@ Doxide is a documentation generator for C++.
 * C++ source code is documented with `/** comments */` containing `@commands`, as with the classic tool [Doxygen](https://doxygen.nl/){target="_blank"}. Many commands from Doxygen are already supported.
 * C++ source code is parsed with [Tree-sitter](https://tree-sitter.github.io){target="_blank"}, the same parser used by many syntax highlighters.
 
+=== "C++"
+
+    ```cpp
+    /**
+     * An example.
+     * 
+     * @tparam T Template parameter.
+     * 
+     * @param x Input parameter.
+     * @param[out] y Output parameter.
+     * 
+     * @return Return value.
+     * 
+     * @tip There are plenty more demos [here](/demo).
+     */
+    template<class T>
+    int f(int x, int& y);
+    ```
+
+=== "Output"
+
+    !!! function "template&lt;class T&gt; int f(int x, int&amp; y)"
+        
+        An example.
+
+        :material-code-tags: **Template parameter** `T`
+        :    Template parameter.
+        
+        :material-location-enter: **Parameter** `x`
+        :    Input parameter.
+        
+        :material-location-exit: **Parameter** `y`
+        :    Output parameter.
+        
+        :material-keyboard-return: **Return**
+        :    Return value.
+
+        !!! tip
+            There are plenty more demos [here](/demo).
 
 By generating Markdown, Doxide opens C++ documentation to the whole wide world of static site generation tools and themes. There is particular support for [MkDocs](https://www.mkdocs.org/){target="_blank"} and the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/){target="_blank"} theme, as on the Doxide website. A little extra effort enables alternatives such as [Jekyll](https://jekyllrb.com/){target="_blank"} and [Hugo](https://gohugo.io/){target="_blank"}. Other formats such as PDF are possible too, via [Pandoc](https://pandoc.org/){target="_blank"}.
 

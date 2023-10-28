@@ -1,4 +1,4 @@
-# Writing
+# Writing Documentation
 
 Entities in C++ source code (e.g. classes, functions, operators, variables, macros) are documented by adding a *documentation comment* immediately before or after their declaration. Various conventions are supported to distinguish documentation comments from regular comments. The most basic is to put the comment immediately before the declaration style it as `/** ... */` rather than `/* ... */`. The contents of the documentation can be formatted with Markdown, and include various [commands](#commands) using the syntax `@command`.
 

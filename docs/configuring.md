@@ -1,4 +1,4 @@
-# Configuring
+# Configuring Doxide
 
 The `doxide.yaml` configuration file supports the following entries.
 

@@ -1,4 +1,4 @@
-# Download
+# Installing Doxide
 
 Follow the instructions below for your operating system.
 

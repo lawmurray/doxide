@@ -1,4 +1,4 @@
-# Organizing
+# Organizing Documentation
 
 Doxide organizes documentation by creating a main page, and one additional page for each namespace and type, organized hierarchically. Variables, functions and operators are added to the page of the namespace or class to which they belong. Macros are added to the main page. Only entities with documentation comments are included, with the exception of namespaces, which are included as long as they are non-empty.
 
