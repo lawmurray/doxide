@@ -88,7 +88,8 @@ jobs:
             HOMEBREW_NO_AUTO_UPDATE=1 brew install \
               cmake \
               libyaml \
-              cli11
+              cli11 \
+              cairo
             pip3 install mkdocs mkdocs-material mkdocs-material[imaging]
       - run:
           name: Build
