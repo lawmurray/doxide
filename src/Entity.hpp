@@ -16,8 +16,7 @@ enum class EntityType {
   FUNCTION,
   OPERATOR,
   ENUMERATOR,
-  MACRO,
-  FILE
+  MACRO
 };
 
 /**

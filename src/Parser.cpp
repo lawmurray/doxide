@@ -104,8 +104,6 @@ void Parser::parse(const std::string& file, Entity& global) {
           entity.type = EntityType::ENUMERATOR;
         } else if (strncmp(name, "macro", length) == 0) {
           entity.type = EntityType::MACRO;
-        } else {
-          warn("unrecognized match");
         }
       }
     }
@@ -189,6 +187,7 @@ void Parser::parse(const std::string& file, Entity& global) {
 
 void Parser::translate(const std::string_view& comment, Entity& entity) {
   int indent = 0;
+  bool file = false;  // does this contain @file?
   Tokenizer tokenizer(comment);
   Token token = tokenizer.next();
   token = tokenizer.next();
@@ -261,7 +260,7 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
       } else if (token.substr(1) == "sa") {
         entity.docs.append(":material-eye-outline: **See**\n:   ");
       } else if (token.substr(1) == "file") {
-        entity.type = EntityType::FILE;
+        file = true;
       } else if (token.substr(1) == "internal") {
         entity.hide = true;
       } else if (token.substr(1) == "brief" ||
@@ -356,5 +355,8 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
       entity.docs.append(token.str());
     }
     token = tokenizer.next();
+  }
+  if (file) {
+    entity.docs.clear();
   }
 }

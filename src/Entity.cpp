@@ -85,8 +85,9 @@ void Entity::addToThis(const Entity& o) {
       enums.push_back(o);
     } else if (o.type == EntityType::MACRO) {
       macros.push_back(o);
+    } else if (o.type == EntityType::TEMPLATE) {
+      // ignore, likely a parse error within the template declaration
     } else {
-      std::cerr << o.decl << std::endl;
       warn("unrecognized entity type, ignoring");
     }
   }
