@@ -64,7 +64,7 @@ jobs:
               lcov \
               libyaml-dev \
               libcli11-dev
-            sudo pip3 install mkdocs mkdocs-material
+            sudo pip3 install mkdocs mkdocs-material mkdocs-material[imaging]
       - run:
           name: Build
           command: |
@@ -89,7 +89,7 @@ jobs:
               cmake \
               libyaml \
               cli11
-            pip3 install mkdocs mkdocs-material
+            pip3 install mkdocs mkdocs-material mkdocs-material[imaging]
       - run:
           name: Build
           command: |
