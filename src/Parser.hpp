@@ -53,14 +53,4 @@ private:
    * C++ query.
    */
   TSQuery* query;
-
-  /**
-   * Preprocessor parser;
-   */
-  TSParser* parserPreprocess;
-
-  /**
-   * Preprocessor query.
-   */
-  TSQuery* queryPreprocess;
 };

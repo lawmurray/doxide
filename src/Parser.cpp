@@ -4,9 +4,7 @@
 
 Parser::Parser() :
     parser(nullptr),
-    query(nullptr),
-    parserPreprocess(nullptr),
-    queryPreprocess(nullptr) {
+    query(nullptr) {
   uint32_t error_offset;
   TSQueryError error_type;
 
@@ -26,13 +24,10 @@ Parser::Parser() :
 Parser::~Parser() {
   ts_query_delete(query);
   ts_parser_delete(parser);
-  ts_query_delete(queryPreprocess);
-  ts_parser_delete(parserPreprocess);
 }
 
 void Parser::parse(const std::string& file, Entity& global) {
   std::string in = preprocess(file);
-  ts_parser_reset(parser);
   TSTree* tree = ts_parser_parse_string(parser, NULL, in.data(), in.size());
   if (!tree) {
     warn("cannot parse " << file << ", skipping");
@@ -179,15 +174,14 @@ void Parser::parse(const std::string& file, Entity& global) {
 
   ts_query_cursor_delete(cursor);
   ts_tree_delete(tree);
+  ts_parser_reset(parser);
 }
 
 std::string Parser::preprocess(const std::string& file) {
   static std::regex macro(R"([A-Z_][A-Z0-9_]{2,})");
 
   std::string in = gulp(file);
-  ts_parser_reset(parserPreprocess);
-  TSTree* tree = ts_parser_parse_string(parserPreprocess, NULL, in.data(),
-      in.size());
+  TSTree* tree = ts_parser_parse_string(parser, NULL, in.data(), in.size());
   TSNode root = ts_tree_root_node(tree);
   TSTreeCursor cursor = ts_tree_cursor_new(root);
   TSNode node = ts_tree_cursor_current_node(&cursor);
@@ -258,6 +252,7 @@ std::string Parser::preprocess(const std::string& file) {
 
   ts_tree_cursor_delete(&cursor);
   ts_tree_delete(tree);
+  ts_parser_reset(parser);
   return in;
 }
 
