@@ -559,9 +559,23 @@ public:
    * Attempt to move a member out of its class with `@@ingroup`, but should
    * remain in `ClassWithMembers`.
    * 
-   * @ingroup demo
+   * @ingroup parsing
    */
   int escapee;
+};
+
+/**
+ * Class template with members.
+ * 
+ * @ingroup parsing
+ */
+template<class T>
+class ClassTemplateWithMembers {
+public:
+  /**
+   * Test member variable.
+   */
+  int w;
 };
 
 /**

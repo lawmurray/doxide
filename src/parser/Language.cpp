@@ -14,6 +14,10 @@ const char* query_cpp = R""""(
          (namespace_identifier) @name)
        body: (declaration_list)? @body) @namespace)
 
+  ;; template declaration
+  ((template_declaration
+      (_) @body) @template)
+
   ;; class definition
   ((class_specifier
       name: (type_identifier) @name
@@ -38,27 +42,6 @@ const char* query_cpp = R""""(
       body: (enumerator_list)? @body
       ) @type)
 
-  ;; class template definition
-  ((template_declaration
-      (class_specifier
-        name: [(type_identifier) (template_type)] @name
-        body: (field_declaration_list)? @body
-        )) @type)
-
-  ;; struct template definition
-  ((template_declaration
-      (struct_specifier
-        name: [(type_identifier) (template_type)] @name
-        body: (field_declaration_list)? @body
-        )) @type)
-
-  ;; union template definition
-  ((template_declaration
-      (union_specifier
-        name: [(type_identifier) (template_type)] @name
-        body: (field_declaration_list)? @body
-        )) @type)
-
   ;; typedef
   ((type_definition
        declarator: (type_identifier) @name .) @type)
@@ -67,16 +50,10 @@ const char* query_cpp = R""""(
   ((alias_declaration
       name: (type_identifier) @name) @type)
 
-  ;; type alias template
-  ((template_declaration
-      (alias_declaration
-        name: (type_identifier) @name)) @type)
-
   ;; concept
-  ((template_declaration
-      (concept_definition
-        name: (identifier) @name
-        (_))) @concept)
+  ((concept_definition
+      name: (identifier) @name
+      (_)) @concept)
 
   ;; variable
   ((declaration
@@ -86,25 +63,37 @@ const char* query_cpp = R""""(
         (pointer_declarator (identifier) @name)
         (init_declarator
           declarator: [
-            ((identifier) @name)
+            (identifier) @name
+            (field_identifier) @name
             (reference_declarator (identifier) @name)
             (pointer_declarator (identifier) @name)
           ]
           value: (_) @value)
       ]
+      default_value: (_)? @value
     ) @variable)
+
+  ;; member variable
   ((field_declaration
       declarator: [
         (field_identifier) @name
-        (reference_declarator (field_identifier) @name)
-        (pointer_declarator (field_identifier) @name)
+        (reference_declarator (identifier) @name)
+        (pointer_declarator (identifier) @name)
+        (init_declarator
+          declarator: [
+            (identifier) @name
+            (field_identifier) @name
+            (reference_declarator (identifier) @name)
+            (pointer_declarator (identifier) @name)
+          ]
+          value: (_) @value)
       ]
       default_value: (_)? @value
     ) @variable)
 
   ;; function
   ((_
-      declarator:
+      declarator: [
         (function_declarator
           declarator: [
             (identifier) @name
@@ -112,31 +101,7 @@ const char* query_cpp = R""""(
             (destructor_name) @name
           ]
         )
-        [
-          (field_initializer_list)
-          body: (_)
-        ]? @body
-    ) @function)
-  ((_
-      declarator:
-        (_    ;; wildcard is reference_declarator or pointer_declarator
-          (function_declarator
-            declarator: [
-              (identifier) @name
-              (field_identifier) @name
-            ]
-          )
-        )
-        [
-          (field_initializer_list)
-          body: (_)
-        ]? @body
-    ) @function)
-
-  ;; function template
-  ((template_declaration
-     (_
-        declarator:
+        (reference_declarator
           (function_declarator
             declarator: [
               (identifier) @name
@@ -144,88 +109,41 @@ const char* query_cpp = R""""(
               (destructor_name) @name
             ]
           )
-          [
-            (field_initializer_list)
-            body: (_)
-          ]? @body
         )
-    ) @function)
-  ((template_declaration
-     (_
-        declarator:
-          (_    ;; wildcard is reference_declarator or pointer_declarator
-            (function_declarator
-              declarator: [
-                (identifier) @name
-                (field_identifier) @name
-              ]
-            )
+        (pointer_declarator
+          (function_declarator
+            declarator: [
+              (identifier) @name
+              (field_identifier) @name
+              (destructor_name) @name
+            ]
           )
-          [
-            (field_initializer_list)
-            body: (_)
-          ]? @body
         )
+        ]
+        [
+          (field_initializer_list)
+          body: (_)
+        ]? @body
     ) @function)
 
   ;; operator
   ((_
-      declarator:
+      declarator: [
         (function_declarator
-          declarator: [
-            (operator_name) @name
-          ]
+          declarator: (operator_name) @name
         )
-        [
-          (field_initializer_list)
-          body: (_)
-        ]? @body
-    ) @operator)
-  ((_
-      declarator:
-        (_    ;; wildcard is reference_declarator or pointer_declarator
+        (reference_declarator
           (function_declarator
-            declarator: [
-              (operator_name) @name
-            ]
+            declarator: (operator_name) @name
           )
         )
-        [
-          (field_initializer_list)
-          body: (_)
-        ]? @body
-    ) @operator)
-
-  ;; operator template
-  ((template_declaration
-     (_
-        declarator:
+        (pointer_declarator
           (function_declarator
-            declarator: [
-              (operator_name) @name
-            ]
+            declarator: (operator_name) @name
           )
-          [
-            (field_initializer_list)
-            body: (_)
-          ]? @body
         )
-    ) @operator)
-  ((template_declaration
-     (_
-        declarator:
-          (_    ;; wildcard is reference_declarator or pointer_declarator
-            (function_declarator
-              declarator: [
-                (operator_name) @name
-              ]
-            )
-          )
-          [
-            (field_initializer_list)
-            body: (_)
-          ]? @body
-        )
+        ]
+        body: (_)? @body
     ) @operator)
 
   ;; enumeration value

@@ -88,6 +88,8 @@ void Parser::parse(const std::string& file, Entity& global) {
 
         if (strncmp(name, "namespace", length) == 0) {
           entity.type = EntityType::NAMESPACE;
+        } else if (strncmp(name, "template", length) == 0) {
+          entity.type = EntityType::TEMPLATE;
         } else if (strncmp(name, "type", length) == 0) {
           entity.type = EntityType::TYPE;
         } else if (strncmp(name, "concept", length) == 0) {
@@ -137,15 +139,22 @@ void Parser::parse(const std::string& file, Entity& global) {
         ends.pop_back();
       }
 
-      /* override ingroup for class members, as cannot be moved out */
-      if (entities.back().type == EntityType::TYPE) {
+      /* override ingroup for entities that belong to a class or template, as
+       * cannot be moved out */
+      if (entities.back().type == EntityType::TYPE ||
+          entities.back().type == EntityType::TEMPLATE) {
         entity.ingroup.clear();
       }
 
       /* push to stack */
-      entities.emplace_back(std::move(entity));
-      starts.push_back(start);
-      ends.push_back(end);
+      if (entities.back().type == EntityType::TEMPLATE) {
+        /* merge this entity into the template */
+        entities.back().merge(entity);
+      } else {
+        entities.emplace_back(std::move(entity));
+        starts.push_back(start);
+        ends.push_back(end);
+      }
 
       /* reset */
       entity = Entity();

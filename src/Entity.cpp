@@ -86,6 +86,7 @@ void Entity::addToThis(const Entity& o) {
     } else if (o.type == EntityType::MACRO) {
       macros.push_back(o);
     } else {
+      std::cerr << o.decl << std::endl;
       warn("unrecognized entity type, ignoring");
     }
   }
@@ -106,11 +107,18 @@ void Entity::merge(const Entity& o) {
   operators.insert(operators.end(), o.operators.begin(), o.operators.end());
   macros.insert(macros.end(), o.macros.begin(), o.macros.end());
   enums.insert(enums.end(), o.enums.begin(), o.enums.end());
+
+  if (ingroup.empty()) {
+    ingroup = o.ingroup;
+  }
+  if (type == EntityType::TEMPLATE) {
+    decl += " ";
+    decl += o.decl;
+  }
+
   name = o.name;
-  decl = o.decl;
   docs += o.docs;
   brief += o.brief;
-  ingroup = o.ingroup;
-  type = EntityType::NAMESPACE;
+  type = o.type;
   hide = hide || o.hide;
 }

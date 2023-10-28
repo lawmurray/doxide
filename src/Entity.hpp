@@ -8,6 +8,7 @@
 enum class EntityType {
   NONE,
   NAMESPACE,
+  TEMPLATE,
   GROUP,
   TYPE,
   CONCEPT,
