@@ -1,4 +1,4 @@
-#include "parser/Tokenizer.hpp"
+#include "Tokenizer.hpp"
 
 Tokenizer::Tokenizer(const std::string_view& source) {
   iter = source.cbegin();

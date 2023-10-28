@@ -14,14 +14,14 @@ add_executable(doxide
     contrib/tree-sitter-cpp/src/parser.c
     contrib/tree-sitter-cpp/src/scanner.c
     src/doxide.cpp
-    src/parser/Language.cpp
-    src/parser/Parser.cpp
-    src/parser/Tokenizer.cpp
-    src/markdown/MarkdownGenerator.cpp
-    src/yaml/YAMLNode.cpp
-    src/yaml/YAMLParser.cpp
     src/Driver.cpp
     src/Entity.cpp
+    src/Language.cpp
+    src/MarkdownGenerator.cpp
+    src/Parser.cpp
+    src/Tokenizer.cpp
+    src/YAMLNode.cpp
+    src/YAMLParser.cpp
 )
 if(WIN32)
   # add icon

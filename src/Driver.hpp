@@ -2,7 +2,7 @@
 
 #include "doxide.hpp"
 #include "Entity.hpp"
-#include "yaml/YAMLNode.hpp"
+#include "YAMLNode.hpp"
 
 /**
  * Driver.

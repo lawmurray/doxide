@@ -1,4 +1,4 @@
-#include "yaml/YAMLParser.hpp"
+#include "YAMLParser.hpp"
 
 YAMLParser::YAMLParser() {
   yaml_parser_initialize(&parser);

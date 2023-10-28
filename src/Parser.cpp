@@ -1,6 +1,6 @@
-#include "parser/Parser.hpp"
-#include "parser/Tokenizer.hpp"
-#include "parser/Language.hpp"
+#include "Parser.hpp"
+#include "Tokenizer.hpp"
+#include "Language.hpp"
 
 Parser::Parser() :
     parser(nullptr),

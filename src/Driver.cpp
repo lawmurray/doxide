@@ -1,7 +1,7 @@
 #include "Driver.hpp"
-#include "yaml/YAMLParser.hpp"
-#include "parser/Parser.hpp"
-#include "markdown/MarkdownGenerator.hpp"
+#include "YAMLParser.hpp"
+#include "Parser.hpp"
+#include "MarkdownGenerator.hpp"
 
 Driver::Driver() :
     title("Untitled"),

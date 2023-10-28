@@ -1,7 +1,7 @@
 #pragma once
 
 #include "doxide.hpp"
-#include "yaml/YAMLNode.hpp"
+#include "YAMLNode.hpp"
 
 /**
  * Parser for YAML config files and YAML frontmatter of Markdown files.

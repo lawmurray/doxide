@@ -1,4 +1,4 @@
-#include "yaml/YAMLNode.hpp"
+#include "YAMLNode.hpp"
 
 bool YAMLNode::isValue() const {
   return std::holds_alternative<value_type>(contents);

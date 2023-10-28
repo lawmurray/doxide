@@ -1,4 +1,4 @@
-#include "markdown/MarkdownGenerator.hpp"
+#include "MarkdownGenerator.hpp"
 
 void MarkdownGenerator::generate(const std::filesystem::path& dir,
     const Entity& entity) {

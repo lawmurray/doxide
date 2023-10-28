@@ -1,7 +1,7 @@
 #pragma once
 
 #include "doxide.hpp"
-#include "parser/Token.hpp"
+#include "Token.hpp"
 
 /**
  * Tokenizer.
