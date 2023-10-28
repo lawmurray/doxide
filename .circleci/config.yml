@@ -31,16 +31,12 @@ commands:
   test:
     steps:
       - run:
-          name: Hello world test
+          name: Test
           command: |
             mkdir hello
             cd hello
             doxide init
-            doxide build
-            mkdocs build
-      - run:
-          name: Doxide documentation test
-          command: |
+            cp ../demo/*.hpp .
             doxide build
             mkdocs build
 
