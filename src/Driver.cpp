@@ -59,7 +59,7 @@ void Driver::clean() {
               frontmatter.value("generator") == "doxide") {
             std::filesystem::remove(entry.path());
           }
-        } catch (const std::runtime_error& e) {
+        } catch (const std::runtime_error&) {
           // ignore
         }
       }
