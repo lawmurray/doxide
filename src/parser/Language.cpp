@@ -16,7 +16,16 @@ const char* query_cpp = R""""(
 
   ;; template declaration
   ((template_declaration
-      (_) @body) @template)
+      [
+        (class_specifier)
+        (struct_specifier)
+        (union_specifier)
+        (alias_declaration)
+        (concept_definition)
+        (declaration)
+        (field_declaration)
+        (function_definition)
+      ] @body) @template)
 
   ;; class definition
   ((class_specifier
