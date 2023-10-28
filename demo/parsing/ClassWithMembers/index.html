@@ -295,30 +295,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Demo
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../../installation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Download
+    Installing Doxide
   </span>
   
 
@@ -337,45 +318,7 @@
         
   
   <span class="md-ellipsis">
-    Starting
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../writing/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Writing
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../organizing/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Organizing
+    Initializing Doxide
   </span>
   
 
@@ -394,7 +337,45 @@
         
   
   <span class="md-ellipsis">
-    Configuring
+    Configuring Doxide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../writing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Writing Documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../organizing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Organizing Documentation
   </span>
   
 
@@ -413,7 +394,26 @@
         
   
   <span class="md-ellipsis">
-    Running
+    Running Doxide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Demo
   </span>
   
 
@@ -506,20 +506,6 @@
           <li class="md-nav__item">
   <a href="#escapee" class="md-nav__link">
     escapee
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ptr" class="md-nav__link">
-    ptr
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ref" class="md-nav__link">
-    ref
   </a>
   
 </li>
@@ -668,16 +654,8 @@
 <td>Test member variable with brace initializer.</td>
 </tr>
 <tr>
-<td><a href="#ref">ref</a></td>
-<td>Test member variable of reference type.</td>
-</tr>
-<tr>
-<td><a href="#ptr">ptr</a></td>
-<td>Test member variable of pointer type.</td>
-</tr>
-<tr>
 <td><a href="#_uffffffce_uffffffbb">λ</a></td>
-<td>Test member variable with unicode character.</td>
+<td>Test member variable of reference type.</td>
 </tr>
 <tr>
 <td><a href="#escapee">escapee</a></td>
@@ -770,16 +748,6 @@
 <p>Attempt to move a member out of its class with <code>@ingroup</code>, but should
 remain in <code>ClassWithMembers</code>.</p>
 </div>
-<h3 id="ptr">ptr<a name="ptr"></a><a class="headerlink" href="#ptr" title="Permanent link">&para;</a></h3>
-<div class="admonition variable">
-<p class="admonition-title">int&#42; ptr</p>
-<p>Test member variable of pointer type.</p>
-</div>
-<h3 id="ref">ref<a name="ref"></a><a class="headerlink" href="#ref" title="Permanent link">&para;</a></h3>
-<div class="admonition variable">
-<p class="admonition-title">int&amp; ref</p>
-<p>Test member variable of reference type.</p>
-</div>
 <h3 id="w">w<a name="w"></a><a class="headerlink" href="#w" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
 <p class="admonition-title">int w</p>
@@ -798,6 +766,8 @@ remain in <code>ClassWithMembers</code>.</p>
 <h3 id="_1">λ<a name="_uffffffce_uffffffbb"></a><a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
 <p class="admonition-title">int λ</p>
+<p>Test member variable of reference type.</p>
+<p>Test member variable of pointer type.</p>
 <p>Test member variable with unicode character.</p>
 </div>
 <h2 id="operator-details">Operator Details<a class="headerlink" href="#operator-details" title="Permanent link">&para;</a></h2>
@@ -837,7 +807,7 @@ remain in <code>ClassWithMembers</code>.</p>
 <p>Test member function that returns a reference.</p>
 </div>
 <div class="admonition function">
-<p class="admonition-title">/&#42;&#42; &#42; Test member function that returns a pointer. &#42;/</p>
+<p class="admonition-title">int&#42; f(int x, int y)</p>
 <p>Test member function that returns a pointer.</p>
 </div>
 <div class="admonition function">

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Demonstration of some parsing capabilities, such as variables, functions, classes, enums, namespaces, templates, SFINAE, macros, etc.">
+        <meta name="description" content="Demonstration and test of some parsing capabilities, such as variables, functions, operators, classes, enums, namespaces, templates, concepts, macros, SFINAE, etc.">
       
       
       
@@ -59,7 +59,7 @@
       
         <meta  property="og:title"  content="Parsing - Doxide" >
       
-        <meta  property="og:description"  content="Demonstration of some parsing capabilities, such as variables, functions, classes, enums, namespaces, templates, SFINAE, macros, etc." >
+        <meta  property="og:description"  content="Demonstration and test of some parsing capabilities, such as variables, functions, operators, classes, enums, namespaces, templates, concepts, macros, SFINAE, etc." >
       
         <meta  property="og:image"  content="https://doxide.org/assets/images/social/demo/parsing/index.png" >
       
@@ -75,7 +75,7 @@
       
         <meta  name="twitter:title"  content="Parsing - Doxide" >
       
-        <meta  name="twitter:description"  content="Demonstration of some parsing capabilities, such as variables, functions, classes, enums, namespaces, templates, SFINAE, macros, etc." >
+        <meta  name="twitter:description"  content="Demonstration and test of some parsing capabilities, such as variables, functions, operators, classes, enums, namespaces, templates, concepts, macros, SFINAE, etc." >
       
         <meta  name="twitter:image"  content="https://doxide.org/assets/images/social/demo/parsing/index.png" >
       
@@ -295,30 +295,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Demo
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../installation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Download
+    Installing Doxide
   </span>
   
 
@@ -337,45 +318,7 @@
         
   
   <span class="md-ellipsis">
-    Starting
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../writing/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Writing
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../organizing/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Organizing
+    Initializing Doxide
   </span>
   
 
@@ -394,7 +337,45 @@
         
   
   <span class="md-ellipsis">
-    Configuring
+    Configuring Doxide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../writing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Writing Documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../organizing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Organizing Documentation
   </span>
   
 
@@ -413,7 +394,26 @@
         
   
   <span class="md-ellipsis">
-    Running
+    Running Doxide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Demo
   </span>
   
 
@@ -727,7 +727,7 @@
 
 <hr />
 <h1 id="parsing">Parsing<a class="headerlink" href="#parsing" title="Permanent link">&para;</a></h1>
-<p>Demonstration of some parsing capabilities, such as variables, functions, classes, enums, namespaces, templates, SFINAE, macros, etc.</p>
+<p>Demonstration and test of some parsing capabilities, such as variables, functions, operators, classes, enums, namespaces, templates, concepts, macros, SFINAE, etc.</p>
 <h2 id="types">Types<a class="headerlink" href="#types" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -744,6 +744,10 @@
 <tr>
 <td><a href="ClassTemplate/">ClassTemplate</a></td>
 <td>Test class template.</td>
+</tr>
+<tr>
+<td><a href="ClassTemplateWithMembers/">ClassTemplateWithMembers</a></td>
+<td>Class template with members.</td>
 </tr>
 <tr>
 <td><a href="ClassWithMembers/">ClassWithMembers</a></td>
@@ -856,7 +860,7 @@
 <tbody>
 <tr>
 <td><a href="#a">a</a></td>
-<td>Documented with `/** .</td>
+<td>Documented with <code>/** ... */</code> style preceding comment.</td>
 </tr>
 <tr>
 <td><a href="#b">b</a></td>
@@ -1099,7 +1103,7 @@
 <p>Test function.</p>
 </div>
 <div class="admonition function">
-<p class="admonition-title">/&#42;&#42; &#42; Test function that returns a reference. &#42; &#42; @ingroup parsing &#42;/</p>
+<p class="admonition-title">int&amp; f(int x, int y)</p>
 <p>Test function that returns a reference.</p>
 </div>
 <div class="admonition function">
