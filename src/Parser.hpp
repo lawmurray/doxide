@@ -19,12 +19,22 @@ public:
   ~Parser();
 
   /**
-   * Parse C++ source code.
+   * Parse C++ source.
    * 
    * @param file C++ source file name.
    * @param global Global namespace.
    */
   void parse(const std::string& file, Entity& global);
+
+private:
+  /**
+   * Preprocess C++ source.
+   * 
+   * @param file C++ source file name.
+   * 
+   * @return Preprocessed source.
+   */
+  std::string preprocess(const std::string& file);
 
   /**
    * Translate documentation comment.
@@ -34,14 +44,23 @@ public:
    */
   void translate(const std::string_view& comment, Entity& entity);
 
-private:
   /**
-   * Tree-sitter parser.
+   * C++ parser.
    */
   TSParser* parser;
 
   /**
-   * Tree-sitter query.
+   * C++ query.
    */
   TSQuery* query;
+
+  /**
+   * Preprocessor parser;
+   */
+  TSParser* parserPreprocess;
+
+  /**
+   * Preprocessor query.
+   */
+  TSQuery* queryPreprocess;
 };

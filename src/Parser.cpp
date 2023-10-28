@@ -4,18 +4,33 @@
 
 Parser::Parser() :
     parser(nullptr),
-    query(nullptr) {
+    query(nullptr),
+    parserPreprocess(nullptr),
+    queryPreprocess(nullptr) {
+  uint32_t error_offset;
+  TSQueryError error_type;
+
   /* parser */
   parser = ts_parser_new();
   ts_parser_set_language(parser, tree_sitter_cpp());
 
   /* query */
-  uint32_t error_offset;
-  TSQueryError error_type;
   query = ts_query_new(tree_sitter_cpp(), query_cpp, strlen(query_cpp),
       &error_offset, &error_type);
   if (error_type != TSQueryErrorNone) {
     std::string_view from(query_cpp + error_offset, 40);
+    error("invalid query starting " << from << "...");
+  }
+
+  /* preprocessor parser */
+  parserPreprocess = ts_parser_new();
+  ts_parser_set_language(parserPreprocess, tree_sitter_cpp());
+
+  /* preprocessor query */
+  queryPreprocess = ts_query_new(tree_sitter_cpp(), query_preprocess,
+      strlen(query_preprocess), &error_offset, &error_type);
+  if (error_type != TSQueryErrorNone) {
+    std::string_view from(query_preprocess + error_offset, 40);
     error("invalid query starting " << from << "...");
   }
 }
@@ -23,25 +38,18 @@ Parser::Parser() :
 Parser::~Parser() {
   ts_query_delete(query);
   ts_parser_delete(parser);
+  ts_query_delete(queryPreprocess);
+  ts_parser_delete(parserPreprocess);
 }
 
 void Parser::parse(const std::string& file, Entity& global) {
-  /* read file */
-  auto source = gulp(file);
-
-  /* initialize parser */
+  std::string in = preprocess(file);
   ts_parser_reset(parser);
-  TSTree *tree = ts_parser_parse_string(parser, NULL, source.data(),
-      source.size());
+  TSTree* tree = ts_parser_parse_string(parser, NULL, in.data(), in.size());
   if (!tree) {
     warn("cannot parse " << file << ", skipping");
   }
   TSNode node = ts_tree_root_node(tree);
-  if (ts_node_has_error(node)) {
-    warn("parse error in " << file << " but attempting recovery, this may " <<
-        "occur if the code is not syntactically valid without macro " <<
-        "expansion");
-  }
 
   /* initialize state */
   std::list<uint64_t> starts, ends;
@@ -67,7 +75,7 @@ void Parser::parse(const std::string& file, Entity& global) {
       const char* name = ts_query_capture_name_for_id(query, id, &length);
 
       if (strncmp(name, "docs", length) == 0) {
-        std::string docs = source.substr(k, l - k);
+        std::string docs = in.substr(k, l - k);
         Tokenizer tokenizer(docs);
         Token token = tokenizer.next();
         if (token.type == AFTER_OPEN) {
@@ -76,7 +84,7 @@ void Parser::parse(const std::string& file, Entity& global) {
           translate(docs, entity);
         }
       } else if (strncmp(name, "name", length) == 0) {
-        entity.name = source.substr(k, l - k);
+        entity.name = in.substr(k, l - k);
       } else if (strncmp(name, "body", length) == 0) {
         middle = ts_node_start_byte(node);
       } else if (strncmp(name, "value", length) == 0) {
@@ -111,17 +119,17 @@ void Parser::parse(const std::string& file, Entity& global) {
       /* workaround for entity declaration logic catching punctuation, e.g.
       * ending semicolon in declaration, the equals sign in a variable
       * declaration with initialization, or whitespace */
-      while (middle > start && (source[middle - 1] == ' ' ||
-          source[middle - 1] == '\t' ||
-          source[middle - 1] == '\n' ||
-          source[middle - 1] == '\r' ||
-          source[middle - 1] == '=' ||
-          source[middle - 1] == ';')) {
+      while (middle > start && (in[middle - 1] == ' ' ||
+          in[middle - 1] == '\t' ||
+          in[middle - 1] == '\n' ||
+          in[middle - 1] == '\r' ||
+          in[middle - 1] == '=' ||
+          in[middle - 1] == ';')) {
         --middle;
       }
 
       /* entity declaration */
-      entity.decl = source.substr(start, middle - start);
+      entity.decl = in.substr(start, middle - start);
 
       /* the final node represents the whole entity, pop the stack until we
         * find its direct parent, as determined using nested byte ranges */
@@ -183,6 +191,86 @@ void Parser::parse(const std::string& file, Entity& global) {
 
   ts_query_cursor_delete(cursor);
   ts_tree_delete(tree);
+}
+
+std::string Parser::preprocess(const std::string& file) {
+  static std::regex macro(R"([A-Z_][A-Z0-9_]{2,})");
+
+  std::string in = gulp(file);
+  ts_parser_reset(parserPreprocess);
+  TSTree* tree = ts_parser_parse_string(parserPreprocess, NULL, in.data(),
+      in.size());
+  TSNode root = ts_tree_root_node(tree);
+  TSTreeCursor cursor = ts_tree_cursor_new(root);
+  TSNode node = ts_tree_cursor_current_node(&cursor);
+  do {
+    uint32_t k = ts_node_start_byte(node);
+    uint32_t l = ts_node_end_byte(node);
+    if (ts_node_is_error(node)) {
+      /* parse error: assuming that the syntax is actually valid, this is
+       * usually caused by use of preprocessor macros, as the preprocessor is
+       * not run */
+      TSPoint from = ts_node_start_point(node);
+      TSPoint to = ts_node_end_point(node);
+
+      std::cerr << file << ':' << (from.row + 1) << ':' << from.column <<
+          ": warning: parse failed at '" << in.substr(k, l - k) << "'" <<
+          std::endl;
+
+      /* attempt recovery: step backward looking for a node that looks like
+       * preprocessor macro use, and erase it */
+      int back = 0;
+      while (!std::regex_match(in.substr(k, l - k), macro) &&
+          ts_tree_cursor_goto_previous_sibling(&cursor)) {
+        node = ts_tree_cursor_current_node(&cursor);
+        k = ts_node_start_byte(node);
+        l = ts_node_end_byte(node);
+        from = ts_node_start_point(node);
+        to = ts_node_end_point(node);
+        ++back;
+      }
+      if (std::regex_match(in.substr(k, l - k), macro)) {
+        /* looks like a macro, erase it */
+        std::cerr << file << ':' << (from.row + 1) << ':' << from.column <<
+            ": note: attempting recovery by erasing '" <<
+            in.substr(k, l - k) << "'" << std::endl;
+
+        /* overwrite with whitespace, rather than erasing entirely, to
+         * preserve line and column numbers from user's perspective */
+        in.replace(k, l - k, l - k, ' ');
+
+        /* update cursor state */
+        ts_tree_cursor_delete(&cursor);
+        TSInputEdit edit{k, l, l, from, to, to};
+        ts_tree_edit(tree, &edit);
+        ts_node_edit(&root, &edit);
+        ts_node_edit(&node, &edit);
+        cursor = ts_tree_cursor_new(node);
+        break;  // try again
+      } else {
+        /* go back to where we were */
+        warn("recovery failed, proceeding anyway");
+        while (back--) {
+          ts_tree_cursor_goto_next_sibling(&cursor);
+        }
+      }
+    }
+
+    /* next node */
+    if (ts_tree_cursor_goto_first_child(&cursor)) {
+      //
+    } else if (ts_tree_cursor_goto_next_sibling(&cursor)) {
+      //
+    } else while (ts_tree_cursor_goto_parent(&cursor) &&
+        !ts_tree_cursor_goto_next_sibling(&cursor)) {
+      //
+    }
+    node = ts_tree_cursor_current_node(&cursor);
+  } while (!ts_node_eq(node, root));
+
+  ts_tree_cursor_delete(&cursor);
+  ts_tree_delete(tree);
+  return in;
 }
 
 void Parser::translate(const std::string_view& comment, Entity& entity) {
