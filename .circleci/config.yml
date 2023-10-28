@@ -31,18 +31,17 @@ commands:
   test:
     steps:
       - run:
-          name: Init test
+          name: Hello world test
           command: |
             mkdir hello
             cd hello
             doxide init
+            doxide build
+            mkdocs build
       - run:
-          name: Build test
+          name: Doxide documentation test
           command: |
             doxide build
-      - run:
-          name: MkDocs test
-          command: |
             mkdocs build
 
 jobs:
