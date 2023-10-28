@@ -169,10 +169,3 @@ const char* query_cpp = R""""(
 
 ]
 )"""";
-
-const char* query_preprocess = R""""(
-[
-  (identifier)
-  (type_identifier)
-] @identifier
-)"""";

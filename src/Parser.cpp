@@ -21,18 +21,6 @@ Parser::Parser() :
     std::string_view from(query_cpp + error_offset, 40);
     error("invalid query starting " << from << "...");
   }
-
-  /* preprocessor parser */
-  parserPreprocess = ts_parser_new();
-  ts_parser_set_language(parserPreprocess, tree_sitter_cpp());
-
-  /* preprocessor query */
-  queryPreprocess = ts_query_new(tree_sitter_cpp(), query_preprocess,
-      strlen(query_preprocess), &error_offset, &error_type);
-  if (error_type != TSQueryErrorNone) {
-    std::string_view from(query_preprocess + error_offset, 40);
-    error("invalid query starting " << from << "...");
-  }
 }
 
 Parser::~Parser() {
