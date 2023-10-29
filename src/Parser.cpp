@@ -204,7 +204,10 @@ std::string Parser::preprocess(const std::string& file) {
       /* update tree */
       TSInputEdit edit{k, old_size, new_size, from, root_to, root_to};
       ts_tree_edit(tree, &edit);
-      tree = ts_parser_parse_string(parser, tree, in.data(), in.size());
+      ts_parser_reset(parser);
+      TSTree* old_tree = tree;
+      tree = ts_parser_parse_string(parser, old_tree, in.data(), in.size());
+      ts_tree_delete(old_tree);
       root = ts_tree_root_node(tree);
 
       /* restore cursor to same position as edit */
@@ -249,7 +252,10 @@ std::string Parser::preprocess(const std::string& file) {
         /* update tree */
         TSInputEdit edit{k, old_size, new_size, from, root_to, root_to};
         ts_tree_edit(tree, &edit);
-        tree = ts_parser_parse_string(parser, tree, in.data(), in.size());
+        ts_parser_reset(parser);
+        TSTree* old_tree = tree;
+        tree = ts_parser_parse_string(parser, old_tree, in.data(), in.size());
+        ts_tree_delete(old_tree);
         root = ts_tree_root_node(tree);
 
         /* restore cursor to same byte position as edit */
