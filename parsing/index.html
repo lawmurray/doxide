@@ -6,28 +6,32 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Inner type alias.">
+        <meta name="description" content="Modern documentation for Modern C++. Configure with YAML, output Markdown.">
       
       
       
-        <link rel="canonical" href="https://doxide.org/demo/parsing/ClassWithMembers/InnerTypeAlias/">
+        <link rel="canonical" href="https://doxide.org/parsing/">
       
       
+        <link rel="prev" href="../organizing/">
       
       
-      <link rel="icon" href="../../../../assets/logo_red.svg">
+        <link rel="next" href="../demo/">
+      
+      
+      <link rel="icon" href="../assets/logo_red.svg">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.6">
     
     
       
-        <title>InnerTypeAlias - Doxide</title>
+        <title>Parsing Considerations - Doxide</title>
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.35e1ed30.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.35e1ed30.min.css">
       
         
-        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.356b1318.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.356b1318.min.css">
       
       
 
@@ -46,9 +50,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../../stylesheets/doxide.css">
+      <link rel="stylesheet" href="../stylesheets/doxide.css">
     
-    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -57,11 +61,11 @@
       
         <meta  property="og:type"  content="website" >
       
-        <meta  property="og:title"  content="InnerTypeAlias - Doxide" >
+        <meta  property="og:title"  content="Parsing Considerations - Doxide" >
       
-        <meta  property="og:description"  content="Inner type alias." >
+        <meta  property="og:description"  content="Modern documentation for Modern C++. Configure with YAML, output Markdown." >
       
-        <meta  property="og:image"  content="https://doxide.org/assets/images/social/demo/parsing/ClassWithMembers/InnerTypeAlias/index.png" >
+        <meta  property="og:image"  content="https://doxide.org/assets/images/social/parsing.png" >
       
         <meta  property="og:image:type"  content="image/png" >
       
@@ -69,15 +73,15 @@
       
         <meta  property="og:image:height"  content="630" >
       
-        <meta  property="og:url"  content="https://doxide.org/demo/parsing/ClassWithMembers/InnerTypeAlias/" >
+        <meta  property="og:url"  content="https://doxide.org/parsing/" >
       
         <meta  name="twitter:card"  content="summary_large_image" >
       
-        <meta  name="twitter:title"  content="InnerTypeAlias - Doxide" >
+        <meta  name="twitter:title"  content="Parsing Considerations - Doxide" >
       
-        <meta  name="twitter:description"  content="Inner type alias." >
+        <meta  name="twitter:description"  content="Modern documentation for Modern C++. Configure with YAML, output Markdown." >
       
-        <meta  name="twitter:image"  content="https://doxide.org/assets/images/social/demo/parsing/ClassWithMembers/InnerTypeAlias/index.png" >
+        <meta  name="twitter:image"  content="https://doxide.org/assets/images/social/parsing.png" >
       
     
     
@@ -103,7 +107,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#innertypealias" class="md-skip">
+        <a href="#parsing-considerations" class="md-skip">
           Skip to content
         </a>
       
@@ -119,9 +123,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../../.." title="Doxide" class="md-header__button md-logo" aria-label="Doxide" data-md-component="logo">
+    <a href=".." title="Doxide" class="md-header__button md-logo" aria-label="Doxide" data-md-component="logo">
       
-  <img src="../../../../assets/logo_white.svg" alt="logo">
+  <img src="../assets/logo_white.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -138,7 +142,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              InnerTypeAlias
+              Parsing Considerations
             
           </span>
         </div>
@@ -248,9 +252,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../../.." title="Doxide" class="md-nav__button md-logo" aria-label="Doxide" data-md-component="logo">
+    <a href=".." title="Doxide" class="md-nav__button md-logo" aria-label="Doxide" data-md-component="logo">
       
-  <img src="../../../../assets/logo_white.svg" alt="logo">
+  <img src="../assets/logo_white.svg" alt="logo">
 
     </a>
     Doxide
@@ -276,7 +280,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../.." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -295,7 +299,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../installation/" class="md-nav__link">
+      <a href="../installation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -314,7 +318,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../getting-started/" class="md-nav__link">
+      <a href="../getting-started/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -333,7 +337,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../configuring/" class="md-nav__link">
+      <a href="../configuring/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -352,7 +356,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../command-line/" class="md-nav__link">
+      <a href="../command-line/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -371,7 +375,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../writing/" class="md-nav__link">
+      <a href="../writing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -390,7 +394,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../organizing/" class="md-nav__link">
+      <a href="../organizing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -407,9 +411,29 @@
       
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../../../parsing/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Parsing Considerations
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -418,6 +442,40 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#specifying-preprocessor-symbols" class="md-nav__link">
+    Specifying preprocessor symbols
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autocorrection" class="md-nav__link">
+    Autocorrection
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -428,7 +486,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../" class="md-nav__link">
+      <a href="../demo/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -447,7 +505,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../questions-and-answers/" class="md-nav__link">
+      <a href="../questions-and-answers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -480,6 +538,28 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#specifying-preprocessor-symbols" class="md-nav__link">
+    Specifying preprocessor symbols
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autocorrection" class="md-nav__link">
+    Autocorrection
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -496,10 +576,52 @@
   
 
 
-<hr />
-<h1 id="innertypealias">InnerTypeAlias<a class="headerlink" href="#innertypealias" title="Permanent link">&para;</a></h1>
-<p><strong>using InnerTypeAlias = int</strong></p>
-<p>Inner type alias.</p>
+<h1 id="parsing-considerations">Parsing Considerations<a class="headerlink" href="#parsing-considerations" title="Permanent link">&para;</a></h1>
+<p>Doxide may report parsing errors in C++ source files, even if they are building successfully with a C++ compiler. This can occur for one of two reasons:</p>
+<ol>
+<li>
+<p>The parser used, <a href="https://tree-sitter.github.io">Tree-sitter</a>, is different to that of a compiler. It may fail to parse code that is accepted by a compiler, or even accept code that is rejected by a compiler.</p>
+</li>
+<li>
+<p>Doxide does not run a preprocessor before parsing (it is unclear that this would even be desirable). Consequently, it may report parsing errors in situations where C++ syntax is only valid after preprocessing, due to the use of preprocessor macros.</p>
+</li>
+</ol>
+<p>To demonstrate the latter case, consider the following macro definition:
+<div class="highlight"><pre><span></span><code><span class="cp">#define NO_INLINE __attribute__((noinline))</span>
+</code></pre></div>
+This could be used in a function declaration to direct the compiler not to inline the function:
+<div class="highlight"><pre><span></span><code><span class="n">NO_INLINE</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+</code></pre></div>
+When the preprocessor is run, the function declaration expands to the valid C++ syntax:
+<div class="highlight"><pre><span></span><code><span class="n">__attribute__</span><span class="p">((</span><span class="n">noinline</span><span class="p">))</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+</code></pre></div>
+But prior to running the preprocessor, this is not valid C++ syntax. For example, a parser may consider <code>NO_INLINE</code> the return type and the following <code>int</code> an error.</p>
+<p>When a parse error is encountered, Doxide issues a warning, and applies some error recovery logic. If that error recovery logic fails, it simply skips the problematic tokens and continues the parse. In many cases such issues are inconsequential to the final documentation and can be safely ignored, e.g. a parse error in the body of a function will produce a warning, but have no affect on its documentation.</p>
+<p>Doxide has both manual and automated means for resolving these issues.</p>
+<h2 id="specifying-preprocessor-symbols">Specifying preprocessor symbols<a class="headerlink" href="#specifying-preprocessor-symbols" title="Permanent link">&para;</a></h2>
+<p>The <code>defines</code> section of the <a href="../configuring/">configuration file</a> may be used to set preprocessor symbols and their replacements---a sort of rudimentary substitute for a preprocessor. This also allows the symbols to be replaced with different values in the documentation than in the code. For example, the <code>NO_INLINE</code> example above could be resolved with the following in the configuration file:
+<div class="highlight"><pre><span></span><code><span class="nt">defines</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">NO_INLINE</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">__attribute__((noinline))</span>
+</code></pre></div>
+or, if we prefer not to include such detail in the documentation, it could be erased with:
+<div class="highlight"><pre><span></span><code><span class="nt">defines</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">NO_INLINE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+</code></pre></div></p>
+<h2 id="autocorrection">Autocorrection<a class="headerlink" href="#autocorrection" title="Permanent link">&para;</a></h2>
+<p>Because parse errors are usually the result of preprocessor use, Doxide has specific error recovery logic to attempt to autocorrect them. </p>
+<ol>
+<li>
+<p>When an error is encountered on a node in the parse tree, it steps back through the siblings of that node one by one.</p>
+</li>
+<li>
+<p>If it finds a sibling that looks like a preprocessor symbol, it erases that sibling and retries the parse.</p>
+</li>
+<li>
+<p>Otherwise, it ignores the parse error and continues.</p>
+</li>
+</ol>
+<p>For the purposes of step 2, following the usual convention for preprocessor symbols, a sibling looks like a preprocessor symbol if it has at least three characters consisting of uppercase letters, underscores, and digits, but starting with an uppercase letter or underscore.</p>
+<p>If Doxide applies an autocorrection it will issue a warning. Such warnings may be silenced by defining the symbols in the <code>defines</code> section of the configuration file as above.</p>
 
 
 
@@ -516,6 +638,44 @@
       
         <footer class="md-footer">
   
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../organizing/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Organizing Documentation">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Organizing Documentation
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../demo/" class="md-footer__link md-footer__link--next" aria-label="Next: Demo">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Demo
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
     
   
   <div class="md-footer-meta md-typeset">
@@ -591,10 +751,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.aecac24b.min.js"></script>
+      <script src="../assets/javascripts/bundle.aecac24b.min.js"></script>
       
     
   </body>
