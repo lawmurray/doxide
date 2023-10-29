@@ -40,6 +40,9 @@ The `doxide.yaml` configuration file supports the following entries.
     `groups`
     : Further subgroups, following the same schema.
 
+`defines`
+:   Mapping of preprocessor symbol definitions, where keys are the symbols
+    and values are their replacements. This may be used to troubleshoot [parsing](parsing.md) issues related to the use of preprocessor macros.
 
 !!! example
 
@@ -50,6 +53,10 @@ The `doxide.yaml` configuration file supports the following entries.
     files:
       - header.hpp
       - "*/*.hpp"  # quotes may be needed when using wildcards or other special characters
+      - "**/*.hpp"
+    defines:
+      SYMBOL: value
+      DEFINED_BUT_EMPTY_SYMBOL: ""      
     groups:
       - name: top
         title: Top-level group
