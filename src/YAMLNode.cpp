@@ -1,5 +1,9 @@
 #include "YAMLNode.hpp"
 
+bool YAMLNode::has(const key_type& key) const {
+  return isMapping() && mapping().contains(key);
+}
+
 bool YAMLNode::isValue() const {
   return std::holds_alternative<value_type>(contents);
 }

@@ -23,7 +23,6 @@ void Driver::init() {
   mkdocs_yaml = std::regex_replace(mkdocs_yaml, std::regex("site_description:"),
       "site_description: " + description);
 
-
   write_file_prompt(doxide_yaml, "doxide.yaml");
   write_file_prompt(mkdocs_yaml, "mkdocs.yaml");
   write_file_prompt(init_docs_javascripts_mathjax_js, "docs/javascripts/mathjax.js");
@@ -35,7 +34,7 @@ void Driver::build() {
   clean();
 
   /* parse */
-  Parser parser;
+  Parser parser(defines);
   for (auto file: files) {
     parser.parse(file, global);
   }
@@ -98,16 +97,40 @@ void Driver::config() {
   YAMLParser parser;
   YAMLNode root = parser.parse(path);
 
-  if (root.isValue("title")) {
-    title = root.value("title");
+  if (root.has("title")) {
+    if (root.isValue("title")) {
+      title = root.value("title");
+    } else {
+      warn("'title' must be a value in configuration.");
+    }
   }
-  if (root.isValue("description")) {
-    description = root.value("description");
+  if (root.has("description")) {
+    if (root.isValue("description")) {
+      description = root.value("description");
+    } else {
+      warn("'description' must be a value in configuration.");
+    }
   }
-  if (root.isValue("output")) {
-    output = root.value("output");
+  if (root.has("output")) {
+    if (root.isValue("output")) {
+      output = root.value("output");
+    } else {
+      warn("'output' must be a value in configuration.");
+    }
   }
-
+  if (root.has("defines")) {
+    if (root.isMapping("defines")) {
+      const auto& map = root.mapping("defines");
+      for (auto& [key, value] : map) {
+        if (value->isValue()) {
+          defines[key] = value->value();
+        }
+      }
+    } else {
+      warn("'defines' must be a mapping in configuration.");
+    }
+  }
+  
   /* expand file patterns in file list */
   files.clear();
   if (root.isSequence("files")) {

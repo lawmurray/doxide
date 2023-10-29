@@ -2,7 +2,8 @@
 #include "Tokenizer.hpp"
 #include "Language.hpp"
 
-Parser::Parser() :
+Parser::Parser(const std::unordered_map<std::string,std::string>& defines) :
+    defines(defines),
     parser(nullptr),
     query(nullptr) {
   uint32_t error_offset;
@@ -183,18 +184,39 @@ std::string Parser::preprocess(const std::string& file) {
   std::string in = gulp(file);
   TSTree* tree = ts_parser_parse_string(parser, NULL, in.data(), in.size());
   TSNode root = ts_tree_root_node(tree);
+  TSNode node = root;
   TSTreeCursor cursor = ts_tree_cursor_new(root);
-  TSNode node = ts_tree_cursor_current_node(&cursor);
   do {
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = ts_node_end_byte(node);
-    if (ts_node_is_error(node)) {
+    TSPoint from = ts_node_start_point(node);
+    TSPoint to = ts_node_end_point(node);
+    bool nextNodeChosen = false;
+
+    if (defines.contains(in.substr(k, l - k))) {
+      /* replace preprocessor macro */
+      std::string& value = defines.at(in.substr(k, l - k));
+      uint32_t old_size = in.size();
+      in.replace(k, l - k, value);
+      uint32_t new_size = in.size();
+      TSPoint root_to = ts_node_end_point(root);
+
+      /* update tree */
+      TSInputEdit edit{k, old_size, new_size, from, root_to, root_to};
+      ts_tree_edit(tree, &edit);
+      tree = ts_parser_parse_string(parser, tree, in.data(), in.size());
+      root = ts_tree_root_node(tree);
+
+      /* restore cursor to same position as edit */
+      ts_tree_cursor_reset(&cursor, root);
+      while (ts_tree_cursor_goto_first_child_for_byte(&cursor, k) >= 0);
+
+      /* next iteration from this position */
+      nextNodeChosen = true;
+    } else if (ts_node_is_error(node)) {
       /* parse error: assuming that the syntax is actually valid, this is
        * usually caused by use of preprocessor macros, as the preprocessor is
        * not run */
-      TSPoint from = ts_node_start_point(node);
-      TSPoint to = ts_node_end_point(node);
-
       std::cerr << file << ':' << (from.row + 1) << ':' << from.column <<
           ": warning: parse failed at '" << in.substr(k, l - k) << "'" <<
           std::endl;
@@ -219,19 +241,26 @@ std::string Parser::preprocess(const std::string& file) {
 
         /* overwrite with whitespace, rather than erasing entirely, to
          * preserve line and column numbers from user's perspective */
+        uint32_t old_size = in.size();
         in.replace(k, l - k, l - k, ' ');
+        uint32_t new_size = in.size();
+        TSPoint root_to = ts_node_end_point(root);
 
-        /* update cursor state */
-        ts_tree_cursor_delete(&cursor);
-        TSInputEdit edit{k, l, l, from, to, to};
+        /* update tree */
+        TSInputEdit edit{k, old_size, new_size, from, root_to, root_to};
         ts_tree_edit(tree, &edit);
-        ts_node_edit(&root, &edit);
-        ts_node_edit(&node, &edit);
-        cursor = ts_tree_cursor_new(node);
-        break;  // try again
+        tree = ts_parser_parse_string(parser, tree, in.data(), in.size());
+        root = ts_tree_root_node(tree);
+
+        /* restore cursor to same byte position as edit */
+        ts_tree_cursor_reset(&cursor, root);
+        while (ts_tree_cursor_goto_first_child_for_byte(&cursor, k) >= 0);
+
+        /* next iteration from this position */
+        nextNodeChosen = true;
       } else {
-        /* go back to where we were */
-        warn("recovery failed, proceeding anyway");
+        /* recovery failed, restore original position */
+        warn("recovery failed, continuing anyway");
         while (back--) {
           ts_tree_cursor_goto_next_sibling(&cursor);
         }
@@ -239,13 +268,18 @@ std::string Parser::preprocess(const std::string& file) {
     }
 
     /* next node */
-    if (ts_tree_cursor_goto_first_child(&cursor)) {
-      //
-    } else if (ts_tree_cursor_goto_next_sibling(&cursor)) {
-      //
-    } else while (ts_tree_cursor_goto_parent(&cursor) &&
-        !ts_tree_cursor_goto_next_sibling(&cursor)) {
-      //
+    if (!nextNodeChosen) {
+      if (strcmp(ts_node_type(node), "preproc_def") != 0 &&
+          strcmp(ts_node_type(node), "preproc_function_def") != 0 &&
+          ts_tree_cursor_goto_first_child(&cursor)) {
+        // ^ don't recurse into preprocessor definitions, as we do not want to
+        //   replace preprocessor macros there
+      } else if (ts_tree_cursor_goto_next_sibling(&cursor)) {
+        //
+      } else while (ts_tree_cursor_goto_parent(&cursor) &&
+          !ts_tree_cursor_goto_next_sibling(&cursor)) {
+        //
+      }
     }
     node = ts_tree_cursor_current_node(&cursor);
   } while (!ts_node_eq(node, root));

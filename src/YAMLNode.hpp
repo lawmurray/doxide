@@ -14,6 +14,11 @@ public:
   using variant_type = std::variant<value_type,sequence_type,mapping_type>;
 
   /**
+   * Does this have a given key?
+   */
+  bool has(const key_type& key) const;
+
+  /**
    * Is this a value?
    */
   bool isValue() const;
@@ -26,7 +31,7 @@ public:
    */
   template<class... Args>
   bool isValue(const key_type& key, Args&&... keys) const {
-    return isMapping() && mapping().contains(key) &&
+    return has(key) &&
         mapping().at(key)->isValue(std::forward<Args>(keys)...);
   }
 
@@ -43,7 +48,7 @@ public:
    */
   template<class... Args>
   bool isSequence(const key_type& key, Args&&... keys) const {
-    return isMapping() && mapping().contains(key) &&
+    return has(key) &&
         mapping().at(key)->isSequence(std::forward<Args>(keys)...);
   }
 
@@ -60,7 +65,7 @@ public:
    */
   template<class... Args>
   bool isMapping(const key_type& key, Args&&... keys) const {
-    return isMapping() && mapping().contains(key) &&
+    return has(key) &&
         mapping().at(key)->isMapping(std::forward<Args>(keys)...);
   }
 

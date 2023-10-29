@@ -11,7 +11,7 @@ public:
   /**
    * Constructor.
    */
-  Parser();
+  Parser(const std::unordered_map<std::string,std::string>& defines);
 
   /**
    * Destructor.
@@ -43,6 +43,11 @@ private:
    * @param entity Entity to document.
    */
   void translate(const std::string_view& comment, Entity& entity);
+
+  /**
+   * Defines.
+   */
+  std::unordered_map<std::string,std::string> defines;
 
   /**
    * C++ parser.

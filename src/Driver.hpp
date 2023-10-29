@@ -44,6 +44,11 @@ public:
    */
   std::string output;
 
+  /**
+   * Defines.
+   */
+  std::unordered_map<std::string,std::string> defines;
+
 private:
   /**
    * Read in the configuration file.
