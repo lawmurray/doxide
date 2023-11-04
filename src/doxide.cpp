@@ -147,33 +147,177 @@ R""""(<div class="md-copyright">
 </div>
 )"""";
 
-int main(int argc, char** argv) {
-  Driver driver;
-  CLI::App app{"Modern documentation for modern C++.\n"};
-  app.get_formatter()->column_width(30);
-  app.add_option("--title",
-      driver.title,
-      "Main page title.");
-  app.add_option("--description",
-      driver.description,
-      "Main page description.");
-  app.add_option("--output", driver.output,
-      "Output directory.");
-  app.add_subcommand("init",
-      "Initialize configuration files.")->
-      fallthrough()->
-      callback([&]() { driver.init(); });
-  app.add_subcommand("build",
-      "Build documentation in output directory.")->
-      fallthrough()->
-      callback([&]() { driver.build(); });
-  app.add_subcommand("clean",
-      "Clean output directory.")->
-      fallthrough()->
-      callback([&]() { driver.clean(); });
-  app.require_subcommand(1);
-  CLI11_PARSE(app, argc, argv);
-}
+const char* query_cpp = R""""(
+[
+  ;; documentation
+  ((comment) @docs)
+
+  ;; namespace definition
+  ((namespace_definition
+      name: (namespace_identifier) @name
+      body: (declaration_list)? @body) @namespace)
+
+  ;; nested namespace definition---matches once for each @name
+  ((namespace_definition
+      (nested_namespace_specifier
+         (namespace_identifier) @name)
+       body: (declaration_list)? @body) @namespace)
+
+  ;; template declaration
+  ((template_declaration
+      [
+        (class_specifier)
+        (struct_specifier)
+        (union_specifier)
+        (alias_declaration)
+        (concept_definition)
+        (declaration)
+        (field_declaration)
+        (function_definition)
+      ] @body) @template)
+
+  ;; class definition
+  ((class_specifier
+      name: (type_identifier) @name
+      body: (field_declaration_list)? @body
+      ) @type)
+
+  ;; struct definition
+  ((struct_specifier
+      name: (type_identifier) @name
+      body: (field_declaration_list)? @body
+      ) @type)
+
+  ;; union definition
+  ((union_specifier
+      name: (type_identifier) @name
+      body: (field_declaration_list)? @body
+      ) @type)
+
+  ;; enum definition
+  ((enum_specifier
+      name: (type_identifier) @name
+      body: (enumerator_list)? @body
+      ) @type)
+
+  ;; typedef
+  ((type_definition
+       declarator: (type_identifier) @name .) @type)
+
+  ;; type alias
+  ((alias_declaration
+      name: (type_identifier) @name) @type)
+
+  ;; concept
+  ((concept_definition
+      name: (identifier) @name
+      (_)) @concept)
+
+  ;; variable
+  ((declaration
+      declarator: [
+        (identifier) @name
+        (reference_declarator (identifier) @name)
+        (pointer_declarator (identifier) @name)
+        (init_declarator
+          declarator: [
+            (identifier) @name
+            (field_identifier) @name
+            (reference_declarator (identifier) @name)
+            (pointer_declarator (identifier) @name)
+          ]
+          value: (_) @value)
+      ]
+      default_value: (_)? @value
+    ) @variable)
+
+  ;; member variable
+  ((field_declaration
+      declarator: [
+        (field_identifier) @name
+        (reference_declarator (identifier) @name)
+        (pointer_declarator (identifier) @name)
+        (init_declarator
+          declarator: [
+            (identifier) @name
+            (field_identifier) @name
+            (reference_declarator (identifier) @name)
+            (pointer_declarator (identifier) @name)
+          ]
+          value: (_) @value)
+      ]
+      default_value: (_)? @value
+    ) @variable)
+
+  ;; function
+  ((_
+      declarator: [
+        (function_declarator
+          declarator: [
+            (identifier) @name
+            (field_identifier) @name
+            (destructor_name) @name
+          ]
+        )
+        (reference_declarator
+          (function_declarator
+            declarator: [
+              (identifier) @name
+              (field_identifier) @name
+              (destructor_name) @name
+            ]
+          )
+        )
+        (pointer_declarator
+          (function_declarator
+            declarator: [
+              (identifier) @name
+              (field_identifier) @name
+              (destructor_name) @name
+            ]
+          )
+        )
+        ]
+        [
+          (field_initializer_list)
+          body: (_)
+        ]? @body
+    ) @function)
+
+  ;; operator
+  ((_
+      declarator: [
+        (function_declarator
+          declarator: (operator_name) @name
+        )
+        (reference_declarator
+          (function_declarator
+            declarator: (operator_name) @name
+          )
+        )
+        (pointer_declarator
+          (function_declarator
+            declarator: (operator_name) @name
+          )
+        )
+        ]
+        body: (_)? @body
+    ) @operator)
+
+  ;; enumeration value
+  ((enumerator
+       name: (identifier) @name) @enumerator)
+
+  ;; macro
+  ((preproc_def
+      name: (identifier) @name
+      value: (_) @value) @macro)
+  ((preproc_function_def
+      name: (identifier) @name
+      value: (_) @value) @macro)
+
+]
+)"""";
 
 void write_file(const std::string& contents,
     const std::filesystem::path& dst) {
@@ -230,4 +374,32 @@ std::string gulp(const std::filesystem::path& src) {
   }
   contents.append(buffer, in.gcount());
   return contents;
+}
+
+int main(int argc, char** argv) {
+  Driver driver;
+  CLI::App app{"Modern documentation for modern C++.\n"};
+  app.get_formatter()->column_width(30);
+  app.add_option("--title",
+      driver.title,
+      "Main page title.");
+  app.add_option("--description",
+      driver.description,
+      "Main page description.");
+  app.add_option("--output", driver.output,
+      "Output directory.");
+  app.add_subcommand("init",
+      "Initialize configuration files.")->
+      fallthrough()->
+      callback([&]() { driver.init(); });
+  app.add_subcommand("build",
+      "Build documentation in output directory.")->
+      fallthrough()->
+      callback([&]() { driver.build(); });
+  app.add_subcommand("clean",
+      "Clean output directory.")->
+      fallthrough()->
+      callback([&]() { driver.clean(); });
+  app.require_subcommand(1);
+  CLI11_PARSE(app, argc, argv);
 }

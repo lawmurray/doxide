@@ -60,6 +60,11 @@ extern const char* init_docs_stylesheets_doxide_css ;
 extern const char* init_docs_overrides_partials_copyright_html;
 
 /**
+ * Query for C++.
+ */
+extern const char* query_cpp;
+
+/**
  * Write a whole file.
  */
 void write_file(const std::string& contents, const std::filesystem::path& dst);
@@ -79,3 +84,8 @@ void copy_file_prompt(const std::filesystem::path& src, const std::filesystem::p
  * Read in a whole file.
  */
 std::string gulp(const std::filesystem::path& src);
+
+/**
+ * Tree-sitter language.
+ */
+extern "C" const TSLanguage* tree_sitter_cpp();

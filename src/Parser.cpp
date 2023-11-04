@@ -1,6 +1,5 @@
 #include "Parser.hpp"
 #include "Tokenizer.hpp"
-#include "Language.hpp"
 
 Parser::Parser(const std::unordered_map<std::string,std::string>& defines) :
     defines(defines),
