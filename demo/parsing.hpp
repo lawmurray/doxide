@@ -556,6 +556,33 @@ public:
   }
 
   /**
+   * Test assignment operator.
+   */
+  ClassWithMembers& operator=(const ClassWithMembers& o);
+
+  /**
+   * Test conversion operator declaration.
+   */
+  operator int() const;
+
+  /**
+   * Test reference conversion operator declaration.
+   */
+  operator int&() const;
+
+  /**
+   * Test pointer conversion operator declaration.
+   */
+  operator int*() const;
+
+  /**
+   * Test conversion operator definition.
+   */
+  operator double() const {
+    return 0.0;
+  }
+
+  /**
    * Attempt to move a member out of its class with `@@ingroup`, but should
    * remain in `ClassWithMembers`.
    * 

@@ -300,6 +300,9 @@ const char* query_cpp = R""""(
             declarator: (operator_name) @name
           )
         )
+        (operator_cast
+          type: (_) @name
+        )
         ]
         body: (_)? @body
     ) @operator)
