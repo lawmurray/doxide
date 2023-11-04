@@ -571,8 +571,29 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#double" class="md-nav__link">
+    double
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#int" class="md-nav__link">
+    int
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#operator" class="md-nav__link">
     operator+
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operator_1" class="md-nav__link">
+    operator=
   </a>
   
 </li>
@@ -715,6 +736,26 @@
 <td><a href="#operator_u002b">operator+</a></td>
 <td>Test inline member operator template with SFINAE.</td>
 </tr>
+<tr>
+<td><a href="#operator_u003d">operator=</a></td>
+<td>Test assignment operator.</td>
+</tr>
+<tr>
+<td><a href="#int">int</a></td>
+<td>Test conversion operator declaration.</td>
+</tr>
+<tr>
+<td><a href="#int">int</a></td>
+<td>Test reference conversion operator declaration.</td>
+</tr>
+<tr>
+<td><a href="#int">int</a></td>
+<td>Test pointer conversion operator declaration.</td>
+</tr>
+<tr>
+<td><a href="#double">double</a></td>
+<td>Test conversion operator definition.</td>
+</tr>
 </tbody>
 </table>
 <h2 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link">&para;</a></h2>
@@ -790,6 +831,24 @@ remain in <code>ClassWithMembers</code>.</p>
 <p>Test member variable with unicode character.</p>
 </div>
 <h2 id="operator-details">Operator Details<a class="headerlink" href="#operator-details" title="Permanent link">&para;</a></h2>
+<h3 id="double">double<a name="double"></a><a class="headerlink" href="#double" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">operator double() const</p>
+<p>Test conversion operator definition.</p>
+</div>
+<h3 id="int">int<a name="int"></a><a class="headerlink" href="#int" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">operator int() const</p>
+<p>Test conversion operator declaration.</p>
+</div>
+<div class="admonition function">
+<p class="admonition-title">operator int&amp;() const</p>
+<p>Test reference conversion operator declaration.</p>
+</div>
+<div class="admonition function">
+<p class="admonition-title">operator int&#42;() const</p>
+<p>Test pointer conversion operator declaration.</p>
+</div>
 <h3 id="operator">operator+<a name="operator_u002b"></a><a class="headerlink" href="#operator" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
 <p class="admonition-title">int operator+(int x, int y)</p>
@@ -814,6 +873,11 @@ remain in <code>ClassWithMembers</code>.</p>
 <div class="admonition function">
 <p class="admonition-title">template&lt;class T, std::enable_if_t&lt;std::is_integral_v&lt;T&gt;, int&gt; = 0&gt; T operator+(T x, T y)</p>
 <p>Test inline member operator template with SFINAE.</p>
+</div>
+<h3 id="operator_1">operator=<a name="operator_u003d"></a><a class="headerlink" href="#operator_1" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">ClassWithMembers&amp; operator=(const ClassWithMembers&amp; o)</p>
+<p>Test assignment operator.</p>
 </div>
 <h2 id="function-details">Function Details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
 <h3 id="f">f<a name="f"></a><a class="headerlink" href="#f" title="Permanent link">&para;</a></h3>
