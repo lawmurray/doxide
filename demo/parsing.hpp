@@ -80,14 +80,28 @@ int z{0};
  * 
  * @ingroup parsing
  */
-int& ref = x;
+int& ref1;
 
 /**
  * Test variable of pointer type.
  * 
  * @ingroup parsing
  */
-int* ptr = &x;
+int* ptr1;
+
+/**
+ * Test variable of reference type with initializer.
+ * 
+ * @ingroup parsing
+ */
+int& ref2 = x;
+
+/**
+ * Test variable of pointer type with initializer.
+ * 
+ * @ingroup parsing
+ */
+int* ptr2 = &x;
 
 /**
  * Test variable with unicode character.
@@ -436,12 +450,12 @@ public:
   /**
    * Test member variable.
    */
-  int w;
+  int x;
 
   /**
    * Test member variable with initializer.
    */
-  int x = 0;
+  int y = 0;
 
   /**
    * Test member variable with brace initializer.
@@ -451,12 +465,22 @@ public:
   /**
    * Test member variable of reference type.
    */
-  int& ref = x;
+  int& ref1;
 
   /**
    * Test member variable of pointer type.
    */
-  int* ptr = &x;
+  int* ptr1;
+
+  /**
+   * Test member variable of reference type with initializer.
+   */
+  int& ref2 = x;
+
+  /**
+   * Test member variable of pointer type with initializer.
+   */
+  int* ptr2 = &x;
 
   /**
    * Test member variable with unicode character.

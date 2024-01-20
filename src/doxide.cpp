@@ -222,7 +222,6 @@ const char* query_cpp = R""""(
         (init_declarator
           declarator: [
             (identifier) @name
-            (field_identifier) @name
             (reference_declarator (identifier) @name)
             (pointer_declarator (identifier) @name)
           ]
@@ -235,14 +234,16 @@ const char* query_cpp = R""""(
   ((field_declaration
       declarator: [
         (field_identifier) @name
-        (reference_declarator (identifier) @name)
-        (pointer_declarator (identifier) @name)
+        (reference_declarator (field_identifier) @name)
+        (pointer_declarator (field_identifier) @name)
         (init_declarator
           declarator: [
             (identifier) @name
             (field_identifier) @name
             (reference_declarator (identifier) @name)
+            (reference_declarator (field_identifier) @name)
             (pointer_declarator (identifier) @name)
+            (pointer_declarator (field_identifier) @name)
           ]
           value: (_) @value)
       ]
