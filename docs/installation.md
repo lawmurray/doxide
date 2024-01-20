@@ -86,6 +86,18 @@ Follow the instructions below for your operating system.
 
 ## :simple-fedora: Fedora
 
+??? info "Fedora 39 (x86_64)"
+    Install Doxide:
+    ```
+    sudo dnf config-manager --add-repo https://download.indii.org/rpm/fedora/39/indii.org.repo
+    sudo dnf update
+    sudo dnf install doxide
+    ```
+    Install [MkDocs][mkdocs] and [Material for MkDocs][material]:
+    ```
+    pip install mkdocs mkdocs-material
+    ```
+
 ??? info "Fedora 38 (x86_64)"
     Install Doxide:
     ```
@@ -142,20 +154,6 @@ Follow the instructions below for your operating system.
     sudo zypper addrepo https://download.indii.org/rpm/opensuse/tumbleweed/indii.org.repo
     sudo zypper refresh
     sudo zypper install doxide
-    ```
-    Install [MkDocs][mkdocs] and [Material for MkDocs][material]:
-    ```
-    pip install mkdocs mkdocs-material
-    ```
-
-## :simple-linux: Mageia
-
-??? info "Mageia 8 (x86_64)"
-    Install Doxide:
-    ```
-    sudo dnf config-manager --add-repo https://download.indii.org/rpm/mageia/8/indii.org.repo
-    sudo dnf update
-    sudo dnf install doxide
     ```
     Install [MkDocs][mkdocs] and [Material for MkDocs][material]:
     ```
