@@ -117,8 +117,7 @@ pip install mkdocs mkdocs-material
 ```
 [See below](#using-a-python-virtual-environment) for running MkDocs in a Python virtual environment instead.
 
-!!! tip
-    Material for MkDocs is included as a package in some Linux distributions, but typically an older version, and mileage may vary when using it with Doxide. As Material for MkDocs is updated frequently, it is recommended to install it with `pip` instead, to get the latest version.
+Material for MkDocs is included as a package in some Linux distributions, but typically an older version, and mileage may vary when using it with Doxide. As Material for MkDocs is updated frequently, it is recommended to install it with `pip` instead, to get the latest version.
 
 ## :simple-apple: Mac
 
