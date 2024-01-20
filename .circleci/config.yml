@@ -106,7 +106,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            choco install -y cmake.portable mkdocs mkdocs-material sudo
+            choco install -y cmake.portable python sudo
+            pip3 install mkdocs mkdocs-material mkdocs-material[imaging]
             cd contrib\libyaml
             mkdir build
             cd build
