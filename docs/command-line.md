@@ -1,4 +1,4 @@
-# Running Doxide
+# Command-line reference
 
 Commands are:
 

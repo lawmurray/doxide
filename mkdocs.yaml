@@ -52,8 +52,8 @@ markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -72,9 +72,10 @@ nav:
   - installation.md
   - getting-started.md
   - configuring.md
-  - command-line.md
+  - running.md
   - writing.md
   - organizing.md
   - parsing.md
+  - command-line.md
   - demo/index.md
   - questions-and-answers.md
