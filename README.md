@@ -13,6 +13,8 @@ Doxide is a documentation generator for C++.
 
 By generating Markdown, Doxide opens C++ documentation to the whole wide world of static site generation tools and themes. There is particular support for [MkDocs](https://www.mkdocs.org/) and the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme, as on the Doxide website. A little extra effort enables alternatives such as [Jekyll](https://jekyllrb.com/) and [Hugo](https://gohugo.io/). Other formats such as PDF are possible too, via [Pandoc](https://pandoc.org/).
 
+Instructions for installing from source are provided here. See the [website](https://doxide.org/installation) for packages for Linux, Mac, and Windows that are easier to install.
+
 
 ## License
 
@@ -22,9 +24,36 @@ License. You may obtain a copy of the License at
 <http://www.apache.org/licenses/LICENSE-2.0>.
 
 
-## Installation
+## Requirements
 
-See the [website](https://doxide.org/installation) for packages for Linux, Mac, and Windows.
+* A C++ toolchain for building.
+* [CMake](https://cmake.org) for building.
+* [LibYAML](https://pyyaml.org/wiki/LibYAML).
+* Possibly [ICU](https://icu.unicode.org/), depending on your platform.
+
+On Debian-based Linux systems, install these with:
+```
+sudo apt install cmake libyaml-dev 
+```
+On RPM-based Linux systems, install these with (replace `dnf` for Fedora with `zypper` for openSUSE, or otherwise for your distribution):
+```
+dnf install cmake libyaml-devel libicu-devel
+```
+On Mac systems using Homebrew, use:
+```
+brew install cmake libyaml
+```
+On Windows, build and install LibYAML separately from the `contrib/libyaml` directory.
+
+There are further dependencies that do not need to be installed separately. They are included as submodules in the `contrib/` subdirectory either because they are not universally available in package managers or specific versions are required. The Doxide build handles these for you, but for reference:
+
+* [CLI11](https://cliutils.github.io/CLI11/book/)
+* [Tree-sitter](https://tree-sitter.github.io/tree-sitter/)
+* [Tree-sitter C++ language support](https://github.com/tree-sitter/tree-sitter-cpp)
+* [glob](https://github.com/p-ranav/glob)
+
+
+## Installation
 
 To install from source, clone the Doxide repo with:
 ```
