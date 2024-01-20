@@ -223,6 +223,7 @@ std::string MarkdownGenerator::frontmatter(const Entity& entity) {
   buf << "title: " << title(entity) << std::endl;
   buf << "description: " << line(brief(entity)) << std::endl;
   buf << "generator: doxide" << std::endl;
+  buf << "---" << std::endl;
   buf << std::endl;
   return buf.str();
 }
