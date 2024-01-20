@@ -14,6 +14,12 @@ YAMLNode YAMLParser::parse(const std::string& file) {
       contents.size());
   YAMLNode root;
   int done = 0;
+
+  /* YAML frontmatter in Markdown files is delimited with starting and ending
+   * lines of `---`; this is the document separator for YAML, so we should
+   * stop after two documents (the first empty, the second the frontmatter) */
+  int docs = 0;
+
   while (!done) {
     if (!yaml_parser_parse(&parser, &event)) {
       throw std::runtime_error("syntax error in doxide.yaml");
@@ -22,11 +28,13 @@ YAMLNode YAMLParser::parse(const std::string& file) {
       parseSequence(root);
     } else if (event.type == YAML_MAPPING_START_EVENT) {
       parseMapping(root);
+    } else if (event.type == YAML_DOCUMENT_END_EVENT) {
+      done = ++docs < 2;
+      yaml_event_delete(&event);
+    } else if (event.type == YAML_STREAM_END_EVENT) {
+      done = true;
+      yaml_event_delete(&event);
     } else {
-      /* YAML_STREAM_END_EVENT marks the end of file,
-       * YAML_DOCUMENT_END_EVENT marks the end of frontmatter */
-      done = event.type == YAML_STREAM_END_EVENT ||
-          event.type == YAML_DOCUMENT_END_EVENT;
       yaml_event_delete(&event);
     }
   }

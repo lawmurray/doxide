@@ -4,201 +4,206 @@ void MarkdownGenerator::generate(const std::filesystem::path& dir,
     const Entity& entity) {
   std::ofstream out;
   std::filesystem::create_directories(dir / sanitize(entity.name));
-  out.open(dir / sanitize(entity.name) / "index.md");
-  out << frontmatter(entity) << std::endl;
+  std::filesystem::path file = dir / sanitize(entity.name) / "index.md";
+  if (std::filesystem::exists(file)) {
+    warn(file.string() << " exists, will not overwrite");
+  } else {
+    out.open(file);
+    out << frontmatter(entity) << std::endl;
 
-  /* header */
-  out << "# " << title(entity) << std::endl;
-  out << std::endl;
-  if (entity.type == EntityType::TYPE) {
-    out << "**" << htmlize(line(entity.decl)) << "**" << std::endl;
+    /* header */
+    out << "# " << title(entity) << std::endl;
     out << std::endl;
-  }
-  out << entity.docs << std::endl;
-  out << std::endl;
+    if (entity.type == EntityType::TYPE) {
+      out << "**" << htmlize(line(entity.decl)) << "**" << std::endl;
+      out << std::endl;
+    }
+    out << entity.docs << std::endl;
+    out << std::endl;
 
-  /* groups */
-  for (auto& child : entity.groups) {
-    out << ":material-format-section: [" << title(child) << ']';
-    out << "(" << sanitize(child.name) << "/index.md)" << std::endl;
-    out << ":   " << line(brief(child)) << std::endl;
-    out << std::endl;
-  }
+    /* groups */
+    for (auto& child : entity.groups) {
+      out << ":material-format-section: [" << title(child) << ']';
+      out << "(" << sanitize(child.name) << "/index.md)" << std::endl;
+      out << ":   " << line(brief(child)) << std::endl;
+      out << std::endl;
+    }
 
-  /* namespaces */
-  for (auto& child : view(entity.namespaces, true)) {
-    if (!child->empty()) {
-      out << ":material-package: [" << child->name << ']';
-      out << "(" << sanitize(child->name) << "/index.md)" << std::endl;
-      out << ":   " << line(brief(*child)) << std::endl;
-      out << std::endl;
+    /* namespaces */
+    for (auto& child : view(entity.namespaces, true)) {
+      if (!child->empty()) {
+        out << ":material-package: [" << child->name << ']';
+        out << "(" << sanitize(child->name) << "/index.md)" << std::endl;
+        out << ":   " << line(brief(*child)) << std::endl;
+        out << std::endl;
+      }
     }
-  }
 
-  /* brief descriptions */
-  if (entity.types.size() > 0) {
-    out << "## Types" << std::endl;
-    out << std::endl;
-    out << "| Name | Description |" << std::endl;
-    out << "| ---- | ----------- |" << std::endl;
-    for (auto& child : view(entity.types,
-        entity.type == EntityType::NAMESPACE ||
-        entity.type == EntityType::GROUP)) {
-      out << "| [" << child->name << "](" << sanitize(child->name) <<
-          "/index.md) | ";
-      out << line(brief(*child)) << " |" << std::endl;
+    /* brief descriptions */
+    if (entity.types.size() > 0) {
+      out << "## Types" << std::endl;
+      out << std::endl;
+      out << "| Name | Description |" << std::endl;
+      out << "| ---- | ----------- |" << std::endl;
+      for (auto& child : view(entity.types,
+          entity.type == EntityType::NAMESPACE ||
+          entity.type == EntityType::GROUP)) {
+        out << "| [" << child->name << "](" << sanitize(child->name) <<
+            "/index.md) | ";
+        out << line(brief(*child)) << " |" << std::endl;
+      }
+      out << std::endl;
     }
-    out << std::endl;
-  }
-  if (entity.concepts.size() > 0) {
-    out << "## Concepts" << std::endl;
-    out << std::endl;
-    out << "| Name | Description |" << std::endl;
-    out << "| ---- | ----------- |" << std::endl;
-    for (auto& child : view(entity.concepts,
-        entity.type == EntityType::NAMESPACE ||
-        entity.type == EntityType::GROUP)) {
-      out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
-      out << line(brief(*child)) << " |" << std::endl;
+    if (entity.concepts.size() > 0) {
+      out << "## Concepts" << std::endl;
+      out << std::endl;
+      out << "| Name | Description |" << std::endl;
+      out << "| ---- | ----------- |" << std::endl;
+      for (auto& child : view(entity.concepts,
+          entity.type == EntityType::NAMESPACE ||
+          entity.type == EntityType::GROUP)) {
+        out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
+        out << line(brief(*child)) << " |" << std::endl;
+      }
+      out << std::endl;
     }
-    out << std::endl;
-  }
-  if (entity.macros.size() > 0) {
-    out << "## Macros" << std::endl;
-    out << std::endl;
-    out << "| Name | Description |" << std::endl;
-    out << "| ---- | ----------- |" << std::endl;
-    for (auto& child : view(entity.macros,
-        entity.type == EntityType::NAMESPACE ||
-        entity.type == EntityType::GROUP)) {
-      out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
-      out << line(brief(*child)) << " |" << std::endl;
+    if (entity.macros.size() > 0) {
+      out << "## Macros" << std::endl;
+      out << std::endl;
+      out << "| Name | Description |" << std::endl;
+      out << "| ---- | ----------- |" << std::endl;
+      for (auto& child : view(entity.macros,
+          entity.type == EntityType::NAMESPACE ||
+          entity.type == EntityType::GROUP)) {
+        out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
+        out << line(brief(*child)) << " |" << std::endl;
+      }
+      out << std::endl;
     }
-    out << std::endl;
-  }
-  if (entity.variables.size() > 0) {
-    out << "## Variables" << std::endl;
-    out << std::endl;
-    out << "| Name | Description |" << std::endl;
-    out << "| ---- | ----------- |" << std::endl;
-    for (auto& child : view(entity.variables,
-        entity.type == EntityType::NAMESPACE ||
-        entity.type == EntityType::GROUP)) {
-      out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
-      out << line(brief(*child)) << " |" << std::endl;
+    if (entity.variables.size() > 0) {
+      out << "## Variables" << std::endl;
+      out << std::endl;
+      out << "| Name | Description |" << std::endl;
+      out << "| ---- | ----------- |" << std::endl;
+      for (auto& child : view(entity.variables,
+          entity.type == EntityType::NAMESPACE ||
+          entity.type == EntityType::GROUP)) {
+        out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
+        out << line(brief(*child)) << " |" << std::endl;
+      }
+      out << std::endl;
     }
-    out << std::endl;
-  }
-  if (entity.operators.size() > 0) {
-    out << "## Operators" << std::endl;
-    out << std::endl;
-    out << "| Name | Description |" << std::endl;
-    out << "| ---- | ----------- |" << std::endl;
-    for (auto& child : view(entity.operators,
-        entity.type == EntityType::NAMESPACE ||
-        entity.type == EntityType::GROUP)) {
-      out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
-      out << line(brief(*child)) << " |" << std::endl;
+    if (entity.operators.size() > 0) {
+      out << "## Operators" << std::endl;
+      out << std::endl;
+      out << "| Name | Description |" << std::endl;
+      out << "| ---- | ----------- |" << std::endl;
+      for (auto& child : view(entity.operators,
+          entity.type == EntityType::NAMESPACE ||
+          entity.type == EntityType::GROUP)) {
+        out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
+        out << line(brief(*child)) << " |" << std::endl;
+      }
+      out << std::endl;
     }
-    out << std::endl;
-  }
-  if (entity.functions.size() > 0) {
-    out << "## Functions" << std::endl;
-    out << std::endl;
-    out << "| Name | Description |" << std::endl;
-    out << "| ---- | ----------- |" << std::endl;
-    for (auto& child : view(entity.functions,
-        entity.type == EntityType::NAMESPACE ||
-        entity.type == EntityType::GROUP)) {
-      out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
-      out << line(brief(*child)) << " |" << std::endl;
+    if (entity.functions.size() > 0) {
+      out << "## Functions" << std::endl;
+      out << std::endl;
+      out << "| Name | Description |" << std::endl;
+      out << "| ---- | ----------- |" << std::endl;
+      for (auto& child : view(entity.functions,
+          entity.type == EntityType::NAMESPACE ||
+          entity.type == EntityType::GROUP)) {
+        out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
+        out << line(brief(*child)) << " |" << std::endl;
+      }
+      out << std::endl;
     }
-    out << std::endl;
-  }
 
-  /* for an enumerator, output the possible values */
-  if (entity.enums.size() > 0) {
-    for (auto& child : entity.enums) {
-      out << "**" << child.decl << "**" << std::endl;
-      out << ":   " << child.docs << std::endl;
+    /* for an enumerator, output the possible values */
+    if (entity.enums.size() > 0) {
+      for (auto& child : entity.enums) {
+        out << "**" << child.decl << "**" << std::endl;
+        out << ":   " << child.docs << std::endl;
+        out << std::endl;
+      }
       out << std::endl;
     }
-    out << std::endl;
-  }
 
-  /* detailed descriptions */
-  if (entity.concepts.size() > 0) {
-    out << "## Concept Details" << std::endl;
-    out << std::endl;
-    for (auto& child : view(entity.concepts, true)) {
-      out << "### " << child->name;
-      out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
+    /* detailed descriptions */
+    if (entity.concepts.size() > 0) {
+      out << "## Concept Details" << std::endl;
       out << std::endl;
-      out << "!!! concept \"" << htmlize(line(child->decl)) << '"' << std::endl;
-      out << std::endl;
-      out << indent(child->docs) << std::endl;
-      out << std::endl;
-    }
-  }
-  if (entity.macros.size() > 0) {
-    out << "## Macro Details" << std::endl;
-    out << std::endl;
-    for (auto& child : view(entity.macros, true)) {
-      out << "### " << child->name;
-      out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
-      out << std::endl;
-      out << "!!! macro \"" << htmlize(line(child->decl)) << '"' << std::endl;
-      out << std::endl;
-      out << indent(child->docs) << std::endl;
-      out << std::endl;
-    }
-  }
-  if (entity.variables.size() > 0) {
-    out << "## Variable Details" << std::endl;
-    out << std::endl;
-    for (auto& child : view(entity.variables, true)) {
-      out << "### " << child->name;
-      out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
-      out << std::endl;
-      out << "!!! variable \"" << htmlize(line(child->decl)) << '"' << std::endl;
-      out << std::endl;
-      out << indent(child->docs) << std::endl;
-      out << std::endl;
-    }
-  }
-  if (entity.operators.size() > 0) {
-    out << "## Operator Details" << std::endl;
-    out << std::endl;
-    std::string prev;
-    for (auto& child : view(entity.operators, true)) {
-      if (child->name != prev) {
-        /* heading only for the first overload of this name */
+      for (auto& child : view(entity.concepts, true)) {
         out << "### " << child->name;
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
+        out << "!!! concept \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        out << std::endl;
+        out << indent(child->docs) << std::endl;
+        out << std::endl;
       }
-      out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
-      out << std::endl;
-      out << indent(child->docs) << std::endl;
-      out << std::endl;
-      prev = child->name;
     }
-  }
-  if (entity.functions.size() > 0) {
-    out << "## Function Details" << std::endl;
-    out << std::endl;
-    std::string prev;
-    for (auto& child : view(entity.functions, true)) {
-      if (child->name != prev) {
-        /* heading only for the first overload of this name */
+    if (entity.macros.size() > 0) {
+      out << "## Macro Details" << std::endl;
+      out << std::endl;
+      for (auto& child : view(entity.macros, true)) {
         out << "### " << child->name;
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
+        out << std::endl;
+        out << "!!! macro \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        out << std::endl;
+        out << indent(child->docs) << std::endl;
+        out << std::endl;
       }
-      out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
+    }
+    if (entity.variables.size() > 0) {
+      out << "## Variable Details" << std::endl;
       out << std::endl;
-      out << indent(child->docs) << std::endl;
+      for (auto& child : view(entity.variables, true)) {
+        out << "### " << child->name;
+        out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
+        out << std::endl;
+        out << "!!! variable \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        out << std::endl;
+        out << indent(child->docs) << std::endl;
+        out << std::endl;
+      }
+    }
+    if (entity.operators.size() > 0) {
+      out << "## Operator Details" << std::endl;
       out << std::endl;
-      prev = child->name;
+      std::string prev;
+      for (auto& child : view(entity.operators, true)) {
+        if (child->name != prev) {
+          /* heading only for the first overload of this name */
+          out << "### " << child->name;
+          out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
+          out << std::endl;
+        }
+        out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        out << std::endl;
+        out << indent(child->docs) << std::endl;
+        out << std::endl;
+        prev = child->name;
+      }
+    }
+    if (entity.functions.size() > 0) {
+      out << "## Function Details" << std::endl;
+      out << std::endl;
+      std::string prev;
+      for (auto& child : view(entity.functions, true)) {
+        if (child->name != prev) {
+          /* heading only for the first overload of this name */
+          out << "### " << child->name;
+          out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
+        }
+        out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        out << std::endl;
+        out << indent(child->docs) << std::endl;
+        out << std::endl;
+        prev = child->name;
+      }
     }
   }
 
@@ -220,6 +225,7 @@ std::string MarkdownGenerator::frontmatter(const Entity& entity) {
   /* use YAML frontmatter to ensure correct capitalization of title, and to
    * mark as managed by Doxide */
   std::stringstream buf;
+  buf << "---" << std::endl;
   buf << "title: " << title(entity) << std::endl;
   buf << "description: " << line(brief(entity)) << std::endl;
   buf << "generator: doxide" << std::endl;
