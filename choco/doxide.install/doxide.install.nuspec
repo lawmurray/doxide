@@ -4,6 +4,7 @@
     <id>doxide.install</id>
     <version>0.0.0</version>
     <packageSourceUrl>https://github.com/lawmurray/doxide/tree/main/choco/doxide.install</packageSourceUrl>
+    <releaseNotes>https://github.com/lawmurray/doxide/releases/</releaseNotes>
     <owners>Lawrence Murray</owners>
     <title>doxide (Install)</title>
     <authors>Lawrence Murray</authors>

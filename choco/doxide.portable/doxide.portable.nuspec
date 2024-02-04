@@ -3,6 +3,7 @@
   <metadata>
     <id>doxide.portable</id>
     <version>0.0.0</version>
+    <releaseNotes>https://github.com/lawmurray/doxide/releases/</releaseNotes>
     <packageSourceUrl>https://github.com/lawmurray/doxide/tree/main/choco/doxide.portable</packageSourceUrl>
     <owners>Lawrence Murray</owners>
     <title>doxide (Portable)</title>

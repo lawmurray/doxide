@@ -4,6 +4,7 @@
     <id>doxide</id>
     <version>0.0.0</version>
     <packageSourceUrl>https://github.com/lawmurray/doxide/tree/main/choco/doxide</packageSourceUrl>
+    <releaseNotes>https://github.com/lawmurray/doxide/releases/</releaseNotes>
     <owners>Lawrence Murray</owners>
     <title>doxide</title>
     <authors>Lawrence Murray</authors>
