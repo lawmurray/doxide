@@ -468,6 +468,12 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
     token = tokenizer.next();
   }
   if (file) {
+    /* discard */
     entity.docs.clear();
+  } else {
+    /* always add a new line, as multiple doc comments may appear before an
+     * entity (e.g. multiple end-of-line style comments) and these should be
+     * separated with new lines */
+    entity.docs.append("\n");
   }
 }

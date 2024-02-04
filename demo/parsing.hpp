@@ -39,9 +39,13 @@ int b;
 
 ///
 /// Documented with `///` style preceding comment that wraps across multiple
-/// lines.
+/// lines and has multiple paragraphs.
+///
+///This is the second paragraph.
 ///
 /// @ingroup parsing
+///
+/// This is the third paragraph.
 ///
 int c;
 
