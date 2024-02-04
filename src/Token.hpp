@@ -8,9 +8,9 @@
  */
 enum TokenType : int {
   NONE = 0,
-  AFTER_OPEN = 1 << 1,
-  BEFORE_OPEN = 1 << 2,
-  CLOSE = 1 << 3,
+  OPEN_AFTER = 1 << 1,   // opening sequence for doc comment after entity
+  OPEN_BEFORE = 1 << 2,  // opening sequence for doc comment before entity
+  CLOSE = 1 << 3,        // closing sequence for doc comment
   COMMAND = 1 << 4,
   PARA = 1 << 5,
   LINE = 1 << 6,
@@ -27,8 +27,8 @@ enum TokenType : int {
  * precludes a match to a later.
  */
 static auto regexes = {
-  std::make_pair(AFTER_OPEN, std::regex("(?:/\\*\\*|/\\*!|///|//!)<")),
-  std::make_pair(BEFORE_OPEN, std::regex("(?:/\\*\\*|/\\*!|///|//!)")),
+  std::make_pair(OPEN_AFTER, std::regex("(?:/\\*\\*|/\\*!|///|//!)<")),
+  std::make_pair(OPEN_BEFORE, std::regex("(?:/\\*\\*|/\\*!|///|//!)")),
   std::make_pair(CLOSE, std::regex("\\*/")),
   std::make_pair(COMMAND, std::regex("[@\\\\](?:param(?:\\[(?:in|out|in,out)\\])?|\\w+|@|/|f[\\$\\[\\]])")),
 

@@ -61,9 +61,9 @@ void Parser::parse(const std::string& file, Entity& global) {
         std::string docs = in.substr(k, l - k);
         Tokenizer tokenizer(docs);
         Token token = tokenizer.next();
-        if (token.type == AFTER_OPEN) {
+        if (token.type == OPEN_AFTER) {
           translate(docs, entities.back());
-        } else if (token.type == BEFORE_OPEN) {
+        } else if (token.type == OPEN_BEFORE) {
           translate(docs, entity);
         }
       } else if (strncmp(name, "name", length) == 0) {
@@ -178,6 +178,7 @@ void Parser::parse(const std::string& file, Entity& global) {
 }
 
 std::string Parser::preprocess(const std::string& file) {
+  /* regex to detect preprocessor macro names */
   static std::regex macro(R"([A-Z_][A-Z0-9_]{2,})");
 
   std::string in = gulp(file);

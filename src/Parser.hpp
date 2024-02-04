@@ -28,7 +28,8 @@ public:
 
 private:
   /**
-   * Preprocess C++ source.
+   * Preprocess C++ source, replacing preprocessor macros as defined in the
+   * config file, and attempting to recover from any parse errors.
    * 
    * @param file C++ source file name.
    * 
