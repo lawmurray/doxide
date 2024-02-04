@@ -16,17 +16,16 @@ function Update-Package {
 }
 
 function Build-Package {
-    param($Package)
+    param($Package, $Version)
     Set-Location -Path $Package
-    choco pack
-    choco install $Package --debug --verbose --force --source .
+    choco pack --version $Version
     Set-Location -Path ..
 }
 
 function Test-Package {
-    param($Package)
+    param($Package, $Version)
     Set-Location -Path $Package
-    choco install $Package --debug --verbose --source .
+    choco install $Package --version $Version --source .
     choco uninstall $Package
     Set-Location -Path ..
 }
@@ -44,13 +43,13 @@ Update-Package -Package doxide.portable -Download doxide.exe
 Update-Package -Package doxide.install -Download doxide-installer.exe
 Update-Package -Package doxide
 
-Build-Package -Package doxide.portable
-Build-Package -Package doxide.install
-Build-Package -Package doxide
+Build-Package -Package doxide.portable -Version $version
+Build-Package -Package doxide.install -Version $version
+Build-Package -Package doxide -Version $version
 
-Test-Package -Package doxide.portable
-Test-Package -Package doxide.install
-Test-Package -Package doxide
+Test-Package -Package doxide.portable -Version $version
+Test-Package -Package doxide.install -Version $version
+#Test-Package -Package doxide -Version $version
 
 Release-Package -Package doxide.portable -Version $version
 Release-Package -Package doxide.install -Version $version
