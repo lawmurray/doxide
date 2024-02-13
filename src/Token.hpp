@@ -42,7 +42,7 @@ static auto regexes = {
 
   std::make_pair(SENTENCE, std::regex("[.!?]")),
   std::make_pair(WHITESPACE, std::regex("\\s+")),
-  std::make_pair(WORD, std::regex("[^@\\s\\*/]+")),
+  std::make_pair(WORD, std::regex("[^\\s\\*/]+")),
   std::make_pair(STAR, std::regex("\\*")),
   std::make_pair(SLASH, std::regex("/"))
 };
