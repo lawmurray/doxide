@@ -100,8 +100,8 @@ void Parser::parse(const std::string& file, Entity& global) {
     }
     if (entity.type != EntityType::NONE) {
       /* workaround for entity declaration logic catching punctuation, e.g.
-      * ending semicolon in declaration, the equals sign in a variable
-      * declaration with initialization, or whitespace */
+       * ending semicolon in declaration, the equals sign in a variable
+       * declaration with initialization, or whitespace */
       while (middle > start && (in[middle - 1] == ' ' ||
           in[middle - 1] == '\t' ||
           in[middle - 1] == '\n' ||
@@ -115,7 +115,7 @@ void Parser::parse(const std::string& file, Entity& global) {
       entity.decl = in.substr(start, middle - start);
 
       /* the final node represents the whole entity, pop the stack until we
-        * find its direct parent, as determined using nested byte ranges */
+       * find its direct parent, as determined using nested byte ranges */
       while (start < starts.back() || ends.back() < end) {
         Entity back = std::move(entities.back());
         entities.pop_back();
@@ -278,8 +278,8 @@ std::string Parser::preprocess(const std::string& file) {
       if (strcmp(ts_node_type(node), "preproc_def") != 0 &&
           strcmp(ts_node_type(node), "preproc_function_def") != 0 &&
           ts_tree_cursor_goto_first_child(&cursor)) {
-        // ^ don't recurse into preprocessor definitions, as we do not want to
-        //   replace preprocessor macros there
+        // ^ do not recurse into preprocessor definitions, as we do not want
+        //   to replace preprocessor macros there
       } else if (ts_tree_cursor_goto_next_sibling(&cursor)) {
         //
       } else while (ts_tree_cursor_goto_parent(&cursor) &&
@@ -448,7 +448,7 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
         entity.docs.append("/");
       } else if (token.str().at(0) == '\\') {
         /* unrecognized command starting with legacy backslash, could just
-          * be e.g. a LaTeX macro, output as is */
+         * be e.g. a LaTeX macro, output as is */
         entity.docs.append(token.str());
       } else {
         warn("unrecognized command: " << token.str());
