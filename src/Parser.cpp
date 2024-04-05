@@ -297,12 +297,14 @@ std::string Parser::preprocess(const std::string& file) {
 }
 
 void Parser::translate(const std::string_view& comment, Entity& entity) {
-  int indent = 0;
-  bool file = false;  // does this contain @file?
   Tokenizer tokenizer(comment);
   Token token = tokenizer.next();
   token = tokenizer.next();
-  while (token.type) {
+  bool first = true;  // first token
+  if (!token.type) {
+    /* empty end-of-line comment, consider end of paragraph */
+    entity.indent = std::max(entity.indent - 4, 0);
+  } else while (token.type) {
     if (token.type & COMMAND) {
       /* non-legacy commands */
       if (token.substr(1) == "param" ||
@@ -310,22 +312,22 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
         entity.docs.append(":material-location-enter: **Parameter** `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
-        indent = 4;
+        entity.indent = 4;
       } else if (token.substr(1) == "param[out]") {
         entity.docs.append(":material-location-exit: **Parameter** `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
-        indent = 4;
+        entity.indent = 4;
       } else if (token.substr(1) == "param[in,out]") {
         entity.docs.append(":material-location-enter::material-location-exit: **Parameter** `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
-        indent = 4;
+        entity.indent = 4;
       } else if (token.substr(1) == "tparam") {
         entity.docs.append(":material-code-tags: **Template parameter** `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
-        indent = 4;
+        entity.indent = 4;
       } else if (token.substr(1) == "p") {
         entity.docs.append("`");
         entity.docs.append(tokenizer.consume(WORD).str());
@@ -359,8 +361,8 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
         entity.docs.append("!!! ");
         entity.docs.append(token.substr(1));
         entity.docs.append("\n");
-        indent += 4;
-        entity.docs.append(indent, ' ');
+        entity.indent += 4;
+        entity.docs.append(entity.indent, ' ');
       } else if (token.substr(1) == "ingroup") {
         entity.ingroup = tokenizer.consume(WORD).str();
 
@@ -370,9 +372,8 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
         entity.docs.append(":material-location-exit: **Return**\n:   ");
       } else if (token.substr(1) == "sa") {
         entity.docs.append(":material-eye-outline: **See**\n:   ");
-      } else if (token.substr(1) == "file") {
-        file = true;
-      } else if (token.substr(1) == "internal") {
+      } else if (token.substr(1) == "file" ||
+          token.substr(1) == "internal") {
         entity.hide = true;
       } else if (token.substr(1) == "brief" ||
           token.substr(1) == "short") {
@@ -418,16 +419,16 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
         entity.docs.append("```");
       } else if (token.substr(1) == "attention") {
         entity.docs.append("!!! warning \"Attention\"\n");
-        indent += 4;
-        entity.docs.append(indent, ' ');
+        entity.indent = 4;
+        entity.docs.append(entity.indent, ' ');
       } else if (token.substr(1) == "todo") {
         entity.docs.append("!!! example \"To-do\"\n");
-        indent += 4;
-        entity.docs.append(indent, ' ');
+        entity.indent = 4;
+        entity.docs.append(entity.indent, ' ');
       } else if (token.substr(1) == "remark") {
         entity.docs.append("!!! quote \"Remark\"\n");
-        indent += 4;
-        entity.docs.append(indent, ' ');
+        entity.indent = 4;
+        entity.docs.append(entity.indent, ' ');
       } else if (token.substr(1) == "def" ||
           token.substr(1) == "var" ||
           token.substr(1) == "fn" ||
@@ -456,24 +457,22 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
       }
     } else if (token.type & PARA) {
       entity.docs.append("\n\n");
-      indent = std::max(indent - 4, 0);
+      entity.indent = std::max(entity.indent - 4, 0);
     } else if (token.type & LINE) {
       entity.docs.append("\n");
-      entity.docs.append(indent, ' ');
+      entity.docs.append(entity.indent, ' ');
     } else if (token.type & CLOSE) {
       //
     } else {
+      entity.docs.append(first*entity.indent, ' ');
       entity.docs.append(token.str());
     }
     token = tokenizer.next();
+    first = false;
   }
-  if (file) {
-    /* discard */
-    entity.docs.clear();
-  } else {
-    /* always add a new line, as multiple doc comments may appear before an
-     * entity (e.g. multiple end-of-line style comments) and these should be
-     * separated with new lines */
-    entity.docs.append("\n");
-  }
+
+  /* always add a new line, as multiple doc comments may appear before an
+   * entity (e.g. multiple end-of-line style comments) and these should be
+   * separated with new lines */
+  entity.docs.append("\n");
 }

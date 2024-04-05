@@ -156,6 +156,11 @@ struct Entity {
   EntityType type;
 
   /**
+   * Current indent level of the documentation comment for this entity.
+   */
+  int indent;
+
+  /**
    * Hide this node?
    */
   bool hide;

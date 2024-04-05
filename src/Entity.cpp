@@ -2,6 +2,7 @@
 
 Entity::Entity() :
    type(EntityType::NONE),
+   indent(0),
    hide(false) {
   //
 }
