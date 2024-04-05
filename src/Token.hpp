@@ -27,8 +27,8 @@ enum TokenType : int {
  * precludes a match to a later.
  */
 static auto regexes = {
-  std::make_pair(OPEN_AFTER, std::regex("(?:/\\*\\*|/\\*!|///|//!)<")),
-  std::make_pair(OPEN_BEFORE, std::regex("(?:/\\*\\*|/\\*!|///|//!)")),
+  std::make_pair(OPEN_AFTER, std::regex("(?:/\\*\\*|/\\*!|///|//!)<[ \t]*")),
+  std::make_pair(OPEN_BEFORE, std::regex("(?:/\\*\\*|/\\*!|///|//!)[ \t]*")),
   std::make_pair(CLOSE, std::regex("\\*/")),
   std::make_pair(COMMAND, std::regex("[@\\\\](?:param(?:\\[(?:in|out|in,out)\\])?|\\w+|@|/|f[\\$\\[\\]])")),
 
