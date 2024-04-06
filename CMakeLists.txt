@@ -18,6 +18,7 @@ add_executable(doxide
     src/Entity.cpp
     src/MarkdownGenerator.cpp
     src/Parser.cpp
+    src/Token.cpp
     src/Tokenizer.cpp
     src/YAMLNode.cpp
     src/YAMLParser.cpp

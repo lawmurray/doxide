@@ -57,34 +57,26 @@ class Token {
 public:
   /**
    * Constructor.
+   * 
+   * @param type Token type.
+   * @param first Iterator to first character in source.
+   * @param last Iterator to one-past-last character in source.
    */
   Token(const TokenType& type,
       const std::string_view::const_iterator& first,
-      const std::string_view::const_iterator& last) :
-      type(type),
-      first(first),
-      last(last) {
-    //
-  }
+      const std::string_view::const_iterator& last);
 
   /**
    * Get token as string.
    */
-  std::string_view str() const {
-    /* std::string_view(first, last) ought to work with C++20 support, but
-     * using the below overload of the constructor extends support to some
-     * older compilers, such as gcc with gnu++2a support only, and MSVC 2022 */
-    return std::string_view(&*first, std::distance(first, last));
-  }
+  std::string_view str() const;
 
   /**
    * Get substring of the token as a string.
    * 
    * @param pos Position of the first character.
    */
-  std::string_view substr(size_t pos = 0) const {
-    return str().substr(pos);
-  }
+  std::string_view substr(size_t pos = 0) const;
 
   /**
    * Token type.
