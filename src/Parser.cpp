@@ -464,7 +464,7 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
     } else if (token.type & CLOSE) {
       //
     } else {
-      entity.docs.append(first*entity.indent, ' ');
+      entity.docs.append(first*entity.indent, ' ');  // indent on first token
       entity.docs.append(token.str());
     }
     token = tokenizer.next();
