@@ -611,7 +611,7 @@ public:
   }
 
   /**
-   * Attempt to move a member out of its class with `@@ingroup`, but should
+   * Attempt to move a member out of its class with `@ingroup`, but should
    * remain in `ClassWithMembers`.
    * 
    * @ingroup parsing
