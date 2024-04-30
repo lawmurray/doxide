@@ -6,6 +6,15 @@ Follow the instructions below for your operating system.
 
 Install Doxide from your package manager by adding appropriate repository for your Linux distribution below. If your distribution is not listed, you can instead [install from source](#install-from-source).
 
+??? info ":simple-ubuntu: Ubuntu 24.04 Noble Numbat (amd64)"
+    Install Doxide:
+    ```
+    echo 'deb http://download.indii.org/deb noble main' | sudo tee /etc/apt/sources.list.d/indii.org.list
+    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.org.gpg > /dev/null
+    sudo apt update
+    sudo apt install doxide
+    ```
+
 ??? info ":simple-ubuntu: Ubuntu 23.10 Mantic Minotaur (amd64)"
     Install Doxide:
     ```
@@ -58,6 +67,14 @@ Install Doxide from your package manager by adding appropriate repository for yo
     curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.org.gpg > /dev/null
     sudo apt update
     sudo apt install doxide
+    ```
+
+??? info ":simple-fedora: Fedora 40 (x86_64)"
+    Install Doxide:
+    ```
+    sudo dnf config-manager --add-repo https://download.indii.org/rpm/fedora/40/indii.org.repo
+    sudo dnf update
+    sudo dnf install doxide
     ```
 
 ??? info ":simple-fedora: Fedora 39 (x86_64)"
