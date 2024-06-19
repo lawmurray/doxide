@@ -63,7 +63,6 @@ markdown_extensions:
       alternate_style: true 
 plugins:
   - search
-  - social
 extra_css:
   - stylesheets/doxide.css
 
