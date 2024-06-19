@@ -309,22 +309,22 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
       /* non-legacy commands */
       if (token.substr(1) == "param" ||
           token.substr(1) == "param[in]") {
-        entity.docs.append(":material-location-enter: **Parameter** `");
+        entity.docs.append("\n:material-location-enter: **Parameter** `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
         entity.indent = 4;
       } else if (token.substr(1) == "param[out]") {
-        entity.docs.append(":material-location-exit: **Parameter** `");
+        entity.docs.append("\n:material-location-exit: **Parameter** `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
         entity.indent = 4;
       } else if (token.substr(1) == "param[in,out]") {
-        entity.docs.append(":material-location-enter::material-location-exit: **Parameter** `");
+        entity.docs.append("\n:material-location-enter::material-location-exit: **Parameter** `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
         entity.indent = 4;
       } else if (token.substr(1) == "tparam") {
-        entity.docs.append(":material-code-tags: **Template parameter** `");
+        entity.docs.append("\n:material-code-tags: **Template parameter** `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
         entity.indent = 4;
@@ -333,15 +333,15 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`");
       } else if (token.substr(1) == "return") {
-        entity.docs.append(":material-keyboard-return: **Return**\n:   ");
+        entity.docs.append("\n:material-keyboard-return: **Return**\n:   ");
       } else if (token.substr(1) == "pre") {
-        entity.docs.append(":material-check-circle-outline: **Pre-condition**\n:   ");
+        entity.docs.append("\n:material-check-circle-outline: **Pre-condition**\n:   ");
       } else if (token.substr(1) == "post") {
-        entity.docs.append(":material-check-circle-outline: **Post-condition**\n:   ");
+        entity.docs.append("\n:material-check-circle-outline: **Post-condition**\n:   ");
       } else if (token.substr(1) == "throw") {
-        entity.docs.append(":material-alert-circle-outline: **Throw**\n:   ");
+        entity.docs.append("\n:material-alert-circle-outline: **Throw**\n:   ");
       } else if (token.substr(1) == "see") {
-        entity.docs.append(":material-eye-outline: **See**\n:   ");
+        entity.docs.append("\n:material-eye-outline: **See**\n:   ");
       } else if (token.substr(1) == "anchor") {
         entity.docs.append("<a name=\"");
         entity.docs.append(tokenizer.consume(WORD).str());
@@ -358,7 +358,7 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
           token.substr(1) == "bug" ||
           token.substr(1) == "example" ||
           token.substr(1) == "quote") {
-        entity.docs.append("!!! ");
+        entity.docs.append("\n!!! ");
         entity.docs.append(token.substr(1));
         entity.docs.append("\n");
         entity.indent += 4;
@@ -369,9 +369,9 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
       /* legacy commands */
       } else if (token.substr(1) == "returns" ||
           token.substr(1) == "result") {
-        entity.docs.append(":material-location-exit: **Return**\n:   ");
+        entity.docs.append("\n:material-location-exit: **Return**\n:   ");
       } else if (token.substr(1) == "sa") {
-        entity.docs.append(":material-eye-outline: **See**\n:   ");
+        entity.docs.append("\n:material-eye-outline: **See**\n:   ");
       } else if (token.substr(1) == "file" ||
           token.substr(1) == "internal") {
         entity.hide = true;
@@ -416,17 +416,17 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
           token.substr(1) == "endcode" ||
           token.substr(1) == "verbatim" ||
           token.substr(1) == "endverbatim") {
-        entity.docs.append("```");
+        entity.docs.append("\n```");
       } else if (token.substr(1) == "attention") {
-        entity.docs.append("!!! warning \"Attention\"\n");
+        entity.docs.append("\n!!! warning \"Attention\"\n");
         entity.indent = 4;
         entity.docs.append(entity.indent, ' ');
       } else if (token.substr(1) == "todo") {
-        entity.docs.append("!!! example \"To-do\"\n");
+        entity.docs.append("\n!!! example \"To-do\"\n");
         entity.indent = 4;
         entity.docs.append(entity.indent, ' ');
       } else if (token.substr(1) == "remark") {
-        entity.docs.append("!!! quote \"Remark\"\n");
+        entity.docs.append("\n!!! quote \"Remark\"\n");
         entity.indent = 4;
         entity.docs.append(entity.indent, ' ');
       } else if (token.substr(1) == "def" ||

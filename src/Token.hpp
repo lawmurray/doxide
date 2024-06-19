@@ -27,18 +27,17 @@ enum TokenType : int {
  * precludes a match to a later.
  */
 static auto regexes = {
-  std::make_pair(OPEN_AFTER, std::regex("(?:/\\*\\*|/\\*!|///|//!)<[ \t]*")),
-  std::make_pair(OPEN_BEFORE, std::regex("(?:/\\*\\*|/\\*!|///|//!)[ \t]*")),
+  std::make_pair(OPEN_AFTER, std::regex("(?:/\\*\\*|/\\*!|///|//!)<[ \\t]?")),
+  std::make_pair(OPEN_BEFORE, std::regex("(?:/\\*\\*|/\\*!|///|//!)[ \\t]?")),
   std::make_pair(CLOSE, std::regex("\\*/")),
-  std::make_pair(COMMAND, std::regex("[@\\\\](?:param(?:\\[(?:in|out|in,out)\\])?|\\w+|@|/|f[\\$\\[\\]])")),
+  std::make_pair(COMMAND, std::regex("[@\\\\](?:param(?:\\[(?:in|out|in,out)\\])?|\\w+|@|\\\\|/|f[\\$\\[\\]])")),
 
-  /* the end of a paragraph is either two new lines or one new line with a
-   * command to come */
-  std::make_pair(PARA, std::regex("\\s*\\n[ \t]*(?:\\*(?!/))?[ \t]*(?:(?=@)|\\n[ \t]*(?:\\*(?!/))?[ \t]*)")),
+  /* the end of a paragraph is two new lines  */
+  std::make_pair(PARA, std::regex("(?:[ \\t]*\\n(?:[ \\t]*\\*(?!/))?[ \\t]?){2}")),
 
-  /* the end of a line is one new line, as long as there is not a command to
-   * come (which would denote the end of a paragraph instead) */
-  std::make_pair(LINE, std::regex("\\s*\\n[ \t]*(?:\\*(?!/))?[ \t]*(?!@)")),
+  /* the end of a line is one new line, as long as there is not an end of
+   * comment to come */
+  std::make_pair(LINE, std::regex("[ \\t]*\\n(?:[ \\t]*\\*(?!/))?[ \\t]?")),
 
   std::make_pair(SENTENCE, std::regex("[.!?]")),
   std::make_pair(WHITESPACE, std::regex("\\s+")),
