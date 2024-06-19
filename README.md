@@ -33,7 +33,7 @@ License. You may obtain a copy of the License at
 
 On Debian-based Linux systems, install these with:
 ```
-sudo apt install cmake libyaml-dev 
+sudo apt install cmake libyaml-dev libicu-dev
 ```
 On RPM-based Linux systems, install these with (replace `dnf` for Fedora with `zypper` for openSUSE, or otherwise for your distribution):
 ```

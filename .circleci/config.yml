@@ -58,7 +58,8 @@ jobs:
               g++ \
               lcov \
               libyaml-dev \
-              libcli11-dev
+              libcli11-dev \
+              libicu-dev
             sudo pip3 install mkdocs mkdocs-material mkdocs-material[imaging]
       - run:
           name: Build
