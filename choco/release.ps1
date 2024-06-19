@@ -38,19 +38,22 @@ function Release-Package {
 }
 
 $version=$(git describe --tags --abbrev=0).Substring(1)
+$choco_version=$(choco search --limit-output --exact doxide).Substring(7)
 
-Update-Package -Package doxide.portable -Download doxide.exe
-Update-Package -Package doxide.install -Download doxide-installer.exe
-Update-Package -Package doxide
+if ($version -ne $choco_version) {
+    Update-Package -Package doxide.portable -Download doxide.exe
+    Update-Package -Package doxide.install -Download doxide-installer.exe
+    Update-Package -Package doxide
 
-Build-Package -Package doxide.portable -Version $version
-Build-Package -Package doxide.install -Version $version
-Build-Package -Package doxide -Version $version
+    Build-Package -Package doxide.portable -Version $version
+    Build-Package -Package doxide.install -Version $version
+    Build-Package -Package doxide -Version $version
 
-Test-Package -Package doxide.portable -Version $version
-Test-Package -Package doxide.install -Version $version
-#Test-Package -Package doxide -Version $version
+    Test-Package -Package doxide.portable -Version $version
+    Test-Package -Package doxide.install -Version $version
+    #Test-Package -Package doxide -Version $version
 
-Release-Package -Package doxide.portable -Version $version
-Release-Package -Package doxide.install -Version $version
-Release-Package -Package doxide -Version $version
+    Release-Package -Package doxide.portable -Version $version
+    Release-Package -Package doxide.install -Version $version
+    Release-Package -Package doxide -Version $version
+}
