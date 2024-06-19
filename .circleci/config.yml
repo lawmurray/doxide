@@ -10,7 +10,7 @@ executors:
   mac:
     macos:
       xcode: 14.2.0
-    resource_class: macos.x86.medium.gen2
+    resource_class: macos.m1.medium.gen1
     environment:
       CPATH: /usr/local/include
       LIBRARY_PATH: /usr/local/lib
