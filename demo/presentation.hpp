@@ -9,12 +9,14 @@
  * 
  *   - Itemized list item.
  *   - Itemized list item.
+ *     - Nested itemized list item.
  *   - Itemized list item.
  * 
  * Numbered list:
  * 
  *   1. Enumerated list item.
  *   2. Enumerated list item.
+ *     - Nested itemized list item.
  *   3. Enumerated list item.
  * 
  * #### Tables

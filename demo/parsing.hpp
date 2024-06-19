@@ -52,6 +52,34 @@ int c;
 int d;  ///< Documented after entity with `///` comment @ingroup parsing
 
 /**
+ * Documentation comment with * and / characters.
+ *
+ * @ingroup parsing
+ */
+int e;
+
+/**
+ * Comment where leading whitespace is important, using `/** ... *@/` style
+ * preceding comment. Details should show code if indenting is correctly
+ * preserved.
+ *
+ * @ingroup parsing
+ *
+ *     int main();
+ */
+int whitespace1;
+
+/**
+ * Comment where leading whitespace is important, using `///` style preceding
+ * comment. Details should show code if indenting is correctly preserved.
+ *
+ * @ingroup parsing
+ *
+ *     int main();
+ */
+int whitespace2;
+
+/**
  * Test variable.
  * 
  * @ingroup parsing
