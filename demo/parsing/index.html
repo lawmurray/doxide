@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../assets/logo_red.svg">
-      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.20">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.0">
     
     
       
@@ -24,10 +24,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.66ac8b77.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.9f615399.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.649f08f9.min.css">
       
       
 
@@ -54,32 +54,6 @@
 
     
     
-      
-        <meta  property="og:type"  content="website" >
-      
-        <meta  property="og:title"  content="Parsing - Doxide" >
-      
-        <meta  property="og:description"  content="Demonstration and test of some parsing capabilities, such as variables, functions, operators, classes, enums, namespaces, templates, concepts, macros, SFINAE, etc." >
-      
-        <meta  property="og:image"  content="https://doxide.org/assets/images/social/demo/parsing/index.png" >
-      
-        <meta  property="og:image:type"  content="image/png" >
-      
-        <meta  property="og:image:width"  content="1200" >
-      
-        <meta  property="og:image:height"  content="630" >
-      
-        <meta  property="og:url"  content="https://doxide.org/demo/parsing/" >
-      
-        <meta  name="twitter:card"  content="summary_large_image" >
-      
-        <meta  name="twitter:title"  content="Parsing - Doxide" >
-      
-        <meta  name="twitter:description"  content="Demonstration and test of some parsing capabilities, such as variables, functions, operators, classes, enums, namespaces, templates, concepts, macros, SFINAE, etc." >
-      
-        <meta  name="twitter:image"  content="https://doxide.org/assets/images/social/demo/parsing/index.png" >
-      
-    
     
   </head>
   
@@ -93,6 +67,9 @@
     
     <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="cyan">
   
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -148,9 +125,9 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="cyan"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="cyan"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
     
-      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
       </label>
     
@@ -158,18 +135,15 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="cyan"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="cyan"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
     
-      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
       </label>
     
   
 </form>
       
-    
-    
-      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
@@ -275,7 +249,6 @@
   
   
   
-  
     <li class="md-nav__item">
       <a href="../.." class="md-nav__link">
         
@@ -292,7 +265,6 @@
     
       
       
-  
   
   
   
@@ -315,7 +287,6 @@
   
   
   
-  
     <li class="md-nav__item">
       <a href="../../getting-started/" class="md-nav__link">
         
@@ -332,7 +303,6 @@
     
       
       
-  
   
   
   
@@ -355,7 +325,6 @@
   
   
   
-  
     <li class="md-nav__item">
       <a href="../../running/" class="md-nav__link">
         
@@ -372,7 +341,6 @@
     
       
       
-  
   
   
   
@@ -395,7 +363,6 @@
   
   
   
-  
     <li class="md-nav__item">
       <a href="../../organizing/" class="md-nav__link">
         
@@ -412,7 +379,6 @@
     
       
       
-  
   
   
   
@@ -435,7 +401,6 @@
   
   
   
-  
     <li class="md-nav__item">
       <a href="../../command-line/" class="md-nav__link">
         
@@ -452,7 +417,6 @@
     
       
       
-  
   
   
   
@@ -475,13 +439,12 @@
   
   
   
-  
     <li class="md-nav__item">
       <a href="../../questions-and-answers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Q &amp; A
+    Q & A
   </span>
   
 
@@ -518,63 +481,49 @@
       
         <li class="md-nav__item">
   <a href="#types" class="md-nav__link">
-    <span class="md-ellipsis">
-      Types
-    </span>
+    Types
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#concepts" class="md-nav__link">
-    <span class="md-ellipsis">
-      Concepts
-    </span>
+    Concepts
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#macros" class="md-nav__link">
-    <span class="md-ellipsis">
-      Macros
-    </span>
+    Macros
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#variables" class="md-nav__link">
-    <span class="md-ellipsis">
-      Variables
-    </span>
+    Variables
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#operators" class="md-nav__link">
-    <span class="md-ellipsis">
-      Operators
-    </span>
+    Operators
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#functions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Functions
-    </span>
+    Functions
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#concept-details" class="md-nav__link">
-    <span class="md-ellipsis">
-      Concept Details
-    </span>
+    Concept Details
   </a>
   
     <nav class="md-nav" aria-label="Concept Details">
@@ -582,18 +531,14 @@
         
           <li class="md-nav__item">
   <a href="#concept" class="md-nav__link">
-    <span class="md-ellipsis">
-      Concept
-    </span>
+    Concept
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#trivialconcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      TrivialConcept
-    </span>
+    TrivialConcept
   </a>
   
 </li>
@@ -605,9 +550,7 @@
       
         <li class="md-nav__item">
   <a href="#macro-details" class="md-nav__link">
-    <span class="md-ellipsis">
-      Macro Details
-    </span>
+    Macro Details
   </a>
   
     <nav class="md-nav" aria-label="Macro Details">
@@ -615,36 +558,28 @@
         
           <li class="md-nav__item">
   <a href="#macro" class="md-nav__link">
-    <span class="md-ellipsis">
-      MACRO
-    </span>
+    MACRO
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#macro_after" class="md-nav__link">
-    <span class="md-ellipsis">
-      MACRO_AFTER
-    </span>
+    MACRO_AFTER
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#macro_with_args" class="md-nav__link">
-    <span class="md-ellipsis">
-      MACRO_WITH_ARGS
-    </span>
+    MACRO_WITH_ARGS
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#macro_with_args_after" class="md-nav__link">
-    <span class="md-ellipsis">
-      MACRO_WITH_ARGS_AFTER
-    </span>
+    MACRO_WITH_ARGS_AFTER
   </a>
   
 </li>
@@ -656,9 +591,7 @@
       
         <li class="md-nav__item">
   <a href="#variable-details" class="md-nav__link">
-    <span class="md-ellipsis">
-      Variable Details
-    </span>
+    Variable Details
   </a>
   
     <nav class="md-nav" aria-label="Variable Details">
@@ -666,117 +599,112 @@
         
           <li class="md-nav__item">
   <a href="#a" class="md-nav__link">
-    <span class="md-ellipsis">
-      a
-    </span>
+    a
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#b" class="md-nav__link">
-    <span class="md-ellipsis">
-      b
-    </span>
+    b
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#c" class="md-nav__link">
-    <span class="md-ellipsis">
-      c
-    </span>
+    c
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#d" class="md-nav__link">
-    <span class="md-ellipsis">
-      d
-    </span>
+    d
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#e" class="md-nav__link">
+    e
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#ptr1" class="md-nav__link">
-    <span class="md-ellipsis">
-      ptr1
-    </span>
+    ptr1
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#ptr2" class="md-nav__link">
-    <span class="md-ellipsis">
-      ptr2
-    </span>
+    ptr2
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#ref1" class="md-nav__link">
-    <span class="md-ellipsis">
-      ref1
-    </span>
+    ref1
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#ref2" class="md-nav__link">
-    <span class="md-ellipsis">
-      ref2
-    </span>
+    ref2
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#w" class="md-nav__link">
-    <span class="md-ellipsis">
-      w
-    </span>
+    w
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whitespace1" class="md-nav__link">
+    whitespace1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whitespace2" class="md-nav__link">
+    whitespace2
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#x" class="md-nav__link">
-    <span class="md-ellipsis">
-      x
-    </span>
+    x
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#y" class="md-nav__link">
-    <span class="md-ellipsis">
-      y
-    </span>
+    y
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#z" class="md-nav__link">
-    <span class="md-ellipsis">
-      z
-    </span>
+    z
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      λ
-    </span>
+    λ
   </a>
   
 </li>
@@ -788,9 +716,7 @@
       
         <li class="md-nav__item">
   <a href="#operator-details" class="md-nav__link">
-    <span class="md-ellipsis">
-      Operator Details
-    </span>
+    Operator Details
   </a>
   
     <nav class="md-nav" aria-label="Operator Details">
@@ -798,9 +724,7 @@
         
           <li class="md-nav__item">
   <a href="#operator" class="md-nav__link">
-    <span class="md-ellipsis">
-      operator+
-    </span>
+    operator+
   </a>
   
 </li>
@@ -812,9 +736,7 @@
       
         <li class="md-nav__item">
   <a href="#function-details" class="md-nav__link">
-    <span class="md-ellipsis">
-      Function Details
-    </span>
+    Function Details
   </a>
   
     <nav class="md-nav" aria-label="Function Details">
@@ -822,9 +744,7 @@
         
           <li class="md-nav__item">
   <a href="#f" class="md-nav__link">
-    <span class="md-ellipsis">
-      f
-    </span>
+    f
   </a>
   
 </li>
@@ -1001,6 +921,10 @@
 <td>Documented after entity with <code>///</code> comment</td>
 </tr>
 <tr>
+<td><a href="#e">e</a></td>
+<td>Documentation comment with * and / characters.</td>
+</tr>
+<tr>
 <td><a href="#ptr1">ptr1</a></td>
 <td>Test variable of pointer type.</td>
 </tr>
@@ -1019,6 +943,14 @@
 <tr>
 <td><a href="#w">w</a></td>
 <td>Test variable.</td>
+</tr>
+<tr>
+<td><a href="#whitespace1">whitespace1</a></td>
+<td>Comment where leading whitespace is important, using <code>/** ... */</code> style preceding comment.</td>
+</tr>
+<tr>
+<td><a href="#whitespace2">whitespace2</a></td>
+<td>Comment where leading whitespace is important, using <code>///</code> style preceding comment.</td>
 </tr>
 <tr>
 <td><a href="#x">x</a></td>
@@ -1172,6 +1104,11 @@ lines and has multiple paragraphs.</p>
 <p class="admonition-title">int d</p>
 <p>Documented after entity with <code>///</code> comment </p>
 </div>
+<h3 id="e">e<a name="e"></a><a class="headerlink" href="#e" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">int e</p>
+<p>Documentation comment with * and / characters.</p>
+</div>
 <h3 id="ptr1">ptr1<a name="ptr1"></a><a class="headerlink" href="#ptr1" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
 <p class="admonition-title">int&#42; ptr1</p>
@@ -1196,6 +1133,23 @@ lines and has multiple paragraphs.</p>
 <div class="admonition variable">
 <p class="admonition-title">int w</p>
 <p>Test variable.</p>
+</div>
+<h3 id="whitespace1">whitespace1<a name="whitespace1"></a><a class="headerlink" href="#whitespace1" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">int whitespace1</p>
+<p>Comment where leading whitespace is important, using <code>/** ... */</code> style
+preceding comment. Details should show code if indenting is correctly
+preserved.</p>
+<pre><code>int main();
+</code></pre>
+</div>
+<h3 id="whitespace2">whitespace2<a name="whitespace2"></a><a class="headerlink" href="#whitespace2" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">int whitespace2</p>
+<p>Comment where leading whitespace is important, using <code>///</code> style preceding
+comment. Details should show code if indenting is correctly preserved.</p>
+<pre><code>int main();
+</code></pre>
 </div>
 <h3 id="x">x<a name="x"></a><a class="headerlink" href="#x" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
@@ -1282,22 +1236,11 @@ lines and has multiple paragraphs.</p>
 
 
 
-
-
-  
-  
-
-
-
-
-
-
                 
               </article>
             </div>
           
           
-<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
       </main>
@@ -1378,11 +1321,10 @@ lines and has multiple paragraphs.</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.a264c092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
-    
-      <script src="../../assets/javascripts/bundle.dd8806f2.min.js"></script>
+      <script src="../../assets/javascripts/bundle.4e0fa4ba.min.js"></script>
       
     
   </body>
