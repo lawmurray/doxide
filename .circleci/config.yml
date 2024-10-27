@@ -80,7 +80,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            HOMEBREW_NO_AUTO_UPDATE=1 brew install \
+            brew install \
               cmake \
               libyaml \
               cli11 \
