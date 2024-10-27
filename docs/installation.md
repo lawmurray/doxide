@@ -51,15 +51,6 @@ Install Doxide from your package manager by adding appropriate repository for yo
     sudo apt install doxide
     ```
 
-??? info ":simple-debian: Debian 11 Bullseye (amd64)"
-    Install Doxide:
-    ```
-    echo 'deb http://download.indii.org/deb bullseye main' | sudo tee /etc/apt/sources.list.d/indii.org.list
-    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.org.gpg > /dev/null
-    sudo apt update
-    sudo apt install doxide
-    ```
-
 ??? info ":simple-fedora: Fedora 40 (x86_64)"
     Install Doxide:
     ```
