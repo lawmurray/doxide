@@ -11,8 +11,8 @@ executors:
     macos:
       xcode: 14.2.0
     environment:
-      CPATH: /usr/local/include
-      LIBRARY_PATH: /usr/local/lib
+      CPATH: /opt/homebrew/include
+      LIBRARY_PATH: /opt/homebrew/lib
 
   win:
     machine:
