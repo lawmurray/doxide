@@ -9,7 +9,7 @@ executors:
 
   mac:
     macos:
-      xcode: 14.2.0
+      xcode: 16.0.0
     environment:
       CPATH: /opt/homebrew/include
       LIBRARY_PATH: /opt/homebrew/lib
@@ -80,7 +80,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            brew install \
+            HOMEBREW_NO_AUTO_UPDATE=1 brew install \
               cmake \
               libyaml \
               cli11 \
