@@ -50,6 +50,7 @@ There are further dependencies that do not need to be installed separately. They
 * [CLI11](https://cliutils.github.io/CLI11/book/)
 * [Tree-sitter](https://tree-sitter.github.io/tree-sitter/)
 * [Tree-sitter C++ language support](https://github.com/tree-sitter/tree-sitter-cpp)
+* [Tree-sitter CUDA C++ language support](https://github.com/tree-sitter-grammars/tree-sitter-cuda)
 * [glob](https://github.com/p-ranav/glob)
 
 

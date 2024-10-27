@@ -10,10 +10,10 @@ Parser::Parser(const std::unordered_map<std::string,std::string>& defines) :
 
   /* parser */
   parser = ts_parser_new();
-  ts_parser_set_language(parser, tree_sitter_cpp());
+  ts_parser_set_language(parser, tree_sitter_cuda());
 
   /* query */
-  query = ts_query_new(tree_sitter_cpp(), query_cpp, strlen(query_cpp),
+  query = ts_query_new(tree_sitter_cuda(), query_cpp, strlen(query_cpp),
       &error_offset, &error_type);
   if (error_type != TSQueryErrorNone) {
     std::string_view from(query_cpp + error_offset, 40);

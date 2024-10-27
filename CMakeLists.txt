@@ -13,6 +13,8 @@ add_executable(doxide
     contrib/tree-sitter/lib/src/lib.c
     contrib/tree-sitter-cpp/src/parser.c
     contrib/tree-sitter-cpp/src/scanner.c
+    contrib/tree-sitter-cuda/src/parser.c
+    contrib/tree-sitter-cuda/src/scanner.c
     src/doxide.cpp
     src/Driver.cpp
     src/Entity.cpp

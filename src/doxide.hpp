@@ -86,6 +86,11 @@ void copy_file_prompt(const std::filesystem::path& src, const std::filesystem::p
 std::string gulp(const std::filesystem::path& src);
 
 /**
- * Tree-sitter language.
+ * Tree-sitter C++ language.
  */
 extern "C" const TSLanguage* tree_sitter_cpp();
+
+/**
+ * Tree-sitter CUDA language.
+ */
+extern "C" const TSLanguage* tree_sitter_cuda();

@@ -13,3 +13,6 @@
 [submodule "contrib/libyaml"]
 	path = contrib/libyaml
 	url = https://github.com/yaml/libyaml
+[submodule "contrib/tree-sitter-cuda"]
+	path = contrib/tree-sitter-cuda
+	url = https://github.com/tree-sitter-grammars/tree-sitter-cuda
