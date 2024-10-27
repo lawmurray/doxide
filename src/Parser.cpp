@@ -32,6 +32,7 @@ void Parser::parse(const std::string& file, Entity& global) {
   if (!tree) {
     warn("cannot parse " << file << ", skipping");
   }
+  report(file, in, tree);
   TSNode node = ts_tree_root_node(tree);
 
   /* initialize state */
@@ -210,7 +211,7 @@ std::string Parser::preprocess(const std::string& file) {
       ts_tree_delete(old_tree);
       root = ts_tree_root_node(tree);
 
-      /* restore cursor to same position as edit */
+      /* restore cursor to same byte position as edit */
       ts_tree_cursor_reset(&cursor, root);
       while (ts_tree_cursor_goto_first_child_for_byte(&cursor, k) >= 0);
 
@@ -220,9 +221,9 @@ std::string Parser::preprocess(const std::string& file) {
       /* parse error: assuming that the syntax is actually valid, this is
        * usually caused by use of preprocessor macros, as the preprocessor is
        * not run */
-      std::cerr << file << ':' << (from.row + 1) << ':' << from.column <<
-          ": warning: parse failed at '" << in.substr(k, l - k) << "'" <<
-          std::endl;
+      // std::cerr << file << ':' << (from.row + 1) << ':' << from.column <<
+      //     ": warning: parse failed at '" << in.substr(k, l - k) << "'" <<
+      //     std::endl;
 
       /* attempt recovery: step backward looking for a node that looks like
        * preprocessor macro use, and erase it */
@@ -238,9 +239,9 @@ std::string Parser::preprocess(const std::string& file) {
       }
       if (std::regex_match(in.substr(k, l - k), macro)) {
         /* looks like a macro, erase it */
-        std::cerr << file << ':' << (from.row + 1) << ':' << from.column <<
-            ": note: attempting recovery by erasing '" <<
-            in.substr(k, l - k) << "'" << std::endl;
+        // std::cerr << file << ':' << (from.row + 1) << ':' << from.column <<
+        //     ": note: attempting recovery by erasing '" <<
+        //     in.substr(k, l - k) << "'" << std::endl;
 
         /* overwrite with whitespace, rather than erasing entirely, to
          * preserve line and column numbers from user's perspective */
@@ -266,7 +267,7 @@ std::string Parser::preprocess(const std::string& file) {
         nextNodeChosen = true;
       } else {
         /* recovery failed, restore original position */
-        warn("recovery failed, continuing anyway");
+        // warn("recovery failed, continuing anyway");
         while (back--) {
           ts_tree_cursor_goto_next_sibling(&cursor);
         }
@@ -294,6 +295,39 @@ std::string Parser::preprocess(const std::string& file) {
   ts_tree_delete(tree);
   ts_parser_reset(parser);
   return in;
+}
+
+void Parser::report(const std::string& file, const std::string& in,
+    TSTree* tree) {
+  TSNode root = ts_tree_root_node(tree);
+  TSNode node = root;
+  TSTreeCursor cursor = ts_tree_cursor_new(root);
+  do {
+    uint32_t k = ts_node_start_byte(node);
+    uint32_t l = ts_node_end_byte(node);
+    TSPoint from = ts_node_start_point(node);
+    TSPoint to = ts_node_end_point(node);
+
+    if (ts_node_is_error(node)) {
+      std::cerr << file << ':' << (from.row + 1) << ':' << from.column <<
+          ": warning: parse failed at '" << in.substr(k, l - k) << "'" <<
+          std::endl;
+    }
+
+    /* next node */
+    if (strcmp(ts_node_type(node), "preproc_def") != 0 &&
+        strcmp(ts_node_type(node), "preproc_function_def") != 0 &&
+        ts_tree_cursor_goto_first_child(&cursor)) {
+      // ^ do not recurse into preprocessor definitions
+    } else if (ts_tree_cursor_goto_next_sibling(&cursor)) {
+      //
+    } else while (ts_tree_cursor_goto_parent(&cursor) &&
+        !ts_tree_cursor_goto_next_sibling(&cursor)) {
+      //
+    }
+    node = ts_tree_cursor_current_node(&cursor);
+  } while (!ts_node_eq(node, root));
+  ts_tree_cursor_delete(&cursor);
 }
 
 void Parser::translate(const std::string_view& comment, Entity& entity) {
