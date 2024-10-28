@@ -345,22 +345,22 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
       /* non-legacy commands */
       if (command == "param" ||
           command == "param[in]") {
-        entity.docs.append("\n:material-location-enter: **Parameter** `");
+        entity.docs.append("\n:material-location-enter: `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
         entity.indent = 4;
       } else if (command == "param[out]") {
-        entity.docs.append("\n:material-location-exit: **Parameter** `");
+        entity.docs.append("\n:material-location-exit: `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
         entity.indent = 4;
       } else if (command == "param[in,out]") {
-        entity.docs.append("\n:material-location-enter::material-location-exit: **Parameter** `");
+        entity.docs.append("\n:material-location-enter::material-location-exit: `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
         entity.indent = 4;
       } else if (command == "tparam") {
-        entity.docs.append("\n:material-code-tags: **Template parameter** `");
+        entity.docs.append("\n:material-code-tags: `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
         entity.indent = 4;
