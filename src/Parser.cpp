@@ -340,105 +340,107 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
     entity.indent = std::max(entity.indent - 4, 0);
   } else while (token.type) {
     if (token.type & COMMAND) {
+      std::string_view command = token.substr(1);
+
       /* non-legacy commands */
-      if (token.substr(1) == "param" ||
-          token.substr(1) == "param[in]") {
+      if (command == "param" ||
+          command == "param[in]") {
         entity.docs.append("\n:material-location-enter: **Parameter** `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
         entity.indent = 4;
-      } else if (token.substr(1) == "param[out]") {
+      } else if (command == "param[out]") {
         entity.docs.append("\n:material-location-exit: **Parameter** `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
         entity.indent = 4;
-      } else if (token.substr(1) == "param[in,out]") {
+      } else if (command == "param[in,out]") {
         entity.docs.append("\n:material-location-enter::material-location-exit: **Parameter** `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
         entity.indent = 4;
-      } else if (token.substr(1) == "tparam") {
+      } else if (command == "tparam") {
         entity.docs.append("\n:material-code-tags: **Template parameter** `");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`\n:   ");
         entity.indent = 4;
-      } else if (token.substr(1) == "p") {
+      } else if (command == "p") {
         entity.docs.append("`");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`");
-      } else if (token.substr(1) == "return") {
+      } else if (command == "return") {
         entity.docs.append("\n:material-keyboard-return: **Return**\n:   ");
-      } else if (token.substr(1) == "pre") {
+      } else if (command == "pre") {
         entity.docs.append("\n:material-check-circle-outline: **Pre-condition**\n:   ");
-      } else if (token.substr(1) == "post") {
+      } else if (command == "post") {
         entity.docs.append("\n:material-check-circle-outline: **Post-condition**\n:   ");
-      } else if (token.substr(1) == "throw") {
+      } else if (command == "throw") {
         entity.docs.append("\n:material-alert-circle-outline: **Throw**\n:   ");
-      } else if (token.substr(1) == "see") {
+      } else if (command == "see") {
         entity.docs.append("\n:material-eye-outline: **See**\n:   ");
-      } else if (token.substr(1) == "anchor") {
+      } else if (command == "anchor") {
         entity.docs.append("<a name=\"");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("\"></a>");
-      } else if (token.substr(1) == "note" ||
-          token.substr(1) == "abstract" ||
-          token.substr(1) == "info" ||
-          token.substr(1) == "tip" ||
-          token.substr(1) == "success" ||
-          token.substr(1) == "question" ||
-          token.substr(1) == "warning" ||
-          token.substr(1) == "failure" ||
-          token.substr(1) == "danger" ||
-          token.substr(1) == "bug" ||
-          token.substr(1) == "example" ||
-          token.substr(1) == "quote") {
+      } else if (command == "note" ||
+          command == "abstract" ||
+          command == "info" ||
+          command == "tip" ||
+          command == "success" ||
+          command == "question" ||
+          command == "warning" ||
+          command == "failure" ||
+          command == "danger" ||
+          command == "bug" ||
+          command == "example" ||
+          command == "quote") {
         entity.docs.append("\n!!! ");
-        entity.docs.append(token.substr(1));
+        entity.docs.append(command);
         entity.docs.append("\n");
         entity.indent += 4;
         entity.docs.append(entity.indent, ' ');
-      } else if (token.substr(1) == "ingroup") {
+      } else if (command == "ingroup") {
         entity.ingroup = tokenizer.consume(WORD).str();
 
       /* legacy commands */
-      } else if (token.substr(1) == "returns" ||
-          token.substr(1) == "result") {
+      } else if (command == "returns" ||
+          command == "result") {
         entity.docs.append("\n:material-location-exit: **Return**\n:   ");
-      } else if (token.substr(1) == "sa") {
+      } else if (command == "sa") {
         entity.docs.append("\n:material-eye-outline: **See**\n:   ");
-      } else if (token.substr(1) == "file" ||
-          token.substr(1) == "internal") {
+      } else if (command == "file" ||
+          command == "internal") {
         entity.hide = true;
-      } else if (token.substr(1) == "brief" ||
-          token.substr(1) == "short") {
+      } else if (command == "brief" ||
+          command == "short") {
         auto first = tokenizer.consume(~WHITESPACE);
         auto last = tokenizer.consume(PARA|CLOSE);
         entity.brief.append(first.first, last.first);
         entity.docs.append(first.first, last.first);
         entity.docs.append("\n\n");
-      } else if (token.substr(1) == "e" ||
-          token.substr(1) == "em" ||
-          token.substr(1) == "a") {
+      } else if (command == "e" ||
+          command == "em" ||
+          command == "a") {
         entity.docs.append("*");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("*");
-      } else if (token.substr(1) == "b") {
+      } else if (command == "b") {
         entity.docs.append("**");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("**");
-      } else if (token.substr(1) == "c") {
+      } else if (command == "c") {
         entity.docs.append("`");
         entity.docs.append(tokenizer.consume(WORD).str());
         entity.docs.append("`");
-      } else if (token.substr(1) == "f$") {
+      } else if (command == "f$") {
         entity.docs.append("$");
-      } else if (token.substr(1) == "f[" ||
-          token.substr(1) == "f]") {
+      } else if (command == "f[" ||
+          command == "f]") {
         entity.docs.append("$$");
-      } else if (token.substr(1) == "li" ||
-          token.substr(1) == "arg") {
+      } else if (command == "li" ||
+          command == "arg") {
         entity.docs.append("  - ");
-      } else if (token.substr(1) == "ref") {
+      } else if (command == "ref") {
         auto href = tokenizer.consume(WORD);
         auto text = tokenizer.consume(WORD);
         entity.docs.append("[");
@@ -446,40 +448,40 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
         entity.docs.append("](#");
         entity.docs.append(href.str());
         entity.docs.append(")");
-      } else if (token.substr(1) == "code" ||
-          token.substr(1) == "endcode" ||
-          token.substr(1) == "verbatim" ||
-          token.substr(1) == "endverbatim") {
+      } else if (command == "code" ||
+          command == "endcode" ||
+          command == "verbatim" ||
+          command == "endverbatim") {
         entity.docs.append("\n```");
-      } else if (token.substr(1) == "attention") {
+      } else if (command == "attention") {
         entity.docs.append("\n!!! warning \"Attention\"\n");
         entity.indent = 4;
         entity.docs.append(entity.indent, ' ');
-      } else if (token.substr(1) == "todo") {
+      } else if (command == "todo") {
         entity.docs.append("\n!!! example \"To-do\"\n");
         entity.indent = 4;
         entity.docs.append(entity.indent, ' ');
-      } else if (token.substr(1) == "remark") {
+      } else if (command == "remark") {
         entity.docs.append("\n!!! quote \"Remark\"\n");
         entity.indent = 4;
         entity.docs.append(entity.indent, ' ');
-      } else if (token.substr(1) == "def" ||
-          token.substr(1) == "var" ||
-          token.substr(1) == "fn" ||
-          token.substr(1) == "class" ||
-          token.substr(1) == "struct" ||
-          token.substr(1) == "union" ||
-          token.substr(1) == "enum" ||
-          token.substr(1) == "typedef" ||
-          token.substr(1) == "namespace" ||
-          token.substr(1) == "interface" ||
-          token.substr(1) == "protocol" ||
-          token.substr(1) == "property") {
+      } else if (command == "def" ||
+          command == "var" ||
+          command == "fn" ||
+          command == "class" ||
+          command == "struct" ||
+          command == "union" ||
+          command == "enum" ||
+          command == "typedef" ||
+          command == "namespace" ||
+          command == "interface" ||
+          command == "protocol" ||
+          command == "property") {
         /* ignore, including following name */
         tokenizer.consume(WORD);
-      } else if (token.substr(1) == "@") {
+      } else if (command == "@") {
         entity.docs.append("@");
-      } else if (token.substr(1) == "/") {
+      } else if (command == "/") {
         entity.docs.append("/");
       } else if (token.str().at(0) == '\\') {
         /* unrecognized command starting with legacy backslash, could just
