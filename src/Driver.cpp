@@ -31,8 +31,6 @@ void Driver::init() {
 }
 
 void Driver::build() {
-  clean();
-
   /* parse */
   Parser parser(defines);
   for (auto file: files) {
@@ -42,44 +40,15 @@ void Driver::build() {
   /* generate */
   MarkdownGenerator generator;
   generator.generate(output, global);
+  generator.clean(output);
 }
 
 void Driver::clean() {
-  /* traverse the output directory, removing any Markdown files with
-   * 'generator: doxide' in their YAML frontmatter; these are files managed by
-   * Doxide */
-  if (std::filesystem::exists(output) && std::filesystem::is_directory(output)) {
-    for (auto& entry : std::filesystem::recursive_directory_iterator(output)) {
-      if (entry.is_regular_file() && entry.path().extension() == ".md") {
-        try {
-          YAMLParser parser;
-          YAMLNode frontmatter = parser.parse(entry.path().string());
-          if (frontmatter.isValue("generator") &&
-              frontmatter.value("generator") == "doxide") {
-            std::filesystem::remove(entry.path());
-          }
-        } catch (const std::runtime_error&) {
-          // ignore
-        }
-      }
-    }
-
-    /* traverse the output directory again, this time removing any empty
-    * directories; because removing a directory may make its parent directory
-    * empty, repeat until there are no further empty directories */
-    std::vector<std::filesystem::path> empty;
-    do {
-      empty.clear();
-      for (auto& entry : std::filesystem::recursive_directory_iterator(output)) {
-        if (entry.is_directory() && std::filesystem::is_empty(entry.path())) {
-          empty.push_back(entry.path());
-        }
-      }
-      for (auto& dir : empty) {
-        std::filesystem::remove(dir);
-      }    
-    } while (empty.size());
-  }
+  /* can use MarkdownGenerator::clean() for this just by not calling
+   * generate() first; this will remove all files with `generator: doxide` in
+   * their YAML frontmatter */
+  MarkdownGenerator generator;
+  generator.clean(output);
 }
 
 void Driver::config() {
