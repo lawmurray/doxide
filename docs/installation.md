@@ -81,7 +81,7 @@ pip install mkdocs mkdocs-material
 ```
 [See below](#using-a-python-virtual-environment) for running MkDocs in a Python virtual environment instead.
 
-## :simple-windows: Windows
+## :fontawesome-brands-windows: Windows
 
 First install Doxide via your preferred means:
 
