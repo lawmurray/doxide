@@ -1,4 +1,3 @@
-title: Modern Docs for Modern C++
 description: A documentation generator for modern C++. Configure with YAML, generate Markdown, publish with Material for MkDocs.
 ---
 
