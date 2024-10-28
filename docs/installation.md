@@ -129,4 +129,7 @@ Then enter it:
 ```
 source venv/bin/activate
 ```
-You can then run  `pip install mkdocs mkdocs-material` to install MkDocs (or other dependencies) into this virtual environment, and run `mkdocs` from within that virtual environment to publish your Doxide documentation.
+You can then run  `pip install mkdocs mkdocs-material` to install MkDocs (and other dependencies) into this virtual environment, and run `mkdocs` from within that virtual environment to publish your Doxide documentation. When finished, exit the environment with:
+```
+deactivate
+```
