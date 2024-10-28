@@ -37,9 +37,6 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
   std::filesystem::create_directories(output / dirname);
   std::filesystem::path file = output / dirname / (filename + ".md");
 
-  std::cerr << name << ": " << file.string() << std::endl;
-
-
   /* check if the file exists, and if so that it can be overwritten */
   bool canWrite = true;
   if (std::filesystem::exists(file)) {
