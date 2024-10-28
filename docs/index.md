@@ -48,13 +48,13 @@ Doxide is a documentation generator for modern C++. It consumes C++ sources anno
         
         An example.
 
-        :material-code-tags: **Template parameter** `T`
+        :material-code-tags: `T`
         :    Template parameter.
         
-        :material-location-enter: **Parameter** `x`
+        :material-location-enter: `x`
         :    Input parameter.
         
-        :material-location-exit: **Parameter** `y`
+        :material-location-exit: `y`
         :    Output parameter.
         
         :material-keyboard-return: **Return**
