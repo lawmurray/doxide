@@ -3,26 +3,44 @@
 
 void MarkdownGenerator::generate(const std::filesystem::path& output,
     const Entity& entity) {
-  /* for directories, mkdocs replaces underscores with spaces and capitalizes
-   * names in navigation, but does not do so for files; consequently, rather
-   * than generating the docs for a class at ClassName/index.md, they are
-   * generated at ClassName.md, but children still go in a ClassName/
-   * subdirectory; final URLs are the same, however */
-
-  /* sanitized name of entity, empty for root */
-  std::string name = sanitize(entity.name);
-
-  /* file name, same as name, index for root */
-  std::string filename = name.empty() ? "index" : name;
-
-  /* sub directory for children, same as name, current directory for root */
-  std::string dirname = name.empty() ? "" : (name + "/");
-
+  std::string name = sanitize(entity.name);  // entity name, empty for root
+  std::string dirname;  // directory name for this entity
+  std::string filename;  // file name for this entity
+  std::string childdir;  // directory name for children, relative to filename
+  if (name.empty()) {
+    /* root node */
+    dirname = "";
+    filename = "index";
+    childdir = "";
+  } else if (entity.type == EntityType::TYPE) {
+    /* when building the navigation menu, mkdocs modifies directory names by
+     * replacing underscores and capitalizing words; this is problematic for
+     * type names; rather than generating the docs for a class at
+     * ClassName/index.md, they are generated at ClassName.md, but children
+     * still go in a ClassName/ subdirectory; final URLs are the same, but
+     * this unfortunately adds two links to the menu, one for the class,
+     * another with the same name that expands for the children, if they
+     * exist; this is not such a problem for classes, which don't often have
+     * children, so we prefer the option... */
+    dirname = "";
+    filename = name;
+    childdir = name + "/";
+  } else {
+    /* ...whereas namespaces and groups tend to have simpler names not
+     * affected by the mkdocs changes, while two links in the menu is a
+     * more unsightly, so don't change them */
+    dirname = name;
+    filename = "index";
+    childdir = "";
+  }
   std::ofstream out;
-  std::filesystem::create_directories(output);
-  std::filesystem::path file = output / (filename + ".md");
+  std::filesystem::create_directories(output / dirname);
+  std::filesystem::path file = output / dirname / (filename + ".md");
 
-  /* check if the file exists, and if so that if can be overwritten */
+  std::cerr << name << ": " << file.string() << std::endl;
+
+
+  /* check if the file exists, and if so that it can be overwritten */
   bool canWrite = true;
   if (std::filesystem::exists(file)) {
     YAMLParser parser;
@@ -49,7 +67,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     /* groups */
     for (auto& child : entity.groups) {
       out << ":material-format-section: [" << title(child) << ']';
-      out << "(" << dirname << sanitize(child.name) << ".md)" << std::endl;
+      out << "(" << childdir << sanitize(child.name) << "/index.md)" << std::endl;
       out << ":   " << line(brief(child)) << std::endl;
       out << std::endl;
     }
@@ -58,7 +76,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     for (auto& child : view(entity.namespaces, true)) {
       if (!child->empty()) {
         out << ":material-package: [" << child->name << ']';
-        out << "(" << dirname << sanitize(child->name) << ".md)" << std::endl;
+        out << "(" << childdir << sanitize(child->name) << "/index.md)" << std::endl;
         out << ":   " << line(brief(*child)) << std::endl;
         out << std::endl;
       }
@@ -73,7 +91,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
       for (auto& child : view(entity.types,
           entity.type == EntityType::NAMESPACE ||
           entity.type == EntityType::GROUP)) {
-        out << "| [" << child->name << "](" << dirname << sanitize(child->name) << ".md) | ";
+        out << "| [" << child->name << "](" << childdir << sanitize(child->name) << ".md) | ";
         out << line(brief(*child)) << " |" << std::endl;
       }
       out << std::endl;
@@ -232,16 +250,17 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
   }
 
   /* child pages */
+  std::filesystem::create_directories(output / name);
   for (auto& child : entity.groups) {
-    generate(output / sanitize(entity.name), child);
+    generate(output / name, child);
   }
   for (auto& child : entity.namespaces) {
     if (!child.empty()) {
-      generate(output / sanitize(entity.name), child);
+      generate(output / name, child);
     }
   }
   for (auto& child : entity.types) {
-    generate(output / sanitize(entity.name), child);
+    generate(output / name, child);
   }
 }
 
