@@ -40,7 +40,7 @@
  * 
  * #### Images
  * 
- * ![Doxide logo](../../assets/logo_red.svg){width="256"}
+ * ![Doxide logo](../assets/logo_red.svg){width="256"}
  * 
  * #### Headings
  * 
@@ -164,7 +164,7 @@ int f(int x, int y);
 /// 
 /// #### Images
 /// 
-/// ![Doxide logo](../../assets/logo_red.svg){width="256"}
+/// ![Doxide logo](../assets/logo_red.svg){width="256"}
 /// 
 /// #### Headings
 /// 

@@ -3,9 +3,24 @@
 
 void MarkdownGenerator::generate(const std::filesystem::path& output,
     const Entity& entity) {
+  /* for directories, mkdocs replaces underscores with spaces and capitalizes
+   * names in navigation, but does not do so for files; consequently, rather
+   * than generating the docs for a class at ClassName/index.md, they are
+   * generated at ClassName.md, but children still go in a ClassName/
+   * subdirectory; final URLs are the same, however */
+
+  /* sanitized name of entity, empty for root */
+  std::string name = sanitize(entity.name);
+
+  /* file name, same as name, index for root */
+  std::string filename = name.empty() ? "index" : name;
+
+  /* sub directory for children, same as name, current directory for root */
+  std::string dirname = name.empty() ? "" : (name + "/");
+
   std::ofstream out;
-  std::filesystem::create_directories(output / sanitize(entity.name));
-  std::filesystem::path file = output / sanitize(entity.name) / "index.md";
+  std::filesystem::create_directories(output);
+  std::filesystem::path file = output / (filename + ".md");
 
   /* check if the file exists, and if so that if can be overwritten */
   bool canWrite = true;
@@ -34,7 +49,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     /* groups */
     for (auto& child : entity.groups) {
       out << ":material-format-section: [" << title(child) << ']';
-      out << "(" << sanitize(child.name) << "/index.md)" << std::endl;
+      out << "(" << dirname << sanitize(child.name) << ".md)" << std::endl;
       out << ":   " << line(brief(child)) << std::endl;
       out << std::endl;
     }
@@ -43,7 +58,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     for (auto& child : view(entity.namespaces, true)) {
       if (!child->empty()) {
         out << ":material-package: [" << child->name << ']';
-        out << "(" << sanitize(child->name) << "/index.md)" << std::endl;
+        out << "(" << dirname << sanitize(child->name) << ".md)" << std::endl;
         out << ":   " << line(brief(*child)) << std::endl;
         out << std::endl;
       }
@@ -58,8 +73,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
       for (auto& child : view(entity.types,
           entity.type == EntityType::NAMESPACE ||
           entity.type == EntityType::GROUP)) {
-        out << "| [" << child->name << "](" << sanitize(child->name) <<
-            "/index.md) | ";
+        out << "| [" << child->name << "](" << dirname << sanitize(child->name) << ".md) | ";
         out << line(brief(*child)) << " |" << std::endl;
       }
       out << std::endl;
