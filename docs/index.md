@@ -37,7 +37,7 @@ Doxide is a documentation generator for modern C++. It consumes C++ sources anno
      * 
      * @return Return value.
      * 
-     * @tip There are plenty more demos [here](/demo).
+     * @tip There are plenty more [demonstrations available](/demo)!
      */
     template<class T>
     int f(int x, int& y);
@@ -62,7 +62,7 @@ Doxide is a documentation generator for modern C++. It consumes C++ sources anno
         :    Return value.
 
         !!! tip
-            There are plenty more demos [here](/demo).
+            There are plenty more [demonstrations available](/demo)!
 
 By generating Markdown, Doxide opens C++ documentation to the whole wide world of static site generation tools and themes. There is particular support for [MkDocs](https://www.mkdocs.org/){target="_blank"} and the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/){target="_blank"} theme, as on this website. A little extra effort enables alternative static site generation tools such as [Jekyll](https://jekyllrb.com/){target="_blank"} and [Hugo](https://gohugo.io/){target="_blank"}. Other formats such as PDF are possible too, via [Pandoc](https://pandoc.org/){target="_blank"}.
 
