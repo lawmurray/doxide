@@ -573,7 +573,7 @@
 <p>Doxide may report parsing errors in C++ source files, even if they are building successfully with a C++ compiler. This can occur for one of two reasons:</p>
 <ol>
 <li>
-<p>The parser used, <a href="https://tree-sitter.github.io">Tree-sitter</a>, is different to that of a compiler. It may fail to parse code that is accepted by a compiler, or even accept code that is rejected by a compiler.</p>
+<p>The parser used, <a href="https://tree-sitter.github.io">Tree-sitter</a>, is different to that of a compiler, and is designed more for language tools such as syntax highlighters. It may fail to parse code that is accepted by a compiler, or even accept code that is rejected by a compiler.</p>
 </li>
 <li>
 <p>Doxide does not run a preprocessor before parsing (it is unclear that this would even be desirable). Consequently, it may report parsing errors in situations where C++ syntax is only valid after preprocessing, due to the use of preprocessor macros.</p>
@@ -614,7 +614,6 @@ or, if we prefer not to include such detail in the documentation, it could be er
 </li>
 </ol>
 <p>For the purposes of step 2, following the usual convention for preprocessor symbols, a sibling looks like a preprocessor symbol if it has at least three characters consisting of uppercase letters, underscores, and digits, but starting with an uppercase letter or underscore.</p>
-<p>If Doxide applies an autocorrection it will issue a warning. Such warnings may be silenced by defining the symbols in the <code>defines</code> section of the configuration file as above.</p>
 
 
 
