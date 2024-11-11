@@ -108,6 +108,13 @@ int y(0);
 int z{0};
 
 /**
+ * Test variable of array type.
+ * 
+ * @ingroup parsing
+ */
+int arr1[10];
+
+/**
  * Test variable of reference type.
  * 
  * @ingroup parsing
@@ -120,6 +127,13 @@ int& ref1;
  * @ingroup parsing
  */
 int* ptr1;
+
+/**
+ * Test variable of array type with initializer.
+ * 
+ * @ingroup parsing
+ */
+int arr2[10] = {0};
 
 /**
  * Test variable of reference type with initializer.
@@ -495,6 +509,11 @@ public:
   int z{0};
 
   /**
+   * Test member variable of array type.
+   */
+  int arr1[10];
+
+  /**
    * Test member variable of reference type.
    */
   int& ref1;
@@ -503,6 +522,11 @@ public:
    * Test member variable of pointer type.
    */
   int* ptr1;
+
+  /**
+   * Test member variable of array type with initializer.
+   */
+  int arr2[10] = {0};
 
   /**
    * Test member variable of reference type with initializer.
