@@ -2,7 +2,7 @@
 
 Contributions to Doxide are welcome via a pull request to the [GitHub repository](https://github.com/lawmurray/doxide). Similarly, bug reports and feature suggestions can be made by [opening an issue](https://github.com/lawmurray/doxide/issues), and questions asked by [starting a discussion](https://github.com/lawmurray/doxide/discussions).
 
-There are many ways to contribute code to Doxide. To do so you will need knowledge of C++, and may need to learn how to use [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) to parse and query a C++ source files. A brief how-to on the latter is given here .
+There are many ways to contribute code to Doxide. To do so you will need knowledge of C++, and may need to learn how to use [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) to parse and query C++ source files. A brief how-to on the latter is given here .
 
 When developing Doxide, you will need to build it from source, and rebuild it from source after making any changes. See the [README.md](https://github.com/lawmurray/doxide?tab=readme-ov-file#installation) file for instructions on working from source.
 
