@@ -113,6 +113,7 @@ void Parser::parse(const std::string& file, Entity& global) {
           in[middle - 1] == '\t' ||
           in[middle - 1] == '\n' ||
           in[middle - 1] == '\r' ||
+          in[middle - 1] == '\\' ||
           in[middle - 1] == '=' ||
           in[middle - 1] == ';')) {
         --middle;
