@@ -11,6 +11,9 @@ Commands are:
 `doxide clean`
 :   Clean the output directory.
 
+`doxide cover`
+:   Output (on `stdout`) zero-count line data for mixing with [code coverage](coverage.md) reports.
+
 `doxide help`
 :   Print usage information.
 

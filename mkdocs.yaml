@@ -76,6 +76,7 @@ nav:
   - writing.md
   - organizing.md
   - parsing.md
+  - coverage.md
   - command-line.md
   - contributing.md
   - demo/index.md
