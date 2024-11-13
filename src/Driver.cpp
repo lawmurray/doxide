@@ -2,6 +2,7 @@
 #include "YAMLParser.hpp"
 #include "Parser.hpp"
 #include "MarkdownGenerator.hpp"
+#include "GcovGenerator.hpp"
 
 Driver::Driver() :
     title("Untitled"),
@@ -49,6 +50,18 @@ void Driver::clean() {
    * their YAML frontmatter */
   MarkdownGenerator generator;
   generator.clean(output);
+}
+
+void Driver::cover() {
+  /* parse */
+  Parser parser(defines);
+  for (auto file: files) {
+    parser.parse(file, global);
+  }
+
+  /* generate */
+  GcovGenerator generator;
+  generator.generate(global);
 }
 
 void Driver::config() {

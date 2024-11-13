@@ -18,6 +18,7 @@ add_executable(doxide
     src/doxide.cpp
     src/Driver.cpp
     src/Entity.cpp
+    src/GcovGenerator.cpp
     src/MarkdownGenerator.cpp
     src/Parser.cpp
     src/Token.cpp

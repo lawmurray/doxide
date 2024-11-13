@@ -32,6 +32,11 @@ public:
   void clean();
 
   /**
+   * Output line coverage information.
+   */
+  void cover();
+
+  /**
    * Title.
    */
   std::string title;

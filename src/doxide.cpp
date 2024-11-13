@@ -409,6 +409,10 @@ int main(int argc, char** argv) {
       "Clean output directory.")->
       fallthrough()->
       callback([&]() { driver.clean(); });
+  app.add_subcommand("cover",
+      "Output line coverage information in gcov JSON intermediate format.")->
+      fallthrough()->
+      callback([&]() { driver.cover(); });
   app.require_subcommand(1);
   CLI11_PARSE(app, argc, argv);
 }
