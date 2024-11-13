@@ -48,7 +48,10 @@ void GcovGenerator::collate(const Entity& node) {
   /* record lines for functions and operators */
   if ((node.type == EntityType::FUNCTION || node.type == EntityType::OPERATOR)) {
     auto& lines = coverage[node.file];
-    for (int line = node.start_line; line <= node.end_line; ++line) {
+    /* omit the first line (containing the function signature) and the last
+     * line (containing the closing brace); this misses functions defined on a
+     * single line, assumed to be rare */
+    for (int line = node.start_line + 1; line < node.end_line; ++line) {
       lines.insert(line);
     }
   }
