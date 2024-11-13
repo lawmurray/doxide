@@ -6,6 +6,7 @@ description: |
     the repository. This first page demonstrates how
     [groups](../organizing.md) can be used to organize documentation.
 files:
+  - "src/**.hpp"
   - "demo/*.hpp"
 output: docs/demo
 groups:
@@ -15,3 +16,6 @@ groups:
   - name: presentation
     title: Presentation
     description: Demonstration and test of some Markdown elements, such as code, syntax highlighting, tables, images, and admonitions.
+  - name: developer
+    title: Developer
+    description: Doxide's own source code documentation, for developers, but also serving as an example for others.

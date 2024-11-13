@@ -3,8 +3,10 @@
 #include "doxide.hpp"
 
 /**
- * Token types. Closing delimiters must be one shift left of their opening
- * counterparts.
+ * Documentation comment token types. Closing delimiters must be one shift
+ * left of their opening counterparts.
+ *
+ * @ingroup developer
  */
 enum TokenType : int {
   NONE = 0,
@@ -23,8 +25,10 @@ enum TokenType : int {
 };
 
 /**
- * Token patterns. Order is important, as a match to an earlier pattern
- * precludes a match to a later.
+ * Documentation comment token patterns. Order is important, as a match to an
+ * earlier pattern precludes a match to a later.
+ *
+ * @ingroup developer
  */
 static auto regexes = {
   std::make_pair(OPEN_AFTER, std::regex("(?:/\\*\\*|/\\*!|///|//!)<[ \\t]?")),
@@ -48,6 +52,8 @@ static auto regexes = {
 
 /**
  * Token.
+ * 
+ * @ingroup developer
  * 
  * A token is only valid for the lifetime of the Tokenizer that produced it,
  * as it contains a reference to a substring of the source file.

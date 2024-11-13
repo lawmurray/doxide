@@ -5,7 +5,9 @@
 #include "YAMLNode.hpp"
 
 /**
- * Driver.
+ * Driver for running commands
+ * 
+ * @ingroup developer
  */
 class Driver {
 public:

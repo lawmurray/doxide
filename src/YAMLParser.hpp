@@ -4,7 +4,10 @@
 #include "YAMLNode.hpp"
 
 /**
- * Parser for YAML config files and YAML frontmatter of Markdown files.
+ * Parser for YAML config files and YAML frontmatter of Markdown files. Also
+ * works for JSON, as YAML is nowadays a superset of JSON.
+ * 
+ * @ingroup developer
  */
 class YAMLParser {
 public:

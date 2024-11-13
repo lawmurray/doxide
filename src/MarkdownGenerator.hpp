@@ -5,6 +5,8 @@
 
 /**
  * Markdown generator.
+ * 
+ * @ingroup developer
  */
 class MarkdownGenerator {
 public:

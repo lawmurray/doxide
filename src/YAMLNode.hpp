@@ -4,6 +4,8 @@
 
 /**
  * Node in a YAML document.
+ * 
+ * @ingroup developer
  */
 class YAMLNode {
 public:

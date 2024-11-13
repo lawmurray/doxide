@@ -5,6 +5,8 @@
 
 /**
  * C++ source parser.
+ * 
+ * @ingroup developer
  */
 class Parser {
 public:

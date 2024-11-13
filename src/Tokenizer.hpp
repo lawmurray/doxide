@@ -4,7 +4,9 @@
 #include "Token.hpp"
 
 /**
- * Tokenizer.
+ * Documentation comment tokenizer.
+ * 
+ * @ingroup developer
  */
 class Tokenizer {
 public:

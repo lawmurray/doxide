@@ -4,6 +4,8 @@
 
 /**
  * Entity types.
+ * 
+ * @ingroup developer
  */
 enum class EntityType {
   NONE,
@@ -20,7 +22,9 @@ enum class EntityType {
 };
 
 /**
- * Entity.
+ * Entity in a C++ source file, e.g. variable, function, class, etc.
+ * 
+ * @ingroup developer
  */
 struct Entity {
   /**
