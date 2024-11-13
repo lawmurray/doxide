@@ -1,8 +1,11 @@
 #include "Entity.hpp"
 
 Entity::Entity() :
-   type(EntityType::NONE),
+   start_line(-1),
+   middle_line(-1),
+   end_line(-1),
    indent(0),
+   type(EntityType::NONE),
    hide(false) {
   //
 }

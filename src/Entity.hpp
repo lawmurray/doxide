@@ -155,14 +155,35 @@ struct Entity {
   std::string ingroup;
 
   /**
-   * Entity type.
+   * Source file of the entity.
    */
-  EntityType type;
+  std::string file;
+
+  /**
+   * Starting line of the entity.
+   */
+  int start_line;
+
+  /**
+   * Starting line of the body. If there is no body, e.g. this is a
+   * declaration only, then equals `end_line`.
+   */
+  int middle_line;
+
+  /**
+   * Ending line of the entity.
+   */
+  int end_line;
 
   /**
    * Current indent level of the documentation comment for this entity.
    */
   int indent;
+
+  /**
+   * Entity type.
+   */
+  EntityType type;
 
   /**
    * Hide this node?

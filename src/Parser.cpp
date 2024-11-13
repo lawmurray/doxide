@@ -50,6 +50,7 @@ void Parser::parse(const std::string& file, Entity& global) {
   Entity entity;
   while (ts_query_cursor_next_match(cursor, &match)) {    
     uint64_t start = 0, middle = 0, end = 0;
+    uint64_t start_line = -1, middle_line = -1, end_line = -1;
     for (uint16_t i = 0; i < match.capture_count; ++i) {
       node = match.captures[i].node;
       uint32_t id = match.captures[i].index; 
@@ -71,12 +72,17 @@ void Parser::parse(const std::string& file, Entity& global) {
         entity.name = in.substr(k, l - k);
       } else if (strncmp(name, "body", length) == 0) {
         middle = ts_node_start_byte(node);
+        middle_line = ts_node_start_point(node).row;
       } else if (strncmp(name, "value", length) == 0) {
         middle = ts_node_start_byte(node);
+        middle_line = ts_node_start_point(node).row;
       } else {
         start = ts_node_start_byte(node);
+        start_line = ts_node_start_point(node).row;
         end = ts_node_end_byte(node);
+        end_line = ts_node_end_point(node).row;
         middle = end;
+        middle_line = end_line;
 
         if (strncmp(name, "namespace", length) == 0) {
           entity.type = EntityType::NAMESPACE;
@@ -114,6 +120,12 @@ void Parser::parse(const std::string& file, Entity& global) {
 
       /* entity declaration */
       entity.decl = in.substr(start, middle - start);
+
+      /* entity location */
+      entity.file = file;
+      entity.start_line = start_line;
+      entity.middle_line = middle_line;
+      entity.end_line = end_line;
 
       /* the final node represents the whole entity, pop the stack until we
        * find its direct parent, as determined using nested byte ranges */
