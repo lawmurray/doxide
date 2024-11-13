@@ -51,7 +51,7 @@ void GcovGenerator::collate(const Entity& node) {
     /* omit the first line (containing the function signature) and the last
      * line (containing the closing brace); this misses functions defined on a
      * single line, assumed to be rare */
-    for (int line = node.start_line + 1; line < node.end_line; ++line) {
+    for (int line = node.middle_line + 1; line < node.end_line; ++line) {
       lines.insert(line);
     }
   }
