@@ -410,7 +410,7 @@ int main(int argc, char** argv) {
       fallthrough()->
       callback([&]() { driver.clean(); });
   app.add_subcommand("cover",
-      "Output line coverage information in gcov JSON intermediate format.")->
+      "Output (on stdout) zero-count line data for mixing with code coverage reports.")->
       fallthrough()->
       callback([&]() { driver.cover(); });
   app.require_subcommand(1);
