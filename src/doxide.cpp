@@ -178,19 +178,28 @@ const char* query_cpp = R""""(
 
   ;; class definition
   ((class_specifier
-      name: (type_identifier) @name
+      name: [
+        (type_identifier) @name
+        (template_type) @name  ;; for template specialization
+      ]
       body: (field_declaration_list)? @body
       ) @type)
 
   ;; struct definition
   ((struct_specifier
-      name: (type_identifier) @name
+      name: [
+        (type_identifier) @name
+        (template_type) @name  ;; for template specialization
+      ]
       body: (field_declaration_list)? @body
       ) @type)
 
   ;; union definition
   ((union_specifier
-      name: (type_identifier) @name
+      name: [
+        (type_identifier) @name
+        (template_type) @name  ;; for template specialization
+      ]
       body: (field_declaration_list)? @body
       ) @type)
 
