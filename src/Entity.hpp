@@ -189,4 +189,9 @@ struct Entity {
    * Hide this node?
    */
   bool hide;
+
+  /**
+   * Does this node have one or more visible children?
+   */
+  bool visibleChildren;
 };

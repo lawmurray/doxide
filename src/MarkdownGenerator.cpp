@@ -3,10 +3,6 @@
 
 void MarkdownGenerator::generate(const std::filesystem::path& output,
     const Entity& entity) {
-  if (entity.hide || entity.docs.empty()) {
-    return;
-  }
-
   std::string name = sanitize(entity.name);  // entity name, empty for root
   std::string dirname;  // directory name for this entity
   std::string filename;  // file name for this entity
@@ -75,12 +71,10 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
 
     /* namespaces */
     for (auto& child : view(entity.namespaces, true)) {
-      if (!child->empty()) {
-        out << ":material-package: [" << child->name << ']';
-        out << "(" << childdir << sanitize(child->name) << "/index.md)" << std::endl;
-        out << ":   " << line(brief(*child)) << std::endl;
-        out << std::endl;
-      }
+      out << ":material-package: [" << child->name << ']';
+      out << "(" << childdir << sanitize(child->name) << "/index.md)" << std::endl;
+      out << ":   " << line(brief(*child)) << std::endl;
+      out << std::endl;
     }
 
     /* brief descriptions */
@@ -252,16 +246,14 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
 
   /* child pages */
   std::filesystem::create_directories(output / name);
-  for (auto& child : entity.groups) {
-    generate(output / name, child);
+  for (auto& child : view(entity.groups, false)) {
+    generate(output / name, *child);
   }
-  for (auto& child : entity.namespaces) {
-    if (!child.empty()) {
-      generate(output / name, child);
-    }
+  for (auto& child : view(entity.namespaces, false)) {
+    generate(output / name, *child);
   }
-  for (auto& child : entity.types) {
-    generate(output / name, child);
+  for (auto& child : view(entity.types, false)) {
+    generate(output / name, *child);
   }
 }
 
@@ -401,6 +393,10 @@ std::list<const Entity*> MarkdownGenerator::view(
   std::list<const Entity*> ptrs;
   std::transform(entities.begin(), entities.end(), std::back_inserter(ptrs),
       [](const Entity& e) { return &e; });
+  auto end = std::remove_if(ptrs.begin(), ptrs.end(),
+      [](const Entity* e) { return e->hide || e->docs.empty() || 
+      (e->type == EntityType::NAMESPACE && !e->visibleChildren); });
+  ptrs.erase(end, ptrs.end());
   if (sort) {
     ptrs.sort([](const Entity* a, const Entity* b) {
       return a->name < b->name;

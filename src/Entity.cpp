@@ -6,7 +6,8 @@ Entity::Entity() :
    end_line(-1),
    indent(0),
    type(EntityType::NONE),
-   hide(false) {
+   hide(false),
+   visibleChildren(false) {
   //
 }
 
@@ -93,6 +94,7 @@ void Entity::addToThis(const Entity& o) {
   } else {
     warn("unrecognized entity type, ignoring");
   }
+  visibleChildren = visibleChildren || !o.hide || !o.docs.empty();
 }
 
 void Entity::merge(const Entity& o) {
@@ -125,4 +127,5 @@ void Entity::merge(const Entity& o) {
   middle_line = o.middle_line;
   type = o.type;
   hide = hide || o.hide;
+  visibleChildren = visibleChildren || o.visibleChildren;
 }
