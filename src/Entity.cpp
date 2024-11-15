@@ -116,14 +116,15 @@ void Entity::merge(const Entity& o) {
   if (ingroup.empty()) {
     ingroup = o.ingroup;
   }
+
+  name = o.name;
   if (type == EntityType::TEMPLATE) {
     decl += " ";
     decl += o.decl;
   }
-
-  name = o.name;
   docs += o.docs;
   brief += o.brief;
+  middle_line = o.middle_line;
   type = o.type;
   hide = hide || o.hide;
 }

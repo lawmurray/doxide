@@ -283,11 +283,11 @@ const char* query_cpp = R""""(
             ]
           )
         )
-        ]
-        [
-          (field_initializer_list)
-          body: (_)
-        ]? @body
+      ]
+      [
+        (field_initializer_list)
+        body: (_)
+      ]? @body
     ) @function)
 
   ;; operator
@@ -309,8 +309,8 @@ const char* query_cpp = R""""(
         (operator_cast
           type: (_) @name
         )
-        ]
-        body: (_)? @body
+      ]
+      body: (_)? @body
     ) @operator)
 
   ;; enumeration value
