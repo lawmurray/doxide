@@ -3,6 +3,10 @@
 
 void MarkdownGenerator::generate(const std::filesystem::path& output,
     const Entity& entity) {
+  if (entity.hide || entity.docs.empty()) {
+    return;
+  }
+
   std::string name = sanitize(entity.name);  // entity name, empty for root
   std::string dirname;  // directory name for this entity
   std::string filename;  // file name for this entity

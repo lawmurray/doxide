@@ -74,26 +74,24 @@ void Entity::addToThis(const Entity& o) {
     }
   } else if (o.type == EntityType::GROUP) {
     groups.push_back(o);
-  } else if (!o.hide && !o.docs.empty()) {
-    if (o.type == EntityType::TYPE) {
-      types.push_back(o);
-    } else if (o.type == EntityType::CONCEPT) {
-      concepts.push_back(o);
-    } else if (o.type == EntityType::VARIABLE) {
-      variables.push_back(o);
-    } else if (o.type == EntityType::FUNCTION) {
-      functions.push_back(o);
-    } else if (o.type == EntityType::OPERATOR) {
-      operators.push_back(o);
-    } else if (o.type == EntityType::ENUMERATOR) {
-      enums.push_back(o);
-    } else if (o.type == EntityType::MACRO) {
-      macros.push_back(o);
-    } else if (o.type == EntityType::TEMPLATE) {
-      // ignore, likely a parse error within the template declaration
-    } else {
-      warn("unrecognized entity type, ignoring");
-    }
+  } else if (o.type == EntityType::TYPE) {
+    types.push_back(o);
+  } else if (o.type == EntityType::CONCEPT) {
+    concepts.push_back(o);
+  } else if (o.type == EntityType::VARIABLE) {
+    variables.push_back(o);
+  } else if (o.type == EntityType::FUNCTION) {
+    functions.push_back(o);
+  } else if (o.type == EntityType::OPERATOR) {
+    operators.push_back(o);
+  } else if (o.type == EntityType::ENUMERATOR) {
+    enums.push_back(o);
+  } else if (o.type == EntityType::MACRO) {
+    macros.push_back(o);
+  } else if (o.type == EntityType::TEMPLATE) {
+    // ignore, likely a parse error within the template declaration
+  } else {
+    warn("unrecognized entity type, ignoring");
   }
 }
 
