@@ -1,6 +1,7 @@
 #include "YAMLParser.hpp"
 
-YAMLParser::YAMLParser() {
+YAMLParser::YAMLParser(const std::string& filename) :
+    filename(filename) {
   yaml_parser_initialize(&parser);
 }
 
@@ -8,8 +9,8 @@ YAMLParser::~YAMLParser() {
   yaml_parser_delete(&parser);
 }
 
-YAMLNode YAMLParser::parse(const std::string& file) {
-  auto contents = gulp(file);
+YAMLNode YAMLParser::parse() {
+  auto contents = gulp(filename);
   yaml_parser_set_input_string(&parser, (const unsigned char*)contents.data(),
       contents.size());
   YAMLNode root;
@@ -22,7 +23,7 @@ YAMLNode YAMLParser::parse(const std::string& file) {
 
   while (!done) {
     if (!yaml_parser_parse(&parser, &event)) {
-      throw std::runtime_error("syntax error in doxide.yaml");
+      throw std::runtime_error("YAML syntax error in " + filename);
     }
     if (event.type == YAML_SEQUENCE_START_EVENT) {
       parseSequence(root);
@@ -48,7 +49,7 @@ void YAMLParser::parseMapping(YAMLNode& node) {
   while (!done) {
     /* read one name/value pair on each iteration */
     if (!yaml_parser_parse(&parser, &event)) {
-      throw std::runtime_error("YAML syntax error");
+      throw std::runtime_error("YAML syntax error in " + filename);
     }
     if (event.type == YAML_SCALAR_EVENT) {
       /* key */
@@ -59,7 +60,7 @@ void YAMLParser::parseMapping(YAMLNode& node) {
 
       /* value */
       if (!yaml_parser_parse(&parser, &event)) {
-        throw std::runtime_error("YAML syntax error");
+        throw std::runtime_error("YAML syntax error in " + filename);
       }
       if (event.type == YAML_SCALAR_EVENT) {
         parseValue(node.insert(key));
@@ -83,7 +84,7 @@ void YAMLParser::parseSequence(YAMLNode& node) {
   int done = 0;
   while (!done) {
     if (!yaml_parser_parse(&parser, &event)) {
-      throw std::runtime_error("YAML syntax error");
+      throw std::runtime_error("YAML syntax error in " + filename);
     }
     if (event.type == YAML_SCALAR_EVENT) {
       parseValue(node.push());

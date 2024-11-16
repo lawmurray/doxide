@@ -14,7 +14,7 @@ public:
   /**
    * Constructor.
    */
-  YAMLParser();
+  YAMLParser(const std::string& filename);
 
   /**
    * Destructor.
@@ -22,18 +22,21 @@ public:
   ~YAMLParser();
 
   /**
-   * Parse a file.
-   * 
-   * @param file File name.
+   * Parse the file.
    * 
    * @return The contents of the file.
    */
-  YAMLNode parse(const std::string& file);
+  YAMLNode parse();
 
 private:
   void parseMapping(YAMLNode& node);
   void parseSequence(YAMLNode& node);
   void parseValue(YAMLNode& node);
+
+  /**
+   * File name.
+   */
+  std::string filename;
 
   /**
    * LibYAML parser.

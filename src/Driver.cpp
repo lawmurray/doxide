@@ -70,8 +70,8 @@ void Driver::config() {
   }
 
   /* parse build configuration file */
-  YAMLParser yaml;
-  YAMLNode root = yaml.parse(path);
+  YAMLParser yaml(path);
+  YAMLNode root = yaml.parse();
 
   if (root.has("title")) {
     if (root.isValue("title")) {
