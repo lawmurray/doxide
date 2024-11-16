@@ -2,7 +2,6 @@
 
 #include "doxide.hpp"
 #include "Entity.hpp"
-#include "File.hpp"
 
 /**
  * C++ source parser.
@@ -41,11 +40,6 @@ public:
    * Root entity.
    */
   Entity root;
-
-  /**
-   * Source files.
-   */
-  std::list<File> files;
 
   /**
    * Macro definitions.

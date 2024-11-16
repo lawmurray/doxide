@@ -70,6 +70,25 @@ void Entity::addToThis(const Entity& o) {
     macros.push_back(o);
   } else if (o.type == EntityType::TEMPLATE) {
     // ignore, likely a parse error within the template declaration
+  } else if (o.type == EntityType::FILE || o.type == EntityType::DIR) {
+    /* maintain directory structure */
+    std::filesystem::path path = o.name, partial;
+    path = path.parent_path();
+    Entity* e = this;
+    for (auto iter = path.begin(); iter != path.end(); ++iter) {
+      auto single = iter->string();
+      auto found = std::find_if(e->files.begin(), e->files.end(),
+          [&single](auto& e) { return e.name == single; });
+      if (found == files.end()) {
+        /* insert a subdirectory */
+        partial /= single;
+        e = &e->files.emplace_back();
+        e->type = EntityType::DIR;
+        e->name = partial;
+        e->title = single;
+      }
+    }
+    e->files.push_back(o);
   } else {
     warn("unrecognized entity type, ignoring");
   }

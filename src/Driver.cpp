@@ -47,7 +47,7 @@ void Driver::cover() {
 
   /* generate */
   GcovGenerator generator;
-  generator.generate(parser.files);
+  generator.generate(parser.root);
 }
 
 void Driver::clean() {

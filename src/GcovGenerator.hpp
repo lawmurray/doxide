@@ -1,7 +1,7 @@
 #pragma once
 
 #include "doxide.hpp"
-#include "File.hpp"
+#include "Entity.hpp"
 
 /**
  * Gcov JSON generator.
@@ -13,7 +13,18 @@ public:
   /**
    * Generate documentation.
    * 
-   * @param files Source files.
+   * @param root Root entity.
    */
-  void generate(const std::list<File>& files);
+  void generate(const Entity& root);
+
+private:
+  /**
+   * Generate documentation.
+   * 
+   * @param root Root entity.
+   * @param nfiles Number of files output so far.
+   * 
+   * @return Updated number of files output so far.
+   */
+  int generate(const Entity& root, int nfiles);
 };

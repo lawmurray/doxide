@@ -18,7 +18,9 @@ enum class EntityType {
   FUNCTION,
   OPERATOR,
   ENUMERATOR,
-  MACRO
+  MACRO,
+  DIR,
+  FILE
 };
 
 /**
@@ -101,12 +103,24 @@ struct Entity {
   list_type macros;
 
   /**
-   * Entity name (e.g. name of variable, function, class).
+   * Child directories and files.
+   */
+  list_type files;
+
+  /**
+   * For a file only, the line numbers of executable lines, zero-based.
+   */
+  std::unordered_set<uint32_t> lines;
+
+  /**
+   * Entity name (e.g. name of variable, function, class). For a file or
+   * directory this is the full path.
    */
   std::string name;
 
   /**
-   * Entity declaration (e.g. function signature).
+   * Entity declaration (e.g. function signature). For a file this is its full
+   * contents.
    */
   std::string decl;
 
@@ -116,7 +130,8 @@ struct Entity {
   std::string docs;
 
   /**
-   * Entity title. This is used for the title of the page.
+   * Entity title. This is used for the title of the page. For a file or
+   * directory it is the name, not the full path.
    */
   std::string title;
 

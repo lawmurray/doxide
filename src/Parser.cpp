@@ -50,24 +50,35 @@ void Parser::parse(const std::unordered_set<std::string>& filenames) {
 }
 
 void Parser::parse(const std::string& filename) {
-  /* preprocess data */
-  std::string in = preprocess(filename);
+  /* entity to represent file */
+  Entity file;
+  file.name = filename;
+  file.decl = preprocess(filename);
+  file.title = std::filesystem::path(filename).filename();
+  file.filename = filename;
+  file.start_line = 0;
+  file.end_line = 0;
+  file.type = EntityType::FILE;
 
-  /* final parse */
-  TSTree* tree = ts_parser_parse_string(parser, NULL, in.data(), in.size());
+  /* parse */
+  TSTree* tree = ts_parser_parse_string(parser, NULL, file.decl.data(),
+      file.decl.size());
   if (!tree) {
     /* something went very wrong */
     warn("cannot parse " << filename << ", skipping");
     return;
   } else {
     /* report on any remaining parse errors */
-    report(filename, in, tree);
+    report(filename, file.decl, tree);
   }
 
   /* query entity information */
   TSNode node = ts_tree_root_node(tree);
   std::list<uint32_t> starts, ends;
   std::list<Entity> entities;
+
+  file.start_line = ts_node_start_point(node).row;
+  file.end_line = ts_node_end_point(node).row;
 
   starts.push_back(ts_node_start_byte(node));
   ends.push_back(ts_node_end_byte(node));
@@ -89,7 +100,7 @@ void Parser::parse(const std::string& filename) {
       uint32_t l = ts_node_end_byte(node);
 
       if (strncmp(name, "docs", length) == 0) {
-        std::string docs = in.substr(k, l - k);
+        std::string docs = file.decl.substr(k, l - k);
         Tokenizer tokenizer(docs);
         Token token = tokenizer.next();
         if (token.type == OPEN_AFTER) {
@@ -98,7 +109,7 @@ void Parser::parse(const std::string& filename) {
           translate(docs, entity);
         }
       } else if (strncmp(name, "name", length) == 0) {
-        entity.name = in.substr(k, l - k);
+        entity.name = file.decl.substr(k, l - k);
       } else if (strncmp(name, "body", length) == 0) {
         middle = ts_node_start_byte(node);
         middle_line = ts_node_start_point(node).row;
@@ -138,18 +149,18 @@ void Parser::parse(const std::string& filename) {
       /* workaround for entity declaration logic catching punctuation, e.g.
        * ending semicolon in declaration, the equals sign in a variable
        * declaration with initialization, or whitespace */
-      while (middle > start && (in[middle - 1] == ' ' ||
-          in[middle - 1] == '\t' ||
-          in[middle - 1] == '\n' ||
-          in[middle - 1] == '\r' ||
-          in[middle - 1] == '\\' ||
-          in[middle - 1] == '=' ||
-          in[middle - 1] == ';')) {
+      while (middle > start && (file.decl[middle - 1] == ' ' ||
+          file.decl[middle - 1] == '\t' ||
+          file.decl[middle - 1] == '\n' ||
+          file.decl[middle - 1] == '\r' ||
+          file.decl[middle - 1] == '\\' ||
+          file.decl[middle - 1] == '=' ||
+          file.decl[middle - 1] == ';')) {
         --middle;
       }
 
       /* entity declaration */
-      entity.decl = in.substr(start, middle - start);
+      entity.decl = file.decl.substr(start, middle - start);
 
       /* entity location */
       entity.filename = filename;
@@ -238,7 +249,7 @@ void Parser::parse(const std::string& filename) {
       } else if (strncmp(name, "if", length) == 0) {
         /* check if this is `if constexpr`, which is not reflected in the
          * parse tree and requires a string comparison */
-        std::string stmt = in.substr(start, end - start);
+        std::string stmt = file.decl.substr(start, end - start);
         exclude_next_condition = std::regex_search(stmt, regex_if_constexpr);
       } else if (strncmp(name, "condition", length) == 0) {
         /* exclude if the condition belongs to an `if constexpr` */
@@ -285,7 +296,7 @@ void Parser::parse(const std::string& filename) {
   ts_query_cursor_delete(cursor);
 
   /* finish up */
-  files.push_back(File{filename, std::move(in), std::move(lines)});
+  root.add(file);
   ts_tree_delete(tree);
   ts_parser_reset(parser);  
 }
