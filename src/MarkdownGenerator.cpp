@@ -250,6 +250,14 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
       out << std::endl;
     }
 
+    /* for a file, output the complete contents */
+    if (entity.type == EntityType::FILE) {
+      out << "```cpp" << std::endl;
+      out << entity.decl << std::endl;
+      out << "```" << std::endl;
+      out << std::endl;
+    }
+
     /* detailed descriptions */
     if (concepts.size() > 0) {
       out << "## Concept Details" << std::endl;
