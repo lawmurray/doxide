@@ -57,7 +57,9 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     dirname = "";
     filename = "index";
     childdir = "";
-  } else if (entity.type == EntityType::TYPE) {
+  } else if (entity.type == EntityType::TYPE ||
+      entity.type == EntityType::DIR ||
+      entity.type == EntityType::FILE) {
     /* when building the navigation menu, mkdocs modifies directory names by
      * replacing underscores and capitalizing words; this is problematic for
      * type names; rather than generating the docs for a class at
@@ -124,6 +126,25 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
       out << ":material-package: [" << child->name << ']';
       out << "(" << childdir << sanitize(child->name) << "/index.md)" << std::endl;
       out << ":   " << line(brief(*child)) << std::endl;
+      out << std::endl;
+    }
+
+    /* directories and files */
+    auto dirs = view(entity.dirs, true);
+    auto files = view(entity.files, true);
+    if (dirs.size() + files.size() > 0) {
+      out << "## Files" << std::endl;
+      out << std::endl;
+      out << "| Name | Lines |" << std::endl;
+      out << "| :--- | ----: |" << std::endl;
+      for (auto& child : dirs) {
+        out << "| :material-folder: [" << child->name << "](" << childdir << sanitize(child->name) << ".md) | ";
+        out << child->lines.size() << " |" << std::endl;
+      }
+      for (auto& child : files) {
+        out << "| :material-file: [" << child->name << "](" << childdir << sanitize(child->name) << ".md) | ";
+        out << child->lines.size() << " |" << std::endl;
+      }
       out << std::endl;
     }
 
@@ -317,6 +338,12 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
   for (auto& child : view(entity.types, false)) {
     generate(output / name, *child);
   }
+  for (auto& child : view(entity.dirs, false)) {
+    generate(output / name, *child);
+  }
+  for (auto& child : view(entity.files, false)) {
+    generate(output / name, *child);
+  }
 }
 
 std::string MarkdownGenerator::frontmatter(const Entity& entity) {
@@ -420,8 +447,10 @@ std::list<const Entity*> MarkdownGenerator::view(
   std::transform(entities.begin(), entities.end(), std::back_inserter(ptrs),
       [](const Entity& e) { return &e; });
   auto end = std::remove_if(ptrs.begin(), ptrs.end(),
-      [](const Entity* e) { return e->hide || e->docs.empty() || 
-      (e->type == EntityType::NAMESPACE && !e->visibleChildren); });
+      [](const Entity* e) { 
+        return e->hide ||
+          (e->type != EntityType::DIR && e->type != EntityType::FILE && e->docs.empty()) || 
+          (e->type == EntityType::NAMESPACE && !e->visibleChildren); });
   ptrs.erase(end, ptrs.end());
   if (sort) {
     ptrs.sort([](const Entity* a, const Entity* b) {

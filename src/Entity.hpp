@@ -103,7 +103,12 @@ struct Entity {
   list_type macros;
 
   /**
-   * Child directories and files.
+   * Child directories.
+   */
+  list_type dirs;
+
+  /**
+   * Child files.
    */
   list_type files;
 
@@ -130,8 +135,7 @@ struct Entity {
   std::string docs;
 
   /**
-   * Entity title. This is used for the title of the page. For a file or
-   * directory it is the name, not the full path.
+   * Entity title. This is used for the title of the page.
    */
   std::string title;
 

@@ -72,20 +72,20 @@ void Entity::addToThis(Entity&& o) {
     // ignore, likely a parse error within the template declaration
   } else if (o.type == EntityType::FILE || o.type == EntityType::DIR) {
     /* maintain directory structure */
-    std::filesystem::path path = o.name, partial;
+    std::filesystem::path path = o.filename;
     path = path.parent_path();
     Entity* e = this;
     for (auto iter = path.begin(); iter != path.end(); ++iter) {
       auto single = iter->string();
-      auto found = std::find_if(e->files.begin(), e->files.end(),
-          [&single](auto& e) { return e.name == single; });
-      if (found == files.end()) {
-        /* insert a subdirectory */
-        partial /= single;
-        e = &e->files.emplace_back();
+      auto found = std::find_if(e->dirs.begin(), e->dirs.end(),
+          [&single](auto& s) { return s.name == single; });
+      if (found == e->dirs.end()) {
+        /* add subdirectory */
+        e = &e->dirs.emplace_back();
         e->type = EntityType::DIR;
-        e->name = partial;
-        e->title = single;
+        e->name = single;
+      } else {
+        e = &(*found);
       }
     }
     e->files.push_back(std::move(o));
@@ -101,6 +101,7 @@ void Entity::merge(Entity&& o) {
       [this](Entity& o) {
         this->addToThis(std::move(o));
       });
+  o.namespaces.clear();
 
   groups.splice(groups.end(), std::move(o.groups));
   types.splice(types.end(), std::move(o.types));
@@ -110,19 +111,21 @@ void Entity::merge(Entity&& o) {
   operators.splice(operators.end(), std::move(o.operators));
   macros.splice(macros.end(), std::move(o.macros));
   enums.splice(enums.end(), std::move(o.enums));
-  files.splice(enums.end(), std::move(o.files));
+  dirs.splice(dirs.end(), std::move(o.dirs));
+  files.splice(files.end(), std::move(o.files));
+  lines.merge(std::move(o.lines));
 
   if (ingroup.empty()) {
-    ingroup = o.ingroup;
+    ingroup = std::move(o.ingroup);
   }
 
   name = o.name;
   if (type == EntityType::TEMPLATE) {
     decl += " ";
-    decl += o.decl;
+    decl += std::move(o.decl);
   }
-  docs += o.docs;
-  brief += o.brief;
+  docs += std::move(o.docs);
+  brief += std::move(o.brief);
   type = o.type;
   hide = hide || o.hide;
   visibleChildren = visibleChildren || o.visibleChildren;
