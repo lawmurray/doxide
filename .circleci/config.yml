@@ -10,6 +10,7 @@ executors:
   mac:
     macos:
       xcode: 16.0.0
+    resource_class: macos.m1.medium.gen1
     environment:
       CPATH: /opt/homebrew/include
       LIBRARY_PATH: /opt/homebrew/lib
