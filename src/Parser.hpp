@@ -2,6 +2,7 @@
 
 #include "doxide.hpp"
 #include "Entity.hpp"
+#include "File.hpp"
 
 /**
  * C++ source parser.
@@ -13,7 +14,7 @@ public:
   /**
    * Constructor.
    */
-  Parser(const std::unordered_map<std::string,std::string>& defines);
+  Parser();
 
   /**
    * Destructor.
@@ -21,12 +22,35 @@ public:
   ~Parser();
 
   /**
+   * Parse C++ sources.
+   * 
+   * @param filenames C++ source file names.
+   * @param defines Macro definitions.
+   */
+  void parse(const std::unordered_set<std::string>& filenames);
+
+  /**
    * Parse C++ source.
    * 
    * @param file C++ source file name.
-   * @param global Global namespace.
+   * @param defines Macro definitions.
    */
-  void parse(const std::string& file, Entity& global);
+  void parse(const std::string& file);
+
+  /**
+   * Root entity.
+   */
+  Entity root;
+
+  /**
+   * Source files.
+   */
+  std::list<File> files;
+
+  /**
+   * Macro definitions.
+   */
+  std::unordered_map<std::string,std::string> defines;
 
 private:
   /**
@@ -36,6 +60,7 @@ private:
    * later.
    *
    * @param file C++ source file name.
+   * @param defines Macro definitions.
    *
    * @return Preprocessed source.
    */
@@ -57,11 +82,6 @@ private:
    * @param entity Entity to document.
    */
   void translate(const std::string_view& comment, Entity& entity);
-
-  /**
-   * Defines.
-   */
-  std::unordered_map<std::string,std::string> defines;
 
   /**
    * C++ parser.

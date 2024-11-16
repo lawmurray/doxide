@@ -1,8 +1,9 @@
 #pragma once
 
 #include "doxide.hpp"
-#include "Entity.hpp"
+#include "Parser.hpp"
 #include "YAMLNode.hpp"
+#include "Entity.hpp"
 
 /**
  * Driver for running commands
@@ -27,14 +28,14 @@ public:
   void build();
 
   /**
-   * Clean documentation.
-   */
-  void clean();
-
-  /**
    * Output line coverage information.
    */
   void cover();
+
+  /**
+   * Clean documentation.
+   */
+  void clean();
 
   /**
    * Title.
@@ -49,12 +50,7 @@ public:
   /**
    * Output directory.
    */
-  std::string output;
-
-  /**
-   * Defines.
-   */
-  std::unordered_map<std::string,std::string> defines;
+  std::filesystem::path output;
 
 private:
   /**
@@ -65,15 +61,15 @@ private:
   /**
    * Recursively read groups from the configuration file.
    */
-  void groups(YAMLNode& parentNode, Entity& parentEntity);
+  static void groups(YAMLNode& parentNode, Entity& parentEntity);
 
   /**
-   * Lists of files from config.
+   * Files.
    */
-  std::unordered_set<std::string> files;
+  std::unordered_set<std::string> filenames;
 
   /**
-   * Global namespace.
+   * Parser.
    */
-  Entity global;
+  Parser parser;
 };

@@ -155,9 +155,9 @@ struct Entity {
   std::string ingroup;
 
   /**
-   * Source file of the entity.
+   * Source file name of the entity.
    */
-  std::string file;
+  std::string filename;
 
   /**
    * Starting line of the entity.

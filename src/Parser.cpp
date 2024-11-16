@@ -1,8 +1,7 @@
 #include "Parser.hpp"
 #include "Tokenizer.hpp"
 
-Parser::Parser(const std::unordered_map<std::string,std::string>& defines) :
-    defines(defines),
+Parser::Parser() :
     parser(nullptr),
     query(nullptr) {
   uint32_t error_offset;
@@ -26,22 +25,29 @@ Parser::~Parser() {
   ts_parser_delete(parser);
 }
 
-void Parser::parse(const std::string& file, Entity& global) {
-  std::string in = preprocess(file);
+void Parser::parse(const std::unordered_set<std::string>& filenames) {
+  for (const std::string& filename: filenames) {
+    parse(filename);
+  }
+}
+
+void Parser::parse(const std::string& filename) {
+  std::string in = preprocess(filename);
   TSTree* tree = ts_parser_parse_string(parser, NULL, in.data(), in.size());
   if (!tree) {
-    warn("cannot parse " << file << ", skipping");
+    warn("cannot parse " << filename << ", skipping");
   }
-  report(file, in, tree);
+  report(filename, in, tree);
   TSNode node = ts_tree_root_node(tree);
 
   /* initialize state */
   std::list<uint64_t> starts, ends;
   std::list<Entity> entities;
+  std::set<int> lines;
 
   starts.push_back(ts_node_start_byte(node));
   ends.push_back(ts_node_end_byte(node));
-  entities.emplace_back(std::move(global));
+  entities.emplace_back(std::move(root));
 
   /* run query */
   TSQueryCursor* cursor = ts_query_cursor_new();
@@ -123,7 +129,7 @@ void Parser::parse(const std::string& file, Entity& global) {
       entity.decl = in.substr(start, middle - start);
 
       /* entity location */
-      entity.file = file;
+      entity.filename = filename;
       entity.start_line = start_line;
       entity.middle_line = middle_line;
       entity.end_line = end_line;
@@ -176,7 +182,7 @@ void Parser::parse(const std::string& file, Entity& global) {
     starts.pop_back();
     ends.pop_back();
   }
-  global = std::move(entities.back());
+  root = std::move(entities.back());
 
   entities.pop_back();
   starts.pop_back();
@@ -191,11 +197,11 @@ void Parser::parse(const std::string& file, Entity& global) {
   ts_parser_reset(parser);
 }
 
-std::string Parser::preprocess(const std::string& file) {
+std::string Parser::preprocess(const std::string& filename) {
   /* regex to detect preprocessor macro names */
   static std::regex macro(R"([A-Z_][A-Z0-9_]{2,})");
 
-  std::string in = gulp(file);
+  std::string in = gulp(filename);
   TSTree* tree = ts_parser_parse_string(parser, NULL, in.data(), in.size());
   TSNode root = ts_tree_root_node(tree);
   TSNode node = root;
@@ -234,7 +240,7 @@ std::string Parser::preprocess(const std::string& file) {
       /* parse error: assuming that the syntax is actually valid, this is
        * usually caused by use of preprocessor macros, as the preprocessor is
        * not run */
-      // std::cerr << file << ':' << (from.row + 1) << ':' << from.column <<
+      // std::cerr << filename << ':' << (from.row + 1) << ':' << from.column <<
       //     ": warning: parse failed at '" << in.substr(k, l - k) << "'" <<
       //     std::endl;
 
@@ -252,7 +258,7 @@ std::string Parser::preprocess(const std::string& file) {
       }
       if (std::regex_match(in.substr(k, l - k), macro)) {
         /* looks like a macro, erase it */
-        // std::cerr << file << ':' << (from.row + 1) << ':' << from.column <<
+        // std::cerr << filename << ':' << (from.row + 1) << ':' << from.column <<
         //     ": note: attempting recovery by erasing '" <<
         //     in.substr(k, l - k) << "'" << std::endl;
 
@@ -310,7 +316,7 @@ std::string Parser::preprocess(const std::string& file) {
   return in;
 }
 
-void Parser::report(const std::string& file, const std::string& in,
+void Parser::report(const std::string& filename, const std::string& in,
     TSTree* tree) {
   TSNode root = ts_tree_root_node(tree);
   TSNode node = root;
@@ -322,7 +328,7 @@ void Parser::report(const std::string& file, const std::string& in,
     TSPoint to = ts_node_end_point(node);
 
     if (ts_node_is_error(node)) {
-      std::cerr << file << ':' << (from.row + 1) << ':' << from.column <<
+      std::cerr << filename << ':' << (from.row + 1) << ':' << from.column <<
           ": warning: parse failed at '" << in.substr(k, l - k) << "'" <<
           std::endl;
     }

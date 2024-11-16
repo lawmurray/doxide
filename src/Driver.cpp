@@ -33,35 +33,29 @@ void Driver::init() {
 
 void Driver::build() {
   /* parse */
-  Parser parser(defines);
-  for (auto file: files) {
-    parser.parse(file, global);
-  }
+  parser.parse(filenames);
 
   /* generate */
-  MarkdownGenerator generator;
-  generator.generate(output, global);
-  generator.clean(output);
+  MarkdownGenerator generator(output);
+  generator.generate(parser.root);
+  generator.clean();
+}
+
+void Driver::cover() {
+  /* parse */
+  parser.parse(filenames);
+
+  /* generate */
+  GcovGenerator generator;
+  generator.generate(parser.files);
 }
 
 void Driver::clean() {
   /* can use MarkdownGenerator::clean() for this just by not calling
    * generate() first; this will remove all files with `generator: doxide` in
    * their YAML frontmatter */
-  MarkdownGenerator generator;
-  generator.clean(output);
-}
-
-void Driver::cover() {
-  /* parse */
-  Parser parser(defines);
-  for (auto file: files) {
-    parser.parse(file, global);
-  }
-
-  /* generate */
-  GcovGenerator generator;
-  generator.generate(global);
+  MarkdownGenerator generator(output);
+  generator.clean();
 }
 
 void Driver::config() {
@@ -76,8 +70,8 @@ void Driver::config() {
   }
 
   /* parse build configuration file */
-  YAMLParser parser;
-  YAMLNode root = parser.parse(path);
+  YAMLParser yaml;
+  YAMLNode root = yaml.parse(path);
 
   if (root.has("title")) {
     if (root.isValue("title")) {
@@ -105,7 +99,7 @@ void Driver::config() {
       const auto& map = root.mapping("defines");
       for (auto& [key, value] : map) {
         if (value->isValue()) {
-          defines[key] = value->value();
+          parser.defines[key] = value->value();
         }
       }
     } else {
@@ -114,7 +108,7 @@ void Driver::config() {
   }
   
   /* expand file patterns in file list */
-  files.clear();
+  filenames.clear();
   if (root.isSequence("files")) {
     for (auto& node : root.sequence("files")) {
       if (node->isValue()) {
@@ -126,7 +120,7 @@ void Driver::config() {
             warn("no file matching '" + pattern + "' in configuration.");
           }
         } else for (auto path : paths) {
-          auto result = files.insert(path.string());
+          auto result = filenames.insert(path.string());
           if (!result.second) {
             warn("file " << path << " appears more than once in configuration.");
           }
@@ -135,12 +129,10 @@ void Driver::config() {
     }
   }
 
-  /* initialize groups */
-  groups(root, global);
-
-  /* initialize meta data */
-  global.title = title;
-  global.docs = description;
+  /* initialize root entity */
+  groups(root, parser.root);
+  parser.root.title = title;
+  parser.root.docs = description;
 }
 
 void Driver::groups(YAMLNode& parentNode, Entity& parentEntity) {

@@ -1,9 +1,6 @@
 #include "GcovGenerator.hpp"
 
-void GcovGenerator::generate(const Entity& node) {
-  /* collate coverage information */
-  collate(node);
-
+void GcovGenerator::generate(const std::list<File>& files) {
   /* JSON header */
   std::cout << "{" << std::endl;
   std::cout << "  \"format_version:\": \"2\"," << std::endl;
@@ -12,17 +9,18 @@ void GcovGenerator::generate(const Entity& node) {
 
   /* line coverage information */
   bool first_file = true;
-  for (auto& [file, lines] : coverage) {
+  for (const File& file : files) {
     if (!first_file) {
       std::cout << "," << std::endl;
     }
     first_file = false;
     std::cout << "    {" << std::endl;
-    std::cout << "      \"file\": \"" << file << "\"," << std::endl;
+    std::cout << "      \"file\": \"" << file.filename << "\"," << std::endl;
     std::cout << "      \"functions\": []," << std::endl;
     std::cout << "      \"lines\": [" << std::endl;
     bool first_line = true;
-    for (auto line : lines) {
+    for (int line : file.lines) {
+      /* note: line numbers are zero-based, but JSON format expects 1-based */
       if (!first_line) {
         std::cout << "," << std::endl;
       }
@@ -42,35 +40,4 @@ void GcovGenerator::generate(const Entity& node) {
   /* JSON footer */
   std::cout << "  ]" << std::endl;
   std::cout << "}" << std::endl;
-}
-
-void GcovGenerator::collate(const Entity& node) {
-  /* record lines for functions and operators */
-  if ((node.type == EntityType::FUNCTION || node.type == EntityType::OPERATOR)) {
-    auto& lines = coverage[node.file];
-    /* omit the first line (containing the opening brace) and the last line
-     * (containing the closing brace); this is not perfect and misses function
-     * bodies defined on a single line, although this is assumed to be rare */
-    for (int line = node.middle_line + 1; line < node.end_line; ++line) {
-      lines.insert(line);
-    }
-  }
-
-  /* recurse into child entities that may be, or may contain, functions and
-   * operators */
-  for (auto& child : node.namespaces) {
-    collate(child);
-  }
-  for (auto& child : node.groups) {
-    collate(child);
-  }
-  for (auto& child : node.types) {
-    collate(child);
-  }
-  for (auto& child : node.functions) {
-    collate(child);
-  }
-  for (auto& child : node.operators) {
-    collate(child);
-  }
 }
