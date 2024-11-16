@@ -43,8 +43,10 @@ void Parser::parse(const std::string& filename) {
   /* initialize state */
   std::list<uint32_t> starts, ends;
   std::list<Entity> entities;
-  std::list<std::pair<uint32_t,uint32_t>> excluded;
   std::unordered_set<uint32_t> lines;
+  std::list<std::pair<uint32_t,uint32_t>> excluded;
+  bool exclude_next_condition = false;
+  std::regex regex_if_constexpr("^if\\s+constexpr");
 
   starts.push_back(ts_node_start_byte(node));
   ends.push_back(ts_node_end_byte(node));
@@ -113,6 +115,17 @@ void Parser::parse(const std::string& filename) {
           /* compile-time executable statement, exclude any expressions in
            * this region for the purposes of line data */
           excluded.push_back(std::make_pair(start, end));
+        } else if (strncmp(name, "if", length) == 0) {
+          /* check if this is `if constexpr`, which is not reflected in the
+           * parse tree and requires a string comparison */
+          std::string stmt = in.substr(start, middle - start);
+          exclude_next_condition = std::regex_search(stmt, regex_if_constexpr);
+        } else if (strncmp(name, "condition", length) == 0) {
+          /* exclude if the condition belongs to an `if constexpr` */
+          if (exclude_next_condition) {
+            excluded.push_back(std::make_pair(start, end));
+            exclude_next_condition = false;
+          }
         } else if (strncmp(name, "expression", length) == 0) {
           /* executable code, update line data as long as the code is not
            * within and excluded region */

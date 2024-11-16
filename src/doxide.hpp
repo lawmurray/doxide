@@ -13,6 +13,7 @@
 #include <sstream>
 #include <iomanip>
 #include <variant>
+#include <regex>
 
 #include <cassert>
 

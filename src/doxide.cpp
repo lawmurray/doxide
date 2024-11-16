@@ -341,8 +341,9 @@ const char* query_cpp = R""""(
   ]) @expression
 
   ;; compile-time executable code that is removed for line counting
-  ((requires_clause) @requires)
-
+  (requires_clause) @requires
+  (if_statement
+     condition: (_) @condition) @if
 ]
 )"""";
 
