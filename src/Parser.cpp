@@ -262,7 +262,6 @@ void Parser::parse(const std::string& filename) {
   ts_query_cursor_delete(cursor);
 
   /* determine included lines */
-  std::unordered_set<uint32_t> lines;
   cursor = ts_query_cursor_new();
   node = ts_tree_root_node(tree);
   ts_query_cursor_exec(cursor, query_include, node);
@@ -286,7 +285,7 @@ void Parser::parse(const std::string& filename) {
           uint32_t start_line = ts_node_start_point(node).row;
           uint32_t end_line = ts_node_end_point(node).row;
           for (uint32_t line = start_line; line <= end_line; ++line) {
-            lines.insert(line);
+            file.lines.insert(line);
           }
         }
       }
