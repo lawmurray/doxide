@@ -3,7 +3,9 @@
 
 Parser::Parser() :
     parser(nullptr),
-    query(nullptr) {
+    query(nullptr),
+    query_exclude(nullptr),
+    query_include(nullptr) {
   uint32_t error_offset;
   TSQueryError error_type;
 
@@ -11,17 +13,33 @@ Parser::Parser() :
   parser = ts_parser_new();
   ts_parser_set_language(parser, tree_sitter_cuda());
 
-  /* query */
-  query = ts_query_new(tree_sitter_cuda(), query_cpp, strlen(query_cpp),
-      &error_offset, &error_type);
+  /* queries */
+  query = ts_query_new(tree_sitter_cuda(), query_cpp,
+      strlen(query_cpp), &error_offset, &error_type);
   if (error_type != TSQueryErrorNone) {
     std::string_view from(query_cpp + error_offset, 40);
+    error("invalid query starting " << from << "...");
+  }
+
+  query_exclude = ts_query_new(tree_sitter_cuda(), query_cpp_exclude,
+      strlen(query_cpp_exclude), &error_offset, &error_type);
+  if (error_type != TSQueryErrorNone) {
+    std::string_view from(query_cpp_exclude + error_offset, 40);
+    error("invalid query starting " << from << "...");
+  }
+
+  query_include = ts_query_new(tree_sitter_cuda(), query_cpp_include,
+      strlen(query_cpp_include), &error_offset, &error_type);
+  if (error_type != TSQueryErrorNone) {
+    std::string_view from(query_cpp_include + error_offset, 40);
     error("invalid query starting " << from << "...");
   }
 }
 
 Parser::~Parser() {
   ts_query_delete(query);
+  ts_query_delete(query_exclude);
+  ts_query_delete(query_include);
   ts_parser_delete(parser);
 }
 
@@ -32,27 +50,29 @@ void Parser::parse(const std::unordered_set<std::string>& filenames) {
 }
 
 void Parser::parse(const std::string& filename) {
+  /* preprocess data */
   std::string in = preprocess(filename);
+
+  /* final parse */
   TSTree* tree = ts_parser_parse_string(parser, NULL, in.data(), in.size());
   if (!tree) {
+    /* something went very wrong */
     warn("cannot parse " << filename << ", skipping");
+    return;
+  } else {
+    /* report on any remaining parse errors */
+    report(filename, in, tree);
   }
-  report(filename, in, tree);
-  TSNode node = ts_tree_root_node(tree);
 
-  /* initialize state */
+  /* query entity information */
+  TSNode node = ts_tree_root_node(tree);
   std::list<uint32_t> starts, ends;
   std::list<Entity> entities;
-  std::unordered_set<uint32_t> lines;
-  std::list<std::pair<uint32_t,uint32_t>> excluded;
-  bool exclude_next_condition = false;
-  std::regex regex_if_constexpr("^if\\s+constexpr");
 
   starts.push_back(ts_node_start_byte(node));
   ends.push_back(ts_node_end_byte(node));
   entities.emplace_back(std::move(root));
 
-  /* run query */
   TSQueryCursor* cursor = ts_query_cursor_new();
   ts_query_cursor_exec(cursor, query, node);
   TSQueryMatch match;
@@ -64,11 +84,11 @@ void Parser::parse(const std::string& filename) {
       node = match.captures[i].node;
       uint32_t id = match.captures[i].index; 
       uint32_t length = 0;
-      uint32_t k = ts_node_start_byte(node);
-      uint32_t l = ts_node_end_byte(node);
       const char* name = ts_query_capture_name_for_id(query, id, &length);
 
       if (strncmp(name, "docs", length) == 0) {
+        uint32_t k = ts_node_start_byte(node);
+        uint32_t l = ts_node_end_byte(node);
         std::string docs = in.substr(k, l - k);
         Tokenizer tokenizer(docs);
         Token token = tokenizer.next();
@@ -78,7 +98,7 @@ void Parser::parse(const std::string& filename) {
           translate(docs, entity);
         }
       } else if (strncmp(name, "name", length) == 0) {
-        entity.name = in.substr(k, l - k);
+        entity.name = in.substr(start, end - start);
       } else if (strncmp(name, "body", length) == 0) {
         middle = ts_node_start_byte(node);
         middle_line = ts_node_start_point(node).row;
@@ -111,36 +131,6 @@ void Parser::parse(const std::string& filename) {
           entity.type = EntityType::ENUMERATOR;
         } else if (strncmp(name, "macro", length) == 0) {
           entity.type = EntityType::MACRO;
-        } else if (strncmp(name, "requires", length) == 0) {
-          /* compile-time executable statement, exclude any expressions in
-           * this region for the purposes of line data */
-          excluded.push_back(std::make_pair(start, end));
-        } else if (strncmp(name, "if", length) == 0) {
-          /* check if this is `if constexpr`, which is not reflected in the
-           * parse tree and requires a string comparison */
-          std::string stmt = in.substr(start, middle - start);
-          exclude_next_condition = std::regex_search(stmt, regex_if_constexpr);
-        } else if (strncmp(name, "condition", length) == 0) {
-          /* exclude if the condition belongs to an `if constexpr` */
-          if (exclude_next_condition) {
-            excluded.push_back(std::make_pair(start, end));
-            exclude_next_condition = false;
-          }
-        } else if (strncmp(name, "expression", length) == 0) {
-          /* executable code, update line data as long as the code is not
-           * within and excluded region */
-          bool exclude = false;
-          for (auto range: excluded) {
-            if (range.first <= start && end <= range.second) {
-              exclude = true;
-              break;
-            }
-          }
-          if (!exclude) {
-            for (uint32_t line = start_line; line <= end_line; ++line) {
-              lines.insert(line);
-            }
-          }
         }
       }
     }
@@ -203,7 +193,7 @@ void Parser::parse(const std::string& filename) {
     }
   }
 
-  /* finalize */
+  /* finalize entity information */
   while (entities.size() > 1) {
     Entity back = std::move(entities.back());
     entities.pop_back();
@@ -225,11 +215,80 @@ void Parser::parse(const std::string& filename) {
   assert(starts.empty());
   assert(ends.empty());
 
-  files.push_back(File{filename, std::move(in), std::move(lines)});
-
   ts_query_cursor_delete(cursor);
+
+  /* determine excluded byte ranges for line data */
+  std::list<std::pair<uint32_t,uint32_t>> excluded;
+  bool exclude_next_condition = false;
+  std::regex regex_if_constexpr("^if\\s+constexpr");
+  cursor = ts_query_cursor_new();
+  node = ts_tree_root_node(tree);
+  ts_query_cursor_exec(cursor, query_exclude, node);
+  while (ts_query_cursor_next_match(cursor, &match)) {    
+    for (uint16_t i = 0; i < match.capture_count; ++i) {
+      node = match.captures[i].node;
+      uint32_t id = match.captures[i].index; 
+      uint32_t length = 0;
+      uint32_t start = ts_node_start_byte(node);
+      uint32_t end = ts_node_end_byte(node);
+      const char* name = ts_query_capture_name_for_id(query_exclude, id,
+          &length);
+      if (strncmp(name, "exclude", length) == 0) {
+        /* exclude any expressions in this region for line data */
+        excluded.push_back(std::make_pair(start, end));
+      } else if (strncmp(name, "if", length) == 0) {
+        /* check if this is `if constexpr`, which is not reflected in the
+          * parse tree and requires a string comparison */
+        std::string stmt = in.substr(start, end - start);
+        exclude_next_condition = std::regex_search(stmt, regex_if_constexpr);
+      } else if (strncmp(name, "condition", length) == 0) {
+        /* exclude if the condition belongs to an `if constexpr` */
+        if (exclude_next_condition) {
+          excluded.push_back(std::make_pair(start, end));
+          exclude_next_condition = false;
+        }
+      }
+    }
+  }
+  ts_query_cursor_delete(cursor);
+
+  /* determine included lines */
+  std::unordered_set<uint32_t> lines;
+  cursor = ts_query_cursor_new();
+  node = ts_tree_root_node(tree);
+  ts_query_cursor_exec(cursor, query_include, node);
+  while (ts_query_cursor_next_match(cursor, &match)) {
+    for (uint16_t i = 0; i < match.capture_count; ++i) {
+      node = match.captures[i].node;
+      uint32_t id = match.captures[i].index; 
+      uint32_t length = 0;
+      uint32_t start = ts_node_start_byte(node);
+      uint32_t end = ts_node_end_byte(node);
+      const char* name = ts_query_capture_name_for_id(query_include, id,
+          &length);
+      if (strncmp(name, "executable", length) == 0) {
+        /* executable code, update line data as long as the code is not
+          * within an excluded region */
+        bool exclude = std::any_of(excluded.begin(), excluded.end(),
+            [start,end](auto range) {
+              return range.first <= start && end <= range.second;
+            });
+        if (!exclude) {
+          uint32_t start_line = ts_node_start_point(node).row;
+          uint32_t end_line = ts_node_end_point(node).row;
+          for (uint32_t line = start_line; line <= end_line; ++line) {
+            lines.insert(line);
+          }
+        }
+      }
+    }
+  }
+  ts_query_cursor_delete(cursor);
+
+  /* finish up */
+  files.push_back(File{filename, std::move(in), std::move(lines)});
   ts_tree_delete(tree);
-  ts_parser_reset(parser);
+  ts_parser_reset(parser);  
 }
 
 std::string Parser::preprocess(const std::string& filename) {

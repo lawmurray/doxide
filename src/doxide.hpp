@@ -82,6 +82,20 @@ extern const char* init_docs_overrides_partials_copyright_html;
 extern const char* query_cpp;
 
 /**
+ * Query for entities to explicitly exclude from  line counts in C++ sources.
+ * 
+ * @ingroup developer
+ */
+extern const char* query_cpp_exclude;
+
+/**
+ * Query for entities to explicitly include in line counts in C++ sources.
+ * 
+ * @ingroup developer
+ */
+extern const char* query_cpp_include;
+
+/**
  * Write a whole file.
  * 
  * @ingroup developer

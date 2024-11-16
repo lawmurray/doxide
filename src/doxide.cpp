@@ -333,17 +333,23 @@ const char* query_cpp = R""""(
   (preproc_function_def
       name: (identifier) @name
       value: (_) @value) @macro
+]
+)"""";
 
-  ;; executable code for line counting
-  ([
-     (expression)
-     (field_initializer)
-  ]) @expression
+const char* query_cpp_exclude = R""""(
+[
+  ;; code to exclude for line counting
+  (requires_clause) @exclude  ;; compile time only
+  (number_literal) @exclude   ;; can be just template argument
+  (if_statement condition: (_) @condition) @if  ;; check for if constexpr
+]
+)"""";
 
-  ;; compile-time executable code that is removed for line counting
-  (requires_clause) @requires
-  (if_statement
-     condition: (_) @condition) @if
+const char* query_cpp_include = R""""(
+[
+  ;; code to include for line counting
+  (expression) @executable
+  (field_initializer) @executable
 ]
 )"""";
 

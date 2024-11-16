@@ -89,7 +89,17 @@ private:
   TSParser* parser;
 
   /**
-   * C++ query.
+   * C++ entities query.
    */
   TSQuery* query;
+
+  /**
+   * C++ exclusions query.
+   */
+  TSQuery* query_exclude;
+
+  /**
+   * C++ inclusions query.
+   */
+  TSQuery* query_include;
 };
