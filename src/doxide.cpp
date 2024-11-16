@@ -340,6 +340,7 @@ const char* query_cpp_exclude = R""""(
 [
   ;; code to exclude for line counting
   (requires_clause) @exclude  ;; compile time only
+  (alias_declaration) @exclude
   (number_literal) @exclude   ;; can be just template argument
   (if_statement condition: (_) @condition) @if  ;; check for if constexpr
 ]
