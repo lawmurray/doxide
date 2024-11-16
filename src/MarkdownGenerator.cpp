@@ -358,8 +358,8 @@ std::string MarkdownGenerator::frontmatter(const Entity& entity) {
    * mark as managed by Doxide */
   std::stringstream buf;
   buf << "---" << std::endl;
-  buf << "title: " << title(entity) << std::endl;
-  buf << "description: " << line(brief(entity)) << std::endl;
+  buf << "title: " << stringify(title(entity)) << std::endl;
+  buf << "description: " << stringify(line(brief(entity))) << std::endl;
   buf << "generator: doxide" << std::endl;
   buf << "---" << std::endl;
   buf << std::endl;
