@@ -22,8 +22,8 @@ void MarkdownGenerator::clean() {
               frontmatter.value("generator") == "doxide") {
             std::filesystem::remove(entry.path());
           }
-        } catch (const std::runtime_error&) {
-          // ignore
+        } catch (const std::runtime_error& e) {
+          warn(e.what());
         }
       }
     }
@@ -89,7 +89,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
       YAMLParser parser(file.string());
       YAMLNode node = parser.parse();
       canWrite = node.isValue("generator") && node.value("generator") == "doxide";
-    } catch (const std::runtime_error&) {
+    } catch (const std::runtime_error& e) {
+      warn(e.what());
       canWrite = false;
     }
   }
