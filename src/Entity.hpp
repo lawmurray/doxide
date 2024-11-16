@@ -56,25 +56,6 @@ struct Entity {
   void merge(const Entity& o);
 
   /**
-   * Add child entity to a group.
-   * 
-   * @param o Child entity with `ingroup` set.
-   * 
-   * @return True if a group of the given name was found, in which case @p o
-   * will have been added to it, false otherwise.
-   */
-  bool addToGroup(const Entity& o);
-
-  /**
-   * Add child entity.
-   * 
-   * @param o Child entity.
-   * 
-   * If the child has `ingroup` set, it is ignored.
-   */
-  void addToThis(const Entity& o);
-
-  /**
    * Child namespaces.
    */
   list_type namespaces;
@@ -183,4 +164,24 @@ struct Entity {
    * Does this node have one or more visible children?
    */
   bool visibleChildren;
+
+private:
+  /**
+   * Add child entity to a group.
+   * 
+   * @param o Child entity with `ingroup` set.
+   * 
+   * @return True if a group of the given name was found, in which case @p o
+   * will have been added to it, false otherwise.
+   */
+  bool addToGroup(const Entity& o);
+
+  /**
+   * Add child entity.
+   * 
+   * @param o Child entity.
+   * 
+   * If the child has `ingroup` set, it is ignored.
+   */
+  void addToThis(const Entity& o);
 };
