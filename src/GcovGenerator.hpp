@@ -15,5 +15,5 @@ public:
    * 
    * @param files Source files.
    */
-  void generate(const std::list<File>& parser);
+  void generate(const std::list<File>& files);
 };
