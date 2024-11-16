@@ -52,7 +52,7 @@ void Parser::parse(const std::unordered_set<std::string>& filenames) {
 void Parser::parse(const std::string& filename) {
   /* entity to represent file */
   Entity file;
-  file.name = std::filesystem::path(filename).filename();
+  file.name = std::filesystem::path(filename).filename().string();
   file.decl = preprocess(filename);
   file.filename = filename;
   file.start_line = 0;
