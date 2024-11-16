@@ -141,7 +141,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << child->lines.size() << " |" << std::endl;
       }
       for (auto& child : files) {
-        out << "| :material-file: [" << child->name << "](" << childdir << sanitize(child->name) << ".md) | ";
+        out << "| :material-file-outline: [" << child->name << "](" << childdir << sanitize(child->name) << ".md) | ";
         out << child->lines.size() << " |" << std::endl;
       }
       out << std::endl;
