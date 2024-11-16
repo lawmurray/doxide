@@ -165,12 +165,6 @@ struct Entity {
   int start_line;
 
   /**
-   * Starting line of the body. If there is no body, e.g. this is a
-   * declaration only, then equals `end_line`.
-   */
-  int middle_line;
-
-  /**
    * Ending line of the entity.
    */
   int end_line;

@@ -2,7 +2,6 @@
 
 Entity::Entity() :
    start_line(-1),
-   middle_line(-1),
    end_line(-1),
    indent(0),
    type(EntityType::NONE),
@@ -124,7 +123,6 @@ void Entity::merge(const Entity& o) {
   }
   docs += o.docs;
   brief += o.brief;
-  middle_line = o.middle_line;
   type = o.type;
   hide = hide || o.hide;
   visibleChildren = visibleChildren || o.visibleChildren;

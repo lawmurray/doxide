@@ -154,7 +154,6 @@ void Parser::parse(const std::string& filename) {
       /* entity location */
       entity.filename = filename;
       entity.start_line = start_line;
-      entity.middle_line = middle_line;
       entity.end_line = end_line;
 
       /* the final node represents the whole entity, pop the stack until we
