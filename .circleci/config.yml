@@ -32,12 +32,10 @@ commands:
       - run:
           name: Test
           command: |
-            mkdir hello
-            cd hello
-            doxide init
-            cp ../demo/*.hpp .
             doxide build
+            doxide cover > cover.json
             mkdocs build
+            mkdir hello && cd hello && doxide init
 
 jobs:
 
