@@ -338,11 +338,28 @@ const char* query_cpp = R""""(
 
 const char* query_cpp_exclude = R""""(
 [
-  ;; code to exclude for line counting
-  (requires_clause) @exclude  ;; compile time only
+  ;; constexpr context
+  (requires_clause) @exclude
+  (static_assert_declaration) @exclude
+  (type_definition) @exclude
   (alias_declaration) @exclude
-  (number_literal) @exclude   ;; can be just template argument
-  (if_statement condition: (_) @condition) @if  ;; check for if constexpr
+  (concept_definition) @exclude
+  (preproc_def) @exclude
+  (preproc_function_def) @exclude
+
+  ;; return types may contain expressions
+  (declaration type: (_) @exclude)
+
+  ;; parameter types and default values may contain expressions
+  (_ parameters: (_) @exclude)
+
+  ;; template arguments in template specializations may contain expressions
+  (class_specifier name: (_) @exclude)
+  (struct_specifier name: (_) @exclude)
+  (union_specifier name: (_) @exclude)
+
+  ;; if statement may be if constexpr, special handling in code for this
+  (if_statement condition: (_) @condition) @if
 ]
 )"""";
 
