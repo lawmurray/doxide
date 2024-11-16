@@ -347,11 +347,9 @@ const char* query_cpp_exclude = R""""(
   (preproc_def) @exclude
   (preproc_function_def) @exclude
 
-  ;; return types may contain expressions
-  (declaration type: (_) @exclude)
-
-  ;; parameter types and default values may contain expressions
-  (_ parameters: (_) @exclude)
+  ;; types and parameter default values may contain expressions
+  (_ type: (_) @exclude)
+  (_ default_value: (_) @exclude)
 
   ;; template arguments in template specializations may contain expressions
   (class_specifier name: (_) @exclude)
