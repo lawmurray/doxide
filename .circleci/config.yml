@@ -35,7 +35,9 @@ commands:
             doxide build
             doxide cover > cover.json
             mkdocs build
-            mkdir hello && cd hello && doxide init
+            mkdir hello
+            cd hello
+            doxide init
 
 jobs:
 
