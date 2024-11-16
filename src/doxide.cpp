@@ -150,21 +150,21 @@ R""""(<div class="md-copyright">
 const char* query_cpp = R""""(
 [
   ;; documentation
-  ((comment) @docs)
+  (comment) @docs
 
   ;; namespace definition
-  ((namespace_definition
+  (namespace_definition
       name: (namespace_identifier) @name
-      body: (declaration_list)? @body) @namespace)
+      body: (declaration_list)? @body) @namespace
 
   ;; nested namespace definition---matches once for each @name
-  ((namespace_definition
+  (namespace_definition
       (nested_namespace_specifier
          (namespace_identifier) @name)
-       body: (declaration_list)? @body) @namespace)
+       body: (declaration_list)? @body) @namespace
 
   ;; template declaration
-  ((template_declaration
+  (template_declaration
       [
         (class_specifier)
         (struct_specifier)
@@ -174,56 +174,56 @@ const char* query_cpp = R""""(
         (declaration)
         (field_declaration)
         (function_definition)
-      ] @body) @template)
+      ] @body) @template
 
   ;; class definition
-  ((class_specifier
+  (class_specifier
       name: [
         (type_identifier) @name
         (template_type) @name  ;; for template specialization
       ]
       body: (field_declaration_list)? @body
-      ) @type)
+      ) @type
 
   ;; struct definition
-  ((struct_specifier
+  (struct_specifier
       name: [
         (type_identifier) @name
         (template_type) @name  ;; for template specialization
       ]
       body: (field_declaration_list)? @body
-      ) @type)
+      ) @type
 
   ;; union definition
-  ((union_specifier
+  (union_specifier
       name: [
         (type_identifier) @name
         (template_type) @name  ;; for template specialization
       ]
       body: (field_declaration_list)? @body
-      ) @type)
+      ) @type
 
   ;; enum definition
-  ((enum_specifier
+  (enum_specifier
       name: (type_identifier) @name
       body: (enumerator_list)? @body
-      ) @type)
+      ) @type
 
   ;; typedef
-  ((type_definition
-       declarator: (type_identifier) @name .) @type)
+  (type_definition
+       declarator: (type_identifier) @name .) @type
 
   ;; type alias
-  ((alias_declaration
-      name: (type_identifier) @name) @type)
+  (alias_declaration
+      name: (type_identifier) @name) @type
 
   ;; concept
-  ((concept_definition
+  (concept_definition
       name: (identifier) @name
-      (_)) @concept)
+      (_)) @concept
 
   ;; variable
-  ((declaration
+  (declaration
       declarator: [
         (identifier) @name
         (array_declarator (identifier) @name)
@@ -239,10 +239,10 @@ const char* query_cpp = R""""(
           value: (_) @value)
       ]
       default_value: (_)? @value
-    ) @variable)
+    ) @variable
 
   ;; member variable
-  ((field_declaration
+  (field_declaration
       declarator: [
         (field_identifier) @name
         (array_declarator (field_identifier) @name)
@@ -262,10 +262,10 @@ const char* query_cpp = R""""(
           value: (_) @value)
       ]
       default_value: (_)? @value
-    ) @variable)
+    ) @variable
 
   ;; function
-  ((_
+  (_
       declarator: [
         (function_declarator
           declarator: [
@@ -297,10 +297,10 @@ const char* query_cpp = R""""(
         (field_initializer_list)
         body: (_)
       ]? @body
-    ) @function)
+    ) @function
 
   ;; operator
-  ((_
+  (_
       declarator: [
         (function_declarator
           declarator: (operator_name) @name
@@ -320,19 +320,19 @@ const char* query_cpp = R""""(
         )
       ]
       body: (_)? @body
-    ) @operator)
+    ) @operator
 
   ;; enumeration value
-  ((enumerator
-       name: (identifier) @name) @enumerator)
+  (enumerator
+       name: (identifier) @name) @enumerator
 
   ;; macro
-  ((preproc_def
+  (preproc_def
       name: (identifier) @name
-      value: (_) @value) @macro)
-  ((preproc_function_def
+      value: (_) @value) @macro
+  (preproc_function_def
       name: (identifier) @name
-      value: (_) @value) @macro)
+      value: (_) @value) @macro
 
   ;; executable code for line counting
   ([
