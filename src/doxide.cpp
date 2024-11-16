@@ -334,6 +334,15 @@ const char* query_cpp = R""""(
       name: (identifier) @name
       value: (_) @value) @macro)
 
+  ;; executable code for line counting
+  ([
+     (expression)
+     (field_initializer)
+  ]) @expression
+
+  ;; compile-time executable code that is removed for line counting
+  ((requires_clause) @requires)
+
 ]
 )"""";
 

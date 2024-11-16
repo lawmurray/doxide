@@ -19,7 +19,7 @@ void GcovGenerator::generate(const std::list<File>& files) {
     std::cout << "      \"functions\": []," << std::endl;
     std::cout << "      \"lines\": [" << std::endl;
     bool first_line = true;
-    for (int line : file.lines) {
+    for (uint32_t line : file.lines) {
       /* note: line numbers are zero-based, but JSON format expects 1-based */
       if (!first_line) {
         std::cout << "," << std::endl;

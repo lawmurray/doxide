@@ -41,9 +41,10 @@ void Parser::parse(const std::string& filename) {
   TSNode node = ts_tree_root_node(tree);
 
   /* initialize state */
-  std::list<uint64_t> starts, ends;
+  std::list<uint32_t> starts, ends;
   std::list<Entity> entities;
-  std::unordered_set<int> lines;
+  std::list<std::pair<uint32_t,uint32_t>> excluded;
+  std::unordered_set<uint32_t> lines;
 
   starts.push_back(ts_node_start_byte(node));
   ends.push_back(ts_node_end_byte(node));
@@ -55,8 +56,8 @@ void Parser::parse(const std::string& filename) {
   TSQueryMatch match;
   Entity entity;
   while (ts_query_cursor_next_match(cursor, &match)) {    
-    uint64_t start = 0, middle = 0, end = 0;
-    uint64_t start_line = -1, middle_line = -1, end_line = -1;
+    uint32_t start = 0, middle = 0, end = 0;
+    uint32_t start_line = -1, middle_line = -1, end_line = -1;
     for (uint16_t i = 0; i < match.capture_count; ++i) {
       node = match.captures[i].node;
       uint32_t id = match.captures[i].index; 
@@ -108,10 +109,24 @@ void Parser::parse(const std::string& filename) {
           entity.type = EntityType::ENUMERATOR;
         } else if (strncmp(name, "macro", length) == 0) {
           entity.type = EntityType::MACRO;
-        } else if (strncmp(name, "statement", length) == 0) {
-          /* executable statement, update line data */
-          for (int line = start_line; line <= end_line; ++line) {
-            lines.insert(line);
+        } else if (strncmp(name, "requires", length) == 0) {
+          /* compile-time executable statement, exclude any expressions in
+           * this region for the purposes of line data */
+          excluded.push_back(std::make_pair(start, end));
+        } else if (strncmp(name, "expression", length) == 0) {
+          /* executable code, update line data as long as the code is not
+           * within and excluded region */
+          bool exclude = false;
+          for (auto range: excluded) {
+            if (range.first <= start && end <= range.second) {
+              exclude = true;
+              break;
+            }
+          }
+          if (!exclude) {
+            for (uint32_t line = start_line; line <= end_line; ++line) {
+              lines.insert(line);
+            }
           }
         }
       }

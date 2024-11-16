@@ -21,5 +21,5 @@ struct File {
   /**
    * Numbers of executable lines, zero-based.
    */
-  std::unordered_set<int> lines;
+  std::unordered_set<uint32_t> lines;
 };
