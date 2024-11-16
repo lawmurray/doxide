@@ -173,9 +173,9 @@ void Parser::parse(const std::string& filename) {
         Entity back = std::move(entities.back());
         entities.pop_back();
         if (back.ingroup.empty()) {
-          entities.back().add(back);
+          entities.back().add(std::move(back));
         } else {
-          entities.front().add(back);
+          entities.front().add(std::move(back));
         }
         starts.pop_back();
         ends.pop_back();
@@ -191,7 +191,7 @@ void Parser::parse(const std::string& filename) {
       /* push to stack */
       if (entities.back().type == EntityType::TEMPLATE) {
         /* merge this entity into the template */
-        entities.back().merge(entity);
+        entities.back().merge(std::move(entity));
       } else {
         entities.emplace_back(std::move(entity));
         starts.push_back(start);
@@ -208,9 +208,9 @@ void Parser::parse(const std::string& filename) {
     Entity back = std::move(entities.back());
     entities.pop_back();
     if (back.ingroup.empty()) {
-      entities.back().add(back);
+      entities.back().add(std::move(back));
     } else {
-      entities.front().add(back);
+      entities.front().add(std::move(back));
     }
     starts.pop_back();
     ends.pop_back();
@@ -296,7 +296,7 @@ void Parser::parse(const std::string& filename) {
   ts_query_cursor_delete(cursor);
 
   /* finish up */
-  root.add(file);
+  root.add(std::move(file));
   ts_tree_delete(tree);
   ts_parser_reset(parser);  
 }

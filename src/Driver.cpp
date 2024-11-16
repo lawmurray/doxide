@@ -152,7 +152,7 @@ void Driver::groups(YAMLNode& parentNode, Entity& parentEntity) {
         warn("a group is missing a name in the configuration file.")
       }
       groups(*node, entity);
-      parentEntity.add(entity);
+      parentEntity.add(std::move(entity));
     }
   }
 }

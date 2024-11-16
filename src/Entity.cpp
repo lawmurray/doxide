@@ -10,64 +10,64 @@ Entity::Entity() :
   //
 }
 
-void Entity::add(const Entity& o) {
+void Entity::add(Entity&& o) {
   if (!o.ingroup.empty()) {
-    if (addToGroup(o)) {
+    if (addToGroup(std::move(o))) {
       return;
     } else {
       warn("ignoring @ingroup " << o.ingroup << ", no such group");
     }
   }
-  addToThis(o);
+  addToThis(std::move(o));
 }
 
-bool Entity::addToGroup(const Entity& o) {
+bool Entity::addToGroup(Entity&& o) {
   /* search for immediate child of given name */
   auto iter = std::find_if(groups.begin(), groups.end(),
       [&o](const Entity& g) {
         return g.name == o.ingroup;
       });
   if (iter != groups.end()) {
-    iter->addToThis(o);
+    iter->addToThis(std::move(o));
     return true;
   }
 
   /* search recursively for descendent of given name */
   for (auto& g : groups) {
-    if (g.addToGroup(o)) {
+    if (g.addToGroup(std::move(o))) {
       return true;
     }
   }
   return false;
 }
 
-void Entity::addToThis(const Entity& o) {
+void Entity::addToThis(Entity&& o) {
   if (o.type == EntityType::NAMESPACE) {
     auto iter = std::find_if(namespaces.begin(), namespaces.end(),
         [&o](const Entity& ns) {
           return ns.name == o.name;
         });
     if (iter == namespaces.end()) {
-      namespaces.push_back(o);
+      namespaces.push_back(std::move(o));
     } else {
-      iter->merge(o);
+      iter->merge(std::move(o));
     }
   } else if (o.type == EntityType::GROUP) {
-    groups.push_back(o);
+    groups.push_back(std::move(o));
   } else if (o.type == EntityType::TYPE) {
-    types.push_back(o);
+    types.push_back(std::move(o));
   } else if (o.type == EntityType::CONCEPT) {
-    concepts.push_back(o);
+    concepts.push_back(std::move(o));
   } else if (o.type == EntityType::VARIABLE) {
-    variables.push_back(o);
+    variables.push_back(std::move(o));
   } else if (o.type == EntityType::FUNCTION) {
-    functions.push_back(o);
+    functions.push_back(std::move(o));
   } else if (o.type == EntityType::OPERATOR) {
-    operators.push_back(o);
+    operators.push_back(std::move(o));
   } else if (o.type == EntityType::ENUMERATOR) {
-    enums.push_back(o);
+    enums.push_back(std::move(o));
   } else if (o.type == EntityType::MACRO) {
-    macros.push_back(o);
+    macros.push_back(std::move(o));
   } else if (o.type == EntityType::TEMPLATE) {
     // ignore, likely a parse error within the template declaration
   } else if (o.type == EntityType::FILE || o.type == EntityType::DIR) {
@@ -88,28 +88,29 @@ void Entity::addToThis(const Entity& o) {
         e->title = single;
       }
     }
-    e->files.push_back(o);
+    e->files.push_back(std::move(o));
   } else {
     warn("unrecognized entity type, ignoring");
   }
   visibleChildren = visibleChildren || !o.hide || !o.docs.empty();
 }
 
-void Entity::merge(const Entity& o) {
+void Entity::merge(Entity&& o) {
   /* add namespaces via the merging logic of addToThis() */
   std::for_each(o.namespaces.begin(), o.namespaces.end(),
-      [this](const Entity& o) {
-        this->addToThis(o);
+      [this](Entity& o) {
+        this->addToThis(std::move(o));
       });
 
-  groups.insert(groups.end(), o.groups.begin(), o.groups.end());
-  types.insert(types.end(), o.types.begin(), o.types.end());
-  concepts.insert(concepts.end(), o.concepts.begin(), o.concepts.end());
-  variables.insert(variables.end(), o.variables.begin(), o.variables.end());
-  functions.insert(functions.end(), o.functions.begin(), o.functions.end());
-  operators.insert(operators.end(), o.operators.begin(), o.operators.end());
-  macros.insert(macros.end(), o.macros.begin(), o.macros.end());
-  enums.insert(enums.end(), o.enums.begin(), o.enums.end());
+  groups.splice(groups.end(), std::move(o.groups));
+  types.splice(types.end(), std::move(o.types));
+  concepts.splice(concepts.end(), std::move(o.concepts));
+  variables.splice(variables.end(), std::move(o.variables));
+  functions.splice(functions.end(), std::move(o.functions));
+  operators.splice(operators.end(), std::move(o.operators));
+  macros.splice(macros.end(), std::move(o.macros));
+  enums.splice(enums.end(), std::move(o.enums));
+  files.splice(enums.end(), std::move(o.files));
 
   if (ingroup.empty()) {
     ingroup = o.ingroup;
