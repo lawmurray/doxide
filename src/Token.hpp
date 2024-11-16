@@ -64,12 +64,9 @@ public:
    * Constructor.
    * 
    * @param type Token type.
-   * @param first Iterator to first character in source.
-   * @param last Iterator to one-past-last character in source.
+   * @param value Token value.
    */
-  Token(const TokenType& type,
-      const std::string_view::const_iterator& first,
-      const std::string_view::const_iterator& last);
+  Token(const TokenType type = NONE, std::string_view value = std::string_view());
 
   /**
    * Get token as string.
@@ -91,10 +88,5 @@ public:
   /**
    * Iterator to first character.
    */
-  std::string_view::const_iterator first;
-
-  /**
-   * Iterator to one-past-last character.
-   */
-  std::string_view::const_iterator last;
+  std::string_view value;
 };

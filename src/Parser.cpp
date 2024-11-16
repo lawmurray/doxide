@@ -428,8 +428,8 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
           command == "short") {
         auto first = tokenizer.consume(~WHITESPACE);
         auto last = tokenizer.consume(PARA|CLOSE);
-        entity.brief.append(first.first, last.first);
-        entity.docs.append(first.first, last.first);
+        entity.brief.append(first.str().begin(), last.str().begin());
+        entity.docs.append(first.str().begin(), last.str().begin());
         entity.docs.append("\n\n");
       } else if (command == "e" ||
           command == "em" ||

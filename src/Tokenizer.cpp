@@ -6,19 +6,19 @@ Tokenizer::Tokenizer(const std::string_view& source) {
 }
 
 Token Tokenizer::next() {
-  Token token(NONE, iter, iter);
+  Token token;
   if (iter != end) {
     for (auto& [type, regex] : regexes) {
       std::match_results<std::string_view::const_iterator> match;
       if (std::regex_search(iter, end, match, regex,
           std::regex_constants::match_continuous)) {
-        iter += match.length();
         token.type = type;
-        token.last = iter;
+        token.value = std::string_view(iter, iter + match.length());
+        iter += match.length();
         return token;
       }
     }
-    error("unrecognized token starting: " << std::string(iter, iter + 40) << "...");
+    error("unrecognized token");
   }
   return token;
 }
