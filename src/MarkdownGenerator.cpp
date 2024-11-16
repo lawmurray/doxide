@@ -58,7 +58,6 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     filename = "index";
     childdir = "";
   } else if (entity.type == EntityType::TYPE ||
-      entity.type == EntityType::DIR ||
       entity.type == EntityType::FILE) {
     /* when building the navigation menu, mkdocs modifies directory names by
      * replacing underscores and capitalizing words; this is problematic for
@@ -138,7 +137,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
       out << "| Name | Lines |" << std::endl;
       out << "| :--- | ----: |" << std::endl;
       for (auto& child : dirs) {
-        out << "| :material-folder: [" << child->name << "](" << childdir << sanitize(child->name) << ".md) | ";
+        out << "| :material-folder: [" << child->name << "](" << childdir << sanitize(child->name) << "/index.md) | ";
         out << child->lines.size() << " |" << std::endl;
       }
       for (auto& child : files) {
@@ -428,7 +427,7 @@ std::string MarkdownGenerator::htmlize(const std::string& str) {
 }
 
 std::string MarkdownGenerator::sanitize(const std::string& str) {
-  static const std::regex word("\\w");
+  static const std::regex word("\\w|[.]");
   static const std::regex space("\\s");
 
   std::stringstream buf;
