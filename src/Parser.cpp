@@ -43,7 +43,7 @@ void Parser::parse(const std::string& filename) {
   /* initialize state */
   std::list<uint64_t> starts, ends;
   std::list<Entity> entities;
-  std::set<int> lines;
+  std::unordered_set<int> lines;
 
   starts.push_back(ts_node_start_byte(node));
   ends.push_back(ts_node_end_byte(node));
@@ -108,6 +108,11 @@ void Parser::parse(const std::string& filename) {
           entity.type = EntityType::ENUMERATOR;
         } else if (strncmp(name, "macro", length) == 0) {
           entity.type = EntityType::MACRO;
+        } else if (strncmp(name, "statement", length) == 0) {
+          /* executable statement, update line data */
+          for (int line = start_line; line <= end_line; ++line) {
+            lines.insert(line);
+          }
         }
       }
     }
@@ -191,6 +196,8 @@ void Parser::parse(const std::string& filename) {
   assert(entities.empty());
   assert(starts.empty());
   assert(ends.empty());
+
+  files.push_back(File{filename, std::move(in), std::move(lines)});
 
   ts_query_cursor_delete(cursor);
   ts_tree_delete(tree);

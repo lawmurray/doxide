@@ -2,8 +2,6 @@
 
 #include "doxide.hpp"
 
-#include <set>
-
 /**
  * Source file with line data.
  * 
@@ -23,5 +21,5 @@ struct File {
   /**
    * Numbers of executable lines, zero-based.
    */
-  std::set<int> lines;
+  std::unordered_set<int> lines;
 };
