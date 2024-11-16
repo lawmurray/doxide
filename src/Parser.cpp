@@ -85,10 +85,10 @@ void Parser::parse(const std::string& filename) {
       uint32_t id = match.captures[i].index; 
       uint32_t length = 0;
       const char* name = ts_query_capture_name_for_id(query, id, &length);
+      uint32_t k = ts_node_start_byte(node);
+      uint32_t l = ts_node_end_byte(node);
 
       if (strncmp(name, "docs", length) == 0) {
-        uint32_t k = ts_node_start_byte(node);
-        uint32_t l = ts_node_end_byte(node);
         std::string docs = in.substr(k, l - k);
         Tokenizer tokenizer(docs);
         Token token = tokenizer.next();
@@ -98,7 +98,7 @@ void Parser::parse(const std::string& filename) {
           translate(docs, entity);
         }
       } else if (strncmp(name, "name", length) == 0) {
-        entity.name = in.substr(start, end - start);
+        entity.name = in.substr(k, l - k);
       } else if (strncmp(name, "body", length) == 0) {
         middle = ts_node_start_byte(node);
         middle_line = ts_node_start_point(node).row;
@@ -238,7 +238,7 @@ void Parser::parse(const std::string& filename) {
         excluded.push_back(std::make_pair(start, end));
       } else if (strncmp(name, "if", length) == 0) {
         /* check if this is `if constexpr`, which is not reflected in the
-          * parse tree and requires a string comparison */
+         * parse tree and requires a string comparison */
         std::string stmt = in.substr(start, end - start);
         exclude_next_condition = std::regex_search(stmt, regex_if_constexpr);
       } else if (strncmp(name, "condition", length) == 0) {
