@@ -13,8 +13,13 @@ class YAMLParser {
 public:
   /**
    * Constructor.
+   *
+   * @param filename File name.
+   * @param max_docs Maximum number of documents to handle. Zero for no limit.
+   * Set to 1 (the default) to read YAML frontmatter (delimited with `---` at
+   * start and end) from a Markdown file.
    */
-  YAMLParser(const std::string& filename);
+  YAMLParser(const std::string& filename, const int max_docs = 1);
 
   /**
    * Destructor.
@@ -37,6 +42,11 @@ private:
    * File name.
    */
   std::string filename;
+
+  /**
+   * Maximum number of documents to handle. Zero for no limit.
+   */
+  int max_docs;
 
   /**
    * LibYAML parser.

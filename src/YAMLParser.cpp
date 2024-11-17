@@ -1,7 +1,7 @@
 #include "YAMLParser.hpp"
 
-YAMLParser::YAMLParser(const std::string& filename) :
-    filename(filename) {
+YAMLParser::YAMLParser(const std::string& filename, const int max_docs) :
+    filename(filename), max_docs(max_docs) {
   yaml_parser_initialize(&parser);
 }
 
@@ -14,13 +14,8 @@ YAMLNode YAMLParser::parse() {
   yaml_parser_set_input_string(&parser, (const unsigned char*)contents.data(),
       contents.size());
   YAMLNode root;
-  int done = 0;
-
-  /* YAML frontmatter in Markdown files is delimited with starting and ending
-   * lines of `---`; this is the document separator for YAML, so we should
-   * stop after two documents (the first empty, the second the frontmatter) */
+  bool done = false;
   int docs = 0;
-
   while (!done) {
     if (!yaml_parser_parse(&parser, &event)) {
       throw std::runtime_error("YAML syntax error in " + filename);
@@ -30,7 +25,8 @@ YAMLNode YAMLParser::parse() {
     } else if (event.type == YAML_MAPPING_START_EVENT) {
       parseMapping(root);
     } else if (event.type == YAML_DOCUMENT_END_EVENT) {
-      done = ++docs < 2;
+      ++docs;
+      done = max_docs > 0 && docs >= max_docs;
       yaml_event_delete(&event);
     } else if (event.type == YAML_STREAM_END_EVENT) {
       done = true;
