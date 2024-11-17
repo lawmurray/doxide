@@ -76,8 +76,9 @@ void Parser::parse(const std::string& filename) {
   std::list<uint32_t> starts, ends;
   std::list<Entity> entities;
 
-  file.start_line = ts_node_start_point(node).row;
+  file.start_line = 0;
   file.end_line = ts_node_end_point(node).row;
+  file.line_counts.resize(file.end_line, -1);
 
   starts.push_back(ts_node_start_byte(node));
   ends.push_back(ts_node_end_byte(node));
@@ -276,7 +277,7 @@ void Parser::parse(const std::string& filename) {
           &length);
       if (strncmp(name, "executable", length) == 0) {
         /* executable code, update line data as long as the code is not
-          * within an excluded region */
+         * within an excluded region */
         bool exclude = std::any_of(excluded.begin(), excluded.end(),
             [start,end](auto range) {
               return range.first <= start && end <= range.second;
@@ -285,7 +286,10 @@ void Parser::parse(const std::string& filename) {
           uint32_t start_line = ts_node_start_point(node).row;
           uint32_t end_line = ts_node_end_point(node).row;
           for (uint32_t line = start_line; line <= end_line; ++line) {
-            file.lines.insert(line);
+            if (file.line_counts[line] < 0) {
+              file.line_counts[line] = 0;
+              ++file.lines_included;
+            }
           }
         }
       }

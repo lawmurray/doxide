@@ -113,11 +113,6 @@ struct Entity {
   list_type files;
 
   /**
-   * For a file only, the line numbers of executable lines, zero-based.
-   */
-  std::unordered_set<uint32_t> lines;
-
-  /**
    * Entity name (e.g. name of variable, function, class). For a file or
    * directory this is the full path.
    */
@@ -157,12 +152,28 @@ struct Entity {
   /**
    * Starting line of the entity.
    */
-  int start_line;
+  uint32_t start_line;
 
   /**
    * Ending line of the entity.
    */
-  int end_line;
+  uint32_t end_line;
+
+  /**
+   * For a file only, execution counts for lines. -1 for a line indicates that
+   * it is excluded.
+   */
+  std::vector<int> line_counts;
+
+  /**
+   * Number of lines included in coverage counts.
+   */
+  int lines_included;
+
+  /**
+   * Number of lines covered in coverage counts.
+   */
+  int lines_covered;
 
   /**
    * Current indent level of the documentation comment for this entity.

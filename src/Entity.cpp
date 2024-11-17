@@ -3,6 +3,8 @@
 Entity::Entity() :
    start_line(-1),
    end_line(-1),
+   lines_included(0),
+   lines_covered(0),
    indent(0),
    type(EntityType::NONE),
    hide(false),
@@ -87,6 +89,8 @@ void Entity::addToThis(Entity&& o) {
       } else {
         e = &(*found);
       }
+      e->lines_included += o.lines_included;
+      e->lines_covered += o.lines_covered;
     }
     e->files.push_back(std::move(o));
   } else {
@@ -113,12 +117,27 @@ void Entity::merge(Entity&& o) {
   enums.splice(enums.end(), std::move(o.enums));
   dirs.splice(dirs.end(), std::move(o.dirs));
   files.splice(files.end(), std::move(o.files));
-  lines.merge(std::move(o.lines));
+
+  /* merge line counts, recalling that -1 indicates excluded lines, so cannot
+   * simply add the two vectors */
+  end_line = std::max(line_counts.size(), o.line_counts.size());
+  line_counts.resize(end_line, -1);
+  lines_included = 0;
+  lines_covered = 0;
+  for (uint32_t i = 0; i < end_line; ++i) {
+    int count = (i < o.line_counts.size()) ? o.line_counts[i] : -1;
+    if (line_counts[i] >= 0 || count >= 0) {
+      line_counts[i] = std::max(line_counts[i], 0) + std::max(count, 0);
+      ++lines_included;
+      if (line_counts[i] > 0) {
+        ++lines_covered;
+      }
+    }
+  }
 
   if (ingroup.empty()) {
     ingroup = std::move(o.ingroup);
   }
-
   name = o.name;
   if (type == EntityType::TEMPLATE) {
     decl += " ";

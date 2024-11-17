@@ -132,18 +132,61 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     auto dirs = view(entity.dirs, true);
     auto files = view(entity.files, true);
     if (dirs.size() + files.size() > 0) {
+      uint32_t total_included = 0;
+      uint32_t total_covered = 0;
+      uint32_t total_uncovered = 0;
+
       out << "## Files" << std::endl;
       out << std::endl;
-      out << "| Name | Lines |" << std::endl;
-      out << "| :--- | ----: |" << std::endl;
+      out << "| Name | Lines | Covered | Uncovered | Coverage |" << std::endl;
+      out << "| :--- | ----: | ------: | --------: | -------: |" << std::endl;
       for (auto& child : dirs) {
-        out << "| :material-folder: [" << child->name << "](" << childdir << sanitize(child->name) << "/index.md) | ";
-        out << child->lines.size() << " |" << std::endl;
+        uint32_t lines_included = child->lines_included;
+        uint32_t lines_covered = child->lines_covered;
+        uint32_t lines_uncovered = lines_included - lines_covered;
+        double lines_percent = (lines_included > 0) ?
+            100.0*lines_covered/lines_included : 0.0;
+
+        total_included += lines_included;
+        total_covered += lines_covered;
+        total_uncovered += lines_uncovered;
+
+        out << "| :material-folder: [" << child->name << "](" << childdir << sanitize(child->name) << "/index.md) ";
+        out << "| " << lines_included << ' ';
+        out << "| " << lines_covered << ' ';
+        out << "| " << lines_uncovered << ' ';
+        out << "| " << std::fixed << std::setprecision(1) << lines_percent << "% ";
+        out << "|" << std::endl;
       }
       for (auto& child : files) {
-        out << "| :material-file-outline: [" << child->name << "](" << childdir << sanitize(child->name) << ".md) | ";
-        out << child->lines.size() << " |" << std::endl;
+        uint32_t lines_included = child->lines_included;
+        uint32_t lines_covered = child->lines_covered;
+        uint32_t lines_uncovered = lines_included - lines_covered;
+        double lines_percent = (lines_included > 0) ?
+            100.0*lines_covered/lines_included : 0.0;
+
+        total_included += lines_included;
+        total_covered += lines_covered;
+        total_uncovered += lines_uncovered;
+
+        out << "| :material-file-outline: [" << child->name << "](" << childdir << sanitize(child->name) << "/index.md) ";
+        out << "| " << lines_included << ' ';
+        out << "| " << lines_covered << ' ';
+        out << "| " << lines_uncovered << ' ';
+        out << "| " << std::fixed << std::setprecision(1) << lines_percent << "% ";
+        out << "|" << std::endl;
       }
+
+      double total_percent = (total_included > 0) ?
+          100.0*total_covered/total_included : 0.0;
+
+      out << "| **Total** ";
+      out << "| **" << total_included << "** ";
+      out << "| **" << total_covered << "** ";
+      out << "| **" << total_uncovered << "** ";
+      out << "| **" << std::fixed << std::setprecision(1) << total_percent << "%** ";
+      out << "|" << std::endl;
+
       out << std::endl;
     }
 
