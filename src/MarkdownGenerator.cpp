@@ -134,6 +134,11 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     auto dirs = view(entity.dirs, true);
     auto files = view(entity.files, true);
     if (dirs.size() + files.size() > 0) {
+      out << "## Coverage" << std::endl;
+      out << std::endl;
+      out << treemap(entity) << std::endl;
+      out << std::endl;
+
       uint32_t total_included = 0;
       uint32_t total_covered = 0;
       uint32_t total_uncovered = 0;
@@ -416,6 +421,85 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
   for (auto& child : view(entity.files, false)) {
     generate(output / name, *child);
   }
+}
+
+std::string MarkdownGenerator::treemap(const Entity& entity) {
+  std::stringstream buf;
+  buf <<
+  R""""(
+  <div id="coverage-sunburst" style="width:600px;height:600px;max-width:100%;max-height:auto;"></div>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+  <script type="text/javascript">
+  )"""";
+  buf << "var data = [" << treemap_data(entity) << ']' << std::endl;
+  buf <<
+  R""""(
+  var coverage_sunburst = echarts.init(document.getElementById('coverage-sunburst'));
+  var option = {
+    series: {
+      type: 'sunburst',
+      data: data,
+      radius: ['20%', '100%'],
+      label: {
+        fontSize: 8,
+        align: 'left',
+        rotate: 'radial',
+        width: 50,
+        overflow: 'truncate'
+      }
+    }
+  };
+  coverage_sunburst.setOption(option);
+  window.addEventListener("resize", () => {
+    coverage_sunburst.resize();
+  });
+  </script>
+  )"""";
+
+  return buf.str();
+}
+
+std::string MarkdownGenerator::treemap_data(const Entity& entity) {
+  std::stringstream buf;
+  bool first = true;
+  for (auto& dir: view(entity.dirs, true)) {
+    double percent = (dir->lines_included > 0) ?
+        100.0*dir->lines_covered/dir->lines_included : 0.0;
+    std::string c = color(percent);
+
+    if (!first) {
+      buf << ", ";
+    }
+    first = false;
+
+    buf << '{';
+    buf << "name: \"" << dir->name << "\", ";
+    buf << "path: \"" << dir->filename << "\", ";
+    buf << "value: " << dir->lines_included << ", ";
+    buf << "children: [" << treemap_data(*dir) << "], ";
+    buf << "itemStyle: { color: \"#" << c << "1a\", borderColor: \"#" << c << "\"}, ";
+    buf << "label: { color: \"#" << c << "\"}";
+    buf << '}';
+  }
+  for (auto& file: view(entity.files, true)) {
+    double percent = (file->lines_included > 0) ?
+        100.0*file->lines_covered/file->lines_included : 0.0;
+    std::string c = color(percent);
+
+    if (!first) {
+      buf << ", ";
+    }
+    first = false;
+
+    buf << '{';
+    buf << "name: \"" << file->name << "\", ";
+    buf << "path: \"" << file->filename << "\", ";
+    buf << "value: " << file->lines_included << ", ";
+    buf << "itemStyle: { color: \"#" << c << "1a\", borderColor: \"#" << c << "\"}, ";
+    buf << "label: { color: \"#" << c << "\"}";
+    buf << '}';
+  }
+  return buf.str();
 }
 
 std::string MarkdownGenerator::frontmatter(const Entity& entity) {

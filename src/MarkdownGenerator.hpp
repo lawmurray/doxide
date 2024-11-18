@@ -36,9 +36,24 @@ private:
   /**
    * Recursively generate documentation.
    * 
+   * @param output Output directory.
    * @param entity Entity for which to generate documentation.
    */
   void generate(const std::filesystem::path& output, const Entity& entity);
+
+  /**
+   * Produce treemap of code coverage for entity.
+   * 
+   * @param entity Entity for which to generate treemap.
+   */
+  static std::string treemap(const Entity& entity);
+
+  /**
+   * Produce data for treemap of code coverage for entity.
+   * 
+   * @param entity Entity for which to generate treemap.
+   */
+  static std::string treemap_data(const Entity& entity);
 
   /**
    * Produce the YAML frontmatter for an entity.
