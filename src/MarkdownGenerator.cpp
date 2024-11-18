@@ -178,7 +178,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
-        out << "<td style=\"text-align:right;box-shadow: -4px 0 0 0 #" << row_color << " inset;background-color:#" << row_color << "1a;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
+        out << "<td style=\"text-align:right;box-shadow: -8px 0 0 0 #" << row_color << "dd inset;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
         out << "</tr>" << std::endl;
       }
       for (auto& child : files) {
@@ -202,7 +202,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
-        out << "<td style=\"text-align:right;box-shadow: -4px 0 0 0 #" << row_color << " inset;background-color:#" << row_color << "1a;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
+        out << "<td style=\"text-align:right;box-shadow: -8px 0 0 0 #" << row_color << "dd inset;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
         out << "</tr>" << std::endl;
       }
       out << "</tbody>" << std::endl;
@@ -217,7 +217,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
       out << "<td style=\"text-align:right;font-weight:bold;\">" << total_included << "</td>" << std::endl;
       out << "<td style=\"text-align:right;font-weight:bold;\">" << total_covered << "</td>" << std::endl;
       out << "<td style=\"text-align:right;font-weight:bold;\">" << total_uncovered << "</td>" << std::endl;
-      out << "<td style=\"text-align:right;font-weight:bold;box-shadow: -4px 0 0 0 #" << total_color << " inset;background-color:#" << total_color << "1a;\">" << std::fixed << std::setprecision(1) << total_percent << "%</td>" << std::endl;
+      out << "<td style=\"text-align:right;font-weight:bold;box-shadow: -8px 0 0 0 #" << total_color << "dd inset;\">" << std::fixed << std::setprecision(1) << total_percent << "%</td>" << std::endl;
       out << "</tr>" << std::endl;
       out << "</tfoot>" << std::endl;
 
@@ -448,11 +448,16 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
       type: 'sunburst',
       data: data,
       sort: null,
-      radius: ['20%', '100%'],
+      radius: ['20%', '95%'],
       startAngle: 0,
       clockwise: false,
+      itemStyle: {
+        borderWidth: 1
+      },
       label: {
-        fontSize: 8,
+        color: 'white',
+        fontSize: 10,
+        textBorderWidth: 1,
         align: 'left',
         rotate: 'radial',
         width: 50,
@@ -498,8 +503,8 @@ std::string MarkdownGenerator::treemap_data(const Entity& entity) {
     buf << "path: \"" << dir->filename << "\", ";
     buf << "value: " << dir->lines_included << ", ";
     buf << "children: [" << treemap_data(*dir) << "], ";
-    buf << "itemStyle: { color: \"#" << c << "1a\", borderColor: \"#" << c << "\"}, ";
-    buf << "label: { color: \"#" << c << "\"}";
+    buf << "itemStyle: { color: \"#" << c << "dd\", borderColor: \"#" << c << "\"}, ";
+    buf << "label: { textBorderColor: \"#" << c << "\"}";
     buf << '}';
   }
   for (auto& file: view(entity.files, true)) {
@@ -516,8 +521,8 @@ std::string MarkdownGenerator::treemap_data(const Entity& entity) {
     buf << "name: \"" << file->name << "\", ";
     buf << "path: \"" << file->filename << "\", ";
     buf << "value: " << file->lines_included << ", ";
-    buf << "itemStyle: { color: \"#" << c << "1a\", borderColor: \"#" << c << "\"}, ";
-    buf << "label: { color: \"#" << c << "\"}";
+    buf << "itemStyle: { color: \"#" << c << "dd\", borderColor: \"#" << c << "\"}, ";
+    buf << "label: { textBorderColor: \"#" << c << "\"}";
     buf << '}';
   }
   return buf.str();
@@ -626,9 +631,9 @@ std::string MarkdownGenerator::sanitize(const std::string& str) {
 std::string MarkdownGenerator::color(const double percent) {
   assert(0.0 <= percent && percent <= 100.0);
 
-  const int base_red = 0xFF6666;
+  const int base_red = 0xEF5552;
   const int base_yellow = 0xFFC105;
-  const int base_green = 0x85E485;
+  const int base_green = 0x4CAE4F;
 
   double rounded_percent = 10.0*std::floor(percent/10.0);
   int from, to;
