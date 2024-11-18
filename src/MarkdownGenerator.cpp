@@ -439,6 +439,7 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
     series: {
       type: 'sunburst',
       data: data,
+      sort: null,
       radius: ['20%', '100%'],
       label: {
         fontSize: 8,
