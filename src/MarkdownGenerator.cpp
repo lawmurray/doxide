@@ -158,6 +158,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
 
       out << "<tbody>" << std::endl;
       for (auto& child : dirs) {
+        std::string sanitized = sanitize(child->name);
         uint32_t lines_included = child->lines_included;
         uint32_t lines_covered = child->lines_covered;
         uint32_t lines_uncovered = lines_included - lines_covered;
@@ -169,8 +170,11 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         total_covered += lines_covered;
         total_uncovered += lines_uncovered;
 
+        /* for the purposes of table sorting, data-sort is used to prefix
+         * directory names with "a." and file names with "b." to ensure that
+         * directories precede files in the 'dotsep' sort order */
         out << "<tr>" << std::endl;
-        out << "<td style=\"text-align:left;\">" << material_folder << "&nbsp;<a href=\"" << childdir << sanitize(child->name) << "/\">" << child->name << "</a></td>" << std::endl;
+        out << "<td style=\"text-align:left;\" data-sort=\"a." << sanitized << "\">" << material_folder << " <a href=\"" << childdir << sanitized << "/\">" << child->name << "</a></td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
@@ -178,6 +182,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "</tr>" << std::endl;
       }
       for (auto& child : files) {
+        std::string sanitized = sanitize(child->name);
         uint32_t lines_included = child->lines_included;
         uint32_t lines_covered = child->lines_covered;
         uint32_t lines_uncovered = lines_included - lines_covered;
@@ -189,8 +194,11 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         total_covered += lines_covered;
         total_uncovered += lines_uncovered;
 
+        /* for the purposes of table sorting, data-sort is used to prefix
+         * directory names with "a." and file names with "b." to ensure that
+         * directories precede files in the 'dotsep' sort order */
         out << "<tr>" << std::endl;
-        out << "<td style=\"text-align:left;\">" << material_file_outline << "&nbsp;<a href=\"" << childdir << sanitize(child->name) << "\">" << child->name << "</a></td>" << std::endl;
+        out << "<td style=\"text-align:left;\" data-sort=\"b." << sanitized << "\">" << material_file_outline << " <a href=\"" << childdir << sanitized << "/\">" << child->name << "</a></td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
