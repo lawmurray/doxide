@@ -90,7 +90,7 @@ void Parser::parse(const std::string& filename) {
   Entity entity;
   while (ts_query_cursor_next_match(cursor, &match)) {    
     uint32_t start = 0, middle = 0, end = 0;
-    uint32_t start_line = -1, middle_line = -1, end_line = -1;
+    uint32_t start_line = -1, end_line = -1;
     for (uint16_t i = 0; i < match.capture_count; ++i) {
       node = match.captures[i].node;
       uint32_t id = match.captures[i].index; 
@@ -112,17 +112,14 @@ void Parser::parse(const std::string& filename) {
         entity.name = file.decl.substr(k, l - k);
       } else if (strncmp(name, "body", length) == 0) {
         middle = ts_node_start_byte(node);
-        middle_line = ts_node_start_point(node).row;
       } else if (strncmp(name, "value", length) == 0) {
         middle = ts_node_start_byte(node);
-        middle_line = ts_node_start_point(node).row;
       } else {
         start = ts_node_start_byte(node);
         start_line = ts_node_start_point(node).row;
         end = ts_node_end_byte(node);
         end_line = ts_node_end_point(node).row;
         middle = end;
-        middle_line = end_line;
 
         if (strncmp(name, "namespace", length) == 0) {
           entity.type = EntityType::NAMESPACE;
@@ -431,8 +428,6 @@ void Parser::report(const std::string& filename, const std::string& in,
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = ts_node_end_byte(node);
     TSPoint from = ts_node_start_point(node);
-    TSPoint to = ts_node_end_point(node);
-
     if (ts_node_is_error(node)) {
       std::cerr << filename << ':' << (from.row + 1) << ':' << from.column <<
           ": warning: parse failed at '" << in.substr(k, l - k) << "'" <<
