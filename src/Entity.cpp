@@ -149,3 +149,47 @@ void Entity::merge(Entity&& o) {
   hide = hide || o.hide;
   visibleChildren = visibleChildren || o.visibleChildren;
 }
+
+bool Entity::exists(std::filesystem::path& path) const {
+  auto parent_path = path.parent_path();
+  auto e = this;
+  for (auto iter = parent_path.begin(); iter != parent_path.end(); ++iter) {
+    auto single = iter->string();
+    auto found = std::find_if(e->dirs.begin(), e->dirs.end(),
+        [&single](auto& s) { return s.name == single; });
+    if (found == e->dirs.end()) {
+      return false;
+    } else {
+      e = &(*found);
+    }
+  }
+
+  auto file = path.filename().string();
+  auto found = std::find_if(e->files.begin(), e->files.end(),
+      [&file](auto& s) { return s.name == file; });
+  return found != e->files.end();
+}
+
+std::list<Entity*> Entity::get(std::filesystem::path& path) {
+  auto parent_path = path.parent_path();
+  std::list<Entity*> r;
+  auto e = this;
+  r.push_back(e);
+  for (auto iter = parent_path.begin(); iter != parent_path.end(); ++iter) {
+    auto single = iter->string();
+    auto found = std::find_if(e->dirs.begin(), e->dirs.end(),
+        [&single](auto& s) { return s.name == single; });
+    assert(found != e->dirs.end());
+    e = &(*found);
+    r.push_back(e);
+  }
+
+  auto file = path.filename().string();
+  auto found = std::find_if(e->files.begin(), e->files.end(),
+      [&file](auto& s) { return s.name == file; });
+  assert(found != e->files.end());
+  e = &(*found);
+  r.push_back(e);
+
+  return r;
+}

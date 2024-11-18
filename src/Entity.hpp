@@ -58,6 +58,24 @@ struct Entity {
   void merge(Entity&& o);
 
   /**
+   * Does a file exist of the given name?
+   * 
+   * @param path File path.
+   */
+  bool exists(std::filesystem::path& path) const;
+
+  /**
+   * Get a file of the given name. The file must exist (use `exists()`).
+   *
+   * @param path File path.
+   *
+   * @return List of entities giving the full path to the file. The last
+   * entity represents the file itself, the preceding entities its
+   * subdirectories.
+   */
+  std::list<Entity*> get(std::filesystem::path& path);
+
+  /**
    * Child namespaces.
    */
   list_type namespaces;

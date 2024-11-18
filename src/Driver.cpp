@@ -2,6 +2,7 @@
 #include "YAMLParser.hpp"
 #include "Parser.hpp"
 #include "MarkdownGenerator.hpp"
+#include "GcovCounter.hpp"
 #include "GcovGenerator.hpp"
 
 Driver::Driver() :
@@ -34,6 +35,10 @@ void Driver::init() {
 void Driver::build() {
   /* parse */
   parser.parse(filenames);
+
+  /* incorporate coverage date */
+  GcovCounter counter;
+  counter.count(parser.root);
 
   /* generate */
   MarkdownGenerator generator(output);
