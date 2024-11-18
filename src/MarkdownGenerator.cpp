@@ -452,12 +452,16 @@ std::string MarkdownGenerator::stringify(const std::string& str) {
 }
 
 std::string MarkdownGenerator::htmlize(const std::string& str) {
+  /* basic replacements */
   static const std::regex amp("&");
   static const std::regex lt("<");
   static const std::regex gt(">");
   static const std::regex quot("\"");
   static const std::regex apos("'");
   static const std::regex ptr("\\*");
+
+  /* the sequence operator[](...) looks like a link in Markdown */
+  static const std::regex operator_brackets("operator\\[\\]");
 
   std::string r = str;
   r = std::regex_replace(r, amp, "&amp;");  // must go first or new & replaced
@@ -466,6 +470,7 @@ std::string MarkdownGenerator::htmlize(const std::string& str) {
   r = std::regex_replace(r, quot, "&quot;");
   r = std::regex_replace(r, apos, "&apos;");
   r = std::regex_replace(r, ptr, "&#42;");
+  r = std::regex_replace(r, operator_brackets, "operator&#91;&#93;");
   return r;
 }
 
