@@ -183,7 +183,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         total_uncovered += lines_uncovered;
 
         out << "<tr>" << std::endl;
-        out << "<td style=\"text-align:left;\">" << material_file_outline << "&nbsp;<a href=\"" << childdir << sanitize(child->name) << ".md\">" << child->name << "</a></td>" << std::endl;
+        out << "<td style=\"text-align:left;\">" << material_file_outline << "&nbsp;<a href=\"" << childdir << sanitize(child->name) << "\">" << child->name << "</a></td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
