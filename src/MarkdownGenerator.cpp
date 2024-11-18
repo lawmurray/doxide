@@ -169,7 +169,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
-        out << "<td style=\"text-align:right;box-shadow: 4px 0 0 0 #" << row_color << " inset;background-color:#" << row_color << "1a;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
+        out << "<td style=\"text-align:right;box-shadow: -4px 0 0 0 #" << row_color << " inset;background-color:#" << row_color << "1a;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
         out << "</tr>" << std::endl;
       }
       for (auto& child : files) {
@@ -189,7 +189,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
-        out << "<td style=\"text-align:right;box-shadow: 4px 0 0 0 #" << row_color << " inset;background-color:#" << row_color << "1a;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
+        out << "<td style=\"text-align:right;box-shadow: -4px 0 0 0 #" << row_color << " inset;background-color:#" << row_color << "1a;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
         out << "</tr>" << std::endl;
       }
       out << "</tbody>" << std::endl;
@@ -204,7 +204,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
       out << "<td style=\"text-align:right;font-weight:bold;\">" << total_included << "</td>" << std::endl;
       out << "<td style=\"text-align:right;font-weight:bold;\">" << total_covered << "</td>" << std::endl;
       out << "<td style=\"text-align:right;font-weight:bold;\">" << total_uncovered << "</td>" << std::endl;
-      out << "<td style=\"text-align:right;font-weight:bold;box-shadow: 4px 0 0 0 #" << total_color << " inset;background-color:#" << total_color << "1a;\">" << std::fixed << std::setprecision(1) << total_percent << "%</td>" << std::endl;
+      out << "<td style=\"text-align:right;font-weight:bold;box-shadow: -4px 0 0 0 #" << total_color << " inset;background-color:#" << total_color << "1a;\">" << std::fixed << std::setprecision(1) << total_percent << "%</td>" << std::endl;
       out << "</tr>" << std::endl;
       out << "</tfoot>" << std::endl;
 
@@ -521,24 +521,24 @@ std::string MarkdownGenerator::sanitize(const std::string& str) {
 std::string MarkdownGenerator::color(const double percent) {
   assert(0.0 <= percent && percent <= 100.0);
 
-  const int base_red = 0xff5252;
-  const int base_yellow = 0xff9100;
-  const int base_green = 0x64dd17;
+  const int base_red = 0xFF6666;
+  const int base_yellow = 0xF9FD63;
+  const int base_green = 0x85E485;
 
   int from, to;
   double mix;
-  if (percent < 60.0) {
+  if (percent < 75.0) {
     from = base_red;
     to = base_red;
     mix = 1.0;
-  } else if (percent < 80.0) {
-    from = base_red;
-    to = base_yellow;
-    mix = (percent - 60.0)/20.0;
-  } else {
+  } else if (percent < 90.0) {
     from = base_yellow;
+    to = base_yellow;
+    mix = 1.0;
+  } else {
+    from = base_green;
     to = base_green;
-    mix = (percent - 80.0)/20.0;
+    mix = 1.0;
   }
 
   int r = (1.0 - mix)*((from >> 16) & 0xFF) + mix*((to >> 16) & 0xFF);
