@@ -129,6 +129,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     }
 
     /* directories and files */
+    static std::string material_file_outline("<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm4 18H6V4h7v5h5z\"/></svg></span>");
+    static std::string material_folder("<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M10 4H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8z\"/></svg></span>");
     auto dirs = view(entity.dirs, true);
     auto files = view(entity.files, true);
     if (dirs.size() + files.size() > 0) {
@@ -138,8 +140,18 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
 
       out << "## Files" << std::endl;
       out << std::endl;
-      out << "| Name | Lines | Covered | Uncovered | Coverage |" << std::endl;
-      out << "| :--- | ----: | ------: | --------: | -------: |" << std::endl;
+      out << "<table>" << std::endl;
+      out << "<thead>" << std::endl;
+      out << "<tr>" << std::endl;
+      out << "<th style=\"text-align:left;\">Name</th>" << std::endl;
+      out << "<th style=\"text-align:right;\">Lines</th>" << std::endl;
+      out << "<th style=\"text-align:right;\">Covered</th>" << std::endl;
+      out << "<th style=\"text-align:right;\">Uncovered</th>" << std::endl;
+      out << "<th style=\"text-align:right;\">Coverage</th>" << std::endl;
+      out << "</tr>" << std::endl;
+      out << "</thead>" << std::endl;
+
+      out << "<tbody>" << std::endl;
       for (auto& child : dirs) {
         uint32_t lines_included = child->lines_included;
         uint32_t lines_covered = child->lines_covered;
@@ -151,12 +163,13 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         total_covered += lines_covered;
         total_uncovered += lines_uncovered;
 
-        out << "| :material-folder: [" << child->name << "](" << childdir << sanitize(child->name) << "/index.md) ";
-        out << "| " << lines_included << ' ';
-        out << "| " << lines_covered << ' ';
-        out << "| " << lines_uncovered << ' ';
-        out << "| " << std::fixed << std::setprecision(1) << lines_percent << "% ";
-        out << "|" << std::endl;
+        out << "<tr>" << std::endl;
+        out << "<td style=\"text-align:left;\">" << material_folder << "&nbsp;<a href=\"" << childdir << sanitize(child->name) << "/\">" << child->name << "</a></td>" << std::endl;
+        out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
+        out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
+        out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
+        out << "<td style=\"text-align:right;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
+        out << "</tr>" << std::endl;
       }
       for (auto& child : files) {
         uint32_t lines_included = child->lines_included;
@@ -169,24 +182,29 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         total_covered += lines_covered;
         total_uncovered += lines_uncovered;
 
-        out << "| :material-file-outline: [" << child->name << "](" << childdir << sanitize(child->name) << ".md) ";
-        out << "| " << lines_included << ' ';
-        out << "| " << lines_covered << ' ';
-        out << "| " << lines_uncovered << ' ';
-        out << "| " << std::fixed << std::setprecision(1) << lines_percent << "% ";
-        out << "|" << std::endl;
+        out << "<tr>" << std::endl;
+        out << "<td style=\"text-align:left;\">" << material_file_outline << "&nbsp;<a href=\"" << childdir << sanitize(child->name) << ".md\">" << child->name << "</a></td>" << std::endl;
+        out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
+        out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
+        out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
+        out << "<td style=\"text-align:right;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
+        out << "</tr>" << std::endl;
       }
+      out << "</tbody>" << std::endl;
 
       double total_percent = (total_included > 0) ?
           100.0*total_covered/total_included : 0.0;
+      out << "<tfoot style=\"font-weight:bold;\">" << std::endl;
+      out << "<tr>" << std::endl;
+      out << "<td style=\"text-align:left;\">Total</td>" << std::endl;
+      out << "<td style=\"text-align:right;\">" << total_included << "</td>" << std::endl;
+      out << "<td style=\"text-align:right;\">" << total_covered << "</td>" << std::endl;
+      out << "<td style=\"text-align:right;\">" << total_uncovered << "</td>" << std::endl;
+      out << "<td style=\"text-align:right;\">" << std::fixed << std::setprecision(1) << total_percent << "%</td>" << std::endl;
+      out << "</tr>" << std::endl;
+      out << "</tfoot>" << std::endl;
 
-      out << "| **Total** ";
-      out << "| **" << total_included << "** ";
-      out << "| **" << total_covered << "** ";
-      out << "| **" << total_uncovered << "** ";
-      out << "| **" << std::fixed << std::setprecision(1) << total_percent << "%** ";
-      out << "|" << std::endl;
-
+      out << "</table>" << std::endl;
       out << std::endl;
     }
 
