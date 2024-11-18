@@ -169,7 +169,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         total_covered += lines_covered;
         total_uncovered += lines_uncovered;
 
-        out << "| :material-file-outline: [" << child->name << "](" << childdir << sanitize(child->name) << "/index.md) ";
+        out << "| :material-file-outline: [" << child->name << "](" << childdir << sanitize(child->name) << ".md) ";
         out << "| " << lines_included << ' ';
         out << "| " << lines_covered << ' ';
         out << "| " << lines_uncovered << ' ';
