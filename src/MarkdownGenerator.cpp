@@ -450,7 +450,7 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
       type: 'sunburst',
       data: data,
       sort: null,
-      radius: ['10%', '98%'],
+      radius: ['5%', '98%'],
       startAngle: 0,
       clockwise: false,
       itemStyle: {
@@ -462,7 +462,7 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
         textBorderWidth: 1,
         align: 'left',
         rotate: 'radial',
-        width: 56,
+        width: 60,
         overflow: 'truncate'
       },
       labelLayout: {
