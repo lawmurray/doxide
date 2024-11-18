@@ -66,6 +66,10 @@ plugins:
   - social
 extra_css:
   - stylesheets/doxide.css
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js
+  - https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/sorts/tablesort.number.js
+  - javascripts/tablesort.js
 
 nav:
   - index.md

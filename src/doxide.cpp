@@ -53,6 +53,9 @@ extra_css:
 extra_javascript:
   - javascripts/mathjax.js
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js
+  - https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/sorts/tablesort.number.js
+  - javascripts/tablesort.js
 )"""";
 
 const char* init_docs_javascripts_mathjax_js =
@@ -73,6 +76,15 @@ R""""(<div class="md-copyright">
     </a>
   {% endif %}
 </div>
+)"""";
+
+const char* init_docs_javascripts_tablesort_js =
+R""""(document$.subscribe(function() {
+  var tables = document.querySelectorAll("article table:not([class])")
+  tables.forEach(function(table) {
+    new Tablesort(table)
+  })
+})
 )"""";
 
 const char* init_docs_stylesheets_doxide_css =

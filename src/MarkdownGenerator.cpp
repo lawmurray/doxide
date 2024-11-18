@@ -148,11 +148,11 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
       out << "<table>" << std::endl;
       out << "<thead>" << std::endl;
       out << "<tr>" << std::endl;
-      out << "<th style=\"text-align:left;\">Name</th>" << std::endl;
-      out << "<th style=\"text-align:right;\">Lines</th>" << std::endl;
-      out << "<th style=\"text-align:right;\">Covered</th>" << std::endl;
-      out << "<th style=\"text-align:right;\">Uncovered</th>" << std::endl;
-      out << "<th style=\"text-align:right;\">Coverage</th>" << std::endl;
+      out << "<th style=\"text-align:left;\" data-sort-method=\"dotsep\">Name</th>" << std::endl;
+      out << "<th style=\"text-align:right;\" data-sort-method=\"number\">Lines</th>" << std::endl;
+      out << "<th style=\"text-align:right;\" data-sort-method=\"number\">Covered</th>" << std::endl;
+      out << "<th style=\"text-align:right;\" data-sort-method=\"number\">Uncovered</th>" << std::endl;
+      out << "<th style=\"text-align:right;\" data-sort-method=\"number\">Coverage</th>" << std::endl;
       out << "</tr>" << std::endl;
       out << "</thead>" << std::endl;
 

@@ -61,6 +61,13 @@ extern const char* init_mkdocs_yaml;
 extern const char* init_docs_javascripts_mathjax_js;
 
 /**
+ * Contents of initial `docs/javascripts/tablesort.js` file.
+ * 
+ * @ingroup developer
+ */
+extern const char* init_docs_javascripts_tablesort_js;
+
+/**
  * Contents of initial `docs/stylesheets/doxide.css` file.
  * 
  * @ingroup developer

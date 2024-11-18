@@ -28,6 +28,7 @@ void Driver::init() {
   write_file_prompt(doxide_yaml, "doxide.yaml");
   write_file_prompt(mkdocs_yaml, "mkdocs.yaml");
   write_file_prompt(init_docs_javascripts_mathjax_js, "docs/javascripts/mathjax.js");
+  write_file_prompt(init_docs_javascripts_tablesort_js, "docs/javascripts/tablesort.js");
   write_file_prompt(init_docs_stylesheets_doxide_css, "docs/stylesheets/doxide.css");
   write_file_prompt(init_docs_overrides_partials_copyright_html, "docs/overrides/partials/copyright.html");
 }
