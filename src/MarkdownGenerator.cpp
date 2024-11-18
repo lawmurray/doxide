@@ -446,6 +446,9 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
         rotate: 'radial',
         width: 50,
         overflow: 'truncate'
+      },
+      labelLayout: {
+        hideOverlap: true
       }
     }
   };
