@@ -606,7 +606,7 @@ std::string MarkdownGenerator::color(const double percent) {
   assert(0.0 <= percent && percent <= 100.0);
 
   const int base_red = 0xFF6666;
-  const int base_yellow = 0xF9FD63;
+  const int base_yellow = 0xFFC105;
   const int base_green = 0x85E485;
 
   int from, to;
