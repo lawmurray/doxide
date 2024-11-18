@@ -82,6 +82,11 @@ private:
   static std::string sanitize(const std::string& str);
 
   /**
+   * Convert coverage percentage to hexadecimal color.
+   */
+  static std::string color(const double percent);
+
+  /**
    * Convert a list of entities to a list of pointers to entities, optionally
    * sorting by name.
    * 

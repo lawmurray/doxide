@@ -158,6 +158,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         uint32_t lines_uncovered = lines_included - lines_covered;
         double lines_percent = (lines_included > 0) ?
             100.0*lines_covered/lines_included : 0.0;
+        std::string row_color = color(lines_percent);
 
         total_included += lines_included;
         total_covered += lines_covered;
@@ -168,7 +169,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
-        out << "<td style=\"text-align:right;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
+        out << "<td style=\"text-align:right;box-shadow: 4px 0 0 0 #" << row_color << " inset;background-color:#" << row_color << "1a;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
         out << "</tr>" << std::endl;
       }
       for (auto& child : files) {
@@ -177,6 +178,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         uint32_t lines_uncovered = lines_included - lines_covered;
         double lines_percent = (lines_included > 0) ?
             100.0*lines_covered/lines_included : 0.0;
+        std::string row_color = color(lines_percent);
 
         total_included += lines_included;
         total_covered += lines_covered;
@@ -187,20 +189,22 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
         out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
-        out << "<td style=\"text-align:right;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
+        out << "<td style=\"text-align:right;box-shadow: 4px 0 0 0 #" << row_color << " inset;background-color:#" << row_color << "1a;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
         out << "</tr>" << std::endl;
       }
       out << "</tbody>" << std::endl;
 
       double total_percent = (total_included > 0) ?
           100.0*total_covered/total_included : 0.0;
-      out << "<tfoot style=\"font-weight:bold;\">" << std::endl;
+      std::string total_color = color(total_percent);
+
+      out << "<tfoot>" << std::endl;
       out << "<tr>" << std::endl;
-      out << "<td style=\"text-align:left;\">Total</td>" << std::endl;
-      out << "<td style=\"text-align:right;\">" << total_included << "</td>" << std::endl;
-      out << "<td style=\"text-align:right;\">" << total_covered << "</td>" << std::endl;
-      out << "<td style=\"text-align:right;\">" << total_uncovered << "</td>" << std::endl;
-      out << "<td style=\"text-align:right;\">" << std::fixed << std::setprecision(1) << total_percent << "%</td>" << std::endl;
+      out << "<td style=\"text-align:left;font-weight:bold;\">Total</td>" << std::endl;
+      out << "<td style=\"text-align:right;font-weight:bold;\">" << total_included << "</td>" << std::endl;
+      out << "<td style=\"text-align:right;font-weight:bold;\">" << total_covered << "</td>" << std::endl;
+      out << "<td style=\"text-align:right;font-weight:bold;\">" << total_uncovered << "</td>" << std::endl;
+      out << "<td style=\"text-align:right;font-weight:bold;box-shadow: 4px 0 0 0 #" << total_color << " inset;background-color:#" << total_color << "1a;\">" << std::fixed << std::setprecision(1) << total_percent << "%</td>" << std::endl;
       out << "</tr>" << std::endl;
       out << "</tfoot>" << std::endl;
 
@@ -512,6 +516,39 @@ std::string MarkdownGenerator::sanitize(const std::string& str) {
    * room for a four-character file extension (e.g. .html); on Windows it is
    * 260 bytes, so use the minimum */
   return buf.str().substr(0, 255 - 5);
+}
+
+std::string MarkdownGenerator::color(const double percent) {
+  assert(0.0 <= percent && percent <= 100.0);
+
+  const int base_red = 0xff5252;
+  const int base_yellow = 0xff9100;
+  const int base_green = 0x64dd17;
+
+  int from, to;
+  double mix;
+  if (percent < 60.0) {
+    from = base_red;
+    to = base_red;
+    mix = 1.0;
+  } else if (percent < 80.0) {
+    from = base_red;
+    to = base_yellow;
+    mix = (percent - 60.0)/20.0;
+  } else {
+    from = base_yellow;
+    to = base_green;
+    mix = (percent - 80.0)/20.0;
+  }
+
+  int r = (1.0 - mix)*((from >> 16) & 0xFF) + mix*((to >> 16) & 0xFF);
+  int g = (1.0 - mix)*((from >> 8) & 0xFF) + mix*((to >> 8) & 0xFF);
+  int b = (1.0 - mix)*((from >> 0) & 0xFF) + mix*((to >> 0) & 0xFF);
+  int c = (r << 16) | (g << 8) | b;
+
+  std::stringstream result;
+  result << std::hex << std::setw(6) << std::setfill('0') << c;
+  return result.str();
 }
 
 std::list<const Entity*> MarkdownGenerator::view(
