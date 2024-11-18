@@ -435,7 +435,9 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
   std::stringstream buf;
   buf <<
   R""""(
-  <div id="coverage-sunburst" style="width:600px;height:600px;max-width:100%;max-height:auto;"></div>
+  <div style="position:relative;width:100%;padding-top:100%;">
+    <div id="coverage-sunburst" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
   <script type="text/javascript">
   )"""";
@@ -448,7 +450,7 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
       type: 'sunburst',
       data: data,
       sort: null,
-      radius: ['20%', '95%'],
+      radius: ['10%', '98%'],
       startAngle: 0,
       clockwise: false,
       itemStyle: {
@@ -460,7 +462,7 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
         textBorderWidth: 1,
         align: 'left',
         rotate: 'radial',
-        width: 50,
+        width: 56,
         overflow: 'truncate'
       },
       labelLayout: {
@@ -469,7 +471,7 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
       levels: [
         {
           itemStyle: {
-            opacity: 0.1
+            opacity: 0.2
           }
         }
       ]
