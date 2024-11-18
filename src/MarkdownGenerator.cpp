@@ -441,6 +441,8 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
       data: data,
       sort: null,
       radius: ['20%', '100%'],
+      startAngle: 0,
+      clockwise: false,
       label: {
         fontSize: 8,
         align: 'left',
@@ -450,7 +452,14 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
       },
       labelLayout: {
         hideOverlap: true
-      }
+      },
+      levels: [
+        {
+          itemStyle: {
+            opacity: 0.1
+          }
+        }
+      ]
     }
   };
   coverage_sunburst.setOption(option);
