@@ -622,16 +622,21 @@ std::string MarkdownGenerator::color(const double percent) {
   const int base_yellow = 0xFFC105;
   const int base_green = 0x85E485;
 
+  double rounded_percent = 5.0*std::floor(percent/5.0);
   int from, to;
   double mix;
-  if (percent < 75.0) {
+  if (rounded_percent < 50.0) {
     from = base_red;
     to = base_red;
     mix = 1.0;
-  } else if (percent < 90.0) {
-    from = base_yellow;
+  } else if (rounded_percent < 75.0) {
+    from = base_red;
     to = base_yellow;
-    mix = 1.0;
+    mix = (rounded_percent - 50.0)/25.0;
+  } else if (rounded_percent < 90.0) {
+    from = base_yellow;
+    to = base_green;
+    mix = (rounded_percent - 75.0)/15.0;
   } else {
     from = base_green;
     to = base_green;
