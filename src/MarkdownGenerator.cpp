@@ -327,9 +327,41 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
       out << std::endl;
     }
 
-    /* for a file, output the complete contents */
+    /* for a file, output the whole contents; line numbers are added with the
+     * Markdown notation `linenums="1"`, which ultimately creates a HTML
+     * <table> of one row <tr>, with two cells <td>, the first holding the
+     * line numbers and the second the code; the line number cell contains
+     * a further <pre> with one empty <span></span>, then each line number in
+     * a separate <span> within it; to indicate code coverage we apply styles
+     * to those <span>, which are readily selected by number using the CSS
+     * nth-child() pseudo-class */
+    std::string covered_color = color(100.0);
+    std::string uncovered_color = color(0.0);
+    out << "<style>" << std::endl;
+    for (uint32_t line = 0; line < entity.line_counts.size(); ++line) {
+      if (entity.line_counts[line] > 0) {
+        /* line is covered; line + 2 here to account for 0-base to 1-base
+         * conversion plus the extra empty <span></span> mentioned above */
+        out << ".linenodiv pre span:nth-child(" << (line + 2) << ") {";
+        out << "box-shadow: -8px 0 0 0 #" << covered_color << ";";
+        out << "background-color: #" << covered_color << "dd;";
+        out << "color: white;";
+        out << "}" << std::endl;
+      } else if (entity.line_counts[line] == 0) {
+        /* line is uncovered; line + 2 here to account for 0-base to 1-base
+         * conversion plus the extra empty <span></span> mentioned above */
+        out << ".linenodiv pre span:nth-child(" << (line + 2) << ") {";
+        out << "box-shadow: -8px 0 0 0 #" << uncovered_color << ";";
+        out << "background-color: #" << uncovered_color << "dd;";
+        out << "color: white;";
+        out << "}" << std::endl;
+      }
+    }
+    out << "</style>" << std::endl;
+    out << std::endl;
+
     if (entity.type == EntityType::FILE) {
-      out << "```cpp" << std::endl;
+      out << "```cpp linenums=\"1\"" << std::endl;
       out << entity.decl << std::endl;
       out << "```" << std::endl;
       out << std::endl;
@@ -633,9 +665,9 @@ std::string MarkdownGenerator::sanitize(const std::string& str) {
 std::string MarkdownGenerator::color(const double percent) {
   assert(0.0 <= percent && percent <= 100.0);
 
-  const int base_red = 0xEF5552;
-  const int base_yellow = 0xFFC105;
-  const int base_green = 0x4CAE4F;
+  const int base_red = 0xef5552;
+  const int base_yellow = 0xffc105;
+  const int base_green = 0x4cae4f;
 
   double rounded_percent = 10.0*std::floor(percent/10.0);
   int from, to;
