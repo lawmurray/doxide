@@ -421,7 +421,7 @@ void Parser::report(const std::string& filename, const std::string& in,
     TSPoint from = ts_node_start_point(node);
     if (ts_node_is_error(node)) {
       std::cerr << filename << ':' << (from.row + 1) << ':' << from.column <<
-          ": warning: parse error at '" << in.substr(k, std::min(l - k, 40)) <<
+          ": warning: parse error at '" << in.substr(k, std::min(l - k, 40u)) <<
           "', but will continue" << std::endl;
     }
 
