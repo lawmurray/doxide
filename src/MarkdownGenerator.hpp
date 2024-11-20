@@ -75,17 +75,29 @@ private:
    * Produce sunburst chart of code coverage for entity.
    * 
    * @param entity Entity for which to generate sunburst.
+   * @param root Root entity for the current page. This is used to determine
+   * paths relative to the root.
    * @param out Output stream.
    */
-  static void sunburst(const Entity& entity, std::ofstream& out);
+  static void sunburst(const Entity& entity, const Entity& root,
+      std::ofstream& out);
 
   /**
    * Produce data for sunburst chart of code coverage for entity.
    * 
    * @param entity Entity for which to generate sunburst.
+   * @param root Root entity for the current page. This is used to determine
+   * paths relative to the root.
    * @param out Output stream.
    */
-  static void sunburst_data(const Entity& entity, std::ofstream& out);
+  static void sunburst_data(const Entity& entity, const Entity& root,
+      std::ofstream& out);
+
+  /**
+   * Produce a relative path.
+   */
+  static std::string relative(const std::string& path,
+      const std::string& base);
 
   /**
    * Produce the YAML frontmatter for an entity.

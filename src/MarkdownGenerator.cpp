@@ -383,7 +383,7 @@ void MarkdownGenerator::coverage(const Entity& entity, std::ofstream& out) {
     out << std::endl;
 
     /* code coverage chart */
-    sunburst(entity, out);
+    sunburst(entity, entity, out);
     out << std::endl;
 
     /* code coverage table */
@@ -423,8 +423,7 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
 
   auto dirs = view(entity.dirs, true);
   for (auto& child : dirs) {
-    std::string filename = sanitize(child->filename);
-    std::string parent = sanitize(std::filesystem::path(child->filename).parent_path());
+    std::string parent = sanitize(relative(std::filesystem::path(child->filename).parent_path(), root.filename));
     std::string name = sanitize(child->name);
     uint32_t lines_included = child->lines_included;
     uint32_t lines_covered = child->lines_covered;
@@ -432,10 +431,11 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
     double lines_percent = (lines_included > 0) ?
         100.0*lines_covered/lines_included : 0.0;
     std::string lines_color = color(lines_percent);
-    std::string style = (parent == root.filename) ? "" : ", style=\"display:none;\"";
+    std::string path = parent.empty() ? name : parent + '/' + name;
+    std::string style = parent.empty() ? "" : " style=\"display:none;\"";
 
-    out << "<tr id=\"" << filename << "\" data-parent=\"" << parent << "\"" << style << ">" << std::endl;
-    out << "<td style=\"text-align:left;\" data-sort=\"a." << name << "\">" << material_folder << " <a href=\"" << parent << '/' << name << "/\">" << htmlize(child->name) << "</a></td>" << std::endl;
+    out << "<tr id=\"" << path << "\" data-parent=\"" << parent << "\"" << style << ">" << std::endl;
+    out << "<td style=\"text-align:left;\" data-sort=\"a." << name << "\">" << material_folder << " <a href=\"" << path << "/\">" << htmlize(child->name) << "</a></td>" << std::endl;
     out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
     out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
     out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
@@ -447,8 +447,7 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
 
   auto files = view(entity.files, true);
   for (auto& child : files) {
-    std::string filename = sanitize(child->filename);
-    std::string parent = sanitize(std::filesystem::path(child->filename).parent_path());
+    std::string parent = sanitize(relative(std::filesystem::path(child->filename).parent_path(), root.filename));
     std::string name = sanitize(child->name);
     uint32_t lines_included = child->lines_included;
     uint32_t lines_covered = child->lines_covered;
@@ -456,10 +455,11 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
     double lines_percent = (lines_included > 0) ?
         100.0*lines_covered/lines_included : 0.0;
     std::string lines_color = color(lines_percent);
-    std::string style = (parent == root.filename) ? "" : ", style=\"display:none;\"";
+    std::string path = parent.empty() ? name : parent + '/' + name;
+    std::string style = parent.empty() ? "" : " style=\"display:none;\"";
 
-    out << "<tr id=\"" << filename << "\" data-parent=\"" << parent << "\"" << style << ">" << std::endl;
-    out << "<td style=\"text-align:left;\" data-sort=\"b." << name << "\">" << material_file_outline << " <a href=\"" << parent << '/' << name << "/\">" << htmlize(child->name) << "</a></td>" << std::endl;
+    out << "<tr id=\"" << path << "\" data-parent=\"" << parent << "\"" << style << ">" << std::endl;
+    out << "<td style=\"text-align:left;\" data-sort=\"b." << name << "\">" << material_file_outline << " <a href=\"" << path << "/\">" << htmlize(child->name) << "</a></td>" << std::endl;
     out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
     out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
     out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
@@ -496,7 +496,8 @@ void MarkdownGenerator::coverage_foot(const Entity& entity,
   out << "</tr>" << std::endl;
 }
 
-void MarkdownGenerator::sunburst(const Entity& entity, std::ofstream& out) {
+void MarkdownGenerator::sunburst(const Entity& entity, const Entity& root,
+    std::ofstream& out) {
   out <<
   R""""(
   <div style="position:relative;width:100%;padding-top:100%;">
@@ -506,7 +507,7 @@ void MarkdownGenerator::sunburst(const Entity& entity, std::ofstream& out) {
   <script type="text/javascript">
   )"""";
   out << "var data = [";
-  sunburst_data(entity, out);
+  sunburst_data(entity, root, out);
   out << ']' << std::endl;
   out <<
   R""""(
@@ -592,13 +593,14 @@ void MarkdownGenerator::sunburst(const Entity& entity, std::ofstream& out) {
 }
 
 void MarkdownGenerator::sunburst_data(const Entity& entity,
-    std::ofstream& out) {
+    const Entity& root, std::ofstream& out) {
   bool first = true;
   for (auto& dir: view(entity.dirs, true)) {
     double percent = (dir->lines_included > 0) ?
         100.0*dir->lines_covered/dir->lines_included : 0.0;
     std::string c = color(percent);
     std::string ico = icon(percent);
+    std::string path = relative(dir->filename, root.filename);
 
     if (!first) {
       out << ", ";
@@ -607,12 +609,12 @@ void MarkdownGenerator::sunburst_data(const Entity& entity,
 
     out << '{';
     out << "name: \"" << dir->name << "\", ";
-    out << "path: \"" << dir->filename << "\", ";
+    out << "path: \"" << path << "\", ";
     out << "value: " << dir->lines_included << ", ";
     out << "type: \"dir\", ";
     out << "icon: \"" << ico << "\", ";
     out << "children: [";
-    sunburst_data(*dir, out);
+    sunburst_data(*dir, root, out);
     out << "], ";
     out << "itemStyle: { color: \"#" << c << "dd\", borderColor: \"#" << c << "\"}, ";
     out << "label: { textBorderColor: \"#" << c << "\"}";
@@ -623,6 +625,7 @@ void MarkdownGenerator::sunburst_data(const Entity& entity,
         100.0*file->lines_covered/file->lines_included : 0.0;
     std::string c = color(percent);
     std::string ico = icon(percent);
+    std::string path = relative(file->filename, root.filename);
 
     if (!first) {
       out << ", ";
@@ -631,13 +634,27 @@ void MarkdownGenerator::sunburst_data(const Entity& entity,
 
     out << '{';
     out << "name: \"" << file->name << "\", ";
-    out << "path: \"" << file->filename << "\", ";
+    out << "path: \"" << path << "\", ";
     out << "value: " << file->lines_included << ", ";
     out << "type: \"file\", ";
     out << "icon: \"" << ico << "\", ";
     out << "itemStyle: { color: \"#" << c << "dd\", borderColor: \"#" << c << "\"}, ";
     out << "label: { textBorderColor: \"#" << c << "\"}";
     out << '}';
+  }
+}
+
+std::string MarkdownGenerator::relative(const std::string& path,
+    const std::string& base) {
+  if (base.empty()) {
+    return path;
+  } else {
+    auto result = std::filesystem::relative(path, base);
+    if (result == ".") {
+      return "";
+    } else {
+      return result.string();
+    }
   }
 }
 
