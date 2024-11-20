@@ -8,6 +8,9 @@ When developing Doxide, you will need to build it from source, and rebuild it fr
 
 ## Using Tree-sitter
 
+!!! tip
+    You can also use the online [playground](https://tree-sitter.github.io/tree-sitter/playground).
+
 Install the `tree-sitter` command-line interface. This will depend on your operating system. It is widely available in Linux distributions. Once installed you may need to configure it for the first time:
 ```
 tree-sitter init-config
