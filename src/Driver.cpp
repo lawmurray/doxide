@@ -44,6 +44,7 @@ void Driver::build() {
   /* generate */
   MarkdownGenerator generator(output);
   generator.generate(parser.root);
+  generator.coverage(parser.root);
   generator.clean();
 }
 
