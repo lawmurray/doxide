@@ -74,7 +74,7 @@ void Entity::addToThis(Entity&& o) {
     // ignore, likely a parse error within the template declaration
   } else if (o.type == EntityType::FILE || o.type == EntityType::DIR) {
     /* maintain directory structure */
-    std::filesystem::path path = o.filename;
+    std::filesystem::path path = o.filename, subdir;
     path = path.parent_path();
     Entity* e = this;
     e->lines_included += o.lines_included;
@@ -83,11 +83,13 @@ void Entity::addToThis(Entity&& o) {
       auto single = iter->string();
       auto found = std::find_if(e->dirs.begin(), e->dirs.end(),
           [&single](auto& s) { return s.name == single; });
+      subdir /= single;
       if (found == e->dirs.end()) {
         /* add subdirectory */
         e = &e->dirs.emplace_back();
         e->type = EntityType::DIR;
         e->name = single;
+        e->filename = subdir.string();
       } else {
         e = &(*found);
       }
