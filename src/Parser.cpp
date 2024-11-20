@@ -602,7 +602,11 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
          * be e.g. a LaTeX macro, output as is */
         entity.docs.append(token.str());
       } else {
-        warn("unrecognized command: " << token.str());
+        /* keep track of warnings and don't repeat them */
+        static std::unordered_set<std::string> warned;
+        if (warned.insert(std::string(command)).second) {
+          warn("unrecognized command: " << command);
+        }
         entity.docs.append(token.str());
       }
     } else if (token.type & PARA) {
