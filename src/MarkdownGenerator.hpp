@@ -102,6 +102,11 @@ private:
   static std::string color(const double percent);
 
   /**
+   * Convert coverage percentage to icon.
+   */
+  static std::string icon(const double percent);
+
+  /**
    * Convert a list of entities to a list of pointers to entities, optionally
    * sorting by name.
    * 

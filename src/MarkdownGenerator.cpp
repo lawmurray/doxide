@@ -134,17 +134,18 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     auto dirs = view(entity.dirs, true);
     auto files = view(entity.files, true);
     if (dirs.size() + files.size() > 0) {
-      out << "## Coverage" << std::endl;
+      out << "## Code Coverage" << std::endl;
       out << std::endl;
+
+      /* code coverage chart */
       out << treemap(entity) << std::endl;
       out << std::endl;
 
+      /* code coverage table */
       uint32_t total_included = 0;
       uint32_t total_covered = 0;
       uint32_t total_uncovered = 0;
 
-      out << "## Files" << std::endl;
-      out << std::endl;
       out << "<table>" << std::endl;
       out << "<thead>" << std::endl;
       out << "<tr>" << std::endl;
@@ -337,23 +338,31 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
      * nth-child() pseudo-class */
     std::string covered_color = color(100.0);
     std::string uncovered_color = color(0.0);
+
     out << "<style>" << std::endl;
+    out << ".linenodiv pre span {";
+    out << "padding-left:4px;padding-right:4px";
+    out << "}" << std::endl;
     for (uint32_t line = 0; line < entity.line_counts.size(); ++line) {
       if (entity.line_counts[line] > 0) {
         /* line is covered; line + 2 here to account for 0-base to 1-base
          * conversion plus the extra empty <span></span> mentioned above */
         out << ".linenodiv pre span:nth-child(" << (line + 2) << ") {";
-        out << "box-shadow: -8px 0 0 0 #" << covered_color << ";";
         out << "background-color: #" << covered_color << "dd;";
         out << "color: white;";
+        out << "}" << std::endl;
+        out << ".linenodiv pre span:nth-child(" << (line + 2) << ")::before {";
+        out << "content: \"● \";";
         out << "}" << std::endl;
       } else if (entity.line_counts[line] == 0) {
         /* line is uncovered; line + 2 here to account for 0-base to 1-base
          * conversion plus the extra empty <span></span> mentioned above */
         out << ".linenodiv pre span:nth-child(" << (line + 2) << ") {";
-        out << "box-shadow: -8px 0 0 0 #" << uncovered_color << ";";
         out << "background-color: #" << uncovered_color << "dd;";
         out << "color: white;";
+        out << "}" << std::endl;
+        out << ".linenodiv pre span:nth-child(" << (line + 2) << ")::before {";
+        out << "content: \"○ \";";
         out << "}" << std::endl;
       }
     }
@@ -482,7 +491,7 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
       type: 'sunburst',
       data: data,
       sort: null,
-      radius: ['5%', '98%'],
+      radius: ['5%', '95%'],
       startAngle: 0,
       clockwise: false,
       itemStyle: {
@@ -492,10 +501,18 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
         color: 'white',
         fontSize: 10,
         textBorderWidth: 1,
-        align: 'left',
+        align: 'center',
         rotate: 'radial',
-        width: 60,
-        overflow: 'truncate'
+        width: 80,
+        minAngle: 4,
+        overflow: 'truncate',
+        formatter: function (params) {
+          if (params.data.icon) {
+            return params.name + '\n' + params.data.icon;
+          } else {
+            return params.name;
+          }
+        }
       },
       labelLayout: {
         hideOverlap: true
@@ -526,6 +543,7 @@ std::string MarkdownGenerator::treemap_data(const Entity& entity) {
     double percent = (dir->lines_included > 0) ?
         100.0*dir->lines_covered/dir->lines_included : 0.0;
     std::string c = color(percent);
+    std::string ico = icon(percent);
 
     if (!first) {
       buf << ", ";
@@ -536,6 +554,7 @@ std::string MarkdownGenerator::treemap_data(const Entity& entity) {
     buf << "name: \"" << dir->name << "\", ";
     buf << "path: \"" << dir->filename << "\", ";
     buf << "value: " << dir->lines_included << ", ";
+    buf << "icon: \"" << ico << "\", ";
     buf << "children: [" << treemap_data(*dir) << "], ";
     buf << "itemStyle: { color: \"#" << c << "dd\", borderColor: \"#" << c << "\"}, ";
     buf << "label: { textBorderColor: \"#" << c << "\"}";
@@ -545,6 +564,7 @@ std::string MarkdownGenerator::treemap_data(const Entity& entity) {
     double percent = (file->lines_included > 0) ?
         100.0*file->lines_covered/file->lines_included : 0.0;
     std::string c = color(percent);
+    std::string ico = icon(percent);
 
     if (!first) {
       buf << ", ";
@@ -555,6 +575,7 @@ std::string MarkdownGenerator::treemap_data(const Entity& entity) {
     buf << "name: \"" << file->name << "\", ";
     buf << "path: \"" << file->filename << "\", ";
     buf << "value: " << file->lines_included << ", ";
+    buf << "icon: \"" << ico << "\", ";
     buf << "itemStyle: { color: \"#" << c << "dd\", borderColor: \"#" << c << "\"}, ";
     buf << "label: { textBorderColor: \"#" << c << "\"}";
     buf << '}';
@@ -698,6 +719,22 @@ std::string MarkdownGenerator::color(const double percent) {
   std::stringstream result;
   result << std::hex << std::setw(6) << std::setfill('0') << c;
   return result.str();
+}
+
+std::string MarkdownGenerator::icon(const double percent) {
+  assert(0.0 <= percent && percent <= 100.0);
+
+  if (percent < 60.0) {
+    return "○○○○";
+  } else if (percent < 70.0) {
+    return "●○○○";
+  } else if (percent < 80.0) {
+    return "●●○○";
+  } else if (percent < 90.0) {
+    return "●●●○";
+  } else {
+    return "●●●●";
+  }
 }
 
 std::list<const Entity*> MarkdownGenerator::view(
