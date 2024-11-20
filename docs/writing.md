@@ -100,8 +100,8 @@ The following behaviors are implemented to assist in the migration of existing c
 | `@returns`, `@result`                                        | As `@return`.                                 | Use `@return`.                                               |
 | `@throws` , `@exception`                                     | As `@throw`.                                  | Use `@throw`.                                                |
 | `@sa`                                                        | As `@see`.                                    | Use `@see`.                                                  |
-| `@brief`, `@short`                                           | Override one-sentence description.            | Make the first sentence of the documentation comment usable as a brief description. |
-| `@internal`                                                  | Documentation comment and entity are hidden. | Use a normal comment, rather than a documentation comment.   |
+| `@brief`, `@short`                                           | Ignored.                                      | Make the first sentence of the documentation comment usable as a brief description. |
+| `@internal`                                                  | Documentation comment and entity are hidden.  | Use a normal comment, rather than a documentation comment.   |
 | `@defgroup`                                                  | Ignored.                                      | Doxide handles groups differently, see below.                |
 | `@file`                                                      | Ignored.                                      | Doxide does not produce documentation for files. Incorporate into the documentation for another entity, or into a custom page. |
 | `@def MACRO`                                                 | Ignored.                                      | Doxide does not run the preprocessor. Add a documentation comment immediately before the `#define`. |
