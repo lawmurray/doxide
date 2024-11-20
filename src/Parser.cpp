@@ -524,13 +524,6 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
       } else if (command == "file" ||
           command == "internal") {
         entity.hide = true;
-      } else if (command == "brief" ||
-          command == "short") {
-        auto first = tokenizer.consume(~WHITESPACE);
-        auto last = tokenizer.consume(PARA|CLOSE);
-        entity.brief.append(first.str().begin(), last.str().begin());
-        entity.docs.append(first.str().begin(), last.str().begin());
-        entity.docs.append("\n\n");
       } else if (command == "e" ||
           command == "em" ||
           command == "a") {
