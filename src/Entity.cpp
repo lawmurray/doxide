@@ -36,7 +36,12 @@ void Entity::add(const Entity& o) {
     if (addToGroup(o)) {
       return;
     } else {
-      warn("ignoring @ingroup " << o.ingroup << ", no such group");
+      /* keep track of warnings and don't repeat them */
+      static std::unordered_set<std::string> warned;
+      if (warned.insert(o.ingroup).second) {
+        warn("unrecognized group " << o.ingroup <<
+            ", groups must be defined in config file, ignoring @ingroup");
+      }
     }
   }
   addToThis(o);
