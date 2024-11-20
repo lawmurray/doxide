@@ -96,8 +96,8 @@ private:
   /**
    * Produce a relative path.
    */
-  static std::string relative(const std::string& path,
-      const std::string& base);
+  static std::string relative(const std::filesystem::path& path,
+      const std::filesystem::path& base);
 
   /**
    * Produce the YAML frontmatter for an entity.

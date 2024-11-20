@@ -423,7 +423,7 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
 
   auto dirs = view(entity.dirs, true);
   for (auto& child : dirs) {
-    std::string parent = sanitize(relative(std::filesystem::path(child->filename).parent_path(), root.filename));
+    std::string parent = sanitize(relative(child->path.parent_path(), root.path));
     std::string name = sanitize(child->name);
     uint32_t lines_included = child->lines_included;
     uint32_t lines_covered = child->lines_covered;
@@ -447,7 +447,7 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
 
   auto files = view(entity.files, true);
   for (auto& child : files) {
-    std::string parent = sanitize(relative(std::filesystem::path(child->filename).parent_path(), root.filename));
+    std::string parent = sanitize(relative(child->path.parent_path(), root.path));
     std::string name = sanitize(child->name);
     uint32_t lines_included = child->lines_included;
     uint32_t lines_covered = child->lines_covered;
@@ -478,14 +478,14 @@ void MarkdownGenerator::coverage_foot(const Entity& entity,
   /* here data-parent is set to the name of the entity itself, not its parent,
    * as the summary row in the footer should be shown when the entity is
    * selected as the root */
-  std::string name = sanitize(entity.filename);
+  std::string name = sanitize(entity.path.string());
   uint32_t lines_included = entity.lines_included;
   uint32_t lines_covered = entity.lines_covered;
   uint32_t lines_uncovered = lines_included - lines_covered;
   double lines_percent = (lines_included > 0) ?
       100.0*lines_covered/lines_included : 0.0;
   std::string lines_color = color(lines_percent);
-  std::string style = (name == root.filename) ? "" : ", style=\"display:none;\"";
+  std::string style = (name == root.path.string()) ? "" : ", style=\"display:none;\"";
 
   out << "<tr id=\"summary." << name << "\" data-parent=\"" << name << "\"" << style << ">" << std::endl;
   out << "<td style=\"text-align:left;font-weight:bold;\">Summary</td>" << std::endl;
@@ -600,7 +600,7 @@ void MarkdownGenerator::sunburst_data(const Entity& entity,
         100.0*dir->lines_covered/dir->lines_included : 0.0;
     std::string c = color(percent);
     std::string ico = icon(percent);
-    std::string path = relative(dir->filename, root.filename);
+    std::string path = relative(dir->path, root.path);
 
     if (!first) {
       out << ", ";
@@ -625,7 +625,7 @@ void MarkdownGenerator::sunburst_data(const Entity& entity,
         100.0*file->lines_covered/file->lines_included : 0.0;
     std::string c = color(percent);
     std::string ico = icon(percent);
-    std::string path = relative(file->filename, root.filename);
+    std::string path = relative(file->path, root.path);
 
     if (!first) {
       out << ", ";
@@ -644,12 +644,12 @@ void MarkdownGenerator::sunburst_data(const Entity& entity,
   }
 }
 
-std::string MarkdownGenerator::relative(const std::string& path,
-    const std::string& base) {
+std::string MarkdownGenerator::relative(const std::filesystem::path& path,
+    const std::filesystem::path& base) {
   if (base.empty()) {
-    return path;
+    return path.string();
   } else {
-    auto result = std::filesystem::relative(path, base);
+    std::filesystem::path result = std::filesystem::relative(path, base);
     if (result == ".") {
       return "";
     } else {

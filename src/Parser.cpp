@@ -54,7 +54,7 @@ void Parser::parse(const std::string& filename) {
   Entity file;
   file.name = std::filesystem::path(filename).filename().string();
   file.decl = preprocess(filename);
-  file.filename = filename;
+  file.path = filename;
   file.start_line = 0;
   file.end_line = 0;
   file.type = EntityType::FILE;
@@ -160,7 +160,7 @@ void Parser::parse(const std::string& filename) {
       entity.decl = file.decl.substr(start, middle - start);
 
       /* entity location */
-      entity.filename = filename;
+      entity.path = filename;
       entity.start_line = start_line;
       entity.end_line = end_line;
 

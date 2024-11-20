@@ -2,6 +2,8 @@
 
 #include "doxide.hpp"
 
+#include <filesystem>
+
 /**
  * Entity types.
  * 
@@ -163,17 +165,17 @@ struct Entity {
   std::string ingroup;
 
   /**
-   * Source file name of the entity.
+   * Path of source file.
    */
-  std::string filename;
+  std::filesystem::path path;
 
   /**
-   * Starting line of the entity.
+   * Starting line in the source file.
    */
   uint32_t start_line;
 
   /**
-   * Ending line of the entity.
+   * Ending line in the source file.
    */
   uint32_t end_line;
 
