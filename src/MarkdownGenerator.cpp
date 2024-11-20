@@ -398,10 +398,10 @@ void MarkdownGenerator::coverage(const Entity& entity, std::ofstream& out) {
     out << "</tr>" << std::endl;
     out << "</thead>" << std::endl;
     out << "<tbody>" << std::endl;
-    coverage_data(entity, out);
+    coverage_data(entity, entity, out);
     out << "</tbody>" << std::endl;
     out << "<tfoot>" << std::endl;
-    coverage_foot(entity, out);
+    coverage_foot(entity, entity, out);
     out << "</tfoot>" << std::endl;
     out << "</table>" << std::endl;
     out << std::endl;
@@ -409,7 +409,7 @@ void MarkdownGenerator::coverage(const Entity& entity, std::ofstream& out) {
 }
 
 void MarkdownGenerator::coverage_data(const Entity& entity,
-    std::ofstream& out) {
+    const Entity& root, std::ofstream& out) {
   /* icons */
   static std::string material_file_outline("<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm4 18H6V4h7v5h5z\"/></svg></span>");
   static std::string material_folder("<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M10 4H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8z\"/></svg></span>");
@@ -432,8 +432,9 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
     double lines_percent = (lines_included > 0) ?
         100.0*lines_covered/lines_included : 0.0;
     std::string lines_color = color(lines_percent);
+    std::string style = (parent == root.filename) ? "" : ", style=\"display:none;\"";
 
-    out << "<tr id=\"" << filename << "\" data-parent=\"" << parent << "\">" << std::endl;
+    out << "<tr id=\"" << filename << "\" data-parent=\"" << parent << "\"" << style << ">" << std::endl;
     out << "<td style=\"text-align:left;\" data-sort=\"a." << name << "\">" << material_folder << " <a href=\"" << parent << '/' << name << "/\">" << htmlize(child->name) << "</a></td>" << std::endl;
     out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
     out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
@@ -441,11 +442,12 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
     out << "<td style=\"text-align:right;box-shadow: -8px 0 0 0 #" << lines_color << "dd inset;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
     out << "</tr>" << std::endl;
 
-    coverage_data(*child, out);
+    coverage_data(*child, root, out);
   }
 
   auto files = view(entity.files, true);
   for (auto& child : files) {
+    std::string filename = sanitize(child->filename);
     std::string parent = sanitize(std::filesystem::path(child->filename).parent_path());
     std::string name = sanitize(child->name);
     uint32_t lines_included = child->lines_included;
@@ -454,8 +456,9 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
     double lines_percent = (lines_included > 0) ?
         100.0*lines_covered/lines_included : 0.0;
     std::string lines_color = color(lines_percent);
+    std::string style = (parent == root.filename) ? "" : ", style=\"display:none;\"";
 
-    out << "<tr id=\"" << parent << '/' << name << "\" data-parent=\"" << parent << "\">" << std::endl;
+    out << "<tr id=\"" << filename << "\" data-parent=\"" << parent << "\"" << style << ">" << std::endl;
     out << "<td style=\"text-align:left;\" data-sort=\"b." << name << "\">" << material_file_outline << " <a href=\"" << parent << '/' << name << "/\">" << htmlize(child->name) << "</a></td>" << std::endl;
     out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
     out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
@@ -466,10 +469,10 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
 }
 
 void MarkdownGenerator::coverage_foot(const Entity& entity,
-    std::ofstream& out) {
+    const Entity& root, std::ofstream& out) {
   auto dirs = view(entity.dirs, true);
   for (auto& child : dirs) {
-    coverage_foot(*child, out);
+    coverage_foot(*child, root, out);
   }
 
   /* here data-parent is set to the name of the entity itself, not its parent,
@@ -482,8 +485,9 @@ void MarkdownGenerator::coverage_foot(const Entity& entity,
   double lines_percent = (lines_included > 0) ?
       100.0*lines_covered/lines_included : 0.0;
   std::string lines_color = color(lines_percent);
+  std::string style = (name == root.filename) ? "" : ", style=\"display:none;\"";
 
-  out << "<tr id=\"summary." << name << "\" data-parent=\"" << name << "\">" << std::endl;
+  out << "<tr id=\"summary." << name << "\" data-parent=\"" << name << "\"" << style << ">" << std::endl;
   out << "<td style=\"text-align:left;font-weight:bold;\">Summary</td>" << std::endl;
   out << "<td style=\"text-align:right;font-weight:bold;\">" << lines_included << "</td>" << std::endl;
   out << "<td style=\"text-align:right;font-weight:bold;\">" << lines_covered << "</td>" << std::endl;

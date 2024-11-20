@@ -53,20 +53,29 @@ private:
    * Recursively generate coverage table data.
    * 
    * @param entity Entity for which to generate coverage.
+   * @param root Root entity for the current page. This is used to determine
+   * which are rows should be visible initially.
+   * @param out Output stream.
    */
-  static void coverage_data(const Entity& entity, std::ofstream& out);
+  static void coverage_data(const Entity& entity, const Entity& root,
+      std::ofstream& out);
 
   /**
    * Recursively generate coverage table footer.
    * 
    * @param entity Entity for which to generate coverage.
+   * @param root Root entity for the current page. This is used to determine
+   * which are rows should be visible initially.
+   * @param out Output stream.
    */
-  static void coverage_foot(const Entity& entity, std::ofstream& out);
+  static void coverage_foot(const Entity& entity, const Entity& root,
+      std::ofstream& out);
 
   /**
    * Produce sunburst chart of code coverage for entity.
    * 
    * @param entity Entity for which to generate sunburst.
+   * @param out Output stream.
    */
   static void sunburst(const Entity& entity, std::ofstream& out);
 
@@ -74,6 +83,7 @@ private:
    * Produce data for sunburst chart of code coverage for entity.
    * 
    * @param entity Entity for which to generate sunburst.
+   * @param out Output stream.
    */
   static void sunburst_data(const Entity& entity, std::ofstream& out);
 
