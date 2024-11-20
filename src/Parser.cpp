@@ -342,13 +342,8 @@ std::string Parser::preprocess(const std::string& filename) {
     } else if (ts_node_is_error(node)) {
       /* parse error: assuming that the syntax is actually valid, this is
        * usually caused by use of preprocessor macros, as the preprocessor is
-       * not run */
-      // std::cerr << filename << ':' << (from.row + 1) << ':' << from.column <<
-      //     ": warning: parse failed at '" << in.substr(k, l - k) << "'" <<
-      //     std::endl;
-
-      /* attempt recovery: step backward looking for a node that looks like
-       * preprocessor macro use, and erase it */
+       * not run; attempt recovery: step backward looking for a node that
+       * looks like preprocessor macro use, and erase it */
       int back = 0;
       while (!std::regex_match(in.substr(k, l - k), macro) &&
           ts_tree_cursor_goto_previous_sibling(&cursor)) {
@@ -360,13 +355,9 @@ std::string Parser::preprocess(const std::string& filename) {
         ++back;
       }
       if (std::regex_match(in.substr(k, l - k), macro)) {
-        /* looks like a macro, erase it */
-        // std::cerr << filename << ':' << (from.row + 1) << ':' << from.column <<
-        //     ": note: attempting recovery by erasing '" <<
-        //     in.substr(k, l - k) << "'" << std::endl;
-
-        /* overwrite with whitespace, rather than erasing entirely, to
-         * preserve line and column numbers from user's perspective */
+        /* looks like a macro, erase it; overwrite with whitespace, rather
+         * than erasing entirely, to preserve line and column numbers from
+         * user's perspective */
         uint32_t old_size = in.size();
         in.replace(k, l - k, l - k, ' ');
         uint32_t new_size = in.size();
@@ -430,8 +421,8 @@ void Parser::report(const std::string& filename, const std::string& in,
     TSPoint from = ts_node_start_point(node);
     if (ts_node_is_error(node)) {
       std::cerr << filename << ':' << (from.row + 1) << ':' << from.column <<
-          ": warning: parse failed at '" << in.substr(k, l - k) << "'" <<
-          std::endl;
+          ": warning: parse error at '" << in.substr(k, std::min(l - k, 40)) <<
+          "', but will continue" << std::endl;
     }
 
     /* next node */
