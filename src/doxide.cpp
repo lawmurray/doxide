@@ -399,6 +399,7 @@ const char* query_cpp_include = R""""(
   (call_expression
     function: [
       (identifier)
+      (qualified_identifier)
       (template_function)
     ] @executable)
 
