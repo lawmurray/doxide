@@ -128,103 +128,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
       out << std::endl;
     }
 
-    /* directories and files */
-    static std::string material_file_outline("<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm4 18H6V4h7v5h5z\"/></svg></span>");
-    static std::string material_folder("<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M10 4H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8z\"/></svg></span>");
-    auto dirs = view(entity.dirs, true);
-    auto files = view(entity.files, true);
-    if (dirs.size() + files.size() > 0) {
-      out << "## Code Coverage" << std::endl;
-      out << std::endl;
-
-      /* code coverage chart */
-      out << treemap(entity) << std::endl;
-      out << std::endl;
-
-      /* code coverage table */
-      uint32_t total_included = 0;
-      uint32_t total_covered = 0;
-      uint32_t total_uncovered = 0;
-
-      out << "<table>" << std::endl;
-      out << "<thead>" << std::endl;
-      out << "<tr>" << std::endl;
-      out << "<th style=\"text-align:left;\" data-sort-method=\"dotsep\">Name</th>" << std::endl;
-      out << "<th style=\"text-align:right;\" data-sort-method=\"number\">Lines</th>" << std::endl;
-      out << "<th style=\"text-align:right;\" data-sort-method=\"number\">Covered</th>" << std::endl;
-      out << "<th style=\"text-align:right;\" data-sort-method=\"number\">Uncovered</th>" << std::endl;
-      out << "<th style=\"text-align:right;\" data-sort-method=\"number\">Coverage</th>" << std::endl;
-      out << "</tr>" << std::endl;
-      out << "</thead>" << std::endl;
-
-      out << "<tbody>" << std::endl;
-      for (auto& child : dirs) {
-        std::string sanitized = sanitize(child->name);
-        uint32_t lines_included = child->lines_included;
-        uint32_t lines_covered = child->lines_covered;
-        uint32_t lines_uncovered = lines_included - lines_covered;
-        double lines_percent = (lines_included > 0) ?
-            100.0*lines_covered/lines_included : 0.0;
-        std::string row_color = color(lines_percent);
-
-        total_included += lines_included;
-        total_covered += lines_covered;
-        total_uncovered += lines_uncovered;
-
-        /* for the purposes of table sorting, data-sort is used to prefix
-         * directory names with "a." and file names with "b." to ensure that
-         * directories precede files in the 'dotsep' sort order */
-        out << "<tr>" << std::endl;
-        out << "<td style=\"text-align:left;\" data-sort=\"a." << sanitized << "\">" << material_folder << " <a href=\"" << childdir << sanitized << "/\">" << child->name << "</a></td>" << std::endl;
-        out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
-        out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
-        out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
-        out << "<td style=\"text-align:right;box-shadow: -8px 0 0 0 #" << row_color << "dd inset;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
-        out << "</tr>" << std::endl;
-      }
-      for (auto& child : files) {
-        std::string sanitized = sanitize(child->name);
-        uint32_t lines_included = child->lines_included;
-        uint32_t lines_covered = child->lines_covered;
-        uint32_t lines_uncovered = lines_included - lines_covered;
-        double lines_percent = (lines_included > 0) ?
-            100.0*lines_covered/lines_included : 0.0;
-        std::string row_color = color(lines_percent);
-
-        total_included += lines_included;
-        total_covered += lines_covered;
-        total_uncovered += lines_uncovered;
-
-        /* for the purposes of table sorting, data-sort is used to prefix
-         * directory names with "a." and file names with "b." to ensure that
-         * directories precede files in the 'dotsep' sort order */
-        out << "<tr>" << std::endl;
-        out << "<td style=\"text-align:left;\" data-sort=\"b." << sanitized << "\">" << material_file_outline << " <a href=\"" << childdir << sanitized << "/\">" << child->name << "</a></td>" << std::endl;
-        out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
-        out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
-        out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
-        out << "<td style=\"text-align:right;box-shadow: -8px 0 0 0 #" << row_color << "dd inset;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
-        out << "</tr>" << std::endl;
-      }
-      out << "</tbody>" << std::endl;
-
-      double total_percent = (total_included > 0) ?
-          100.0*total_covered/total_included : 0.0;
-      std::string total_color = color(total_percent);
-
-      out << "<tfoot>" << std::endl;
-      out << "<tr>" << std::endl;
-      out << "<td style=\"text-align:left;font-weight:bold;\">Total</td>" << std::endl;
-      out << "<td style=\"text-align:right;font-weight:bold;\">" << total_included << "</td>" << std::endl;
-      out << "<td style=\"text-align:right;font-weight:bold;\">" << total_covered << "</td>" << std::endl;
-      out << "<td style=\"text-align:right;font-weight:bold;\">" << total_uncovered << "</td>" << std::endl;
-      out << "<td style=\"text-align:right;font-weight:bold;box-shadow: -8px 0 0 0 #" << total_color << "dd inset;\">" << std::fixed << std::setprecision(1) << total_percent << "%</td>" << std::endl;
-      out << "</tr>" << std::endl;
-      out << "</tfoot>" << std::endl;
-
-      out << "</table>" << std::endl;
-      out << std::endl;
-    }
+    /* coverage */
+    coverage(entity, out);
 
     /* brief descriptions */
     auto types = view(entity.types,
@@ -472,9 +377,123 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
   }
 }
 
-std::string MarkdownGenerator::treemap(const Entity& entity) {
-  std::stringstream buf;
-  buf <<
+void MarkdownGenerator::coverage(const Entity& entity, std::ofstream& out) {
+  if (entity.dirs.size() + entity.files.size() > 0) {
+    out << "## Code Coverage" << std::endl;
+    out << std::endl;
+
+    /* code coverage chart */
+    sunburst(entity, out);
+    out << std::endl;
+
+    /* code coverage table */
+    out << "<table>" << std::endl;
+    out << "<thead>" << std::endl;
+    out << "<tr>" << std::endl;
+    out << "<th style=\"text-align:left;\" data-sort-method=\"dotsep\">Name</th>" << std::endl;
+    out << "<th style=\"text-align:right;\" data-sort-method=\"number\">Lines</th>" << std::endl;
+    out << "<th style=\"text-align:right;\" data-sort-method=\"number\">Covered</th>" << std::endl;
+    out << "<th style=\"text-align:right;\" data-sort-method=\"number\">Uncovered</th>" << std::endl;
+    out << "<th style=\"text-align:right;\" data-sort-method=\"number\">Coverage</th>" << std::endl;
+    out << "</tr>" << std::endl;
+    out << "</thead>" << std::endl;
+    out << "<tbody>" << std::endl;
+    coverage_data(entity, out);
+    out << "</tbody>" << std::endl;
+    out << "<tfoot>" << std::endl;
+    coverage_foot(entity, out);
+    out << "</tfoot>" << std::endl;
+    out << "</table>" << std::endl;
+    out << std::endl;
+  }
+}
+
+void MarkdownGenerator::coverage_data(const Entity& entity,
+    std::ofstream& out) {
+  /* icons */
+  static std::string material_file_outline("<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm4 18H6V4h7v5h5z\"/></svg></span>");
+  static std::string material_folder("<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M10 4H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8z\"/></svg></span>");
+
+  /* <tr> includes a data-parent attribute to facilitate filtering the table
+   * dynamically based on the currently-selected directory */
+
+  /* <td> includes data-sort (used by tablesort) for the names column to
+   * prefix directory names with "a." and file names with "b." for the
+   * purposes of sorting using the 'dotsep' sort order */
+
+  auto dirs = view(entity.dirs, true);
+  for (auto& child : dirs) {
+    std::string filename = sanitize(child->filename);
+    std::string parent = sanitize(std::filesystem::path(child->filename).parent_path());
+    std::string name = sanitize(child->name);
+    uint32_t lines_included = child->lines_included;
+    uint32_t lines_covered = child->lines_covered;
+    uint32_t lines_uncovered = lines_included - lines_covered;
+    double lines_percent = (lines_included > 0) ?
+        100.0*lines_covered/lines_included : 0.0;
+    std::string lines_color = color(lines_percent);
+
+    out << "<tr id=\"" << filename << "\" data-parent=\"" << parent << "\">" << std::endl;
+    out << "<td style=\"text-align:left;\" data-sort=\"a." << name << "\">" << material_folder << " <a href=\"" << parent << '/' << name << "/\">" << htmlize(child->name) << "</a></td>" << std::endl;
+    out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
+    out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
+    out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
+    out << "<td style=\"text-align:right;box-shadow: -8px 0 0 0 #" << lines_color << "dd inset;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
+    out << "</tr>" << std::endl;
+
+    coverage_data(*child, out);
+  }
+
+  auto files = view(entity.files, true);
+  for (auto& child : files) {
+    std::string parent = sanitize(std::filesystem::path(child->filename).parent_path());
+    std::string name = sanitize(child->name);
+    uint32_t lines_included = child->lines_included;
+    uint32_t lines_covered = child->lines_covered;
+    uint32_t lines_uncovered = lines_included - lines_covered;
+    double lines_percent = (lines_included > 0) ?
+        100.0*lines_covered/lines_included : 0.0;
+    std::string lines_color = color(lines_percent);
+
+    out << "<tr id=\"" << parent << '/' << name << "\" data-parent=\"" << parent << "\">" << std::endl;
+    out << "<td style=\"text-align:left;\" data-sort=\"b." << name << "\">" << material_file_outline << " <a href=\"" << parent << '/' << name << "/\">" << htmlize(child->name) << "</a></td>" << std::endl;
+    out << "<td style=\"text-align:right;\">" << lines_included << "</td>" << std::endl;
+    out << "<td style=\"text-align:right;\">" << lines_covered << "</td>" << std::endl;
+    out << "<td style=\"text-align:right;\">" << lines_uncovered << "</td>" << std::endl;
+    out << "<td style=\"text-align:right;box-shadow: -8px 0 0 0 #" << lines_color << "dd inset;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
+    out << "</tr>" << std::endl;
+  }
+}
+
+void MarkdownGenerator::coverage_foot(const Entity& entity,
+    std::ofstream& out) {
+  auto dirs = view(entity.dirs, true);
+  for (auto& child : dirs) {
+    coverage_foot(*child, out);
+  }
+
+  /* here data-parent is set to the name of the entity itself, not its parent,
+   * as the summary row in the footer should be shown when the entity is
+   * selected as the root */
+  std::string name = sanitize(entity.filename);
+  uint32_t lines_included = entity.lines_included;
+  uint32_t lines_covered = entity.lines_covered;
+  uint32_t lines_uncovered = lines_included - lines_covered;
+  double lines_percent = (lines_included > 0) ?
+      100.0*lines_covered/lines_included : 0.0;
+  std::string lines_color = color(lines_percent);
+
+  out << "<tr id=\"summary." << name << "\" data-parent=\"" << name << "\">" << std::endl;
+  out << "<td style=\"text-align:left;font-weight:bold;\">Summary</td>" << std::endl;
+  out << "<td style=\"text-align:right;font-weight:bold;\">" << lines_included << "</td>" << std::endl;
+  out << "<td style=\"text-align:right;font-weight:bold;\">" << lines_covered << "</td>" << std::endl;
+  out << "<td style=\"text-align:right;font-weight:bold;\">" << lines_uncovered << "</td>" << std::endl;
+  out << "<td style=\"text-align:right;font-weight:bold;box-shadow: -8px 0 0 0 #" << lines_color << "dd inset;\">" << std::fixed << std::setprecision(1) << lines_percent << "%</td>" << std::endl;
+  out << "</tr>" << std::endl;
+}
+
+void MarkdownGenerator::sunburst(const Entity& entity, std::ofstream& out) {
+  out <<
   R""""(
   <div style="position:relative;width:100%;padding-top:100%;">
     <div id="coverage-sunburst" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
@@ -482,9 +501,42 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
   <script type="text/javascript">
   )"""";
-  buf << "var data = [" << treemap_data(entity) << ']' << std::endl;
-  buf <<
+  out << "var data = [";
+  sunburst_data(entity, out);
+  out << ']' << std::endl;
+  out <<
   R""""(
+  var coverage_root = "";  // current root of coverage report
+  function update_coverage_table(params) {
+    if (typeof params.data.name === 'undefined') {
+      // occurs when the central circle is selected to go up one level
+      var path = coverage_root.substring(0, coverage_root.lastIndexOf('/'));
+      var is_dir = true;
+    } else {
+      var path = params.data.path;
+      var is_dir = params.data.type === 'dir';
+    }
+    let rows = document.querySelectorAll('[data-parent]');
+    if (is_dir) {
+      for (let row of rows) {
+        if (row.dataset.parent === path) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      }
+    } else {
+      for (let row of rows) {
+        if (row.id === path) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      }
+    }
+    coverage_root = path;
+  }
+
   var coverage_sunburst = echarts.init(document.getElementById('coverage-sunburst'));
   var option = {
     series: {
@@ -527,17 +579,16 @@ std::string MarkdownGenerator::treemap(const Entity& entity) {
     }
   };
   coverage_sunburst.setOption(option);
+  coverage_sunburst.on('click', update_coverage_table);
   window.addEventListener("resize", () => {
     coverage_sunburst.resize();
   });
   </script>
   )"""";
-
-  return buf.str();
 }
 
-std::string MarkdownGenerator::treemap_data(const Entity& entity) {
-  std::stringstream buf;
+void MarkdownGenerator::sunburst_data(const Entity& entity,
+    std::ofstream& out) {
   bool first = true;
   for (auto& dir: view(entity.dirs, true)) {
     double percent = (dir->lines_included > 0) ?
@@ -546,19 +597,22 @@ std::string MarkdownGenerator::treemap_data(const Entity& entity) {
     std::string ico = icon(percent);
 
     if (!first) {
-      buf << ", ";
+      out << ", ";
     }
     first = false;
 
-    buf << '{';
-    buf << "name: \"" << dir->name << "\", ";
-    buf << "path: \"" << dir->filename << "\", ";
-    buf << "value: " << dir->lines_included << ", ";
-    buf << "icon: \"" << ico << "\", ";
-    buf << "children: [" << treemap_data(*dir) << "], ";
-    buf << "itemStyle: { color: \"#" << c << "dd\", borderColor: \"#" << c << "\"}, ";
-    buf << "label: { textBorderColor: \"#" << c << "\"}";
-    buf << '}';
+    out << '{';
+    out << "name: \"" << dir->name << "\", ";
+    out << "path: \"" << dir->filename << "\", ";
+    out << "value: " << dir->lines_included << ", ";
+    out << "type: \"dir\", ";
+    out << "icon: \"" << ico << "\", ";
+    out << "children: [";
+    sunburst_data(*dir, out);
+    out << "], ";
+    out << "itemStyle: { color: \"#" << c << "dd\", borderColor: \"#" << c << "\"}, ";
+    out << "label: { textBorderColor: \"#" << c << "\"}";
+    out << '}';
   }
   for (auto& file: view(entity.files, true)) {
     double percent = (file->lines_included > 0) ?
@@ -567,20 +621,20 @@ std::string MarkdownGenerator::treemap_data(const Entity& entity) {
     std::string ico = icon(percent);
 
     if (!first) {
-      buf << ", ";
+      out << ", ";
     }
     first = false;
 
-    buf << '{';
-    buf << "name: \"" << file->name << "\", ";
-    buf << "path: \"" << file->filename << "\", ";
-    buf << "value: " << file->lines_included << ", ";
-    buf << "icon: \"" << ico << "\", ";
-    buf << "itemStyle: { color: \"#" << c << "dd\", borderColor: \"#" << c << "\"}, ";
-    buf << "label: { textBorderColor: \"#" << c << "\"}";
-    buf << '}';
+    out << '{';
+    out << "name: \"" << file->name << "\", ";
+    out << "path: \"" << file->filename << "\", ";
+    out << "value: " << file->lines_included << ", ";
+    out << "type: \"file\", ";
+    out << "icon: \"" << ico << "\", ";
+    out << "itemStyle: { color: \"#" << c << "dd\", borderColor: \"#" << c << "\"}, ";
+    out << "label: { textBorderColor: \"#" << c << "\"}";
+    out << '}';
   }
-  return buf.str();
 }
 
 std::string MarkdownGenerator::frontmatter(const Entity& entity) {
@@ -662,7 +716,7 @@ std::string MarkdownGenerator::htmlize(const std::string& str) {
 }
 
 std::string MarkdownGenerator::sanitize(const std::string& str) {
-  static const std::regex word("\\w|[.]");
+  static const std::regex word("\\w|[./\\\\]");
   static const std::regex space("\\s");
 
   std::stringstream buf;

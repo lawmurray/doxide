@@ -42,18 +42,40 @@ private:
   void generate(const std::filesystem::path& output, const Entity& entity);
 
   /**
-   * Produce treemap of code coverage for entity.
+   * Generate coverage.
    * 
-   * @param entity Entity for which to generate treemap.
+   * @param entity Entity for which to generate coverage.
+   * @param out Output stream.
    */
-  static std::string treemap(const Entity& entity);
+  static void coverage(const Entity& entity, std::ofstream& out);
 
   /**
-   * Produce data for treemap of code coverage for entity.
+   * Recursively generate coverage table data.
    * 
-   * @param entity Entity for which to generate treemap.
+   * @param entity Entity for which to generate coverage.
    */
-  static std::string treemap_data(const Entity& entity);
+  static void coverage_data(const Entity& entity, std::ofstream& out);
+
+  /**
+   * Recursively generate coverage table footer.
+   * 
+   * @param entity Entity for which to generate coverage.
+   */
+  static void coverage_foot(const Entity& entity, std::ofstream& out);
+
+  /**
+   * Produce sunburst chart of code coverage for entity.
+   * 
+   * @param entity Entity for which to generate sunburst.
+   */
+  static void sunburst(const Entity& entity, std::ofstream& out);
+
+  /**
+   * Produce data for sunburst chart of code coverage for entity.
+   * 
+   * @param entity Entity for which to generate sunburst.
+   */
+  static void sunburst_data(const Entity& entity, std::ofstream& out);
 
   /**
    * Produce the YAML frontmatter for an entity.
