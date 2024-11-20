@@ -330,61 +330,6 @@ std::string Parser::preprocess(const std::string& filename) {
 
       /* next iteration from this position */
       nextNodeChosen = true;
-    } else if (ts_node_is_error(node)) {
-      /* parse error: assuming that the syntax is actually valid, this is
-       * usually caused by use of preprocessor macros, as the preprocessor is
-       * not run */
-      // std::cerr << filename << ':' << (from.row + 1) << ':' << from.column <<
-      //     ": warning: parse failed at '" << in.substr(k, l - k) << "'" <<
-      //     std::endl;
-
-      /* attempt recovery: step backward looking for a node that looks like
-       * preprocessor macro use, and erase it */
-      int back = 0;
-      while (!std::regex_match(in.substr(k, l - k), macro) &&
-          ts_tree_cursor_goto_previous_sibling(&cursor)) {
-        node = ts_tree_cursor_current_node(&cursor);
-        k = ts_node_start_byte(node);
-        l = ts_node_end_byte(node);
-        from = ts_node_start_point(node);
-        to = ts_node_end_point(node);
-        ++back;
-      }
-      if (std::regex_match(in.substr(k, l - k), macro)) {
-        /* looks like a macro, erase it */
-        // std::cerr << filename << ':' << (from.row + 1) << ':' << from.column <<
-        //     ": note: attempting recovery by erasing '" <<
-        //     in.substr(k, l - k) << "'" << std::endl;
-
-        /* overwrite with whitespace, rather than erasing entirely, to
-         * preserve line and column numbers from user's perspective */
-        uint32_t old_size = in.size();
-        in.replace(k, l - k, l - k, ' ');
-        uint32_t new_size = in.size();
-        TSPoint root_to = ts_node_end_point(root);
-
-        /* update tree */
-        TSInputEdit edit{k, old_size, new_size, from, root_to, root_to};
-        ts_tree_edit(tree, &edit);
-        ts_parser_reset(parser);
-        TSTree* old_tree = tree;
-        tree = ts_parser_parse_string(parser, old_tree, in.data(), in.size());
-        ts_tree_delete(old_tree);
-        root = ts_tree_root_node(tree);
-
-        /* restore cursor to same byte position as edit */
-        ts_tree_cursor_reset(&cursor, root);
-        while (ts_tree_cursor_goto_first_child_for_byte(&cursor, k) >= 0);
-
-        /* next iteration from this position */
-        nextNodeChosen = true;
-      } else {
-        /* recovery failed, restore original position */
-        // warn("recovery failed, continuing anyway");
-        while (back--) {
-          ts_tree_cursor_goto_next_sibling(&cursor);
-        }
-      }
     }
 
     /* next node */
