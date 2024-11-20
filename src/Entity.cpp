@@ -77,6 +77,8 @@ void Entity::addToThis(Entity&& o) {
     std::filesystem::path path = o.filename;
     path = path.parent_path();
     Entity* e = this;
+    e->lines_included += o.lines_included;
+    e->lines_covered += o.lines_covered;
     for (auto iter = path.begin(); iter != path.end(); ++iter) {
       auto single = iter->string();
       auto found = std::find_if(e->dirs.begin(), e->dirs.end(),
