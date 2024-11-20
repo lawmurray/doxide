@@ -460,7 +460,7 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
     uint32_t lines_covered = child->lines_covered;
     uint32_t lines_uncovered = lines_included - lines_covered;
     double lines_percent = (lines_included > 0) ?
-        100.0*lines_covered/lines_included : 0.0;
+        100.0*lines_covered/lines_included : 100.0;
     std::string lines_color = color(lines_percent);
     std::string path = parent.empty() ? name : parent + '/' + name;
     std::string style = parent.empty() ? "" : " style=\"display:none;\"";
@@ -484,7 +484,7 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
     uint32_t lines_covered = child->lines_covered;
     uint32_t lines_uncovered = lines_included - lines_covered;
     double lines_percent = (lines_included > 0) ?
-        100.0*lines_covered/lines_included : 0.0;
+        100.0*lines_covered/lines_included : 100.0;
     std::string lines_color = color(lines_percent);
     std::string path = parent.empty() ? name : parent + '/' + name;
     std::string style = parent.empty() ? "" : " style=\"display:none;\"";
@@ -514,7 +514,7 @@ void MarkdownGenerator::coverage_foot(const Entity& entity,
   uint32_t lines_covered = entity.lines_covered;
   uint32_t lines_uncovered = lines_included - lines_covered;
   double lines_percent = (lines_included > 0) ?
-      100.0*lines_covered/lines_included : 0.0;
+      100.0*lines_covered/lines_included : 100.0;
   std::string lines_color = color(lines_percent);
   std::string style = (name == root.path.string()) ? "" : ", style=\"display:none;\"";
 
@@ -628,7 +628,7 @@ void MarkdownGenerator::sunburst_data(const Entity& entity,
   bool first = true;
   for (auto& dir: view(entity.dirs, true)) {
     double percent = (dir->lines_included > 0) ?
-        100.0*dir->lines_covered/dir->lines_included : 0.0;
+        100.0*dir->lines_covered/dir->lines_included : 100.0;
     std::string c = color(percent);
     std::string ico = icon(percent);
     std::string path = relative(dir->path, root.path);
@@ -653,7 +653,7 @@ void MarkdownGenerator::sunburst_data(const Entity& entity,
   }
   for (auto& file: view(entity.files, true)) {
     double percent = (file->lines_included > 0) ?
-        100.0*file->lines_covered/file->lines_included : 0.0;
+        100.0*file->lines_covered/file->lines_included : 100.0;
     std::string c = color(percent);
     std::string ico = icon(percent);
     std::string path = relative(file->path, root.path);

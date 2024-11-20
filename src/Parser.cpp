@@ -17,22 +17,25 @@ Parser::Parser() :
   query = ts_query_new(tree_sitter_cuda(), query_cpp,
       strlen(query_cpp), &error_offset, &error_type);
   if (error_type != TSQueryErrorNone) {
-    std::string_view from(query_cpp + error_offset, 40);
-    error("invalid query starting " << from << "...");
+    std::string_view from(query_cpp + error_offset,
+        std::min(size_t(40), strlen(query_cpp) - error_offset));
+    error("invalid query starting '" << from << "'...");
   }
 
   query_exclude = ts_query_new(tree_sitter_cuda(), query_cpp_exclude,
       strlen(query_cpp_exclude), &error_offset, &error_type);
   if (error_type != TSQueryErrorNone) {
-    std::string_view from(query_cpp_exclude + error_offset, 40);
-    error("invalid query starting " << from << "...");
+    std::string_view from(query_cpp_exclude + error_offset,
+        std::min(size_t(40), strlen(query_cpp_exclude) - error_offset));
+    error("invalid query starting '" << from << "'...");
   }
 
   query_include = ts_query_new(tree_sitter_cuda(), query_cpp_include,
       strlen(query_cpp_include), &error_offset, &error_type);
   if (error_type != TSQueryErrorNone) {
-    std::string_view from(query_cpp_include + error_offset, 40);
-    error("invalid query starting " << from << "...");
+    std::string_view from(query_cpp_include + error_offset,
+        std::min(size_t(40), strlen(query_cpp_include) - error_offset));
+    error("invalid query starting '" << from << "'...");
   }
 }
 
@@ -226,8 +229,8 @@ void Parser::parse(const std::string& filename) {
 
   /* determine excluded byte ranges for line data */
   std::list<std::pair<uint32_t,uint32_t>> excluded;
-  bool exclude_next_condition = false;
-  std::regex regex_if_constexpr("^if\\s+constexpr");
+  bool constexpr_context = false;
+  std::regex regex_if_constexpr("^(?:if\\s+)?constexpr");
   cursor = ts_query_cursor_new();
   node = ts_tree_root_node(tree);
   ts_query_cursor_exec(cursor, query_exclude, node);
@@ -243,16 +246,16 @@ void Parser::parse(const std::string& filename) {
       if (strncmp(name, "exclude", length) == 0) {
         /* exclude any expressions in this region for line data */
         excluded.push_back(std::make_pair(start, end));
-      } else if (strncmp(name, "if", length) == 0) {
-        /* check if this is `if constexpr`, which is not reflected in the
+      } else if (strncmp(name, "if_constexpr", length) == 0) {
+        /* check if this is `constexpr`, which is not reflected in the
          * parse tree and requires a string comparison */
         std::string stmt = file.decl.substr(start, end - start);
-        exclude_next_condition = std::regex_search(stmt, regex_if_constexpr);
-      } else if (strncmp(name, "condition", length) == 0) {
-        /* exclude if the condition belongs to an `if constexpr` */
-        if (exclude_next_condition) {
+        constexpr_context = std::regex_search(stmt, regex_if_constexpr);
+      } else if (strncmp(name, "then_exclude", length) == 0) {
+        /* to be excluded if the last constexpr check was positive */
+        if (constexpr_context) {
           excluded.push_back(std::make_pair(start, end));
-          exclude_next_condition = false;
+          constexpr_context = false;
         }
       }
     }

@@ -348,15 +348,6 @@ const char* query_cpp = R""""(
 
 const char* query_cpp_exclude = R""""(
 [
-  ;; constexpr context
-  (requires_clause) @exclude
-  (static_assert_declaration) @exclude
-  (type_definition) @exclude
-  (alias_declaration) @exclude
-  (concept_definition) @exclude
-  (preproc_def) @exclude
-  (preproc_function_def) @exclude
-
   ;; types and parameter default values may contain expressions
   (_ type: (_) @exclude)
   (_ default_value: (_) @exclude)
@@ -366,16 +357,51 @@ const char* query_cpp_exclude = R""""(
   (struct_specifier name: (_) @exclude)
   (union_specifier name: (_) @exclude)
 
+  ;; constexpr context
+  (requires_clause) @exclude
+  (static_assert_declaration) @exclude
+  (type_definition) @exclude
+  (alias_declaration) @exclude
+  (concept_definition) @exclude
+  (preproc_def) @exclude
+  (preproc_function_def) @exclude
+  (decltype) @exclude
+  (sizeof_expression) @exclude
+  (enum_specifier) @exclude
+
   ;; if statement may be if constexpr, special handling in code for this
-  (if_statement condition: (_) @condition) @if
+  (if_statement condition: (_) @then_exclude) @if_constexpr
+  (declaration (type_qualifier) @if_constexpr declarator: (_) @then_exclude)
 ]
 )"""";
 
 const char* query_cpp_include = R""""(
 [
-  ;; code to include for line counting
-  (expression) @executable
+  (unary_expression operator: _ @executable)
+  (binary_expression operator: _ @executable)
+  (assignment_expression operator: _ @executable)
+  (fold_expression operator: _ @executable)
+  (field_expression operator: _ @executable)
+  (co_await_expression operator: _ @executable)
+  (new_expression) @executable
+  (delete_expression) @executable
+  (update_expression) @executable
+  (subscript_expression) @executable
   (field_initializer) @executable
+  (for_range_loop right: _ @executable)
+  (return_statement) @executable
+  (co_return_statement) @executable
+  (co_yield_statement) @executable
+
+  ;; function calls are complicated by higher-order functions, including
+  ;; lambda use such as [](auto x){ return f(x); }(x); anchor on some simpler
+  ;; cases
+  (call_expression
+    function: [
+      (identifier)
+      (template_function)
+    ] @executable)
+
 ]
 )"""";
 
