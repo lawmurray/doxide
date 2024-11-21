@@ -865,10 +865,17 @@ std::list<const Entity*> MarkdownGenerator::view(
   std::transform(entities.begin(), entities.end(), std::back_inserter(ptrs),
       [](const Entity& e) { return &e; });
   auto end = std::remove_if(ptrs.begin(), ptrs.end(),
-      [](const Entity* e) { 
-        return e->hide ||
-          (e->type != EntityType::DIR && e->type != EntityType::FILE && e->docs.empty()) || 
-          (e->type == EntityType::NAMESPACE && !e->visibleChildren); });
+      [](const Entity* e) {
+        bool is_hidden = e->hide;
+        bool is_not_documented = e->docs.empty() &&
+            e->type != EntityType::NAMESPACE &&
+            e->type != EntityType::DIR &&
+            e->type != EntityType::FILE;
+        bool is_empty_namespace = e->docs.empty() && !e->visibleChildren &&
+            e->type == EntityType::NAMESPACE;
+        return is_hidden || is_not_documented || is_empty_namespace;
+      });
+
   ptrs.erase(end, ptrs.end());
   if (sort) {
     ptrs.sort([](const Entity* a, const Entity* b) {
