@@ -401,8 +401,8 @@ void Parser::report(const std::string& filename, const std::string& in,
 void Parser::translate(const std::string_view& comment, Entity& entity) {
   Tokenizer tokenizer(comment);
   Token token = tokenizer.next();
-  token = tokenizer.next();
-  bool first = true;  // first token
+  token = tokenizer.next();  // move past the comment open syntax
+  bool first = true;  // is this the first token in the comment?
   if (!token.type) {
     /* empty end-of-line comment, consider end of paragraph */
     entity.indent = std::max(entity.indent - 4, 0);
@@ -557,11 +557,15 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
         entity.docs.append(token.str());
       }
     } else if (token.type & PARA) {
-      entity.docs.append("\n\n");
-      entity.indent = std::max(entity.indent - 4, 0);
+      if (!first) {
+        entity.docs.append("\n\n");
+        entity.indent = std::max(entity.indent - 4, 0);
+      }
     } else if (token.type & LINE) {
-      entity.docs.append("\n");
-      entity.docs.append(entity.indent, ' ');
+      if (!first) {
+        entity.docs.append("\n");
+        entity.docs.append(entity.indent, ' ');
+      }
     } else if (token.type & CLOSE) {
       //
     } else {
@@ -572,8 +576,12 @@ void Parser::translate(const std::string_view& comment, Entity& entity) {
     first = false;
   }
 
-  /* always add a new line, as multiple doc comments may appear before an
-   * entity (e.g. multiple end-of-line style comments) and these should be
-   * separated with new lines */
-  entity.docs.append("\n");
+  /* trim whitespace from the end */
+  while (entity.docs.length() > 0 && std::isspace(entity.docs.back())) {
+    entity.docs.resize(entity.docs.length() - 1);
+  }
+
+  /* append end of paragraph; this ensures that multiple doc comments that
+   * occur for an entity are treated as separate paragraphs */
+  entity.docs.append("\n\n");
 }
