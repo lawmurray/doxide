@@ -48,6 +48,15 @@ public:
 
 private:
   /**
+   * Push onto the stack.
+   * 
+   * @param entity Entity to push.
+   * @param start Start byte of range.
+   * @param end End byte of range.
+   */
+  void push(Entity&& entity, const uint32_t start, const uint32_t end);
+
+  /**
    * Pop the stack down to the parent of an entity, according to its byte
    * range.
    * 

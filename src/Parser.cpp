@@ -53,6 +53,10 @@ void Parser::parse(const std::unordered_set<std::string>& filenames) {
 }
 
 void Parser::parse(const std::string& filename) {
+  assert(entities.empty());
+  assert(starts.empty());
+  assert(ends.empty());
+
   /* entity to represent file */
   Entity file;
   file.name = std::filesystem::path(filename).filename().string();
@@ -81,9 +85,8 @@ void Parser::parse(const std::string& filename) {
   file.end_line = ts_node_end_point(node).row;
   file.line_counts.resize(file.end_line, -1);
 
-  starts.push_back(ts_node_start_byte(node));
-  ends.push_back(ts_node_end_byte(node));
-  entities.emplace_back(std::move(root));
+  /* push root entity to stack */
+  push(std::move(root), ts_node_start_byte(node), ts_node_end_byte(node));
 
   TSQueryCursor* cursor = ts_query_cursor_new();
   ts_query_cursor_exec(cursor, query, node);
@@ -134,9 +137,8 @@ void Parser::parse(const std::string& filename) {
           Entity parent;
           parent.type = EntityType::NAMESPACE;
           parent.name = prev;
-          entities.emplace_back(std::move(parent));
-          starts.push_back(start);
-          ends.push_back(end);
+
+          push(std::move(parent), start, end);
           prev = *ns_iter;
         }
         entity.name = prev;
@@ -212,9 +214,7 @@ void Parser::parse(const std::string& filename) {
         /* merge this entity into the template */
         parent.merge(std::move(entity));
       } else {
-        entities.emplace_back(std::move(entity));
-        starts.push_back(start);
-        ends.push_back(end);
+        push(std::move(entity), start, end);
       }
 
       /* reset */
@@ -228,10 +228,6 @@ void Parser::parse(const std::string& filename) {
   entities.pop_back();
   starts.pop_back();
   ends.pop_back();
-
-  assert(entities.empty());
-  assert(starts.empty());
-  assert(ends.empty());
 
   ts_query_cursor_delete(cursor);
 
@@ -309,6 +305,16 @@ void Parser::parse(const std::string& filename) {
   root.add(std::move(file));
   ts_tree_delete(tree);
   ts_parser_reset(parser);  
+
+  assert(entities.empty());
+  assert(starts.empty());
+  assert(ends.empty());
+}
+
+void Parser::push(Entity&& entity, const uint32_t start, const uint32_t end) {
+  entities.push_back(std::move(entity));
+  starts.push_back(start);
+  ends.push_back(end);
 }
 
 Entity& Parser::pop(const uint32_t start, const uint32_t end) {
