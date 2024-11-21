@@ -169,9 +169,8 @@ const char* query_cpp = R""""(
 
   ;; nested namespace definition---matches once for each @name
   (namespace_definition
-      (nested_namespace_specifier
-         (namespace_identifier) @name)
-       body: (declaration_list)? @body) @namespace
+      (nested_namespace_specifier) @nested_name
+      body: (declaration_list)? @body) @namespace
 
   ;; template declaration
   (template_declaration

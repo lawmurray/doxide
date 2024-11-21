@@ -76,8 +76,6 @@ void Parser::parse(const std::string& filename) {
 
   /* query entity information */
   TSNode node = ts_tree_root_node(tree);
-  std::list<uint32_t> starts, ends;
-  std::list<Entity> entities;
 
   file.start_line = 0;
   file.end_line = ts_node_end_point(node).row;
@@ -111,6 +109,37 @@ void Parser::parse(const std::string& filename) {
         } else if (token.type == OPEN_BEFORE) {
           translate(docs, entity);
         }
+      } else if (strncmp(name, "nested_name", length) == 0) {
+        assert(entity.type == EntityType::NAMESPACE);
+
+        /* pop the stack down to parent */
+        pop(start, end);
+
+        /* nested namespace specifier, e.g. `namespace a::b::c`, split up the
+         * name on `::`, push namespaces for the first n - 1 identifiers, and
+         * assign the last as the name of this entity */
+        static std::regex sep("\\s*::\\s*");
+        
+        /* load into a std::string and use std::sregex_token_iterator;
+         * maintaining the std::string_view and using
+         * std::cregex_token_iterator seems to have memory issues when mixed
+         * with other local variables */
+        std::string name = file.decl.substr(k, l - k);
+        std::sregex_token_iterator ns_iter(name.begin(), name.end(), sep, -1);
+        std::sregex_token_iterator ns_end;
+        assert(ns_iter != ns_end);
+        std::string prev = *ns_iter;  // lag one
+        while (++ns_iter != ns_end) {
+          /* create parent entity */
+          Entity parent;
+          parent.type = EntityType::NAMESPACE;
+          parent.name = prev;
+          entities.emplace_back(std::move(parent));
+          starts.push_back(start);
+          ends.push_back(end);
+          prev = *ns_iter;
+        }
+        entity.name = prev;
       } else if (strncmp(name, "name", length) == 0) {
         entity.name = file.decl.substr(k, l - k);
       } else if (strncmp(name, "body", length) == 0) {
@@ -169,29 +198,19 @@ void Parser::parse(const std::string& filename) {
 
       /* the final node represents the whole entity, pop the stack until we
        * find its direct parent, as determined using nested byte ranges */
-      while (start < starts.back() || ends.back() < end) {
-        Entity back = std::move(entities.back());
-        entities.pop_back();
-        if (back.ingroup.empty()) {
-          entities.back().add(std::move(back));
-        } else {
-          entities.front().add(std::move(back));
-        }
-        starts.pop_back();
-        ends.pop_back();
-      }
+      Entity& parent = pop(start, end);
 
       /* override ingroup for entities that belong to a class or template, as
        * cannot be moved out */
-      if (entities.back().type == EntityType::TYPE ||
-          entities.back().type == EntityType::TEMPLATE) {
+      if (parent.type == EntityType::TYPE ||
+          parent.type == EntityType::TEMPLATE) {
         entity.ingroup.clear();
       }
 
       /* push to stack */
-      if (entities.back().type == EntityType::TEMPLATE) {
+      if (parent.type == EntityType::TEMPLATE) {
         /* merge this entity into the template */
-        entities.back().merge(std::move(entity));
+        parent.merge(std::move(entity));
       } else {
         entities.emplace_back(std::move(entity));
         starts.push_back(start);
@@ -199,23 +218,12 @@ void Parser::parse(const std::string& filename) {
       }
 
       /* reset */
-      entity = Entity();
+      entity.clear();
     }
   }
 
   /* finalize entity information */
-  while (entities.size() > 1) {
-    Entity back = std::move(entities.back());
-    entities.pop_back();
-    if (back.ingroup.empty()) {
-      entities.back().add(std::move(back));
-    } else {
-      entities.front().add(std::move(back));
-    }
-    starts.pop_back();
-    ends.pop_back();
-  }
-  root = std::move(entities.back());
+  root = std::move(pop());
 
   entities.pop_back();
   starts.pop_back();
@@ -227,7 +235,7 @@ void Parser::parse(const std::string& filename) {
 
   ts_query_cursor_delete(cursor);
 
-  /* determine excluded byte ranges for line data */
+  /* determine excluded byte ranges for code coverage */
   std::list<std::pair<uint32_t,uint32_t>> excluded;
   bool constexpr_context = false;
   std::regex regex_if_constexpr("^(?:if\\s+)?constexpr");
@@ -262,7 +270,7 @@ void Parser::parse(const std::string& filename) {
   }
   ts_query_cursor_delete(cursor);
 
-  /* determine included lines */
+  /* determine included lines for code coverage */
   cursor = ts_query_cursor_new();
   node = ts_tree_root_node(tree);
   ts_query_cursor_exec(cursor, query_include, node);
@@ -301,6 +309,23 @@ void Parser::parse(const std::string& filename) {
   root.add(std::move(file));
   ts_tree_delete(tree);
   ts_parser_reset(parser);  
+}
+
+Entity& Parser::pop(const uint32_t start, const uint32_t end) {
+  while (entities.size() > 1 &&
+      (start < starts.back() || ends.back() < end ||
+      (start == 0 && end == 0))) {
+    Entity back = std::move(entities.back());
+    entities.pop_back();
+    if (back.ingroup.empty()) {
+      entities.back().add(std::move(back));
+    } else {
+      entities.front().add(std::move(back));
+    }
+    starts.pop_back();
+    ends.pop_back();
+  }
+  return entities.back();
 }
 
 std::string Parser::preprocess(const std::string& filename) {

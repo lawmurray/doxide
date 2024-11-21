@@ -78,6 +78,11 @@ struct Entity {
   std::list<Entity*> get(std::filesystem::path& path);
 
   /**
+   * Clear the entity.
+   */
+  void clear();
+
+  /**
    * Child namespaces.
    */
   list_type namespaces;

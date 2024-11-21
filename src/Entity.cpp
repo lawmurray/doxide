@@ -114,7 +114,6 @@ void Entity::merge(Entity&& o) {
       [this](Entity& o) {
         this->addToThis(std::move(o));
       });
-  o.namespaces.clear();
 
   groups.splice(groups.end(), std::move(o.groups));
   types.splice(types.end(), std::move(o.types));
@@ -201,4 +200,8 @@ std::list<Entity*> Entity::get(std::filesystem::path& path) {
   r.push_back(e);
 
   return r;
+}
+
+void Entity::clear() {
+  *this = Entity();
 }

@@ -48,6 +48,20 @@ public:
 
 private:
   /**
+   * Pop the stack down to the parent of an entity, according to its byte
+   * range.
+   * 
+   * @param start Start byte of range.
+   * @param end End byte of range.
+   * 
+   * @return The parent.
+   * 
+   * If both @p start and @p end are zero, this is interpreting as popping the
+   * stack down to the root node and returning it.
+   */
+  Entity& pop(const uint32_t start = 0, const uint32_t end = 0);
+
+  /**
    * Preprocess C++ source, replacing preprocessor macros as defined in the
    * config file and attempting to recover from any parse errors. This is
    * silent and does not report uncorrectable errors, these are reported
@@ -76,6 +90,21 @@ private:
    * @param entity Entity to document.
    */
   void translate(const std::string_view& comment, Entity& entity);
+
+  /**
+   * Stack of entities while parsing.
+   */
+  std::list<Entity> entities;
+
+  /**
+   * Stack of start bytes, corresponding to `entities`, while parsing.
+   */
+  std::list<uint32_t> starts;
+  
+  /**
+   * Stack of end bytes, corresponding to `entities`, while parsing.
+   */
+  std::list<uint32_t> ends;
 
   /**
    * C++ parser.

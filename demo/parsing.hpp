@@ -686,24 +686,27 @@ public:
 };
 
 /**
- * Parent namespace.
- * 
- * @ingroup parsing
+ * Namespace `ns1`.
  */
-namespace parent {
+namespace ns1 {
   /**
-   * Child namespace.
+   * Namespace `ns1::ns2a`.
    */
-  namespace child {
+  namespace ns2a {
     //
   }
 }
 
 /**
- * Child namespace declared with nested namespace specifier.
- * 
- * @ingroup parsing
+ * Namespace `ns1::ns2b` declared with nested namespace specifier.
  */
-namespace parent::nested {
+namespace ns1::ns2b {
+  //
+}
+
+/**
+ * Namespace `ns1::ns2a::ns3` declared with nested namespace specifier.
+ */
+namespace ns1::ns2a::ns3 {
   //
 }
