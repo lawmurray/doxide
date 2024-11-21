@@ -65,6 +65,7 @@ void Parser::parse(const std::string& filename) {
   file.start_line = 0;
   file.end_line = 0;
   file.type = EntityType::FILE;
+  file.visible = true;
 
   /* parse */
   TSTree* tree = ts_parser_parse_string(parser, NULL, file.decl.data(),
@@ -190,13 +191,11 @@ void Parser::parse(const std::string& filename) {
         --middle;
       }
 
-      /* entity declaration */
       entity.decl = file.decl.substr(start, middle - start);
-
-      /* entity location */
       entity.path = filename;
       entity.start_line = start_line;
       entity.end_line = end_line;
+      entity.visible = !entity.docs.empty();
 
       /* the final node represents the whole entity, pop the stack until we
        * find its direct parent, as determined using nested byte ranges */

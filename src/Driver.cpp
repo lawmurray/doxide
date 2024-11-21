@@ -147,6 +147,7 @@ void Driver::groups(YAMLNode& parentNode, Entity& parentEntity) {
     for (auto& node : parentNode.sequence("groups")) {
       Entity entity;
       entity.type = EntityType::GROUP;
+      entity.visible = true;
       if (node->isValue("name")) {
         entity.name = node->value("name");
         if (node->isValue("title")) {

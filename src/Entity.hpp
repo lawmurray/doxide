@@ -211,14 +211,15 @@ struct Entity {
   EntityType type;
 
   /**
+   * Is this node visible? This is a computed quantity, that may be overridden
+   * explicitly with @p hide.
+   */
+  bool visible;
+
+  /**
    * Hide this node?
    */
   bool hide;
-
-  /**
-   * Does this node have one or more visible children?
-   */
-  bool visibleChildren;
 
 private:
   /**

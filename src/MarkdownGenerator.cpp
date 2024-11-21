@@ -861,26 +861,22 @@ std::string MarkdownGenerator::icon(const double percent) {
 
 std::list<const Entity*> MarkdownGenerator::view(
     const std::list<Entity>& entities, const bool sort) {
-  std::list<const Entity*> ptrs;
-  std::transform(entities.begin(), entities.end(), std::back_inserter(ptrs),
-      [](const Entity& e) { return &e; });
-  auto end = std::remove_if(ptrs.begin(), ptrs.end(),
-      [](const Entity* e) {
-        bool is_hidden = e->hide;
-        bool is_not_documented = e->docs.empty() &&
-            e->type != EntityType::NAMESPACE &&
-            e->type != EntityType::DIR &&
-            e->type != EntityType::FILE;
-        bool is_empty_namespace = e->docs.empty() && !e->visibleChildren &&
-            e->type == EntityType::NAMESPACE;
-        return is_hidden || is_not_documented || is_empty_namespace;
-      });
+  auto pointer = [](const Entity& e) {
+    return &e;
+  };
+  auto hide = [](const Entity* e) {
+    return !e->visible || e->hide;
+  };
+  auto compare = [](const Entity* a, const Entity* b) {
+    return a->name < b->name;
+  };
 
-  ptrs.erase(end, ptrs.end());
+  std::list<const Entity*> ptrs;
+  auto end = std::back_inserter(ptrs);
+  std::transform(entities.begin(), entities.end(), end, pointer);
+  ptrs.erase(std::remove_if(ptrs.begin(), ptrs.end(), hide), ptrs.end());
   if (sort) {
-    ptrs.sort([](const Entity* a, const Entity* b) {
-      return a->name < b->name;
-    });
+    ptrs.sort(compare);
   }
   return ptrs;
 }

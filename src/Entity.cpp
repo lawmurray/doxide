@@ -7,8 +7,8 @@ Entity::Entity() :
    lines_covered(0),
    indent(0),
    type(EntityType::ROOT),
-   hide(false),
-   visibleChildren(false) {
+   visible(false),
+   hide(false) {
   //
 }
 
@@ -93,6 +93,7 @@ void Entity::addToThis(Entity&& o) {
         /* add subdirectory */
         e = &e->dirs.emplace_back();
         e->type = EntityType::DIR;
+        e->visible = true;
         e->name = single;
         e->path = subdir.string();
       } else {
@@ -105,7 +106,7 @@ void Entity::addToThis(Entity&& o) {
   } else {
     warn("unrecognized entity type, ignoring");
   }
-  visibleChildren = visibleChildren || !o.hide || !o.docs.empty();
+  visible = visible || o.visible;
 }
 
 void Entity::merge(Entity&& o) {
@@ -155,7 +156,7 @@ void Entity::merge(Entity&& o) {
   brief += std::move(o.brief);
   type = o.type;
   hide = hide || o.hide;
-  visibleChildren = visibleChildren || o.visibleChildren;
+  visible = visible || o.visible;
 }
 
 bool Entity::exists(std::filesystem::path& path) const {
