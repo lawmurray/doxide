@@ -1,8 +1,8 @@
 #include "Entity.hpp"
 
 Entity::Entity() :
-   start_line(-1),
-   end_line(-1),
+   start_line(0),
+   end_line(0),
    lines_included(0),
    lines_covered(0),
    indent(0),
