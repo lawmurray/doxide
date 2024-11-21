@@ -56,7 +56,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
   std::string dirname;  // directory name for this entity
   std::string filename;  // file name for this entity
   std::string childdir;  // directory name for children, relative to filename
-  if (entity.type == EntityType::NONE) {
+  if (entity.type == EntityType::ROOT) {
     /* root node */
     dirname = "";
     filename = "index";
@@ -119,7 +119,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     }
 
     /* code coverage */
-    if (entity.type == EntityType::NONE) {
+    if (entity.type == EntityType::ROOT) {
       out << ":material-chart-pie: [Code Coverage](coverage/index.md)" << std::endl;
       out << std::endl;
     }
@@ -318,7 +318,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
 
 void MarkdownGenerator::coverage(const std::filesystem::path& output,
     const Entity& entity) {
-  std::string name = sanitize(entity.type == EntityType::NONE ?
+  std::string name = sanitize(entity.type == EntityType::ROOT ?
       "coverage" : entity.name);  // entity name, "coverage"" for root
   std::string dirname;  // directory name for this entity
   std::string filename;  // file name for this entity
@@ -344,7 +344,7 @@ void MarkdownGenerator::coverage(const std::filesystem::path& output,
     out << frontmatter(entity) << std::endl;
 
     /* header */
-    if (entity.type == EntityType::NONE) {
+    if (entity.type == EntityType::ROOT) {
       out << "# Code Coverage" << std::endl;
       out << std::endl;
     } else {
@@ -354,7 +354,7 @@ void MarkdownGenerator::coverage(const std::filesystem::path& output,
       out << std::endl;
     }
 
-    if (entity.type == EntityType::NONE || entity.type == EntityType::DIR) {
+    if (entity.type == EntityType::ROOT || entity.type == EntityType::DIR) {
       /* code coverage chart */
       sunburst(entity, entity, out);
       out << std::endl;

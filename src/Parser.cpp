@@ -176,7 +176,7 @@ void Parser::parse(const std::string& filename) {
         }
       }
     }
-    if (entity.type != EntityType::NONE) {
+    if (entity.type != EntityType::ROOT) {
       /* workaround for entity declaration logic catching punctuation, e.g.
        * ending semicolon in declaration, the equals sign in a variable
        * declaration with initialization, or whitespace */

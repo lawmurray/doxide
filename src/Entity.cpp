@@ -6,7 +6,7 @@ Entity::Entity() :
    lines_included(0),
    lines_covered(0),
    indent(0),
-   type(EntityType::NONE),
+   type(EntityType::ROOT),
    hide(false),
    visibleChildren(false) {
   //

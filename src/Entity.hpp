@@ -10,7 +10,7 @@
  * @ingroup developer
  */
 enum class EntityType {
-  NONE,
+  ROOT,
   NAMESPACE,
   TEMPLATE,
   GROUP,
