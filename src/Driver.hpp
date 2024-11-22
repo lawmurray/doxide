@@ -64,6 +64,16 @@ private:
   void config();
 
   /**
+   * Parse files.
+   */
+  void parse();
+
+  /**
+   * Count line coverage.
+   */
+  void count();
+
+  /**
    * Recursively read groups from the configuration file.
    */
   static void groups(YAMLNode& parentNode, Entity& parentEntity);

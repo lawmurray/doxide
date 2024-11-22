@@ -17,41 +17,38 @@ void JSONGenerator::generate(const Entity& root) {
 }
 
 int JSONGenerator::generate(const Entity& root, int nfiles) {
-  /* line coverage information */
+  for (auto& dir : root.dirs) {
+    nfiles = generate(dir, nfiles);
+  }
   for (auto& file : root.files) {
-    if (file.type == EntityType::DIR) {
-      nfiles = generate(file, nfiles);
-    } else if (file.type == EntityType::FILE) {
-      /* file information */
-      if (nfiles > 0) {
-        std::cout << "," << std::endl;
-      }      
-      std::cout << "    {" << std::endl;
-      std::cout << "      \"file\": \"" << file.name << "\"," << std::endl;
-      std::cout << "      \"functions\": []," << std::endl;
-      std::cout << "      \"lines\": [" << std::endl;
+    if (nfiles > 0) {
+      std::cout << "," << std::endl;
+    }      
+    std::cout << "    {" << std::endl;
+    std::cout << "      \"file\": \"" << file.name << "\"," << std::endl;
+    std::cout << "      \"functions\": []," << std::endl;
+    std::cout << "      \"lines\": [" << std::endl;
 
-      /* line information; note lines are stored zero-based, but must be
-       * output 1-based */
-      uint32_t nlines = 0;
-      for (uint32_t line = 0; line < file.line_counts.size(); ++line) {
-        if (file.line_counts[line] >= 0) {
-          if (nlines > 0) {
-            std::cout << "," << std::endl;
-          }
-          ++nlines;
-          std::cout << "        {" << std::endl;
-          std::cout << "          \"line_number\": " << (line + 1) << "," << std::endl;
-          std::cout << "          \"branches\": []," << std::endl;
-          std::cout << "          \"count\": " << file.line_counts[line] << std::endl;
-          std::cout << "        }";
+    /* line information; note lines are stored zero-based, but must be
+      * output 1-based */
+    uint32_t nlines = 0;
+    for (uint32_t line = 0; line < file.line_counts.size(); ++line) {
+      if (file.line_counts[line] >= 0) {
+        if (nlines > 0) {
+          std::cout << "," << std::endl;
         }
+        ++nlines;
+        std::cout << "        {" << std::endl;
+        std::cout << "          \"line_number\": " << (line + 1) << "," << std::endl;
+        std::cout << "          \"branches\": []," << std::endl;
+        std::cout << "          \"count\": " << file.line_counts[line] << std::endl;
+        std::cout << "        }";
       }
-      std::cout << std::endl;
-      std::cout << "      ]" << std::endl;
-      std::cout << "    }";
-      ++nfiles;
     }
+    std::cout << std::endl;
+    std::cout << "      ]" << std::endl;
+    std::cout << "    }";
+    ++nfiles;
   }
   return nfiles;
 }

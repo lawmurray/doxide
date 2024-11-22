@@ -222,22 +222,9 @@ void Driver::init() {
 }
 
 void Driver::build() {
-  /* parse */
-  parser.parse(filenames);
+  parse();
+  count();
 
-  /* incorporate coverage date */
-  if (!coverage.empty()) {
-    auto ext = coverage.extension();
-    if (ext == ".gcov") {
-      GcovCounter counter;
-      counter.count(coverage, parser.root);
-    } else if (ext == ".json") {
-      JSONCounter counter;
-      counter.count(coverage, parser.root);
-    }
-  }
-
-  /* generate */
   MarkdownGenerator generator(output);
   generator.generate(parser.root);
   generator.coverage(parser.root);
@@ -245,10 +232,9 @@ void Driver::build() {
 }
 
 void Driver::cover() {
-  /* parse */
-  parser.parse(filenames);
+  parse();
+  count();
 
-  /* generate */
   JSONGenerator generator;
   generator.generate(parser.root);
 }
@@ -343,6 +329,23 @@ void Driver::config() {
   groups(root, parser.root);
   parser.root.title = title;
   parser.root.docs = description;
+}
+
+void Driver::parse() {
+  parser.parse(filenames);
+}
+
+void Driver::count() {
+  if (!coverage.empty()) {
+    auto ext = coverage.extension();
+    if (ext == ".gcov") {
+      GcovCounter counter;
+      counter.count(coverage, parser.root);
+    } else if (ext == ".json") {
+      JSONCounter counter;
+      counter.count(coverage, parser.root);
+    }
+  }
 }
 
 void Driver::groups(YAMLNode& parentNode, Entity& parentEntity) {
