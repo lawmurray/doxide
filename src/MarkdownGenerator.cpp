@@ -730,7 +730,8 @@ std::string MarkdownGenerator::brief(const Entity& entity) {
   if (!entity.brief.empty()) {
     return entity.brief;
   } else {
-    static const std::regex reg("^(`.*?`|[^;:.?!])*[\\.\\?\\!](?=\\s|$)");
+    static const std::regex reg("^(`.*?`|[^;:.?!])*[\\.\\?\\!](?=\\s|$)",
+        regex_flags);
     std::string l = line(entity.docs);
     std::smatch match;
     if (std::regex_search(l, match, reg)) {
@@ -742,17 +743,17 @@ std::string MarkdownGenerator::brief(const Entity& entity) {
 }
 
 std::string MarkdownGenerator::line(const std::string& str) {
-  static const std::regex newline("\\s*\\n\\s*");
+  static const std::regex newline("\\s*\\n\\s*", regex_flags);
   return std::regex_replace(str, newline, " ");
 }
 
 std::string MarkdownGenerator::indent(const std::string& str) {
-  static const std::regex start("\\n");
+  static const std::regex start("\\n", regex_flags);
   return "    " + std::regex_replace(str, start, "\n    ");
 }
 
 std::string MarkdownGenerator::stringify(const std::string& str) {
-  static const std::regex quote("(\"|\\\\)");
+  static const std::regex quote("(\"|\\\\)", regex_flags);
   std::string r;
   r.append("\"");
   r.append(std::regex_replace(str, quote, "\\$1"));
@@ -762,15 +763,15 @@ std::string MarkdownGenerator::stringify(const std::string& str) {
 
 std::string MarkdownGenerator::htmlize(const std::string& str) {
   /* basic replacements */
-  static const std::regex amp("&");
-  static const std::regex lt("<");
-  static const std::regex gt(">");
-  static const std::regex quot("\"");
-  static const std::regex apos("'");
-  static const std::regex ptr("\\*");
+  static const std::regex amp("&", regex_flags);
+  static const std::regex lt("<", regex_flags);
+  static const std::regex gt(">", regex_flags);
+  static const std::regex quot("\"", regex_flags);
+  static const std::regex apos("'", regex_flags);
+  static const std::regex ptr("\\*", regex_flags);
 
   /* the sequence operator[](...) looks like a link in Markdown */
-  static const std::regex operator_brackets("operator\\[\\]");
+  static const std::regex operator_brackets("operator\\[\\]", regex_flags);
 
   std::string r = str;
   r = std::regex_replace(r, amp, "&amp;");  // must go first or new & replaced
@@ -784,8 +785,8 @@ std::string MarkdownGenerator::htmlize(const std::string& str) {
 }
 
 std::string MarkdownGenerator::sanitize(const std::string& str) {
-  static const std::regex word("\\w|[./\\\\]");
-  static const std::regex space("\\s");
+  static const std::regex word("\\w|[./\\\\]", regex_flags);
+  static const std::regex space("\\s", regex_flags);
 
   std::stringstream buf;
   for (auto iter = str.begin(); iter != str.end(); ++iter) {

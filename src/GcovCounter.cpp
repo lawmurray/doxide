@@ -28,8 +28,10 @@ void GcovCounter::count(const std::filesystem::path& coverage, Entity& root) {
   * aggregated counts are used instead---the disagregated counts are readily
   * recognized and ignored due to the repetition of line numbers seen before.
   */
-  static const std::regex regex_source("^\\s*-:\\s*0:Source:(.*)$");
-  static const std::regex regex_covered("^\\s*(\\d+)\\*?:\\s*(\\d+):.*$");
+  static const std::regex regex_source("^\\s*-:\\s*0:Source:(.*)$",
+      regex_flags);
+  static const std::regex regex_covered("^\\s*(\\d+)\\*?:\\s*(\\d+):.*$",
+      regex_flags);
 
   std::ifstream in(coverage);
   if (!in.is_open()) {

@@ -40,6 +40,14 @@
     exit(EXIT_FAILURE);
 
 /**
+ * Regular expression configuration.
+ * 
+ * @ingroup developer
+ */
+static const std::regex_constants::syntax_option_type regex_flags =
+    std::regex_constants::ECMAScript|std::regex_constants::optimize;
+
+/**
  * Write a whole file.
  * 
  * @ingroup developer

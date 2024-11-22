@@ -384,7 +384,7 @@ void CppParser::parse(const std::filesystem::path& filename) {
         /* nested namespace specifier, e.g. `namespace a::b::c`, split up the
          * name on `::`, push namespaces for the first n - 1 identifiers, and
          * assign the last as the name of this entity */
-        static std::regex sep("\\s*::\\s*");
+        static const std::regex sep("\\s*::\\s*", regex_flags);
         
         /* load into a std::string and use std::sregex_token_iterator;
          * maintaining the std::string_view and using
@@ -495,7 +495,8 @@ void CppParser::parse(const std::filesystem::path& filename) {
   /* determine excluded byte ranges for code coverage */
   std::list<std::pair<uint32_t,uint32_t>> excluded;
   bool constexpr_context = false;
-  std::regex regex_if_constexpr("^(?:if\\s+)?constexpr");
+  static const std::regex regex_if_constexpr("^(?:if\\s+)?constexpr",
+      regex_flags);
   cursor = ts_query_cursor_new();
   node = ts_tree_root_node(tree);
   ts_query_cursor_exec(cursor, query_exclude, node);
@@ -597,7 +598,8 @@ Entity& CppParser::pop(const uint32_t start, const uint32_t end) {
 
 std::string CppParser::preprocess(const std::filesystem::path& filename) {
   /* regex to detect preprocessor macro names */
-  static std::regex macro(R"([A-Z_][A-Z0-9_]{2,})");
+  static const std::regex macro(R"([A-Z_][A-Z0-9_]{2,})",
+      regex_flags);
 
   std::string in = gulp(filename);
   TSTree* tree = ts_parser_parse_string(parser, NULL, in.data(), in.size());
