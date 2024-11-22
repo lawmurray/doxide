@@ -3,7 +3,7 @@
 
 void GcovCounter::count(Entity& root) {
   std::string gcov = "gcov.json";  ///@todo Allow configuration
-  YAMLParser yaml(gcov, 0);
+  YAMLParser yaml(gcov);
   YAMLNode node = yaml.parse();
   if (!node.isSequence("files")) {
     warn("missing 'files' key in " << gcov);

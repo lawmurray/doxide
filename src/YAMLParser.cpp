@@ -1,7 +1,7 @@
 #include "YAMLParser.hpp"
 
-YAMLParser::YAMLParser(const std::string& filename, const int max_docs) :
-    filename(filename), max_docs(max_docs) {
+YAMLParser::YAMLParser(const std::string& filename) :
+    filename(filename) {
   yaml_parser_initialize(&parser);
 }
 
@@ -27,11 +27,8 @@ YAMLNode YAMLParser::parse() {
           parseSequence(root);
         } else if (event.type == YAML_MAPPING_START_EVENT) {
           parseMapping(root);
-        } else if (event.type == YAML_DOCUMENT_END_EVENT) {
-          ++docs;
-          done = max_docs > 0 && docs >= max_docs;
-          yaml_event_delete(&event);
-        } else if (event.type == YAML_STREAM_END_EVENT) {
+        } else if (event.type == YAML_DOCUMENT_END_EVENT ||
+            event.type == YAML_STREAM_END_EVENT) {
           done = true;
           yaml_event_delete(&event);
         } else {
