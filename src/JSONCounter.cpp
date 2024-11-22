@@ -13,15 +13,14 @@ void JSONCounter::count(Entity& root) {
     } else if (!file->isSequence("lines")) {
       warn("missing 'lines' key in 'files' element in " << gcov);
     } else {
-      auto filename = file->value("file");
+      std::filesystem::path path = file->value("file");
       auto lines = file->sequence("lines");
-      std::filesystem::path path(filename);
       if (path.is_absolute()) {
         /* make the path relative to the current working directory */
         path = std::filesystem::relative(path);
       }
       if (!root.exists(path)) {
-        warn("file " << filename << " not found in documentation, ignoring");
+        warn("file " << path << " not found in documentation, ignoring");
       } else {
         /* update line coverage for this file */
         std::list<Entity*> es = root.get(path);
@@ -37,7 +36,7 @@ void JSONCounter::count(Entity& root) {
             bool covered = std::stoi(line->value("count")) > 0;
             uint32_t nlines = file->line_counts.size();
             if (line_number > nlines) {
-              warn("in " << gcov << ", " << filename << ":" << line_number <<
+              warn("in " << gcov << ", " << path << ":" << line_number <<
                   " does not exist; ignoring, are source and coverage" <<
                   " files in sync?");
             } else if (covered && file->line_counts[line_number - 1] >= 0) {

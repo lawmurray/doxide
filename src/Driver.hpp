@@ -66,7 +66,7 @@ private:
   /**
    * Files.
    */
-  std::unordered_set<std::string> filenames;
+  std::unordered_set<std::filesystem::path> filenames;
 
   /**
    * Parser.

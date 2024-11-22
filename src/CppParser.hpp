@@ -26,7 +26,7 @@ public:
    * @param filenames C++ source file names.
    * @param defines Macro definitions.
    */
-  void parse(const std::unordered_set<std::string>& filenames);
+  void parse(const std::unordered_set<std::filesystem::path>& filenames);
 
   /**
    * Parse C++ source.
@@ -34,7 +34,7 @@ public:
    * @param file C++ source file name.
    * @param defines Macro definitions.
    */
-  void parse(const std::string& file);
+  void parse(const std::filesystem::path& filename);
 
   /**
    * Root entity.
@@ -81,7 +81,7 @@ private:
    *
    * @return Preprocessed source.
    */
-  std::string preprocess(const std::string& file);
+  std::string preprocess(const std::filesystem::path& file);
 
   /**
    * Report errors after preprocessing.
@@ -90,7 +90,8 @@ private:
    * @param in Preprocessed source.
    * @param tree Parse tree for file.
    */
-  void report(const std::string& file, const std::string& in, TSTree* tree);
+  void report(const std::filesystem::path& file, const std::string& in,
+      TSTree* tree);
 
   /**
    * Stack of entities while parsing.

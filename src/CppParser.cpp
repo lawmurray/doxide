@@ -309,20 +309,20 @@ CppParser::~CppParser() {
   ts_parser_delete(parser);
 }
 
-void CppParser::parse(const std::unordered_set<std::string>& filenames) {
+void CppParser::parse(const std::unordered_set<std::filesystem::path>& filenames) {
   for (const std::string& filename: filenames) {
     parse(filename);
   }
 }
 
-void CppParser::parse(const std::string& filename) {
+void CppParser::parse(const std::filesystem::path& filename) {
   assert(entities.empty());
   assert(starts.empty());
   assert(ends.empty());
 
   /* entity to represent file */
   Entity file;
-  file.name = std::filesystem::path(filename).filename().string();
+  file.name = filename.filename().string();
   file.decl = preprocess(filename);
   file.path = filename;
   file.start_line = 0;
@@ -595,7 +595,7 @@ Entity& CppParser::pop(const uint32_t start, const uint32_t end) {
   return entities.back();
 }
 
-std::string CppParser::preprocess(const std::string& filename) {
+std::string CppParser::preprocess(const std::filesystem::path& filename) {
   /* regex to detect preprocessor macro names */
   static std::regex macro(R"([A-Z_][A-Z0-9_]{2,})");
 
@@ -659,8 +659,8 @@ std::string CppParser::preprocess(const std::string& filename) {
   return in;
 }
 
-void CppParser::report(const std::string& filename, const std::string& in,
-    TSTree* tree) {
+void CppParser::report(const std::filesystem::path& filename,
+    const std::string& in, TSTree* tree) {
   TSNode root = ts_tree_root_node(tree);
   TSNode node = root;
   TSTreeCursor cursor = ts_tree_cursor_new(root);
@@ -670,7 +670,8 @@ void CppParser::report(const std::string& filename, const std::string& in,
     TSPoint from = ts_node_start_point(node);
     if (ts_node_is_error(node)) {
       std::cerr << filename << ':' << (from.row + 1) << ':' << from.column <<
-          ": warning: parse error at '" << in.substr(k, std::min(l - k, 40u)) <<
+          ": warning: parse error at '" <<
+          in.substr(k, std::min(l - k, 40u)) <<
           "', but will continue" << std::endl;
     }
 

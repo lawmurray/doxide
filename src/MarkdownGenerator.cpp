@@ -53,7 +53,7 @@ void MarkdownGenerator::clean() {
 void MarkdownGenerator::generate(const std::filesystem::path& output,
     const Entity& entity) {
   std::string name = sanitize(entity.name);  // entity name, empty for root
-  std::string dirname;  // directory name for this entity
+  std::string dirname;   // directory name for this entity
   std::string filename;  // file name for this entity
   std::string childdir;  // directory name for children, relative to filename
   if (entity.type == EntityType::ROOT) {

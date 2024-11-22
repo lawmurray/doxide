@@ -1,6 +1,6 @@
 #include "YAMLParser.hpp"
 
-YAMLParser::YAMLParser(const std::string& filename) :
+YAMLParser::YAMLParser(const std::filesystem::path& filename) :
     filename(filename) {
   yaml_parser_initialize(&parser);
 }

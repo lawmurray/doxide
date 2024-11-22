@@ -16,7 +16,7 @@ public:
    *
    * @param filename File name.
    */
-  YAMLParser(const std::string& filename);
+  YAMLParser(const std::filesystem::path& filename);
 
   /**
    * Destructor.
