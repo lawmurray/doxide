@@ -22,8 +22,8 @@ add_executable(doxide
     src/DocTokenizer.cpp
     src/Driver.cpp
     src/Entity.cpp
-    src/GcovCounter.cpp
-    src/GcovGenerator.cpp
+    src/JSONCounter.cpp
+    src/JSONGenerator.cpp
     src/MarkdownGenerator.cpp
     src/YAMLNode.cpp
     src/YAMLParser.cpp
