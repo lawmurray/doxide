@@ -49,7 +49,7 @@ void copy_file_prompt(const std::filesystem::path& src,
 std::string gulp(const std::filesystem::path& src) {
   std::string contents;
   std::ifstream in(src);
-  char buffer[4096];
+  char buffer[8192];
   while (in.read(buffer, sizeof(buffer))) {
     contents.append(buffer, sizeof(buffer));
   }

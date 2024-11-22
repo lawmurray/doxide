@@ -1,6 +1,6 @@
-#include "GcovGenerator.hpp"
+#include "JSONGenerator.hpp"
 
-void GcovGenerator::generate(const Entity& root) {
+void JSONGenerator::generate(const Entity& root) {
   /* JSON header */
   std::cout << "{" << std::endl;
   std::cout << "  \"format_version:\": \"2\"," << std::endl;
@@ -16,7 +16,7 @@ void GcovGenerator::generate(const Entity& root) {
   std::cout << "}" << std::endl;
 }
 
-int GcovGenerator::generate(const Entity& root, int nfiles) {
+int JSONGenerator::generate(const Entity& root, int nfiles) {
   /* line coverage information */
   for (auto& file : root.files) {
     if (file.type == EntityType::DIR) {

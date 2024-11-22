@@ -2,8 +2,8 @@
 #include "YAMLParser.hpp"
 #include "CppParser.hpp"
 #include "MarkdownGenerator.hpp"
-#include "GcovCounter.hpp"
-#include "GcovGenerator.hpp"
+#include "JSONCounter.hpp"
+#include "JSONGenerator.hpp"
 
 /**
  * Contents of initial `doxide.yaml` file.
@@ -226,7 +226,7 @@ void Driver::build() {
 
   /* incorporate coverage date */
   try {
-    GcovCounter counter;
+    JSONCounter counter;
     counter.count(parser.root);
   } catch (...) {
     warn("code coverage error, skipping");
@@ -244,7 +244,7 @@ void Driver::cover() {
   parser.parse(filenames);
 
   /* generate */
-  GcovGenerator generator;
+  JSONGenerator generator;
   generator.generate(parser.root);
 }
 

@@ -4,14 +4,14 @@
 #include "Entity.hpp"
 
 /**
- * Gcov JSON generator.
+ * JSON generator for coverage data following gcov/gcovr schema.
  * 
  * @ingroup developer
  */
-class GcovGenerator {
+class JSONGenerator {
 public:
   /**
-   * Generate documentation.
+   * Generate coverage data.
    * 
    * @param root Root entity.
    */

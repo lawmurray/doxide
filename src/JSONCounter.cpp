@@ -1,7 +1,7 @@
-#include "GcovCounter.hpp"
+#include "JSONCounter.hpp"
 #include "YAMLParser.hpp"
 
-void GcovCounter::count(Entity& root) {
+void JSONCounter::count(Entity& root) {
   std::string gcov = "gcov.json";  ///@todo Allow configuration
   YAMLParser yaml(gcov);
   YAMLNode node = yaml.parse();
