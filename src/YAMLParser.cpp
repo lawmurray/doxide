@@ -10,30 +10,39 @@ YAMLParser::~YAMLParser() {
 }
 
 YAMLNode YAMLParser::parse() {
-  auto contents = gulp(filename);
-  yaml_parser_set_input_string(&parser, (const unsigned char*)contents.data(),
-      contents.size());
   YAMLNode root;
-  bool done = false;
-  int docs = 0;
-  while (!done) {
-    if (!yaml_parser_parse(&parser, &event)) {
-      throw std::runtime_error("YAML syntax error in " + filename);
+  FILE* file = fopen(filename.c_str(), "r");
+  if (!file) {
+    throw std::runtime_error("could not open " + filename);
+  } else {
+    yaml_parser_set_input_file(&parser, file);
+    bool done = false;
+    int docs = 0;
+    try {
+      while (!done) {
+        if (!yaml_parser_parse(&parser, &event)) {
+          throw std::runtime_error("YAML syntax error in " + filename);
+        }
+        if (event.type == YAML_SEQUENCE_START_EVENT) {
+          parseSequence(root);
+        } else if (event.type == YAML_MAPPING_START_EVENT) {
+          parseMapping(root);
+        } else if (event.type == YAML_DOCUMENT_END_EVENT) {
+          ++docs;
+          done = max_docs > 0 && docs >= max_docs;
+          yaml_event_delete(&event);
+        } else if (event.type == YAML_STREAM_END_EVENT) {
+          done = true;
+          yaml_event_delete(&event);
+        } else {
+          yaml_event_delete(&event);
+        }
+      }
+    } catch (const std::runtime_error& e) {
+      fclose(file);
+      throw e;
     }
-    if (event.type == YAML_SEQUENCE_START_EVENT) {
-      parseSequence(root);
-    } else if (event.type == YAML_MAPPING_START_EVENT) {
-      parseMapping(root);
-    } else if (event.type == YAML_DOCUMENT_END_EVENT) {
-      ++docs;
-      done = max_docs > 0 && docs >= max_docs;
-      yaml_event_delete(&event);
-    } else if (event.type == YAML_STREAM_END_EVENT) {
-      done = true;
-      yaml_event_delete(&event);
-    } else {
-      yaml_event_delete(&event);
-    }
+    fclose(file);
   }
   return root;
 }
