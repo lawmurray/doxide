@@ -12,7 +12,7 @@ Commands are:
 :   Clean the output directory.
 
 `doxide cover`
-:   Output (on `stdout`) zero-count line data for mixing with [code coverage](coverage.md) reports.
+:   Output [code coverage](coverage.md) data to `stdout` in JSON format.
 
 `doxide help`
 :   Print usage information.
@@ -27,3 +27,6 @@ Command-line options are as follows. When provided, they override the same setti
 
 `--output` (default `docs`)
 :   Output directory.
+
+`--coverage`
+:   Code coverage file (`.gcov` or `.json`).

@@ -5,9 +5,11 @@ void write_file(const std::string& contents,
   if (dst.has_parent_path()) {
     std::filesystem::create_directories(dst.parent_path());
   }
-  std::fstream stream(dst, std::ios::out);
-  stream << contents << '\n';
-  stream.close();
+  std::fstream out(dst, std::ios::out);
+  if (!out.is_open()) {
+    throw std::runtime_error("could not write file " + dst.string());
+  }
+  out << contents;
 }
 
 void write_file_prompt(const std::string& contents,
@@ -27,28 +29,12 @@ void write_file_prompt(const std::string& contents,
   }
 }
 
-void copy_file_prompt(const std::filesystem::path& src,
-    const std::filesystem::path& dst) {
-  if (dst.has_parent_path()) {
-    std::filesystem::create_directories(dst.parent_path());
-  }
-  if (std::filesystem::exists(dst)) {
-    std::cout << dst.string() << " already exists, overwrite? [y/N] ";
-    std::string ans;
-    std::getline(std::cin, ans);
-    if (ans.length() > 0 && (ans[0] == 'y' || ans[0] == 'Y')) {
-      std::filesystem::copy_file(src, dst,
-          std::filesystem::copy_options::overwrite_existing);
-    }
-  } else {
-    std::filesystem::copy_file(src, dst,
-        std::filesystem::copy_options::overwrite_existing);
-  }
-}
-
 std::string gulp(const std::filesystem::path& src) {
   std::string contents;
   std::ifstream in(src);
+  if (!in.is_open()) {
+    throw std::runtime_error("could not read file " + src.string());
+  }
   char buffer[8192];
   while (in.read(buffer, sizeof(buffer))) {
     contents.append(buffer, sizeof(buffer));
@@ -69,6 +55,8 @@ int main(int argc, char** argv) {
       "Main page description.");
   app.add_option("--output", driver.output,
       "Output directory.");
+  app.add_option("--coverage", driver.coverage,
+      "Code coverage file (.gcov or .json).");
   app.add_subcommand("init",
       "Initialize configuration files.")->
       fallthrough()->
@@ -82,7 +70,7 @@ int main(int argc, char** argv) {
       fallthrough()->
       callback([&]() { driver.clean(); });
   app.add_subcommand("cover",
-      "Output (on stdout) zero-count line data for mixing with code coverage reports.")->
+      "Output code coverage data to stdout in JSON format.")->
       fallthrough()->
       callback([&]() { driver.cover(); });
   app.require_subcommand(1);

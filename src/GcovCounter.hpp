@@ -5,7 +5,7 @@
 
 /**
  * Gcov processor for coverage data.
- * 
+ *
  * @ingroup developer
  */
 class GcovCounter {

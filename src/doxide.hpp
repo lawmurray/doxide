@@ -54,14 +54,6 @@ void write_file(const std::string& contents, const std::filesystem::path& dst);
 void write_file_prompt(const std::string& contents, const std::filesystem::path& dst);
 
 /**
- * Copy a file, prompting to confirm overwrite if the destination already
- * exists.
- * 
- * @ingroup developer
- */
-void copy_file_prompt(const std::filesystem::path& src, const std::filesystem::path& dst);
-
-/**
  * Read in a whole file.
  * 
  * @ingroup developer
