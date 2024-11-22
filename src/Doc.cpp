@@ -1,9 +1,7 @@
 #include "Doc.hpp"
 #include "DocTokenizer.hpp"
 
-Doc::Doc(const std::string_view comment) :
-    hide(false),
-    after(false) {
+Doc::Doc(const std::string_view comment) : hide(false) {
   DocTokenizer tokenizer(comment);
   DocToken token = tokenizer.next();
   open = token;

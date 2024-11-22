@@ -1,6 +1,7 @@
 #pragma once
 
 #include "doxide.hpp"
+#include "DocToken.hpp"
 
 /**
  * Documentation of an entity.

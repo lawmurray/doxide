@@ -40,69 +40,6 @@
     exit(EXIT_FAILURE);
 
 /**
- * Contents of initial `doxide.yaml` file.
- * 
- * @ingroup developer
- */
-extern const char* init_doxide_yaml;
-
-/**
- * Contents of initial `mkdocs.yaml` file.
- * 
- * @ingroup developer
- */
-extern const char* init_mkdocs_yaml;
-
-/**
- * Contents of initial `docs/javascripts/mathjax.js` file.
- * 
- * @ingroup developer
- */
-extern const char* init_docs_javascripts_mathjax_js;
-
-/**
- * Contents of initial `docs/javascripts/tablesort.js` file.
- * 
- * @ingroup developer
- */
-extern const char* init_docs_javascripts_tablesort_js;
-
-/**
- * Contents of initial `docs/stylesheets/doxide.css` file.
- * 
- * @ingroup developer
- */
-extern const char* init_docs_stylesheets_doxide_css ;
-
-/**
- * Contents of initial `docs/overrides/partials/copyright.html` file.
- * 
- * @ingroup developer
- */
-extern const char* init_docs_overrides_partials_copyright_html;
-
-/**
- * Query for entities in C++ sources.
- * 
- * @ingroup developer
- */
-extern const char* query_cpp;
-
-/**
- * Query for entities to explicitly exclude from  line counts in C++ sources.
- * 
- * @ingroup developer
- */
-extern const char* query_cpp_exclude;
-
-/**
- * Query for entities to explicitly include in line counts in C++ sources.
- * 
- * @ingroup developer
- */
-extern const char* query_cpp_include;
-
-/**
  * Write a whole file.
  * 
  * @ingroup developer
