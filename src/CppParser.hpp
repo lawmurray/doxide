@@ -8,17 +8,17 @@
  * 
  * @ingroup developer
  */
-class Parser {
+class CppParser {
 public:
   /**
    * Constructor.
    */
-  Parser();
+  CppParser();
 
   /**
    * Destructor.
    */
-  ~Parser();
+  ~CppParser();
 
   /**
    * Parse C++ sources.
@@ -91,14 +91,6 @@ private:
    * @param tree Parse tree for file.
    */
   void report(const std::string& file, const std::string& in, TSTree* tree);
-
-  /**
-   * Translate documentation comment.
-   * 
-   * @param comment Documentation comment.
-   * @param entity Entity to document.
-   */
-  void translate(const std::string_view& comment, Entity& entity);
 
   /**
    * Stack of entities while parsing.

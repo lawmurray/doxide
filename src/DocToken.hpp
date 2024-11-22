@@ -8,7 +8,7 @@
  *
  * @ingroup developer
  */
-enum TokenType : int {
+enum DocTokenType : int {
   NONE = 0,
   OPEN_AFTER = 1 << 1,   // opening sequence for doc comment after entity
   OPEN_BEFORE = 1 << 2,  // opening sequence for doc comment before entity
@@ -58,15 +58,15 @@ static auto regexes = {
  * A token is only valid for the lifetime of the Tokenizer that produced it,
  * as it contains a reference to a substring of the source file.
  */
-class Token {
-public:
+struct DocToken {
   /**
    * Constructor.
    * 
    * @param type Token type.
    * @param value Token value.
    */
-  Token(const TokenType type = NONE, std::string_view value = std::string_view());
+  DocToken(const DocTokenType type = NONE,
+      std::string_view value = std::string_view());
 
   /**
    * Get token as string.
@@ -83,7 +83,7 @@ public:
   /**
    * Token type.
    */
-  TokenType type;
+  DocTokenType type;
 
   /**
    * Iterator to first character.

@@ -16,14 +16,15 @@ add_executable(doxide
     contrib/tree-sitter-cuda/src/parser.c
     contrib/tree-sitter-cuda/src/scanner.c
     src/doxide.cpp
+    src/CppParser.cpp
+    src/Doc.cpp
+    src/DocToken.cpp
+    src/DocTokenizer.cpp
     src/Driver.cpp
     src/Entity.cpp
     src/GcovCounter.cpp
     src/GcovGenerator.cpp
     src/MarkdownGenerator.cpp
-    src/Parser.cpp
-    src/Token.cpp
-    src/Tokenizer.cpp
     src/YAMLNode.cpp
     src/YAMLParser.cpp
 )

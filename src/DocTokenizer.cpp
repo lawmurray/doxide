@@ -1,12 +1,12 @@
-#include "Tokenizer.hpp"
+#include "DocTokenizer.hpp"
 
-Tokenizer::Tokenizer(const std::string_view& source) {
+DocTokenizer::DocTokenizer(const std::string_view& source) {
   iter = source.cbegin();
   end = source.cend();
 }
 
-Token Tokenizer::next() {
-  Token token;
+DocToken DocTokenizer::next() {
+  DocToken token;
   if (iter != end) {
     for (auto& [type, regex] : regexes) {
       std::match_results<std::string_view::const_iterator> match;
@@ -23,8 +23,8 @@ Token Tokenizer::next() {
   return token;
 }
 
-Token Tokenizer::consume(const int stop) {
-  Token token = next();
+DocToken DocTokenizer::consume(const int stop) {
+  DocToken token = next();
   while (token.type && !(token.type & stop)) {
     token = next();
   }    

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "doxide.hpp"
-#include "Parser.hpp"
+#include "CppParser.hpp"
 #include "YAMLNode.hpp"
 #include "Entity.hpp"
 
@@ -71,5 +71,5 @@ private:
   /**
    * Parser.
    */
-  Parser parser;
+  CppParser parser;
 };

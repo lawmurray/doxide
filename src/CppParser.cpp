@@ -1,7 +1,7 @@
-#include "Parser.hpp"
-#include "Tokenizer.hpp"
+#include "CppParser.hpp"
+#include "Doc.hpp"
 
-Parser::Parser() :
+CppParser::CppParser() :
     parser(nullptr),
     query(nullptr),
     query_exclude(nullptr),
@@ -39,20 +39,20 @@ Parser::Parser() :
   }
 }
 
-Parser::~Parser() {
+CppParser::~CppParser() {
   ts_query_delete(query);
   ts_query_delete(query_exclude);
   ts_query_delete(query_include);
   ts_parser_delete(parser);
 }
 
-void Parser::parse(const std::unordered_set<std::string>& filenames) {
+void CppParser::parse(const std::unordered_set<std::string>& filenames) {
   for (const std::string& filename: filenames) {
     parse(filename);
   }
 }
 
-void Parser::parse(const std::string& filename) {
+void CppParser::parse(const std::string& filename) {
   assert(entities.empty());
   assert(starts.empty());
   assert(ends.empty());
@@ -105,13 +105,12 @@ void Parser::parse(const std::string& filename) {
       uint32_t l = ts_node_end_byte(node);
 
       if (strncmp(name, "docs", length) == 0) {
-        std::string docs = file.decl.substr(k, l - k);
-        Tokenizer tokenizer(docs);
-        Token token = tokenizer.next();
-        if (token.type == OPEN_AFTER) {
-          translate(docs, entities.back());
-        } else if (token.type == OPEN_BEFORE) {
-          translate(docs, entity);
+        Doc doc(file.decl.substr(k, l - k));
+        Entity& e = doc.open.type == OPEN_BEFORE ? entity : entities.back();
+        e.docs.append(doc.docs);
+        e.hide = e.hide || doc.hide;
+        if (!doc.ingroup.empty()) {
+          e.ingroup = doc.ingroup;
         }
       } else if (strncmp(name, "nested_name", length) == 0) {
         assert(entity.type == EntityType::NAMESPACE);
@@ -310,13 +309,13 @@ void Parser::parse(const std::string& filename) {
   assert(ends.empty());
 }
 
-void Parser::push(Entity&& entity, const uint32_t start, const uint32_t end) {
+void CppParser::push(Entity&& entity, const uint32_t start, const uint32_t end) {
   entities.push_back(std::move(entity));
   starts.push_back(start);
   ends.push_back(end);
 }
 
-Entity& Parser::pop(const uint32_t start, const uint32_t end) {
+Entity& CppParser::pop(const uint32_t start, const uint32_t end) {
   while (entities.size() > 1 &&
       (start < starts.back() || ends.back() < end ||
       (start == 0 && end == 0))) {
@@ -333,7 +332,7 @@ Entity& Parser::pop(const uint32_t start, const uint32_t end) {
   return entities.back();
 }
 
-std::string Parser::preprocess(const std::string& filename) {
+std::string CppParser::preprocess(const std::string& filename) {
   /* regex to detect preprocessor macro names */
   static std::regex macro(R"([A-Z_][A-Z0-9_]{2,})");
 
@@ -397,7 +396,7 @@ std::string Parser::preprocess(const std::string& filename) {
   return in;
 }
 
-void Parser::report(const std::string& filename, const std::string& in,
+void CppParser::report(const std::string& filename, const std::string& in,
     TSTree* tree) {
   TSNode root = ts_tree_root_node(tree);
   TSNode node = root;
@@ -426,192 +425,4 @@ void Parser::report(const std::string& filename, const std::string& in,
     node = ts_tree_cursor_current_node(&cursor);
   } while (!ts_node_eq(node, root));
   ts_tree_cursor_delete(&cursor);
-}
-
-void Parser::translate(const std::string_view& comment, Entity& entity) {
-  Tokenizer tokenizer(comment);
-  Token token = tokenizer.next();
-  token = tokenizer.next();  // move past the comment open syntax
-  bool first = true;  // is this the first token in the comment?
-  if (!token.type) {
-    /* empty end-of-line comment, consider end of paragraph */
-    entity.indent = std::max(entity.indent - 4, 0);
-  } else while (token.type) {
-    if (token.type & COMMAND) {
-      std::string_view command = token.substr(1);
-
-      /* non-legacy commands */
-      if (command == "param" ||
-          command == "param[in]") {
-        entity.docs.append("\n:material-location-enter: `");
-        entity.docs.append(tokenizer.consume(WORD).str());
-        entity.docs.append("`\n:   ");
-        entity.indent = 4;
-      } else if (command == "param[out]") {
-        entity.docs.append("\n:material-location-exit: `");
-        entity.docs.append(tokenizer.consume(WORD).str());
-        entity.docs.append("`\n:   ");
-        entity.indent = 4;
-      } else if (command == "param[in,out]") {
-        entity.docs.append("\n:material-location-enter::material-location-exit: `");
-        entity.docs.append(tokenizer.consume(WORD).str());
-        entity.docs.append("`\n:   ");
-        entity.indent = 4;
-      } else if (command == "tparam") {
-        entity.docs.append("\n:material-code-tags: `");
-        entity.docs.append(tokenizer.consume(WORD).str());
-        entity.docs.append("`\n:   ");
-        entity.indent = 4;
-      } else if (command == "p") {
-        entity.docs.append("`");
-        entity.docs.append(tokenizer.consume(WORD).str());
-        entity.docs.append("`");
-      } else if (command == "return") {
-        entity.docs.append("\n:material-keyboard-return: **Return**\n:   ");
-      } else if (command == "pre") {
-        entity.docs.append("\n:material-check-circle-outline: **Pre-condition**\n:   ");
-      } else if (command == "post") {
-        entity.docs.append("\n:material-check-circle-outline: **Post-condition**\n:   ");
-      } else if (command == "throw") {
-        entity.docs.append("\n:material-alert-circle-outline: **Throw**\n:   ");
-      } else if (command == "see") {
-        entity.docs.append("\n:material-eye-outline: **See**\n:   ");
-      } else if (command == "anchor") {
-        entity.docs.append("<a name=\"");
-        entity.docs.append(tokenizer.consume(WORD).str());
-        entity.docs.append("\"></a>");
-      } else if (command == "note" ||
-          command == "abstract" ||
-          command == "info" ||
-          command == "tip" ||
-          command == "success" ||
-          command == "question" ||
-          command == "warning" ||
-          command == "failure" ||
-          command == "danger" ||
-          command == "bug" ||
-          command == "example" ||
-          command == "quote") {
-        entity.docs.append("\n!!! ");
-        entity.docs.append(command);
-        entity.docs.append("\n");
-        entity.indent += 4;
-        entity.docs.append(entity.indent, ' ');
-      } else if (command == "ingroup") {
-        entity.ingroup = tokenizer.consume(WORD).str();
-
-      /* legacy commands */
-      } else if (command == "returns" ||
-          command == "result") {
-        entity.docs.append("\n:material-location-exit: **Return**\n:   ");
-      } else if (command == "sa") {
-        entity.docs.append("\n:material-eye-outline: **See**\n:   ");
-      } else if (command == "file" ||
-          command == "internal") {
-        entity.hide = true;
-      } else if (command == "e" ||
-          command == "em" ||
-          command == "a") {
-        entity.docs.append("*");
-        entity.docs.append(tokenizer.consume(WORD).str());
-        entity.docs.append("*");
-      } else if (command == "b") {
-        entity.docs.append("**");
-        entity.docs.append(tokenizer.consume(WORD).str());
-        entity.docs.append("**");
-      } else if (command == "c") {
-        entity.docs.append("`");
-        entity.docs.append(tokenizer.consume(WORD).str());
-        entity.docs.append("`");
-      } else if (command == "f$") {
-        entity.docs.append("$");
-      } else if (command == "f[" ||
-          command == "f]") {
-        entity.docs.append("$$");
-      } else if (command == "li" ||
-          command == "arg") {
-        entity.docs.append("  - ");
-      } else if (command == "ref") {
-        auto href = tokenizer.consume(WORD);
-        auto text = tokenizer.consume(WORD);
-        entity.docs.append("[");
-        entity.docs.append(text.str());
-        entity.docs.append("](#");
-        entity.docs.append(href.str());
-        entity.docs.append(")");
-      } else if (command == "code" ||
-          command == "endcode" ||
-          command == "verbatim" ||
-          command == "endverbatim") {
-        entity.docs.append("\n```");
-      } else if (command == "attention") {
-        entity.docs.append("\n!!! warning \"Attention\"\n");
-        entity.indent = 4;
-        entity.docs.append(entity.indent, ' ');
-      } else if (command == "todo") {
-        entity.docs.append("\n!!! example \"To-do\"\n");
-        entity.indent = 4;
-        entity.docs.append(entity.indent, ' ');
-      } else if (command == "remark") {
-        entity.docs.append("\n!!! quote \"Remark\"\n");
-        entity.indent = 4;
-        entity.docs.append(entity.indent, ' ');
-      } else if (command == "def" ||
-          command == "var" ||
-          command == "fn" ||
-          command == "class" ||
-          command == "struct" ||
-          command == "union" ||
-          command == "enum" ||
-          command == "typedef" ||
-          command == "namespace" ||
-          command == "interface" ||
-          command == "protocol" ||
-          command == "property") {
-        /* ignore, including following name */
-        tokenizer.consume(WORD);
-      } else if (command == "@") {
-        entity.docs.append("@");
-      } else if (command == "/") {
-        entity.docs.append("/");
-      } else if (token.str().at(0) == '\\') {
-        /* unrecognized command starting with legacy backslash, could just
-         * be e.g. a LaTeX macro, output as is */
-        entity.docs.append(token.str());
-      } else {
-        /* keep track of warnings and don't repeat them */
-        static std::unordered_set<std::string> warned;
-        if (warned.insert(std::string(command)).second) {
-          warn("unrecognized command: " << command);
-        }
-        entity.docs.append(token.str());
-      }
-    } else if (token.type & PARA) {
-      if (!first) {
-        entity.docs.append("\n\n");
-        entity.indent = std::max(entity.indent - 4, 0);
-      }
-    } else if (token.type & LINE) {
-      if (!first) {
-        entity.docs.append("\n");
-        entity.docs.append(entity.indent, ' ');
-      }
-    } else if (token.type & CLOSE) {
-      //
-    } else {
-      entity.docs.append(first*entity.indent, ' ');  // indent on first token
-      entity.docs.append(token.str());
-    }
-    token = tokenizer.next();
-    first = false;
-  }
-
-  /* trim whitespace from the end */
-  while (entity.docs.length() > 0 && std::isspace(entity.docs.back())) {
-    entity.docs.resize(entity.docs.length() - 1);
-  }
-
-  /* append end of paragraph; this ensures that multiple doc comments that
-   * occur for an entity are treated as separate paragraphs */
-  entity.docs.append("\n\n");
 }
