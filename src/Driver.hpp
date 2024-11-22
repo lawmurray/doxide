@@ -48,6 +48,11 @@ public:
   std::string description;
 
   /**
+   * Coverage file.
+   */
+  std::filesystem::path coverage;
+
+  /**
    * Output directory.
    */
   std::filesystem::path output;

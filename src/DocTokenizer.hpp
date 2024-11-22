@@ -32,15 +32,13 @@ public:
   /**
    * Consume tokens until stopping criterion.
    * 
-   * @param stop Bitmask giving the token type on which to stop and return.
+   * @param stop Bitmask giving the token types on which to stop and return.
    * 
    * @return Last token consumed.
    * 
    * Tokens are consumed until one is encountered with a type in @p stop,
    * which is then returned. If @p stop is `ANY` then the next token is
    * returned.
-   * 
-   * @see interpret()
    */
   DocToken consume(const int stop = ANY);
 

@@ -2,6 +2,7 @@
 #include "YAMLParser.hpp"
 #include "CppParser.hpp"
 #include "MarkdownGenerator.hpp"
+#include "GcovCounter.hpp"
 #include "JSONCounter.hpp"
 #include "JSONGenerator.hpp"
 
@@ -225,11 +226,15 @@ void Driver::build() {
   parser.parse(filenames);
 
   /* incorporate coverage date */
-  try {
-    JSONCounter counter;
-    counter.count(parser.root);
-  } catch (...) {
-    warn("code coverage error, skipping");
+  if (!coverage.empty()) {
+    auto ext = coverage.extension();
+    if (ext == ".gcov") {
+      GcovCounter counter;
+      counter.count(coverage, parser.root);
+    } else if (ext == ".json") {
+      JSONCounter counter;
+      counter.count(coverage, parser.root);
+    }
   }
 
   /* generate */
@@ -283,6 +288,13 @@ void Driver::config() {
       description = root.value("description");
     } else {
       warn("'description' must be a value in configuration.");
+    }
+  }
+  if (root.has("coverage")) {
+    if (root.isValue("coverage")) {
+      coverage = root.value("coverage");
+    } else {
+      warn("'coverage' must be a value in configuration.");
     }
   }
   if (root.has("output")) {

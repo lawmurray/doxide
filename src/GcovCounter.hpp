@@ -4,11 +4,11 @@
 #include "Entity.hpp"
 
 /**
- * JSON processor for coverage data following gcov/gcovr schema.
+ * Gcov processor for coverage data.
  * 
  * @ingroup developer
  */
-class JSONCounter {
+class GcovCounter {
 public:
   /**
    * Read in file and update coverage data.

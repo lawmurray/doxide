@@ -11,6 +11,9 @@ The `doxide.yaml` configuration file supports the following entries.
 `output` (default `docs`)
 :   Output directory. Overruled by [command-line](command-line.md) option `--output`.
 
+`coverage`
+:   Name of a `.gcov` or `.json` file with code coverage data from which to construct a [code coverage report](coverage.md), if desired.
+
 `files`
 :   List of source files from which to extract documentation. The following wildcards are supported for pattern matching:
 
@@ -54,6 +57,7 @@ The `doxide.yaml` configuration file supports the following entries.
       - header.hpp
       - "*/*.hpp"  # quotes may be needed when using wildcards or other special characters
       - "**/*.hpp"
+    coverage: coverage.gcov
     defines:
       SYMBOL: value
       DEFINED_BUT_EMPTY_SYMBOL: ""      
