@@ -613,9 +613,9 @@ std::string CppParser::preprocess(const std::filesystem::path& filename,
     if (defines.contains(in.substr(k, l - k))) {
       /* replace preprocessor macro */
       const std::string& value = defines.at(in.substr(k, l - k));
-      uint32_t old_size = in.size();
+      uint32_t old_size = uint32_t(in.size());
       in.replace(k, l - k, value);
-      uint32_t new_size = in.size();
+      uint32_t new_size = uint32_t(in.size());
       TSPoint root_to = ts_node_end_point(root);
 
       /* update tree */
@@ -623,7 +623,8 @@ std::string CppParser::preprocess(const std::filesystem::path& filename,
       ts_tree_edit(tree, &edit);
       ts_parser_reset(parser);
       TSTree* old_tree = tree;
-      tree = ts_parser_parse_string(parser, old_tree, in.data(), in.size());
+      tree = ts_parser_parse_string(parser, old_tree, in.data(),
+          uint32_t(in.size()));
       ts_tree_delete(old_tree);
       root = ts_tree_root_node(tree);
 
