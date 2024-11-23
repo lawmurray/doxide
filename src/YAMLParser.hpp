@@ -16,7 +16,7 @@ public:
    *
    * @param filename File name.
    */
-  YAMLParser(const std::filesystem::path& filename);
+  YAMLParser();
 
   /**
    * Destructor.
@@ -28,17 +28,12 @@ public:
    * 
    * @return The contents of the file.
    */
-  YAMLNode parse();
+  YAMLNode parse(const std::filesystem::path& filename);
 
 private:
-  void parseMapping(YAMLNode& node);
-  void parseSequence(YAMLNode& node);
-  void parseValue(YAMLNode& node);
-
-  /**
-   * File name.
-   */
-  std::string filename;
+  void parseMapping(const std::filesystem::path& filename, YAMLNode& node);
+  void parseSequence(const std::filesystem::path& filename, YAMLNode& node);
+  void parseValue(const std::filesystem::path& filename, YAMLNode& node);
 
   /**
    * LibYAML parser.

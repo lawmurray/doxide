@@ -2,8 +2,8 @@
 #include "YAMLParser.hpp"
 
 void JSONCounter::count(const std::filesystem::path& coverage, Entity& root) {
-  YAMLParser parser(coverage);
-  YAMLNode node = parser.parse();
+  YAMLParser parser;
+  YAMLNode node = parser.parse(coverage);
   if (!node.isSequence("files")) {
     warn("missing 'files' key in " << coverage);
   } else for (auto file : node.sequence("files")) {

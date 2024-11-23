@@ -263,8 +263,8 @@ void Driver::config() {
   }
 
   /* parse build configuration file */
-  YAMLParser parser(path);
-  YAMLNode yaml = parser.parse();
+  YAMLParser parser;
+  YAMLNode yaml = parser.parse(path);
 
   if (yaml.has("title")) {
     if (yaml.isValue("title")) {
@@ -344,13 +344,20 @@ void Driver::parse() {
 
 void Driver::count() {
   if (!coverage.empty()) {
-    auto ext = coverage.extension();
-    if (ext == ".gcov") {
-      GcovCounter counter;
-      counter.count(coverage, root);
-    } else if (ext == ".json") {
-      JSONCounter counter;
-      counter.count(coverage, root);
+    try {
+      auto ext = coverage.extension();
+      if (ext == ".gcov") {
+        GcovCounter counter;
+        counter.count(coverage, root);
+      } else if (ext == ".json") {
+        JSONCounter counter;
+        counter.count(coverage, root);
+      } else {
+        throw std::runtime_error("unrecognized file extension on " +
+            coverage.string());
+      }
+    } catch (const std::runtime_error& e) {
+      warn(e.what() << ", coverage will be reported as zero");
     }
   }
 }

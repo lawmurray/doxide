@@ -20,8 +20,8 @@ void MarkdownGenerator::clean() {
       if (entry.is_regular_file() && entry.path().extension() == ".md" &&
           !files.contains(entry)) {
         try {
-          YAMLParser parser(entry.path().string());
-          YAMLNode frontmatter = parser.parse();
+          YAMLParser parser;
+          YAMLNode frontmatter = parser.parse(entry.path().string());
           if (frontmatter.isValue("generator") &&
               frontmatter.value("generator") == "doxide") {
             std::filesystem::remove(entry.path());
@@ -679,8 +679,8 @@ bool MarkdownGenerator::can_write(const std::filesystem::path& path) {
   bool canWrite = true;
   if (std::filesystem::exists(path)) {
     try {
-      YAMLParser parser(path.string());
-      YAMLNode node = parser.parse();
+      YAMLParser parser;
+      YAMLNode node = parser.parse(path.string());
       canWrite = node.isValue("generator") && node.value("generator") == "doxide";
     } catch (const std::runtime_error& e) {
       warn(e.what());

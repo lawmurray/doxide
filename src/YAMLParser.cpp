@@ -1,7 +1,6 @@
 #include "YAMLParser.hpp"
 
-YAMLParser::YAMLParser(const std::filesystem::path& filename) :
-    filename(filename) {
+YAMLParser::YAMLParser() {
   yaml_parser_initialize(&parser);
 }
 
@@ -9,11 +8,11 @@ YAMLParser::~YAMLParser() {
   yaml_parser_delete(&parser);
 }
 
-YAMLNode YAMLParser::parse() {
+YAMLNode YAMLParser::parse(const std::filesystem::path& filename) {
   YAMLNode root;
   FILE* file = fopen(filename.c_str(), "r");
   if (!file) {
-    throw std::runtime_error("could not read file " + filename);
+    throw std::runtime_error("could not read file " + filename.string());
   }
 
   yaml_parser_set_input_file(&parser, file);
@@ -21,12 +20,13 @@ YAMLNode YAMLParser::parse() {
   try {
     while (!done) {
       if (!yaml_parser_parse(&parser, &event)) {
-        throw std::runtime_error("YAML syntax error in file " + filename);
+        throw std::runtime_error("YAML syntax error in file " +
+            filename.string());
       }
       if (event.type == YAML_SEQUENCE_START_EVENT) {
-        parseSequence(root);
+        parseSequence(filename, root);
       } else if (event.type == YAML_MAPPING_START_EVENT) {
-        parseMapping(root);
+        parseMapping(filename, root);
       } else if (event.type == YAML_DOCUMENT_END_EVENT ||
           event.type == YAML_STREAM_END_EVENT) {
         done = true;
@@ -45,14 +45,16 @@ YAMLNode YAMLParser::parse() {
   return root;
 }
 
-void YAMLParser::parseMapping(YAMLNode& node) {
+void YAMLParser::parseMapping(const std::filesystem::path& filename,
+    YAMLNode& node) {
   yaml_event_delete(&event);
   node.setMapping();
   int done = 0;
   while (!done) {
     /* read one name/value pair on each iteration */
     if (!yaml_parser_parse(&parser, &event)) {
-      throw std::runtime_error("YAML syntax error in file " + filename);
+      throw std::runtime_error("YAML syntax error in file " +
+          filename.string());
     }
     if (event.type == YAML_SCALAR_EVENT) {
       /* key */
@@ -63,14 +65,15 @@ void YAMLParser::parseMapping(YAMLNode& node) {
 
       /* value */
       if (!yaml_parser_parse(&parser, &event)) {
-        throw std::runtime_error("YAML syntax error in file " + filename);
+        throw std::runtime_error("YAML syntax error in file " +
+            filename.string());
       }
       if (event.type == YAML_SCALAR_EVENT) {
-        parseValue(node.insert(key));
+        parseValue(filename, node.insert(key));
       } else if (event.type == YAML_SEQUENCE_START_EVENT) {
-        parseSequence(node.insert(key));
+        parseSequence(filename, node.insert(key));
       } else if (event.type == YAML_MAPPING_START_EVENT) {
-        parseMapping(node.insert(key));
+        parseMapping(filename, node.insert(key));
       } else {
         yaml_event_delete(&event);
       }
@@ -81,20 +84,22 @@ void YAMLParser::parseMapping(YAMLNode& node) {
   }
 }
 
-void YAMLParser::parseSequence(YAMLNode& node) {
+void YAMLParser::parseSequence(const std::filesystem::path& filename,
+    YAMLNode& node) {
   yaml_event_delete(&event);
   node.setSequence();
   int done = 0;
   while (!done) {
     if (!yaml_parser_parse(&parser, &event)) {
-      throw std::runtime_error("YAML syntax error in file " + filename);
+      throw std::runtime_error("YAML syntax error in file " +
+          filename.string());
     }
     if (event.type == YAML_SCALAR_EVENT) {
-      parseValue(node.push());
+      parseValue(filename, node.push());
     } else if (event.type == YAML_SEQUENCE_START_EVENT) {
-      parseSequence(node.push());
+      parseSequence(filename, node.push());
     } else if (event.type == YAML_MAPPING_START_EVENT) {
-      parseMapping(node.push());
+      parseMapping(filename, node.push());
     } else {
       done = event.type == YAML_SEQUENCE_END_EVENT;
       yaml_event_delete(&event);
@@ -102,7 +107,8 @@ void YAMLParser::parseSequence(YAMLNode& node) {
   }
 }
 
-void YAMLParser::parseValue(YAMLNode& node) {
+void YAMLParser::parseValue(const std::filesystem::path& filename,
+    YAMLNode& node) {
   auto data = (char*)event.data.scalar.value;
   auto length = event.data.scalar.length;
   node.set(std::string(data, length));
