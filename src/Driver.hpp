@@ -1,7 +1,6 @@
 #pragma once
 
 #include "doxide.hpp"
-#include "CppParser.hpp"
 #include "YAMLNode.hpp"
 #include "Entity.hpp"
 
@@ -79,12 +78,17 @@ private:
   static void groups(YAMLNode& parentNode, Entity& parentEntity);
 
   /**
+   * Root entity.
+   */
+  Entity root;
+
+  /**
+   * Macro definitions.
+   */
+  std::unordered_map<std::string,std::string> defines;
+
+  /**
    * Files.
    */
   std::unordered_set<std::filesystem::path> filenames;
-
-  /**
-   * Parser.
-   */
-  CppParser parser;
 };

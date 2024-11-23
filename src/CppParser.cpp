@@ -309,13 +309,9 @@ CppParser::~CppParser() {
   ts_parser_delete(parser);
 }
 
-void CppParser::parse(const std::unordered_set<std::filesystem::path>& filenames) {
-  for (const auto& filename: filenames) {
-    parse(filename);
-  }
-}
-
-void CppParser::parse(const std::filesystem::path& filename) {
+void CppParser::parse(const std::filesystem::path& filename,
+    const std::unordered_map<std::string,std::string>& defines,
+    Entity& root) {
   assert(entities.empty());
   assert(starts.empty());
   assert(ends.empty());
@@ -323,7 +319,7 @@ void CppParser::parse(const std::filesystem::path& filename) {
   /* entity to represent file */
   Entity file;
   file.name = filename.filename().string();
-  file.decl = preprocess(filename);
+  file.decl = preprocess(filename, defines);
   file.path = filename;
   file.start_line = 0;
   file.end_line = 0;
@@ -596,7 +592,8 @@ Entity& CppParser::pop(const uint32_t start, const uint32_t end) {
   return entities.back();
 }
 
-std::string CppParser::preprocess(const std::filesystem::path& filename) {
+std::string CppParser::preprocess(const std::filesystem::path& filename,
+    const std::unordered_map<std::string,std::string>& defines) {
   /* regex to detect preprocessor macro names */
   static const std::regex macro(R"([A-Z_][A-Z0-9_]{2,})",
       regex_flags);
@@ -614,7 +611,7 @@ std::string CppParser::preprocess(const std::filesystem::path& filename) {
 
     if (defines.contains(in.substr(k, l - k))) {
       /* replace preprocessor macro */
-      std::string& value = defines.at(in.substr(k, l - k));
+      const std::string& value = defines.at(in.substr(k, l - k));
       uint32_t old_size = in.size();
       in.replace(k, l - k, value);
       uint32_t new_size = in.size();

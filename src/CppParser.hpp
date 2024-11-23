@@ -21,30 +21,15 @@ public:
   ~CppParser();
 
   /**
-   * Parse C++ sources.
-   * 
-   * @param filenames C++ source file names.
-   * @param defines Macro definitions.
-   */
-  void parse(const std::unordered_set<std::filesystem::path>& filenames);
-
-  /**
    * Parse C++ source.
    * 
    * @param file C++ source file name.
    * @param defines Macro definitions.
+   * @param[in,out] root Root entity.
    */
-  void parse(const std::filesystem::path& filename);
-
-  /**
-   * Root entity.
-   */
-  Entity root;
-
-  /**
-   * Macro definitions.
-   */
-  std::unordered_map<std::string,std::string> defines;
+  void parse(const std::filesystem::path& filename,
+      const std::unordered_map<std::string,std::string>& defines,
+      Entity& root);
 
 private:
   /**
@@ -81,7 +66,8 @@ private:
    *
    * @return Preprocessed source.
    */
-  std::string preprocess(const std::filesystem::path& file);
+  std::string preprocess(const std::filesystem::path& file,
+      const std::unordered_map<std::string,std::string>& defines);
 
   /**
    * Report errors after preprocessing.

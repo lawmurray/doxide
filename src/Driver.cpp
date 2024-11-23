@@ -196,7 +196,7 @@ R""""(<div class="md-copyright">
 Driver::Driver() :
     title("Untitled"),
     output("docs") {
-  config();
+  //
 }
 
 void Driver::init() {
@@ -222,24 +222,28 @@ void Driver::init() {
 }
 
 void Driver::build() {
+  config();
   parse();
   count();
 
   MarkdownGenerator generator(output);
-  generator.generate(parser.root);
-  generator.coverage(parser.root);
+  generator.generate(root);
+  generator.coverage(root);
   generator.clean();
 }
 
 void Driver::cover() {
+  config();
   parse();
   count();
 
   JSONGenerator generator;
-  generator.generate(parser.root);
+  generator.generate(root);
 }
 
 void Driver::clean() {
+  config();
+
   /* can use MarkdownGenerator::clean() for this just by not calling
    * generate() first; this will remove all files with `generator: doxide` in
    * their YAML frontmatter */
@@ -259,43 +263,43 @@ void Driver::config() {
   }
 
   /* parse build configuration file */
-  YAMLParser yaml(path);
-  YAMLNode root = yaml.parse();
+  YAMLParser parser(path);
+  YAMLNode yaml = parser.parse();
 
-  if (root.has("title")) {
-    if (root.isValue("title")) {
-      title = root.value("title");
+  if (yaml.has("title")) {
+    if (yaml.isValue("title")) {
+      title = yaml.value("title");
     } else {
       warn("'title' must be a value in configuration.");
     }
   }
-  if (root.has("description")) {
-    if (root.isValue("description")) {
-      description = root.value("description");
+  if (yaml.has("description")) {
+    if (yaml.isValue("description")) {
+      description = yaml.value("description");
     } else {
       warn("'description' must be a value in configuration.");
     }
   }
-  if (root.has("coverage")) {
-    if (root.isValue("coverage")) {
-      coverage = root.value("coverage");
+  if (yaml.has("coverage")) {
+    if (yaml.isValue("coverage")) {
+      coverage = yaml.value("coverage");
     } else {
       warn("'coverage' must be a value in configuration.");
     }
   }
-  if (root.has("output")) {
-    if (root.isValue("output")) {
-      output = root.value("output");
+  if (yaml.has("output")) {
+    if (yaml.isValue("output")) {
+      output = yaml.value("output");
     } else {
       warn("'output' must be a value in configuration.");
     }
   }
-  if (root.has("defines")) {
-    if (root.isMapping("defines")) {
-      const auto& map = root.mapping("defines");
+  if (yaml.has("defines")) {
+    if (yaml.isMapping("defines")) {
+      const auto& map = yaml.mapping("defines");
       for (auto& [key, value] : map) {
         if (value->isValue()) {
-          parser.defines[key] = value->value();
+          defines[key] = value->value();
         }
       }
     } else {
@@ -305,8 +309,8 @@ void Driver::config() {
   
   /* expand file patterns in file list */
   filenames.clear();
-  if (root.isSequence("files")) {
-    for (auto& node : root.sequence("files")) {
+  if (yaml.isSequence("files")) {
+    for (auto& node : yaml.sequence("files")) {
       if (node->isValue()) {
         auto& pattern = node->value();
         auto paths = glob::rglob(pattern);
@@ -326,13 +330,16 @@ void Driver::config() {
   }
 
   /* initialize root entity */
-  groups(root, parser.root);
-  parser.root.title = title;
-  parser.root.docs = description;
+  groups(yaml, root);
+  root.title = title;
+  root.docs = description;
 }
 
 void Driver::parse() {
-  parser.parse(filenames);
+  CppParser parser;
+  for (const auto& filename: filenames) {
+    parser.parse(filename, defines, root);
+  }
 }
 
 void Driver::count() {
@@ -340,10 +347,10 @@ void Driver::count() {
     auto ext = coverage.extension();
     if (ext == ".gcov") {
       GcovCounter counter;
-      counter.count(coverage, parser.root);
+      counter.count(coverage, root);
     } else if (ext == ".json") {
       JSONCounter counter;
-      counter.count(coverage, parser.root);
+      counter.count(coverage, root);
     }
   }
 }
