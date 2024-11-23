@@ -43,9 +43,8 @@ void GcovCounter::count(const std::filesystem::path& coverage, Entity& root) {
 
   std::list<Entity*> es;
   Entity* file = nullptr;
-  uint32_t nlines = 0;  // number of lines in file
-  int max_line_number = 0;  // highest line number seen so far, used to
-                                 // detect disaggreated counts
+  int nlines = 0;  // number of lines in file
+  int max_line_number = 0;  // highest line number seen so far
   std::string line;
   std::smatch match;
 
@@ -72,6 +71,9 @@ void GcovCounter::count(const std::filesystem::path& coverage, Entity& root) {
             " does not exist; ignoring, are source and coverage" <<
             " files in sync?");
       } else if (count > 0 && line_number > max_line_number) {
+        // ^ the check against max_line_number means skipping lines with
+        //   disaggregated counts that have already been accounted for in
+        //   aggregated counts
         int& line_count = file->line_counts[line_number];
         if (line_count == 0) {
           /* line is included in report and first time seeing it covered,

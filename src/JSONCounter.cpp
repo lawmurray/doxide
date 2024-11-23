@@ -22,7 +22,7 @@ void JSONCounter::count(const std::filesystem::path& coverage, Entity& root) {
         /* update line coverage for this file */
         std::list<Entity*> es = root.get(path);
         Entity* file = es.back();
-        uint32_t nlines = file->line_counts.size();
+        int nlines = file->line_counts.size();
         for (auto line : lines) {
           if (!line->has("line_number")) {
             warn("missing 'line_number' key in 'lines' element in " << file);

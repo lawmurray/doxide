@@ -310,7 +310,7 @@ CppParser::~CppParser() {
 }
 
 void CppParser::parse(const std::unordered_set<std::filesystem::path>& filenames) {
-  for (const std::string& filename: filenames) {
+  for (const auto& filename: filenames) {
     parse(filename);
   }
 }
@@ -610,7 +610,6 @@ std::string CppParser::preprocess(const std::filesystem::path& filename) {
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = ts_node_end_byte(node);
     TSPoint from = ts_node_start_point(node);
-    TSPoint to = ts_node_end_point(node);
     bool nextNodeChosen = false;
 
     if (defines.contains(in.substr(k, l - k))) {

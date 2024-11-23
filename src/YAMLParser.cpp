@@ -18,7 +18,6 @@ YAMLNode YAMLParser::parse() {
 
   yaml_parser_set_input_file(&parser, file);
   bool done = false;
-  int docs = 0;
   try {
     while (!done) {
       if (!yaml_parser_parse(&parser, &event)) {
