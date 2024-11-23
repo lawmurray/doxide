@@ -10,7 +10,7 @@ YAMLParser::~YAMLParser() {
 
 YAMLNode YAMLParser::parse(const std::filesystem::path& filename) {
   YAMLNode root;
-  FILE* file = fopen(filename.c_str(), "r");
+  FILE* file = fopen(filename.string().c_str(), "r");
   if (!file) {
     throw std::runtime_error("could not read file " + filename.string());
   }

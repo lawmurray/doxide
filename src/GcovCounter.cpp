@@ -51,7 +51,7 @@ void GcovCounter::count(const std::filesystem::path& coverage, Entity& root) {
   while (std::getline(in, line)) {
     if (std::regex_match(line, match, regex_source)) {
       /* start of new file */
-      path = match[1];
+      path = match[1].str();
       if (path.is_absolute()) {
         path = std::filesystem::relative(path);
       }
