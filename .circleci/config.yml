@@ -67,7 +67,7 @@ jobs:
               mkdir build
               cd build
               cmake ..
-              cmake --build . --config Debug
+              cmake --build . --config Debug --parallel
               sudo cmake --install . --config Debug
       - test
 
@@ -93,7 +93,7 @@ jobs:
               mkdir build
               cd build
               cmake ..
-              cmake --build . --config Debug
+              cmake --build . --config Debug --parallel
               sudo cmake --install . --config Debug
       - test
 
@@ -113,7 +113,7 @@ jobs:
             mkdir build
             cd build
             cmake .. -DCMAKE_INSTALL_PREFIX=c:\ProgramData\chocolatey
-            cmake --build . --config Debug
+            cmake --build . --config Debug --parallel
             sudo cmake --install . --config Debug
       - run:
           name: Build
@@ -121,7 +121,7 @@ jobs:
               mkdir build
               cd build
               cmake .. -DCMAKE_INSTALL_PREFIX=c:\ProgramData\chocolatey
-              cmake --build . --config Debug
+              cmake --build . --config Debug --parallel
               sudo cmake --install . --config Debug
       - test
 
