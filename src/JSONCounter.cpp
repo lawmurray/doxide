@@ -22,7 +22,7 @@ void JSONCounter::count(const std::filesystem::path& coverage, Entity& root) {
         /* update line coverage for this file */
         std::list<Entity*> es = root.get(path);
         Entity* file = es.back();
-        int nlines = file->line_counts.size();
+        size_t nlines = file->line_counts.size();
         for (auto line : lines) {
           if (!line->has("line_number")) {
             warn("missing 'line_number' key in 'lines' element in " << file);
@@ -31,7 +31,7 @@ void JSONCounter::count(const std::filesystem::path& coverage, Entity& root) {
           } else {
             int line_number = std::stoi(line->value("line_number")) - 1;
             int count = std::stoi(line->value("count"));
-            if (line_number < 0 || line_number >= nlines) {
+            if (line_number < 0 || size_t(line_number) >= nlines) {
               warn("in " << file << ", " << path << ":" << line_number <<
                   " does not exist; ignoring, are source and coverage" <<
                   " files in sync?");

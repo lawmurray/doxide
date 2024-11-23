@@ -129,7 +129,7 @@ void Entity::merge(Entity&& o) {
 
   /* merge line counts, recalling that -1 indicates excluded lines, so cannot
    * simply add the two vectors */
-  end_line = std::max(line_counts.size(), o.line_counts.size());
+  end_line = uint32_t(std::max(line_counts.size(), o.line_counts.size()));
   line_counts.resize(end_line, -1);
   lines_included = 0;
   lines_covered = 0;
