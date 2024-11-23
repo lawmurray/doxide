@@ -43,7 +43,7 @@ void GcovCounter::count(const std::filesystem::path& coverage, Entity& root) {
 
   std::list<Entity*> es;
   Entity* file = nullptr;
-  int nlines = 0;  // number of lines in file
+  size_t nlines = 0;  // number of lines in file
   int max_line_number = 0;  // highest line number seen so far
   std::string line;
   std::smatch match;
@@ -66,7 +66,7 @@ void GcovCounter::count(const std::filesystem::path& coverage, Entity& root) {
       /* line data */
       int line_number = std::stoi(match[2]) - 1;
       int count = std::stoi(match[1]);
-      if (line_number < 0 || line_number >= nlines) {
+      if (line_number < 0 || size_t(line_number) >= nlines) {
         warn("in " << file << ", " << path << ":" << line_number <<
             " does not exist; ignoring, are source and coverage" <<
             " files in sync?");

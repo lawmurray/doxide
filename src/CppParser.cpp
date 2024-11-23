@@ -278,7 +278,7 @@ CppParser::CppParser() :
 
   /* queries */
   query = ts_query_new(tree_sitter_cuda(), query_cpp,
-      strlen(query_cpp), &error_offset, &error_type);
+      uint32_t(strlen(query_cpp)), &error_offset, &error_type);
   if (error_type != TSQueryErrorNone) {
     std::string_view from(query_cpp + error_offset,
         std::min(size_t(40), strlen(query_cpp) - error_offset));
@@ -286,7 +286,7 @@ CppParser::CppParser() :
   }
 
   query_exclude = ts_query_new(tree_sitter_cuda(), query_cpp_exclude,
-      strlen(query_cpp_exclude), &error_offset, &error_type);
+      uint32_t(strlen(query_cpp_exclude)), &error_offset, &error_type);
   if (error_type != TSQueryErrorNone) {
     std::string_view from(query_cpp_exclude + error_offset,
         std::min(size_t(40), strlen(query_cpp_exclude) - error_offset));
@@ -294,7 +294,7 @@ CppParser::CppParser() :
   }
 
   query_include = ts_query_new(tree_sitter_cuda(), query_cpp_include,
-      strlen(query_cpp_include), &error_offset, &error_type);
+      uint32_t(strlen(query_cpp_include)), &error_offset, &error_type);
   if (error_type != TSQueryErrorNone) {
     std::string_view from(query_cpp_include + error_offset,
         std::min(size_t(40), strlen(query_cpp_include) - error_offset));
@@ -328,7 +328,7 @@ void CppParser::parse(const std::filesystem::path& filename,
 
   /* parse */
   TSTree* tree = ts_parser_parse_string(parser, NULL, file.decl.data(),
-      file.decl.size());
+      uint32_t(file.decl.size()));
   if (!tree) {
     /* something went very wrong */
     warn("cannot parse " << filename << ", skipping");
@@ -599,7 +599,8 @@ std::string CppParser::preprocess(const std::filesystem::path& filename,
       regex_flags);
 
   std::string in = gulp(filename);
-  TSTree* tree = ts_parser_parse_string(parser, NULL, in.data(), in.size());
+  TSTree* tree = ts_parser_parse_string(parser, NULL, in.data(),
+      uint32_t(in.size()));
   TSNode root = ts_tree_root_node(tree);
   TSNode node = root;
   TSTreeCursor cursor = ts_tree_cursor_new(root);
