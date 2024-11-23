@@ -154,14 +154,14 @@ private:
   static std::string sanitize(const std::string& str);
 
   /**
-   * Convert coverage percentage to hexadecimal color.
+   * Lookup color for given percentage.
    */
-  static std::string color(const double percent);
+  static const std::string& color(const double percent);
 
   /**
-   * Convert coverage percentage to icon.
+   * Lookup icon for given percentage.
    */
-  static std::string icon(const double percent);
+  static const std::string& icon(const double percent);
 
   /**
    * Convert a list of entities to a list of pointers to entities, optionally

@@ -387,8 +387,8 @@ void MarkdownGenerator::coverage(const std::filesystem::path& output,
        * in a separate <span> within it; to indicate code coverage we apply
        * styles to those <span>, which are readily selected by number using
        * the CSS nth-child() pseudo-class */
-      std::string covered_color = color(100.0);
-      std::string uncovered_color = color(0.0);
+      const std::string& covered_color = color(100.0);
+      const std::string& uncovered_color = color(0.0);
 
       /* style sheet to highlight lines according to code coverage */
       out << "<style>" << std::endl;
@@ -461,7 +461,7 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
     uint32_t lines_uncovered = lines_included - lines_covered;
     double lines_percent = (lines_included > 0) ?
         100.0*lines_covered/lines_included : 100.0;
-    std::string lines_color = color(lines_percent);
+    const std::string& lines_color = color(lines_percent);
     std::string path = parent.empty() ? name : parent + '/' + name;
     std::string style = parent.empty() ? "" : " style=\"display:none;\"";
 
@@ -485,7 +485,7 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
     uint32_t lines_uncovered = lines_included - lines_covered;
     double lines_percent = (lines_included > 0) ?
         100.0*lines_covered/lines_included : 100.0;
-    std::string lines_color = color(lines_percent);
+    const std::string& lines_color = color(lines_percent);
     std::string path = parent.empty() ? name : parent + '/' + name;
     std::string style = parent.empty() ? "" : " style=\"display:none;\"";
 
@@ -515,7 +515,7 @@ void MarkdownGenerator::coverage_foot(const Entity& entity,
   uint32_t lines_uncovered = lines_included - lines_covered;
   double lines_percent = (lines_included > 0) ?
       100.0*lines_covered/lines_included : 100.0;
-  std::string lines_color = color(lines_percent);
+  const std::string& lines_color = color(lines_percent);
   std::string style = (name == root.path.string()) ? "" : ", style=\"display:none;\"";
 
   out << "<tr id=\"summary." << name << "\" data-parent=\"" << name << "\"" << style << ">" << std::endl;
@@ -629,9 +629,9 @@ void MarkdownGenerator::sunburst_data(const Entity& entity,
   for (auto& dir: view(entity.dirs, true)) {
     double percent = (dir->lines_included > 0) ?
         100.0*dir->lines_covered/dir->lines_included : 100.0;
-    std::string c = color(percent);
-    std::string ico = icon(percent);
-    std::string path = relative(dir->path, root.path);
+    const std::string& c = color(percent);
+    const std::string& ico = icon(percent);
+    std::filesystem::path path = relative(dir->path, root.path);
 
     if (!first) {
       out << ", ";
@@ -640,7 +640,7 @@ void MarkdownGenerator::sunburst_data(const Entity& entity,
 
     out << '{';
     out << "name: \"" << dir->name << "\", ";
-    out << "path: \"" << path << "\", ";
+    out << "path: \"" << path.string() << "\", ";
     out << "value: " << dir->lines_included << ", ";
     out << "type: \"dir\", ";
     out << "icon: \"" << ico << "\", ";
@@ -654,9 +654,9 @@ void MarkdownGenerator::sunburst_data(const Entity& entity,
   for (auto& file: view(entity.files, true)) {
     double percent = (file->lines_included > 0) ?
         100.0*file->lines_covered/file->lines_included : 100.0;
-    std::string c = color(percent);
-    std::string ico = icon(percent);
-    std::string path = relative(file->path, root.path);
+    const std::string& c = color(percent);
+    const std::string& ico = icon(percent);
+    std::filesystem::path path = relative(file->path, root.path);
 
     if (!first) {
       out << ", ";
@@ -665,7 +665,7 @@ void MarkdownGenerator::sunburst_data(const Entity& entity,
 
     out << '{';
     out << "name: \"" << file->name << "\", ";
-    out << "path: \"" << path << "\", ";
+    out << "path: \"" << path.string() << "\", ";
     out << "value: " << file->lines_included << ", ";
     out << "type: \"file\", ";
     out << "icon: \"" << ico << "\", ";
@@ -806,57 +806,47 @@ std::string MarkdownGenerator::sanitize(const std::string& str) {
   return buf.str().substr(0, 255 - 5);
 }
 
-std::string MarkdownGenerator::color(const double percent) {
+const std::string& MarkdownGenerator::color(const double percent) {
   assert(0.0 <= percent && percent <= 100.0);
 
-  const int base_red = 0xef5552;
-  const int base_yellow = 0xffc105;
-  const int base_green = 0x4cae4f;
-
-  double rounded_percent = 10.0*std::floor(percent/10.0);
-  int from, to;
-  double mix;
-  if (rounded_percent < 50.0) {
-    from = base_red;
-    to = base_red;
-    mix = 1.0;
-  } else if (rounded_percent < 70.0) {
-    from = base_red;
-    to = base_yellow;
-    mix = (rounded_percent - 50.0)/20.0;
-  } else if (rounded_percent < 90.0) {
-    from = base_yellow;
-    to = base_green;
-    mix = (rounded_percent - 70.0)/20.0;
-  } else {
-    from = base_green;
-    to = base_green;
-    mix = 1.0;
-  }
-
-  int r = (1.0 - mix)*((from >> 16) & 0xFF) + mix*((to >> 16) & 0xFF);
-  int g = (1.0 - mix)*((from >> 8) & 0xFF) + mix*((to >> 8) & 0xFF);
-  int b = (1.0 - mix)*((from >> 0) & 0xFF) + mix*((to >> 0) & 0xFF);
-  int c = (r << 16) | (g << 8) | b;
-
-  std::stringstream result;
-  result << std::hex << std::setw(6) << std::setfill('0') << c;
-  return result.str();
-}
-
-std::string MarkdownGenerator::icon(const double percent) {
-  assert(0.0 <= percent && percent <= 100.0);
+  static const std::string red = "ef5552";
+  static const std::string orange = "f78b2b";
+  static const std::string amber = "ffc105";
+  static const std::string olive = "a5b72a";
+  static const std::string green = "4cae4f";
 
   if (percent < 60.0) {
-    return "○○○○";
+    return red;
   } else if (percent < 70.0) {
-    return "●○○○";
+    return orange;
   } else if (percent < 80.0) {
-    return "●●○○";
+    return amber;
   } else if (percent < 90.0) {
-    return "●●●○";
+    return olive;
   } else {
-    return "●●●●";
+    return green;
+  }
+}
+
+const std::string& MarkdownGenerator::icon(const double percent) {
+  assert(0.0 <= percent && percent <= 100.0);
+
+  static const std::string icon0 = "○○○○";
+  static const std::string icon1 = "●○○○";
+  static const std::string icon2 = "●●○○";
+  static const std::string icon3 = "●●●○";
+  static const std::string icon4 = "●●●●";
+
+  if (percent < 60.0) {
+    return icon0;
+  } else if (percent < 70.0) {
+    return icon1;
+  } else if (percent < 80.0) {
+    return icon2;
+  } else if (percent < 90.0) {
+    return icon3;
+  } else {
+    return icon4;
   }
 }
 
