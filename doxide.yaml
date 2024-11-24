@@ -7,6 +7,7 @@ description: |
     [groups](../organizing.md) can be used to organize documentation.
 files:
   - "src/**.hpp"
+  - "src/**.cpp"
   - "demo/*.hpp"
 output: docs/demo
 groups:
