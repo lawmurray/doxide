@@ -189,7 +189,9 @@ Doc::Doc(const std::string_view comment) : hide(false) {
     }
 
     /* append end of paragraph; this ensures that multiple doc comments that
-    * occur for an entity are treated as separate paragraphs */
-    docs.append("\n\n");
+     * occur for an entity are treated as separate paragraphs */
+    if (!docs.empty()) {
+      docs.append("\n\n");
+    }
   }
 }

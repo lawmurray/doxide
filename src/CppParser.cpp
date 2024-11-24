@@ -368,6 +368,7 @@ void CppParser::parse(const std::filesystem::path& filename,
         Entity& e = doc.open.type == OPEN_BEFORE ? entity : entities.back();
         e.docs.append(doc.docs);
         e.hide = e.hide || doc.hide;
+        e.visible = !e.docs.empty();
         if (!doc.ingroup.empty()) {
           e.ingroup = doc.ingroup;
         }
