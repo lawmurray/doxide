@@ -1,14 +1,15 @@
 #include "Doc.hpp"
 #include "DocTokenizer.hpp"
 
-Doc::Doc(const std::string_view comment) : hide(false) {
+Doc::Doc(const std::string_view comment, const int init_indent) :
+    indent(init_indent),
+    hide(false) {
   DocTokenizer tokenizer(comment);
   DocToken token = tokenizer.next();
   open = token;
   if (open.type == OPEN_BEFORE || open.type == OPEN_AFTER) {
     /* documentation comment, not just an ordinary comment */
     token = tokenizer.next();
-    int indent = 0;
     bool first = true;  // is this the first token in the comment?
     if (!token.type) {
       /* empty end-of-line comment, consider end of paragraph */
@@ -16,8 +17,6 @@ Doc::Doc(const std::string_view comment) : hide(false) {
     } else while (token.type) {
       if (token.type & COMMAND) {
         std::string_view command = token.substr(1);
-
-        /* non-legacy commands */
         if (command == "param" ||
             command == "param[in]") {
           docs.append("\n:material-location-enter: `");
@@ -73,7 +72,6 @@ Doc::Doc(const std::string_view comment) : hide(false) {
           docs.append(command);
           docs.append("\n");
           indent += 4;
-          docs.append(indent, ' ');
         } else if (command == "ingroup") {
           ingroup = tokenizer.consume(WORD).str();
 
@@ -123,15 +121,15 @@ Doc::Doc(const std::string_view comment) : hide(false) {
           docs.append("\n```");
         } else if (command == "attention") {
           docs.append("\n!!! warning \"Attention\"\n");
-          indent = 4;
+          indent += 4;
           docs.append(indent, ' ');
         } else if (command == "todo") {
           docs.append("\n!!! example \"To-do\"\n");
-          indent = 4;
+          indent += 4;
           docs.append(indent, ' ');
         } else if (command == "remark") {
           docs.append("\n!!! quote \"Remark\"\n");
-          indent = 4;
+          indent += 4;
           docs.append(indent, ' ');
         } else if (command == "def" ||
             command == "var" ||
@@ -153,7 +151,7 @@ Doc::Doc(const std::string_view comment) : hide(false) {
           docs.append("/");
         } else if (token.str().at(0) == '\\') {
           /* unrecognized command starting with legacy backslash, could just
-          * be e.g. a LaTeX macro, output as is */
+           * be e.g. a LaTeX macro, output as is */
           docs.append(token.str());
         } else {
           /* keep track of warnings and don't repeat them */
@@ -183,15 +181,10 @@ Doc::Doc(const std::string_view comment) : hide(false) {
       first = false;
     }
 
-    /* trim whitespace from the end */
+    /* trim whitespace from the end and add single new line */
     while (docs.length() > 0 && std::isspace(docs.back())) {
       docs.resize(docs.length() - 1);
     }
-
-    /* append end of paragraph; this ensures that multiple doc comments that
-     * occur for an entity are treated as separate paragraphs */
-    if (!docs.empty()) {
-      docs.append("\n\n");
-    }
+    docs.append("\n");
   }
 }

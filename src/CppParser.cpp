@@ -352,6 +352,7 @@ void CppParser::parse(const std::filesystem::path& filename,
   ts_query_cursor_exec(cursor, query, node);
   TSQueryMatch match;
   Entity entity;
+  int indent = 0;
   while (ts_query_cursor_next_match(cursor, &match)) {    
     uint32_t start = 0, middle = 0, end = 0;
     uint32_t start_line = -1, end_line = -1;
@@ -364,7 +365,7 @@ void CppParser::parse(const std::filesystem::path& filename,
       uint32_t l = ts_node_end_byte(node);
 
       if (strncmp(name, "docs", length) == 0) {
-        Doc doc(file.decl.substr(k, l - k));
+        Doc doc(file.decl.substr(k, l - k), indent);
         Entity& e = doc.open.type == OPEN_BEFORE ? entity : entities.back();
         e.docs.append(doc.docs);
         e.hide = e.hide || doc.hide;
@@ -372,6 +373,7 @@ void CppParser::parse(const std::filesystem::path& filename,
         if (!doc.ingroup.empty()) {
           e.ingroup = doc.ingroup;
         }
+        indent = doc.indent;
       } else if (strncmp(name, "nested_name", length) == 0) {
         assert(entity.type == EntityType::NAMESPACE);
 

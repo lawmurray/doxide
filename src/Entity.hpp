@@ -201,11 +201,6 @@ struct Entity {
   int lines_covered;
 
   /**
-   * Current indent level of the documentation comment for this entity.
-   */
-  int indent;
-
-  /**
    * Entity type.
    */
   EntityType type;
