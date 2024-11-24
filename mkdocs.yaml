@@ -81,6 +81,7 @@ nav:
   - organizing.md
   - parsing.md
   - coverage.md
+  - coverage-reports.md
   - command-line.md
   - contributing.md
   - demo/index.md
