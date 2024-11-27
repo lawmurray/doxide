@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://doxide.org/command-line/">
       
       
-        <link rel="prev" href="../coverage/">
+        <link rel="prev" href="../coverage-reports/">
       
       
         <link rel="next" href="../contributing/">
@@ -445,7 +445,27 @@
         
   
   <span class="md-ellipsis">
-    Code Coverage
+    Enabling Code Coverage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../coverage-reports/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Understanding Code Coverage Reports
   </span>
   
 
@@ -590,7 +610,7 @@
 <dt><code>doxide clean</code></dt>
 <dd>Clean the output directory.</dd>
 <dt><code>doxide cover</code></dt>
-<dd>Output (on <code>stdout</code>) zero-count line data for mixing with <a href="../coverage/">code coverage</a> reports.</dd>
+<dd>Output <a href="../coverage/">code coverage</a> data to <code>stdout</code> in JSON format.</dd>
 <dt><code>doxide help</code></dt>
 <dd>Print usage information.</dd>
 </dl>
@@ -602,6 +622,8 @@
 <dd>Main page description.</dd>
 <dt><code>--output</code> (default <code>docs</code>)</dt>
 <dd>Output directory.</dd>
+<dt><code>--coverage</code></dt>
+<dd>Code coverage file (<code>.gcov</code> or <code>.json</code>).</dd>
 </dl>
 
 
@@ -635,7 +657,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../coverage/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Code Coverage">
+          <a href="../coverage-reports/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Understanding Code Coverage Reports">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -645,7 +667,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Code Coverage
+                Understanding Code Coverage Reports
               </div>
             </div>
           </a>
@@ -747,6 +769,12 @@
     
     
       <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/sorts/tablesort.number.js"></script>
+      
+        <script src="../javascripts/tablesort.js"></script>
       
     
   </body>

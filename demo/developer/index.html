@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Doxide's own source code documentation, for developers, but also serving as an example for others.">
+        <meta name="description" content="Modern documentation for Modern C++. Configure with YAML, output Markdown.">
       
       
       
@@ -59,7 +59,7 @@
       
         <meta  property="og:title"  content="Developer - Doxide" >
       
-        <meta  property="og:description"  content="Doxide's own source code documentation, for developers, but also serving as an example for others." >
+        <meta  property="og:description"  content="Modern documentation for Modern C++. Configure with YAML, output Markdown." >
       
         <meta  property="og:image"  content="https://doxide.org/assets/images/social/demo/developer/index.png" >
       
@@ -75,7 +75,7 @@
       
         <meta  name="twitter:title"  content="Developer - Doxide" >
       
-        <meta  name="twitter:description"  content="Doxide's own source code documentation, for developers, but also serving as an example for others." >
+        <meta  name="twitter:description"  content="Modern documentation for Modern C++. Configure with YAML, output Markdown." >
       
         <meta  name="twitter:image"  content="https://doxide.org/assets/images/social/demo/developer/index.png" >
       
@@ -441,7 +441,27 @@
         
   
   <span class="md-ellipsis">
-    Code Coverage
+    Enabling Code Coverage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../coverage-reports/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Understanding Code Coverage Reports
   </span>
   
 
@@ -645,6 +665,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#init_docs_javascripts_tablesort_js" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_docs_javascripts_tablesort_js
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#init_docs_overrides_partials_copyright_html" class="md-nav__link">
     <span class="md-ellipsis">
       init_docs_overrides_partials_copyright_html
@@ -690,6 +719,33 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#query_cpp_exclude" class="md-nav__link">
+    <span class="md-ellipsis">
+      query_cpp_exclude
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#query_cpp_include" class="md-nav__link">
+    <span class="md-ellipsis">
+      query_cpp_include
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#regex_flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      regex_flags
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#regexes" class="md-nav__link">
     <span class="md-ellipsis">
       regexes
@@ -712,15 +768,6 @@
   
     <nav class="md-nav" aria-label="Function Details">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#copy_file_prompt" class="md-nav__link">
-    <span class="md-ellipsis">
-      copy_file_prompt
-    </span>
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#gulp" class="md-nav__link">
@@ -791,7 +838,7 @@
 
 
 <h1 id="developer">Developer<a class="headerlink" href="#developer" title="Permanent link">&para;</a></h1>
-<p>Doxide's own source code documentation, for developers, but also serving as an example for others.</p>
+<p>Doxide's own source code documentation.</p>
 <h2 id="types">Types<a class="headerlink" href="#types" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -801,6 +848,26 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><a href="CppParser/">CppParser</a></td>
+<td>C++ source parser.</td>
+</tr>
+<tr>
+<td><a href="Doc/">Doc</a></td>
+<td>Documentation of an entity.</td>
+</tr>
+<tr>
+<td><a href="DocToken/">DocToken</a></td>
+<td>Token.</td>
+</tr>
+<tr>
+<td><a href="DocTokenType/">DocTokenType</a></td>
+<td>Documentation comment token types.</td>
+</tr>
+<tr>
+<td><a href="DocTokenizer/">DocTokenizer</a></td>
+<td>Documentation comment tokenizer.</td>
+</tr>
 <tr>
 <td><a href="Driver/">Driver</a></td>
 <td>Driver for running commands</td>
@@ -814,28 +881,20 @@
 <td>Entity types.</td>
 </tr>
 <tr>
-<td><a href="GcovGenerator/">GcovGenerator</a></td>
-<td>Gcov JSON generator.</td>
+<td><a href="GcovCounter/">GcovCounter</a></td>
+<td>Gcov processor for coverage data.</td>
+</tr>
+<tr>
+<td><a href="JSONCounter/">JSONCounter</a></td>
+<td>JSON processor for coverage data following gcov/gcovr schema.</td>
+</tr>
+<tr>
+<td><a href="JSONGenerator/">JSONGenerator</a></td>
+<td>JSON generator for coverage data following gcov/gcovr schema.</td>
 </tr>
 <tr>
 <td><a href="MarkdownGenerator/">MarkdownGenerator</a></td>
 <td>Markdown generator.</td>
-</tr>
-<tr>
-<td><a href="Parser/">Parser</a></td>
-<td>C++ source parser.</td>
-</tr>
-<tr>
-<td><a href="Token/">Token</a></td>
-<td>Token.</td>
-</tr>
-<tr>
-<td><a href="TokenType/">TokenType</a></td>
-<td>Documentation comment token types.</td>
-</tr>
-<tr>
-<td><a href="Tokenizer/">Tokenizer</a></td>
-<td>Documentation comment tokenizer.</td>
 </tr>
 <tr>
 <td><a href="YAMLNode/">YAMLNode</a></td>
@@ -880,6 +939,10 @@
 <td>Contents of initial <code>docs/javascripts/mathjax.js</code> file.</td>
 </tr>
 <tr>
+<td><a href="#init_docs_javascripts_tablesort_js">init_docs_javascripts_tablesort_js</a></td>
+<td>Contents of initial <code>docs/javascripts/tablesort.js</code> file.</td>
+</tr>
+<tr>
 <td><a href="#init_docs_overrides_partials_copyright_html">init_docs_overrides_partials_copyright_html</a></td>
 <td>Contents of initial <code>docs/overrides/partials/copyright.html</code> file.</td>
 </tr>
@@ -900,6 +963,18 @@
 <td>Query for entities in C++ sources.</td>
 </tr>
 <tr>
+<td><a href="#query_cpp_exclude">query_cpp_exclude</a></td>
+<td>Query for entities to explicitly exclude from  line counts in C++ sources.</td>
+</tr>
+<tr>
+<td><a href="#query_cpp_include">query_cpp_include</a></td>
+<td>Query for entities to explicitly include in line counts in C++ sources.</td>
+</tr>
+<tr>
+<td><a href="#regex_flags">regex_flags</a></td>
+<td>Regular expression configuration.</td>
+</tr>
+<tr>
 <td><a href="#regexes">regexes</a></td>
 <td>Documentation comment token patterns.</td>
 </tr>
@@ -914,10 +989,6 @@
 </tr>
 </thead>
 <tbody>
-<tr>
-<td><a href="#copy_file_prompt">copy_file_prompt</a></td>
-<td>Copy a file, prompting to confirm overwrite if the destination already exists.</td>
-</tr>
 <tr>
 <td><a href="#gulp">gulp</a></td>
 <td>Read in a whole file.</td>
@@ -954,33 +1025,53 @@
 <h2 id="variable-details">Variable Details<a class="headerlink" href="#variable-details" title="Permanent link">&para;</a></h2>
 <h3 id="init_docs_javascripts_mathjax_js">init_docs_javascripts_mathjax_js<a name="init_docs_javascripts_mathjax_js"></a><a class="headerlink" href="#init_docs_javascripts_mathjax_js" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
-<p class="admonition-title">extern const char&#42; init_docs_javascripts_mathjax_js</p>
+<p class="admonition-title">static const char&#42; init_docs_javascripts_mathjax_js</p>
 <p>Contents of initial <code>docs/javascripts/mathjax.js</code> file.</p>
+</div>
+<h3 id="init_docs_javascripts_tablesort_js">init_docs_javascripts_tablesort_js<a name="init_docs_javascripts_tablesort_js"></a><a class="headerlink" href="#init_docs_javascripts_tablesort_js" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">static const char&#42; init_docs_javascripts_tablesort_js</p>
+<p>Contents of initial <code>docs/javascripts/tablesort.js</code> file.</p>
 </div>
 <h3 id="init_docs_overrides_partials_copyright_html">init_docs_overrides_partials_copyright_html<a name="init_docs_overrides_partials_copyright_html"></a><a class="headerlink" href="#init_docs_overrides_partials_copyright_html" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
-<p class="admonition-title">extern const char&#42; init_docs_overrides_partials_copyright_html</p>
+<p class="admonition-title">static const char&#42; init_docs_overrides_partials_copyright_html</p>
 <p>Contents of initial <code>docs/overrides/partials/copyright.html</code> file.</p>
 </div>
 <h3 id="init_docs_stylesheets_doxide_css">init_docs_stylesheets_doxide_css<a name="init_docs_stylesheets_doxide_css"></a><a class="headerlink" href="#init_docs_stylesheets_doxide_css" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
-<p class="admonition-title">extern const char&#42; init_docs_stylesheets_doxide_css</p>
+<p class="admonition-title">static const char&#42; init_docs_stylesheets_doxide_css</p>
 <p>Contents of initial <code>docs/stylesheets/doxide.css</code> file.</p>
 </div>
 <h3 id="init_doxide_yaml">init_doxide_yaml<a name="init_doxide_yaml"></a><a class="headerlink" href="#init_doxide_yaml" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
-<p class="admonition-title">extern const char&#42; init_doxide_yaml</p>
+<p class="admonition-title">static const char&#42; init_doxide_yaml</p>
 <p>Contents of initial <code>doxide.yaml</code> file.</p>
 </div>
 <h3 id="init_mkdocs_yaml">init_mkdocs_yaml<a name="init_mkdocs_yaml"></a><a class="headerlink" href="#init_mkdocs_yaml" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
-<p class="admonition-title">extern const char&#42; init_mkdocs_yaml</p>
+<p class="admonition-title">static const char&#42; init_mkdocs_yaml</p>
 <p>Contents of initial <code>mkdocs.yaml</code> file.</p>
 </div>
 <h3 id="query_cpp">query_cpp<a name="query_cpp"></a><a class="headerlink" href="#query_cpp" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
-<p class="admonition-title">extern const char&#42; query_cpp</p>
+<p class="admonition-title">static const char&#42; query_cpp</p>
 <p>Query for entities in C++ sources.</p>
+</div>
+<h3 id="query_cpp_exclude">query_cpp_exclude<a name="query_cpp_exclude"></a><a class="headerlink" href="#query_cpp_exclude" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">static const char&#42; query_cpp_exclude</p>
+<p>Query for entities to explicitly exclude from  line counts in C++ sources.</p>
+</div>
+<h3 id="query_cpp_include">query_cpp_include<a name="query_cpp_include"></a><a class="headerlink" href="#query_cpp_include" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">static const char&#42; query_cpp_include</p>
+<p>Query for entities to explicitly include in line counts in C++ sources.</p>
+</div>
+<h3 id="regex_flags">regex_flags<a name="regex_flags"></a><a class="headerlink" href="#regex_flags" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">static const std::regex_constants::syntax_option_type regex_flags</p>
+<p>Regular expression configuration.</p>
 </div>
 <h3 id="regexes">regexes<a name="regexes"></a><a class="headerlink" href="#regexes" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
@@ -989,12 +1080,6 @@
 earlier pattern precludes a match to a later.</p>
 </div>
 <h2 id="function-details">Function Details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
-<h3 id="copy_file_prompt">copy_file_prompt<a name="copy_file_prompt"></a><a class="headerlink" href="#copy_file_prompt" title="Permanent link">&para;</a></h3>
-<div class="admonition function">
-<p class="admonition-title">void copy_file_prompt(const std::filesystem::path&amp; src, const std::filesystem::path&amp; dst)</p>
-<p>Copy a file, prompting to confirm overwrite if the destination already
-exists.</p>
-</div>
 <h3 id="gulp">gulp<a name="gulp"></a><a class="headerlink" href="#gulp" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
 <p class="admonition-title">std::string gulp(const std::filesystem::path&amp; src)</p>
@@ -1126,6 +1211,12 @@ exists.</p>
     
     
       <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/sorts/tablesort.number.js"></script>
+      
+        <script src="../../javascripts/tablesort.js"></script>
       
     
   </body>

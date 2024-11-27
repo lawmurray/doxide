@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Driver for running commands">
+        <meta name="description" content="Modern documentation for Modern C++. Configure with YAML, output Markdown.">
       
       
       
@@ -59,7 +59,7 @@
       
         <meta  property="og:title"  content="Driver - Doxide" >
       
-        <meta  property="og:description"  content="Driver for running commands" >
+        <meta  property="og:description"  content="Modern documentation for Modern C++. Configure with YAML, output Markdown." >
       
         <meta  property="og:image"  content="https://doxide.org/assets/images/social/demo/developer/Driver.png" >
       
@@ -75,7 +75,7 @@
       
         <meta  name="twitter:title"  content="Driver - Doxide" >
       
-        <meta  name="twitter:description"  content="Driver for running commands" >
+        <meta  name="twitter:description"  content="Modern documentation for Modern C++. Configure with YAML, output Markdown." >
       
         <meta  name="twitter:image"  content="https://doxide.org/assets/images/social/demo/developer/Driver.png" >
       
@@ -441,7 +441,27 @@
         
   
   <span class="md-ellipsis">
-    Code Coverage
+    Enabling Code Coverage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../coverage-reports/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Understanding Code Coverage Reports
   </span>
   
 
@@ -585,9 +605,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#defines" class="md-nav__link">
+  <a href="#title" class="md-nav__link">
     <span class="md-ellipsis">
-      defines
+      title
     </span>
   </a>
   
@@ -603,18 +623,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#files" class="md-nav__link">
+  <a href="#coverage" class="md-nav__link">
     <span class="md-ellipsis">
-      files
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#global" class="md-nav__link">
-    <span class="md-ellipsis">
-      global
+      coverage
     </span>
   </a>
   
@@ -630,9 +641,27 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#title" class="md-nav__link">
+  <a href="#root" class="md-nav__link">
     <span class="md-ellipsis">
-      title
+      root
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defines" class="md-nav__link">
+    <span class="md-ellipsis">
+      defines
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filenames" class="md-nav__link">
+    <span class="md-ellipsis">
+      filenames
     </span>
   </a>
   
@@ -663,9 +692,27 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#init" class="md-nav__link">
+    <span class="md-ellipsis">
+      init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#build" class="md-nav__link">
     <span class="md-ellipsis">
       build
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cover" class="md-nav__link">
+    <span class="md-ellipsis">
+      cover
     </span>
   </a>
   
@@ -690,9 +737,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#cover" class="md-nav__link">
+  <a href="#parse" class="md-nav__link">
     <span class="md-ellipsis">
-      cover
+      parse
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#count" class="md-nav__link">
+    <span class="md-ellipsis">
+      count
     </span>
   </a>
   
@@ -702,15 +758,6 @@
   <a href="#groups" class="md-nav__link">
     <span class="md-ellipsis">
       groups
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#init" class="md-nav__link">
-    <span class="md-ellipsis">
-      init
     </span>
   </a>
   
@@ -760,20 +807,24 @@
 <td>Description.</td>
 </tr>
 <tr>
+<td><a href="#coverage">coverage</a></td>
+<td>Coverage file.</td>
+</tr>
+<tr>
 <td><a href="#output">output</a></td>
 <td>Output directory.</td>
 </tr>
 <tr>
+<td><a href="#root">root</a></td>
+<td>Root entity.</td>
+</tr>
+<tr>
 <td><a href="#defines">defines</a></td>
-<td>Defines.</td>
+<td>Macro definitions.</td>
 </tr>
 <tr>
-<td><a href="#files">files</a></td>
-<td>Lists of files from config.</td>
-</tr>
-<tr>
-<td><a href="#global">global</a></td>
-<td>Global namespace.</td>
+<td><a href="#filenames">filenames</a></td>
+<td>Files.</td>
 </tr>
 </tbody>
 </table>
@@ -799,16 +850,24 @@
 <td>Build documentation.</td>
 </tr>
 <tr>
-<td><a href="#clean">clean</a></td>
-<td>Clean documentation.</td>
-</tr>
-<tr>
 <td><a href="#cover">cover</a></td>
 <td>Output line coverage information.</td>
 </tr>
 <tr>
+<td><a href="#clean">clean</a></td>
+<td>Clean documentation.</td>
+</tr>
+<tr>
 <td><a href="#config">config</a></td>
 <td>Read in the configuration file.</td>
+</tr>
+<tr>
+<td><a href="#parse">parse</a></td>
+<td>Parse files.</td>
+</tr>
+<tr>
+<td><a href="#count">count</a></td>
+<td>Count line coverage.</td>
 </tr>
 <tr>
 <td><a href="#groups">groups</a></td>
@@ -817,35 +876,40 @@
 </tbody>
 </table>
 <h2 id="variable-details">Variable Details<a class="headerlink" href="#variable-details" title="Permanent link">&para;</a></h2>
-<h3 id="defines">defines<a name="defines"></a><a class="headerlink" href="#defines" title="Permanent link">&para;</a></h3>
+<h3 id="title">title<a name="title"></a><a class="headerlink" href="#title" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
-<p class="admonition-title">std::unordered_map&lt;std::string,std::string&gt; defines</p>
-<p>Defines.</p>
+<p class="admonition-title">std::string title</p>
+<p>Title.</p>
 </div>
 <h3 id="description">description<a name="description"></a><a class="headerlink" href="#description" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
 <p class="admonition-title">std::string description</p>
 <p>Description.</p>
 </div>
-<h3 id="files">files<a name="files"></a><a class="headerlink" href="#files" title="Permanent link">&para;</a></h3>
+<h3 id="coverage">coverage<a name="coverage"></a><a class="headerlink" href="#coverage" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
-<p class="admonition-title">std::unordered_set&lt;std::string&gt; files</p>
-<p>Lists of files from config.</p>
-</div>
-<h3 id="global">global<a name="global"></a><a class="headerlink" href="#global" title="Permanent link">&para;</a></h3>
-<div class="admonition variable">
-<p class="admonition-title">Entity global</p>
-<p>Global namespace.</p>
+<p class="admonition-title">std::filesystem::path coverage</p>
+<p>Coverage file.</p>
 </div>
 <h3 id="output">output<a name="output"></a><a class="headerlink" href="#output" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
-<p class="admonition-title">std::string output</p>
+<p class="admonition-title">std::filesystem::path output</p>
 <p>Output directory.</p>
 </div>
-<h3 id="title">title<a name="title"></a><a class="headerlink" href="#title" title="Permanent link">&para;</a></h3>
+<h3 id="root">root<a name="root"></a><a class="headerlink" href="#root" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
-<p class="admonition-title">std::string title</p>
-<p>Title.</p>
+<p class="admonition-title">Entity root</p>
+<p>Root entity.</p>
+</div>
+<h3 id="defines">defines<a name="defines"></a><a class="headerlink" href="#defines" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">std::unordered_map&lt;std::string,std::string&gt; defines</p>
+<p>Macro definitions.</p>
+</div>
+<h3 id="filenames">filenames<a name="filenames"></a><a class="headerlink" href="#filenames" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">std::unordered_set&lt;std::filesystem::path&gt; filenames</p>
+<p>Files.</p>
 </div>
 <h2 id="function-details">Function Details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
 <h3 id="driver_1">Driver<a name="Driver"></a><a class="headerlink" href="#driver_1" title="Permanent link">&para;</a></h3>
@@ -853,10 +917,20 @@
 <p class="admonition-title">Driver()</p>
 <p>Constructor.</p>
 </div>
+<h3 id="init">init<a name="init"></a><a class="headerlink" href="#init" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">void init()</p>
+<p>Create a new configuration file.</p>
+</div>
 <h3 id="build">build<a name="build"></a><a class="headerlink" href="#build" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
 <p class="admonition-title">void build()</p>
 <p>Build documentation.</p>
+</div>
+<h3 id="cover">cover<a name="cover"></a><a class="headerlink" href="#cover" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">void cover()</p>
+<p>Output line coverage information.</p>
 </div>
 <h3 id="clean">clean<a name="clean"></a><a class="headerlink" href="#clean" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
@@ -868,20 +942,20 @@
 <p class="admonition-title">void config()</p>
 <p>Read in the configuration file.</p>
 </div>
-<h3 id="cover">cover<a name="cover"></a><a class="headerlink" href="#cover" title="Permanent link">&para;</a></h3>
+<h3 id="parse">parse<a name="parse"></a><a class="headerlink" href="#parse" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">void cover()</p>
-<p>Output line coverage information.</p>
+<p class="admonition-title">void parse()</p>
+<p>Parse files.</p>
+</div>
+<h3 id="count">count<a name="count"></a><a class="headerlink" href="#count" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">void count()</p>
+<p>Count line coverage.</p>
 </div>
 <h3 id="groups">groups<a name="groups"></a><a class="headerlink" href="#groups" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">void groups(YAMLNode&amp; parentNode, Entity&amp; parentEntity)</p>
+<p class="admonition-title">static void groups(YAMLNode&amp; parentNode, Entity&amp; parentEntity)</p>
 <p>Recursively read groups from the configuration file.</p>
-</div>
-<h3 id="init">init<a name="init"></a><a class="headerlink" href="#init" title="Permanent link">&para;</a></h3>
-<div class="admonition function">
-<p class="admonition-title">void init()</p>
-<p>Create a new configuration file.</p>
 </div>
 
 
@@ -989,6 +1063,12 @@
     
     
       <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/sorts/tablesort.number.js"></script>
+      
+        <script src="../../../javascripts/tablesort.js"></script>
       
     
   </body>

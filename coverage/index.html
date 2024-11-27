@@ -16,7 +16,7 @@
         <link rel="prev" href="../parsing/">
       
       
-        <link rel="next" href="../command-line/">
+        <link rel="next" href="../coverage-reports/">
       
       
       <link rel="icon" href="../assets/logo_red.svg">
@@ -24,7 +24,7 @@
     
     
       
-        <title>Code Coverage - Doxide</title>
+        <title>Enabling Code Coverage - Doxide</title>
       
     
     
@@ -61,7 +61,7 @@
       
         <meta  property="og:type"  content="website" >
       
-        <meta  property="og:title"  content="Code Coverage - Doxide" >
+        <meta  property="og:title"  content="Enabling Code Coverage - Doxide" >
       
         <meta  property="og:description"  content="Modern documentation for Modern C++. Configure with YAML, output Markdown." >
       
@@ -77,7 +77,7 @@
       
         <meta  name="twitter:card"  content="summary_large_image" >
       
-        <meta  name="twitter:title"  content="Code Coverage - Doxide" >
+        <meta  name="twitter:title"  content="Enabling Code Coverage - Doxide" >
       
         <meta  name="twitter:description"  content="Modern documentation for Modern C++. Configure with YAML, output Markdown." >
       
@@ -104,7 +104,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#code-coverage" class="md-skip">
+        <a href="#enabling-code-coverage" class="md-skip">
           Skip to content
         </a>
       
@@ -139,7 +139,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Code Coverage
+              Enabling Code Coverage
             
           </span>
         </div>
@@ -450,16 +450,126 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Enabling Code Coverage
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
-    Code Coverage
+    Enabling Code Coverage
   </span>
   
 
       </a>
       
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#compiling-for-code-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compiling for Code Coverage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-for-code-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running for Code Coverage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#collating-code-coverage-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Collating Code Coverage Data
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Collating Code Coverage Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#alternatives" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alternatives
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reporting-coverage-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reporting Coverage Data
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exporting-coverage-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exporting Coverage Data
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../coverage-reports/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Understanding Code Coverage Reports
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -564,6 +674,74 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#compiling-for-code-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compiling for Code Coverage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-for-code-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running for Code Coverage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#collating-code-coverage-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Collating Code Coverage Data
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Collating Code Coverage Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#alternatives" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alternatives
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reporting-coverage-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reporting Coverage Data
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exporting-coverage-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exporting Coverage Data
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -580,20 +758,83 @@
   
 
 
-<h1 id="code-coverage">Code Coverage<a class="headerlink" href="#code-coverage" title="Permanent link">&para;</a></h1>
+<h1 id="enabling-code-coverage">Enabling Code Coverage<a class="headerlink" href="#enabling-code-coverage" title="Permanent link">&para;</a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This is an experimental feature of Doxide that is still under development. Behavior is subject to change. See the blog post <a href="https://indii.org/blog/cplusplus-code-coverage-with-gcov-gcovr-doxide/">C++ Code Coverage with Gcov, Gcovr, and Doxide</a> for more on the motivation and direction.</p>
+<p>This is a new and somewhat experimental feature and behavior is subject to change. Please <a href="https://github.com/lawmurray/doxide/issues">report problems</a>.</p>
 </div>
-<p>Doxide can provide line data to contribute to more accurate code coverage reports. This source-code-derived data supplements binary-program-derived data from code coverage tools such as <code>gcov</code>. It is particularly useful for including function templates in code coverage reports, even when not instantiated in a compile; these are often omitted by other tools.</p>
-<p>To produce line data, simply run:
-<div class="highlight"><pre><span></span><code>doxide<span class="w"> </span>cover
+<p>Doxide can produce interactive code coverage reports for C++ code, including which lines have, and have not, been executed. These can be used to drill down into source files with poor coverage that may warrant additional testing.</p>
+<p>Doxide code coverage reports include a sunburst chart, tables sortable by column, and line-by-line annotated source code. They are constructed through a combination of source code analysis and binary program instrumentation. The combination is intended to provide more accurate coverage reports for C++ codebases, especially by accounting for uninstantiated function templates that are are blind spot for other tools, and which can produce misleading coverage results.</p>
+<p>The basic workflow to enable code coverage is:</p>
+<ol>
+<li>Compile code (e.g. test suite) with instrumentation for code coverage.</li>
+<li>Run code to collect data on which lines are executed.</li>
+<li>Summarize the code coverage data into a single file with command-line tools.</li>
+<li>Run Doxide to produce the final report.</li>
+</ol>
+<h2 id="compiling-for-code-coverage">Compiling for Code Coverage<a class="headerlink" href="#compiling-for-code-coverage" title="Permanent link">&para;</a></h2>
+<p>The following instructions work for both GCC and LLVM. Add the following options when compiling with <code>g++</code> or <code>clang++</code>:
+<div class="highlight"><pre><span></span><code>--coverage -O0 -fno-inline -fno-elide-constructors
 </code></pre></div>
-This will output JSON to <code>stdout</code>. The JSON is compatible with <code>gcov</code> and <code>gcovr</code> for producing code coverage reports. It provides information on all source files given in the <a href="../configuring/">configuration file</a>, indicating those lines occupied by function and operator bodies (i.e. executable code), including function template bodies. These are all given zero execution counts. This can then be merged with a JSON report from <code>gcov</code> or <code>gcovr</code> that provides nonzero counts after program execution. This helps ensure that all source code lines are included in the denominator when computing code coverage percentages, and that uninstantiated function templates are marked as uncovered, rather than merely omitted.</p>
-<p>As this is still a developing feature, see the blog post <a href="https://indii.org/blog/cplusplus-code-coverage-with-gcov-gcovr-doxide/">C++ Code Coverage with Gcov, Gcovr, and Doxide</a> for more information.</p>
+The first, <code>--coverage</code>, is the most critical. It will create a <code>.gcno</code> file alongside each object file when compiling. The other options can improve code coverage reports somewhat by ensuring that optimizations do not inline functions in such a way that will make them invisible for the purposes of code coverage.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>For the purposes of code coverage, you may wish to add <code>*.cpp</code> source files, not just header files, to your <a href="../configuring/">configuration file</a>.</p>
+<p>To add these for a CMake project, set the <code>CXXFLAGS</code> environment variable when calling <code>cmake</code> for the first time to configure your project, e.g.
+<div class="highlight"><pre><span></span><code>mkdir build
+cd build
+CXXFLAGS=&quot;--coverage -O0 -fno-inline -fno-elide-constructors&quot; cmake -DCMAKE_BUILD_TYPE=Debug ..
+</code></pre></div>
+To add these for a GNU Autotools project, set the <code>CXXFLAGS</code> environment variable when calling the <code>configure</code> script to configure your project, e.g.
+<div class="highlight"><pre><span></span><code>./configure --prefix=$HOME/.local CXXFLAGS=&quot;--coverage -O0 -fno-inline -fno-elide-constructors&quot;
+</code></pre></div></p>
+</div>
+<h2 id="running-for-code-coverage">Running for Code Coverage<a class="headerlink" href="#running-for-code-coverage" title="Permanent link">&para;</a></h2>
+<p>After compiling with the above options, simply run the program (e.g. test suite) as normal. The instrumentation will create additional <code>.gcda</code> files alongside each <code>.gcno</code> file created in the previous step. These files contain data on how many times each line of the program was executed. The data accumulates across runs, so you can run the code multiple times, perhaps in different configurations, to accumulate coverage data.</p>
+<h2 id="collating-code-coverage-data">Collating Code Coverage Data<a class="headerlink" href="#collating-code-coverage-data" title="Permanent link">&para;</a></h2>
+<p>The next step is to collate all the <code>.gcno</code> and <code>.gcda</code> files into one file that can be ingested by Doxide. The recommended approach is to use <code>gcov</code>, which is included with GCC, or <code>llvm-cov gcov</code>, which is included with LLVM. For the former:
+<div class="highlight"><pre><span></span><code>find . -name &#39;*.gcda&#39; | xargs gcov --stdout &gt; coverage.gcov
+</code></pre></div>
+For the latter, just replace <code>gcov</code> with <code>llvm-cov gcov</code>:
+<div class="highlight"><pre><span></span><code>find . -name &#39;*.gcda&#39; | xargs llvm-cov gcov --stdout &gt; coverage.gcov
+</code></pre></div>
+Either of these commands creates a <code>coverage.gcov</code> file that can be passed to <code>doxide</code> in the next step.</p>
+<h3 id="alternatives">Alternatives<a class="headerlink" href="#alternatives" title="Permanent link">&para;</a></h3>
+<p>The recommended approach is to create a <code>.gcov</code> file as above. An alternative, however, is to use JSON. The simplest way to do so is with <a href="https://gcovr.com">gcovr</a>:
+<div class="highlight"><pre><span></span><code>gcovr --json coverage.json
+</code></pre></div>
+This <code>coverage.json</code> file can then be used in place of the <code>coverage.gcov</code> file above. The only downside of this is that it introduces <code>gcovr</code> as an additional dependency in the workflow, which needs to be installed separately from GCC or LLVM.</p>
+<p>It is also possible to export JSON from <code>gcov</code> directly, but this produces one JSON file (compressed with <code>gzip</code>) for each <code>.gcda</code> input file. Further postprocessing is then needed to decompress those files and massage them into a single <code>.json</code> file, perhaps using <a href="https://jqlang.github.io/jq/">jq</a>.</p>
+<h2 id="reporting-coverage-data">Reporting Coverage Data<a class="headerlink" href="#reporting-coverage-data" title="Permanent link">&para;</a></h2>
+<p>To enable code coverage reports with Doxide, provide it with the file produced in the previous step (e.g. <code>coverage.gcov</code>) when running <code>doxide build</code>. This can be done in one of two ways:</p>
+<ol>
+<li>adding the <code>--coverage</code> <a href="../command-line/">command-line option</a>, e.g.
+   <div class="highlight"><pre><span></span><code>doxide build --coverage coverage.gcov
+</code></pre></div>
+   or</li>
+<li>adding a <code>coverage</code> entry to the <a href="../configuring/">configuration file</a>, e.g.
+   <div class="highlight"><pre><span></span><code><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Example</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Example configuration file.</span>
+<span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docs</span>
+<span class="nt">files</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;*/**.hpp</span>
+<span class="s">-</span><span class="nv"> </span><span class="s">&quot;</span><span class="err">*</span><span class="l l-Scalar l-Scalar-Plain">/**.cpp</span>
+<span class="nt">coverage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">coverage.gcov</span>
+</code></pre></div></li>
+</ol>
+<p>The former overrides the latter, and may be more convenient if code coverage reports are not routinely produced.</p>
+<p>The standard <code>files</code> entry in the <a href="../configuring/">configuration file</a> will be used to determine the set of files to include in the coverage report. This is the same entry as used for documentation. You may wish to add <code>.cpp</code> source files for the purposes of code coverage, which are not typically added for the purposes of documentation alone.</p>
+<h2 id="exporting-coverage-data">Exporting Coverage Data<a class="headerlink" href="#exporting-coverage-data" title="Permanent link">&para;</a></h2>
+<p>It is possible to export Doxide's code coverage data for further processing or use with other tools. Simply run:
+<div class="highlight"><pre><span></span><code>doxide<span class="w"> </span>cover<span class="w"> </span>--coverage<span class="w"> </span>coverage.gcov<span class="w"> </span>&gt;<span class="w"> </span>export.json
+</code></pre></div>
+The <code>--coverage</code> option may be omitted if specified in the <a href="../configuring/">configuration file</a> instead. This will output JSON to <code>export.json</code>. The JSON schema is the same as <a href="https://gcovr.com/en/stable/output/json.html">that used by <code>gcovr</code></a>, a superset of <a href="https://gcc.gnu.org/onlinedocs/gcc/Invoking-Gcov.html#Invoking-Gcov">that used by <code>gcov</code></a>. The data follows the definition of code coverage above. Lines that are not included by Doxide are not included in the data.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>For further reading:</p>
+<ul>
+<li><a href="https://indii.org/blog/cplusplus-code-coverage-with-gcov-gcovr-doxide/">C++ Code Coverage with Gcov, Gcovr, and Doxide</a> for the thinking behind Doxide's code coverage support.</li>
+<li><a href="https://gcc.gnu.org/onlinedocs/gcc/Gcov-Data-Files.html">GCC Manual</a> for more information on <code>.gcno</code> and <code>.gcda</code> files.</li>
+</ul>
 </div>
 
 
@@ -644,13 +885,13 @@ This will output JSON to <code>stdout</code>. The JSON is compatible with <code>
         
         
           
-          <a href="../command-line/" class="md-footer__link md-footer__link--next" aria-label="Next: Command-line reference">
+          <a href="../coverage-reports/" class="md-footer__link md-footer__link--next" aria-label="Next: Understanding Code Coverage Reports">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Command-line reference
+                Understanding Code Coverage Reports
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -739,6 +980,12 @@ This will output JSON to <code>stdout</code>. The JSON is compatible with <code>
     
     
       <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/sorts/tablesort.number.js"></script>
+      
+        <script src="../javascripts/tablesort.js"></script>
       
     
   </body>

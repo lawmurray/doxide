@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Parser for YAML config files and YAML frontmatter of Markdown files.">
+        <meta name="description" content="Modern documentation for Modern C++. Configure with YAML, output Markdown.">
       
       
       
@@ -59,7 +59,7 @@
       
         <meta  property="og:title"  content="YAMLParser - Doxide" >
       
-        <meta  property="og:description"  content="Parser for YAML config files and YAML frontmatter of Markdown files." >
+        <meta  property="og:description"  content="Modern documentation for Modern C++. Configure with YAML, output Markdown." >
       
         <meta  property="og:image"  content="https://doxide.org/assets/images/social/demo/developer/YAMLParser.png" >
       
@@ -75,7 +75,7 @@
       
         <meta  name="twitter:title"  content="YAMLParser - Doxide" >
       
-        <meta  name="twitter:description"  content="Parser for YAML config files and YAML frontmatter of Markdown files." >
+        <meta  name="twitter:description"  content="Modern documentation for Modern C++. Configure with YAML, output Markdown." >
       
         <meta  name="twitter:image"  content="https://doxide.org/assets/images/social/demo/developer/YAMLParser.png" >
       
@@ -441,7 +441,27 @@
         
   
   <span class="md-ellipsis">
-    Code Coverage
+    Enabling Code Coverage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../coverage-reports/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Understanding Code Coverage Reports
   </span>
   
 
@@ -585,18 +605,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#event" class="md-nav__link">
+  <a href="#parser" class="md-nav__link">
     <span class="md-ellipsis">
-      event
+      parser
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#parser" class="md-nav__link">
+  <a href="#event" class="md-nav__link">
     <span class="md-ellipsis">
-      parser
+      event
     </span>
   </a>
   
@@ -627,18 +647,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#parse" class="md-nav__link">
+  <a href="#yamlparser_2" class="md-nav__link">
     <span class="md-ellipsis">
-      parse
+      ~YAMLParser
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#yamlparser_2" class="md-nav__link">
+  <a href="#parse" class="md-nav__link">
     <span class="md-ellipsis">
-      ~YAMLParser
+      parse
     </span>
   </a>
   
@@ -709,42 +729,44 @@ works for JSON, as YAML is nowadays a superset of JSON.</p>
 </tr>
 <tr>
 <td><a href="#parse">parse</a></td>
-<td>Parse a file.</td>
+<td>Parse the file.</td>
 </tr>
 </tbody>
 </table>
 <h2 id="variable-details">Variable Details<a class="headerlink" href="#variable-details" title="Permanent link">&para;</a></h2>
-<h3 id="event">event<a name="event"></a><a class="headerlink" href="#event" title="Permanent link">&para;</a></h3>
-<div class="admonition variable">
-<p class="admonition-title">yaml_event_t event</p>
-<p>LibYAML event.</p>
-</div>
 <h3 id="parser">parser<a name="parser"></a><a class="headerlink" href="#parser" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
 <p class="admonition-title">yaml_parser_t parser</p>
 <p>LibYAML parser.</p>
+</div>
+<h3 id="event">event<a name="event"></a><a class="headerlink" href="#event" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">yaml_event_t event</p>
+<p>LibYAML event.</p>
 </div>
 <h2 id="function-details">Function Details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
 <h3 id="yamlparser_1">YAMLParser<a name="YAMLParser"></a><a class="headerlink" href="#yamlparser_1" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
 <p class="admonition-title">YAMLParser()</p>
 <p>Constructor.</p>
-</div>
-<h3 id="parse">parse<a name="parse"></a><a class="headerlink" href="#parse" title="Permanent link">&para;</a></h3>
-<div class="admonition function">
-<p class="admonition-title">YAMLNode parse(const std::string&amp; file)</p>
-<p>Parse a file.</p>
 <dl>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>file</code></dt>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>filename</code></dt>
 <dd>File name.</dd>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.42L5.83 13H21V7z"/></svg></span> <strong>Return</strong></dt>
-<dd>The contents of the file.</dd>
 </dl>
 </div>
 <h3 id="yamlparser_2">~YAMLParser<a name="_u007eYAMLParser"></a><a class="headerlink" href="#yamlparser_2" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
 <p class="admonition-title">~YAMLParser()</p>
 <p>Destructor.</p>
+</div>
+<h3 id="parse">parse<a name="parse"></a><a class="headerlink" href="#parse" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">YAMLNode parse(const std::filesystem::path&amp; filename)</p>
+<p>Parse the file.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.42L5.83 13H21V7z"/></svg></span> <strong>Return</strong></dt>
+<dd>The contents of the file.</dd>
+</dl>
 </div>
 
 
@@ -852,6 +874,12 @@ works for JSON, as YAML is nowadays a superset of JSON.</p>
     
     
       <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/sorts/tablesort.number.js"></script>
+      
+        <script src="../../../javascripts/tablesort.js"></script>
       
     
   </body>

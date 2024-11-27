@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="500" height="400" version="1.1" viewBox="0 0 132.29 105.83" xmlns="http://www.w3.org/2000/svg">
+ <g stroke="#ef5552">
+  <g fill="none" stroke-width=".52917">
+   <circle cx="43.392" cy="41.804" r="34.503" style="mix-blend-mode:normal"/>
+   <circle cx="43.392" cy="61.913" r="40.5" style="mix-blend-mode:normal"/>
+   <circle cx="43.392" cy="34.925" r="20.012" stop-color="#000000" style="font-variation-settings:normal;mix-blend-mode:normal"/>
+  </g>
+  <g fill="#ef5552">
+   <path d="m43.392 21.412a40.5 40.5 0 0 0-17.592 4.0793 20.012 20.012 0 0 0-2.4205 9.4335 20.012 20.012 0 0 0 20.012 20.012 20.012 20.012 0 0 0 20.012-20.012 20.012 20.012 0 0 0-2.3818-9.4661 40.5 40.5 0 0 0-17.63-4.0468z" fill-opacity=".39861" stroke-width=".52917" style="mix-blend-mode:normal"/>
+   <g font-size="3.2447px" stroke-width=".88492" text-anchor="end">
+    <text x="127.37928" y="6.2997341" text-align="end" style="-inkscape-stroke:none;font-variation-settings:normal" xml:space="preserve"><tspan x="127.37928" y="6.2997341" fill="#ef5552" font-family="'Noto Sans'" font-size="3.2447px" stroke="none" stroke-width=".88492" text-align="end" text-anchor="end">Binary-derived included lines</tspan></text>
+    <text x="127.48384" y="101.04393" text-align="end" style="-inkscape-stroke:none;font-variation-settings:normal" xml:space="preserve"><tspan x="127.48384" y="101.04393" fill="#ef5552" font-family="'Noto Sans'" font-size="3.2447px" stroke="none" stroke-width=".88492" text-align="end" text-anchor="end">Source-derived included lines</tspan></text>
+    <text x="127.37928" y="13.830667" text-align="end" style="-inkscape-stroke:none;font-variation-settings:normal" xml:space="preserve"><tspan x="127.37928" y="13.830667" fill="#ef5552" font-family="'Noto Sans'" font-size="3.2447px" stroke="none" stroke-width=".88492" text-align="end" text-anchor="end">Binary-derived covered lines</tspan></text>
+   </g>
+  </g>
+  <g fill="none" stroke-dasharray="0.52916667,0.52916667" stroke-width=".52917">
+   <path d="m43.741 7.3007h83.956" style="font-variation-settings:normal"/>
+   <path d="m43.741 102.41h83.956" style="font-variation-settings:normal"/>
+   <path d="m43.741 14.913h83.956" style="font-variation-settings:normal"/>
+  </g>
+ </g>
+</svg>

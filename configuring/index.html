@@ -455,7 +455,27 @@
         
   
   <span class="md-ellipsis">
-    Code Coverage
+    Enabling Code Coverage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../coverage-reports/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Understanding Code Coverage Reports
   </span>
   
 
@@ -589,6 +609,8 @@
 <dd>Main page description. Overruled by <a href="../command-line/">command-line</a> option <code>--description</code>.</dd>
 <dt><code>output</code> (default <code>docs</code>)</dt>
 <dd>Output directory. Overruled by <a href="../command-line/">command-line</a> option <code>--output</code>.</dd>
+<dt><code>coverage</code></dt>
+<dd>Name of a <code>.gcov</code> or <code>.json</code> file with code coverage data from which to construct a <a href="../coverage/">code coverage report</a>, if desired.</dd>
 <dt><code>files</code></dt>
 <dd>
 <p>List of source files from which to extract documentation. The following wildcards are supported for pattern matching:</p>
@@ -655,6 +677,7 @@ and values are their replacements. This may be used to troubleshoot <a href="../
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">header.hpp</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;*/*.hpp&quot;</span><span class="w">  </span><span class="c1"># quotes may be needed when using wildcards or other special characters</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;**/*.hpp&quot;</span>
+<span class="nt">coverage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">coverage.gcov</span>
 <span class="nt">defines</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">SYMBOL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">value</span>
 <span class="w">  </span><span class="nt">DEFINED_BUT_EMPTY_SYMBOL</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">      </span>
@@ -815,6 +838,12 @@ and values are their replacements. This may be used to troubleshoot <a href="../
     
     
       <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/sorts/tablesort.number.js"></script>
+      
+        <script src="../javascripts/tablesort.js"></script>
       
     
   </body>

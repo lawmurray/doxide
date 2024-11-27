@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Markdown generator.">
+        <meta name="description" content="Modern documentation for Modern C++. Configure with YAML, output Markdown.">
       
       
       
@@ -59,7 +59,7 @@
       
         <meta  property="og:title"  content="MarkdownGenerator - Doxide" >
       
-        <meta  property="og:description"  content="Markdown generator." >
+        <meta  property="og:description"  content="Modern documentation for Modern C++. Configure with YAML, output Markdown." >
       
         <meta  property="og:image"  content="https://doxide.org/assets/images/social/demo/developer/MarkdownGenerator.png" >
       
@@ -75,7 +75,7 @@
       
         <meta  name="twitter:title"  content="MarkdownGenerator - Doxide" >
       
-        <meta  name="twitter:description"  content="Markdown generator." >
+        <meta  name="twitter:description"  content="Modern documentation for Modern C++. Configure with YAML, output Markdown." >
       
         <meta  name="twitter:image"  content="https://doxide.org/assets/images/social/demo/developer/MarkdownGenerator.png" >
       
@@ -441,7 +441,27 @@
         
   
   <span class="md-ellipsis">
-    Code Coverage
+    Enabling Code Coverage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../coverage-reports/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Understanding Code Coverage Reports
   </span>
   
 
@@ -585,6 +605,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    <span class="md-ellipsis">
+      output
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#files" class="md-nav__link">
     <span class="md-ellipsis">
       files
@@ -609,27 +638,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#brief" class="md-nav__link">
+  <a href="#markdowngenerator_1" class="md-nav__link">
     <span class="md-ellipsis">
-      brief
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#clean" class="md-nav__link">
-    <span class="md-ellipsis">
-      clean
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#frontmatter" class="md-nav__link">
-    <span class="md-ellipsis">
-      frontmatter
+      MarkdownGenerator
     </span>
   </a>
   
@@ -645,18 +656,117 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#htmlize" class="md-nav__link">
+  <a href="#coverage" class="md-nav__link">
     <span class="md-ellipsis">
-      htmlize
+      coverage
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#indent" class="md-nav__link">
+  <a href="#clean" class="md-nav__link">
     <span class="md-ellipsis">
-      indent
+      clean
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generate_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      generate
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coverage_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      coverage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coverage_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      coverage_data
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coverage_foot" class="md-nav__link">
+    <span class="md-ellipsis">
+      coverage_foot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sunburst" class="md-nav__link">
+    <span class="md-ellipsis">
+      sunburst
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sunburst_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      sunburst_data
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relative" class="md-nav__link">
+    <span class="md-ellipsis">
+      relative
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can_write" class="md-nav__link">
+    <span class="md-ellipsis">
+      can_write
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frontmatter" class="md-nav__link">
+    <span class="md-ellipsis">
+      frontmatter
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#title" class="md-nav__link">
+    <span class="md-ellipsis">
+      title
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#brief" class="md-nav__link">
+    <span class="md-ellipsis">
+      brief
     </span>
   </a>
   
@@ -672,9 +782,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#sanitize" class="md-nav__link">
+  <a href="#indent" class="md-nav__link">
     <span class="md-ellipsis">
-      sanitize
+      indent
     </span>
   </a>
   
@@ -690,9 +800,36 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#title" class="md-nav__link">
+  <a href="#htmlize" class="md-nav__link">
     <span class="md-ellipsis">
-      title
+      htmlize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sanitize" class="md-nav__link">
+    <span class="md-ellipsis">
+      sanitize
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#color" class="md-nav__link">
+    <span class="md-ellipsis">
+      color
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#icon" class="md-nav__link">
+    <span class="md-ellipsis">
+      icon
     </span>
   </a>
   
@@ -743,6 +880,10 @@
 </thead>
 <tbody>
 <tr>
+<td><a href="#output">output</a></td>
+<td>Output directory.</td>
+</tr>
+<tr>
 <td><a href="#files">files</a></td>
 <td>Set of files generated during the last call to generate().</td>
 </tr>
@@ -758,12 +899,52 @@
 </thead>
 <tbody>
 <tr>
+<td><a href="#MarkdownGenerator">MarkdownGenerator</a></td>
+<td>Constructor.</td>
+</tr>
+<tr>
 <td><a href="#generate">generate</a></td>
 <td>Generate documentation.</td>
 </tr>
 <tr>
+<td><a href="#coverage">coverage</a></td>
+<td>Generate coverage.</td>
+</tr>
+<tr>
 <td><a href="#clean">clean</a></td>
 <td>Clean up after generation, removing files from old runs.</td>
+</tr>
+<tr>
+<td><a href="#generate">generate</a></td>
+<td>Recursively generate documentation.</td>
+</tr>
+<tr>
+<td><a href="#coverage">coverage</a></td>
+<td>Recursively generate coverage.</td>
+</tr>
+<tr>
+<td><a href="#coverage_data">coverage_data</a></td>
+<td>Recursively generate coverage table data.</td>
+</tr>
+<tr>
+<td><a href="#coverage_foot">coverage_foot</a></td>
+<td>Recursively generate coverage table footer.</td>
+</tr>
+<tr>
+<td><a href="#sunburst">sunburst</a></td>
+<td>Produce sunburst chart of code coverage for entity.</td>
+</tr>
+<tr>
+<td><a href="#sunburst_data">sunburst_data</a></td>
+<td>Produce data for sunburst chart of code coverage for entity.</td>
+</tr>
+<tr>
+<td><a href="#relative">relative</a></td>
+<td>Produce a relative path.</td>
+</tr>
+<tr>
+<td><a href="#can_write">can_write</a></td>
+<td>Can the file be written?</td>
 </tr>
 <tr>
 <td><a href="#frontmatter">frontmatter</a></td>
@@ -798,87 +979,211 @@
 <td>Sanitize for a file name or internal anchor.</td>
 </tr>
 <tr>
+<td><a href="#color">color</a></td>
+<td>Lookup color for given percentage.</td>
+</tr>
+<tr>
+<td><a href="#icon">icon</a></td>
+<td>Lookup icon for given percentage.</td>
+</tr>
+<tr>
 <td><a href="#view">view</a></td>
 <td>Convert a list of entities to a list of pointers to entities, optionally sorting by name.</td>
 </tr>
 </tbody>
 </table>
 <h2 id="variable-details">Variable Details<a class="headerlink" href="#variable-details" title="Permanent link">&para;</a></h2>
+<h3 id="output">output<a name="output"></a><a class="headerlink" href="#output" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">std::filesystem::path output</p>
+<p>Output directory.</p>
+</div>
 <h3 id="files">files<a name="files"></a><a class="headerlink" href="#files" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
 <p class="admonition-title">std::unordered_set&lt;std::filesystem::path&gt; files</p>
 <p>Set of files generated during the last call to generate().</p>
 </div>
 <h2 id="function-details">Function Details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
-<h3 id="brief">brief<a name="brief"></a><a class="headerlink" href="#brief" title="Permanent link">&para;</a></h3>
+<h3 id="markdowngenerator_1">MarkdownGenerator<a name="MarkdownGenerator"></a><a class="headerlink" href="#markdowngenerator_1" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">static std::string brief(const Entity&amp; entity)</p>
-<p>Produce brief description for an entity.</p>
-</div>
-<h3 id="clean">clean<a name="clean"></a><a class="headerlink" href="#clean" title="Permanent link">&para;</a></h3>
-<div class="admonition function">
-<p class="admonition-title">void clean(const std::filesystem::path&amp; output)</p>
-<p>Clean up after generation, removing files from old runs. Traverses the
-output directory, removing any Markdown files with 'generator: doxide' in
-their YAML frontmatter that were not generated by previous calls of
-<code>generate()</code>.</p>
+<p class="admonition-title">MarkdownGenerator(const std::filesystem::path&amp; output)</p>
+<p>Constructor.</p>
 <dl>
 <dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>output</code></dt>
 <dd>Output directory.</dd>
 </dl>
+</div>
+<h3 id="generate">generate<a name="generate"></a><a class="headerlink" href="#generate" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">void generate(const Entity&amp; root)</p>
+<p>Generate documentation.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>root</code></dt>
+<dd>Root entity.</dd>
+</dl>
+</div>
+<h3 id="coverage">coverage<a name="coverage"></a><a class="headerlink" href="#coverage" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">void coverage(const Entity&amp; root)</p>
+<p>Generate coverage.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>root</code></dt>
+<dd>Root entity.</dd>
+</dl>
+</div>
+<h3 id="clean">clean<a name="clean"></a><a class="headerlink" href="#clean" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">void clean()</p>
+<p>Clean up after generation, removing files from old runs. Traverses the
+    output directory, removing any Markdown files with 'generator: doxide' in
+    their YAML frontmatter that were not generated by previous calls of
+    <code>generate()</code>.</p>
+</div>
+<h3 id="generate_1">generate<a name="generate"></a><a class="headerlink" href="#generate_1" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">void generate(const std::filesystem::path&amp; output, const Entity&amp; entity)</p>
+<p>Recursively generate documentation.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>output</code></dt>
+<dd>Output directory.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>entity</code></dt>
+<dd>Entity for which to generate documentation.</dd>
+</dl>
+</div>
+<h3 id="coverage_1">coverage<a name="coverage"></a><a class="headerlink" href="#coverage_1" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">void coverage(const std::filesystem::path&amp; output, const Entity&amp; entity)</p>
+<p>Recursively generate coverage.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>output</code></dt>
+<dd>Output directory.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>entity</code></dt>
+<dd>Entity for which to generate coverage.</dd>
+</dl>
+</div>
+<h3 id="coverage_data">coverage_data<a name="coverage_data"></a><a class="headerlink" href="#coverage_data" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">static void coverage_data(const Entity&amp; entity, const Entity&amp; root, std::ofstream&amp; out)</p>
+<p>Recursively generate coverage table data.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>entity</code></dt>
+<dd>Entity for which to generate coverage.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>root</code></dt>
+<dd>Root entity for the current page. This is used to determine
+which are rows should be visible initially.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>out</code></dt>
+<dd>Output stream.</dd>
+</dl>
+</div>
+<h3 id="coverage_foot">coverage_foot<a name="coverage_foot"></a><a class="headerlink" href="#coverage_foot" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">static void coverage_foot(const Entity&amp; entity, const Entity&amp; root, std::ofstream&amp; out)</p>
+<p>Recursively generate coverage table footer.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>entity</code></dt>
+<dd>Entity for which to generate coverage.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>root</code></dt>
+<dd>Root entity for the current page. This is used to determine
+which are rows should be visible initially.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>out</code></dt>
+<dd>Output stream.</dd>
+</dl>
+</div>
+<h3 id="sunburst">sunburst<a name="sunburst"></a><a class="headerlink" href="#sunburst" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">static void sunburst(const Entity&amp; entity, const Entity&amp; root, std::ofstream&amp; out)</p>
+<p>Produce sunburst chart of code coverage for entity.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>entity</code></dt>
+<dd>Entity for which to generate sunburst.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>root</code></dt>
+<dd>Root entity for the current page. This is used to determine
+paths relative to the root.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>out</code></dt>
+<dd>Output stream.</dd>
+</dl>
+</div>
+<h3 id="sunburst_data">sunburst_data<a name="sunburst_data"></a><a class="headerlink" href="#sunburst_data" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">static void sunburst_data(const Entity&amp; entity, const Entity&amp; root, std::ofstream&amp; out)</p>
+<p>Produce data for sunburst chart of code coverage for entity.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>entity</code></dt>
+<dd>Entity for which to generate sunburst.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>root</code></dt>
+<dd>Root entity for the current page. This is used to determine
+paths relative to the root.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>out</code></dt>
+<dd>Output stream.</dd>
+</dl>
+</div>
+<h3 id="relative">relative<a name="relative"></a><a class="headerlink" href="#relative" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">static std::string relative(const std::filesystem::path&amp; path, const std::filesystem::path&amp; base)</p>
+<p>Produce a relative path.</p>
+</div>
+<h3 id="can_write">can_write<a name="can_write"></a><a class="headerlink" href="#can_write" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">static bool can_write(const std::filesystem::path&amp; path)</p>
+<p>Can the file be written? To be overwritten, the file must either not
+    exist, or exists but has 'generator: doxide' in its YAML frontmatter.</p>
 </div>
 <h3 id="frontmatter">frontmatter<a name="frontmatter"></a><a class="headerlink" href="#frontmatter" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
 <p class="admonition-title">static std::string frontmatter(const Entity&amp; entity)</p>
 <p>Produce the YAML frontmatter for an entity.</p>
 </div>
-<h3 id="generate">generate<a name="generate"></a><a class="headerlink" href="#generate" title="Permanent link">&para;</a></h3>
+<h3 id="title">title<a name="title"></a><a class="headerlink" href="#title" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">void generate(const std::filesystem::path&amp; dir, const Entity&amp; node)</p>
-<p>Generate documentation.</p>
-<dl>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>output</code></dt>
-<dd>Output directory.</dd>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>node</code></dt>
-<dd>Root node.</dd>
-</dl>
+<p class="admonition-title">static std::string title(const Entity&amp; entity)</p>
+<p>Produce title for an entity.</p>
 </div>
-<h3 id="htmlize">htmlize<a name="htmlize"></a><a class="headerlink" href="#htmlize" title="Permanent link">&para;</a></h3>
+<h3 id="brief">brief<a name="brief"></a><a class="headerlink" href="#brief" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">static std::string htmlize(const std::string&amp; str)</p>
-<p>Sanitize for HTML, replacing special characters with entities. Also
-replaces some characters that might trigger Markdown formatting.</p>
-</div>
-<h3 id="indent">indent<a name="indent"></a><a class="headerlink" href="#indent" title="Permanent link">&para;</a></h3>
-<div class="admonition function">
-<p class="admonition-title">static std::string indent(const std::string&amp; str)</p>
-<p>Indent lines.</p>
+<p class="admonition-title">static std::string brief(const Entity&amp; entity)</p>
+<p>Produce brief description for an entity.</p>
 </div>
 <h3 id="line">line<a name="line"></a><a class="headerlink" href="#line" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
 <p class="admonition-title">static std::string line(const std::string&amp; str)</p>
 <p>Reduce to a single line.</p>
 </div>
-<h3 id="sanitize">sanitize<a name="sanitize"></a><a class="headerlink" href="#sanitize" title="Permanent link">&para;</a></h3>
+<h3 id="indent">indent<a name="indent"></a><a class="headerlink" href="#indent" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">static std::string sanitize(const std::string&amp; str)</p>
-<p>Sanitize for a file name or internal anchor.</p>
+<p class="admonition-title">static std::string indent(const std::string&amp; str)</p>
+<p>Indent lines.</p>
 </div>
 <h3 id="stringify">stringify<a name="stringify"></a><a class="headerlink" href="#stringify" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
 <p class="admonition-title">static std::string stringify(const std::string&amp; str)</p>
 <p>Sanitize for a string, escaping double quotes and backslashes.</p>
 </div>
-<h3 id="title">title<a name="title"></a><a class="headerlink" href="#title" title="Permanent link">&para;</a></h3>
+<h3 id="htmlize">htmlize<a name="htmlize"></a><a class="headerlink" href="#htmlize" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">static std::string title(const Entity&amp; entity)</p>
-<p>Produce title for an entity.</p>
+<p class="admonition-title">static std::string htmlize(const std::string&amp; str)</p>
+<p>Sanitize for HTML, replacing special characters with entities. Also
+    replaces some characters that might trigger Markdown formatting.</p>
+</div>
+<h3 id="sanitize">sanitize<a name="sanitize"></a><a class="headerlink" href="#sanitize" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">static std::string sanitize(const std::string&amp; str)</p>
+<p>Sanitize for a file name or internal anchor.</p>
+</div>
+<h3 id="color">color<a name="color"></a><a class="headerlink" href="#color" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">static const std::string&amp; color(const double percent)</p>
+<p>Lookup color for given percentage.</p>
+</div>
+<h3 id="icon">icon<a name="icon"></a><a class="headerlink" href="#icon" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">static const std::string&amp; icon(const double percent)</p>
+<p>Lookup icon for given percentage.</p>
 </div>
 <h3 id="view">view<a name="view"></a><a class="headerlink" href="#view" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
 <p class="admonition-title">static std::list&lt;const Entity&#42;&gt; view(const std::list&lt;Entity&gt;&amp; entities, const bool sort)</p>
 <p>Convert a list of entities to a list of pointers to entities, optionally
-sorting by name.</p>
+    sorting by name.</p>
 <dl>
 <dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>entities</code></dt>
 <dd>List of entities.</dd>
@@ -992,6 +1297,12 @@ sorting by name.</p>
     
     
       <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/sorts/tablesort.number.js"></script>
+      
+        <script src="../../../javascripts/tablesort.js"></script>
       
     
   </body>

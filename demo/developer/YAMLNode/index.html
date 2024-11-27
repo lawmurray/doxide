@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Node in a YAML document.">
+        <meta name="description" content="Modern documentation for Modern C++. Configure with YAML, output Markdown.">
       
       
       
@@ -59,7 +59,7 @@
       
         <meta  property="og:title"  content="YAMLNode - Doxide" >
       
-        <meta  property="og:description"  content="Node in a YAML document." >
+        <meta  property="og:description"  content="Modern documentation for Modern C++. Configure with YAML, output Markdown." >
       
         <meta  property="og:image"  content="https://doxide.org/assets/images/social/demo/developer/YAMLNode.png" >
       
@@ -75,7 +75,7 @@
       
         <meta  name="twitter:title"  content="YAMLNode - Doxide" >
       
-        <meta  name="twitter:description"  content="Node in a YAML document." >
+        <meta  name="twitter:description"  content="Modern documentation for Modern C++. Configure with YAML, output Markdown." >
       
         <meta  name="twitter:image"  content="https://doxide.org/assets/images/social/demo/developer/YAMLNode.png" >
       
@@ -441,7 +441,27 @@
         
   
   <span class="md-ellipsis">
-    Code Coverage
+    Enabling Code Coverage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../coverage-reports/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Understanding Code Coverage Reports
   </span>
   
 
@@ -618,18 +638,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#insert" class="md-nav__link">
+  <a href="#isvalue" class="md-nav__link">
     <span class="md-ellipsis">
-      insert
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ismapping" class="md-nav__link">
-    <span class="md-ellipsis">
-      isMapping
+      isValue
     </span>
   </a>
   
@@ -645,27 +656,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#isvalue" class="md-nav__link">
+  <a href="#ismapping" class="md-nav__link">
     <span class="md-ellipsis">
-      isValue
+      isMapping
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#mapping" class="md-nav__link">
+  <a href="#value" class="md-nav__link">
     <span class="md-ellipsis">
-      mapping
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#push" class="md-nav__link">
-    <span class="md-ellipsis">
-      push
+      value
     </span>
   </a>
   
@@ -681,18 +683,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#set" class="md-nav__link">
+  <a href="#mapping" class="md-nav__link">
     <span class="md-ellipsis">
-      set
+      mapping
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#setmapping" class="md-nav__link">
+  <a href="#set" class="md-nav__link">
     <span class="md-ellipsis">
-      setMapping
+      set
     </span>
   </a>
   
@@ -708,9 +710,27 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#value" class="md-nav__link">
+  <a href="#setmapping" class="md-nav__link">
     <span class="md-ellipsis">
-      value
+      setMapping
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#push" class="md-nav__link">
+    <span class="md-ellipsis">
+      push
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#insert" class="md-nav__link">
+    <span class="md-ellipsis">
+      insert
     </span>
   </a>
   
@@ -876,20 +896,14 @@
 <p class="admonition-title">bool has(const key_type&amp; key) const</p>
 <p>Does this have a given key?</p>
 </div>
-<h3 id="insert">insert<a name="insert"></a><a class="headerlink" href="#insert" title="Permanent link">&para;</a></h3>
+<h3 id="isvalue">isValue<a name="isValue"></a><a class="headerlink" href="#isvalue" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">YAMLNode&amp; insert(const key_type&amp; key)</p>
-<p>For a mapping, insert a key with an uninitialized value and return the
-value.</p>
-</div>
-<h3 id="ismapping">isMapping<a name="isMapping"></a><a class="headerlink" href="#ismapping" title="Permanent link">&para;</a></h3>
-<div class="admonition function">
-<p class="admonition-title">bool isMapping() const</p>
-<p>Is this a mapping?</p>
+<p class="admonition-title">bool isValue() const</p>
+<p>Is this a value?</p>
 </div>
 <div class="admonition function">
-<p class="admonition-title">template&lt;class... Args&gt; bool isMapping(const key_type&amp; key, Args&amp;&amp;... keys) const</p>
-<p>Is there a mapping at a given path?</p>
+<p class="admonition-title">template&lt;class... Args&gt; bool isValue(const key_type&amp; key, Args&amp;&amp;... keys) const</p>
+<p>Is there a value at a given path?</p>
 <dl>
 <dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>key</code></dt>
 <dd>Key.</dd>
@@ -912,19 +926,85 @@ value.</p>
 <dd>Keys.</dd>
 </dl>
 </div>
-<h3 id="isvalue">isValue<a name="isValue"></a><a class="headerlink" href="#isvalue" title="Permanent link">&para;</a></h3>
+<h3 id="ismapping">isMapping<a name="isMapping"></a><a class="headerlink" href="#ismapping" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">bool isValue() const</p>
-<p>Is this a value?</p>
+<p class="admonition-title">bool isMapping() const</p>
+<p>Is this a mapping?</p>
 </div>
 <div class="admonition function">
-<p class="admonition-title">template&lt;class... Args&gt; bool isValue(const key_type&amp; key, Args&amp;&amp;... keys) const</p>
-<p>Is there a value at a given path?</p>
+<p class="admonition-title">template&lt;class... Args&gt; bool isMapping(const key_type&amp; key, Args&amp;&amp;... keys) const</p>
+<p>Is there a mapping at a given path?</p>
 <dl>
 <dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>key</code></dt>
 <dd>Key.</dd>
 <dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>keys...</code></dt>
 <dd>Keys.</dd>
+</dl>
+</div>
+<h3 id="value">value<a name="value"></a><a class="headerlink" href="#value" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">value_type&amp; value()</p>
+<p>Get this as a value.</p>
+</div>
+<div class="admonition function">
+<p class="admonition-title">const value_type&amp; value() const</p>
+<p>Get this as a value.</p>
+</div>
+<div class="admonition function">
+<p class="admonition-title">template&lt;class... Args&gt; value_type&amp; value(const key_type&amp; key, Args&amp;&amp;... keys)</p>
+<p>Get the value at a given path.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>key</code></dt>
+<dd>Key.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>keys...</code></dt>
+<dd>Keys.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.42L5.83 13H21V7z"/></svg></span> <strong>Return</strong></dt>
+<dd>The value.</dd>
+</dl>
+</div>
+<div class="admonition function">
+<p class="admonition-title">template&lt;class... Args&gt; const value_type&amp; value(const key_type&amp; key, Args&amp;&amp;... keys) const</p>
+<p>Get the value at a given path.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>key</code></dt>
+<dd>Key.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>keys...</code></dt>
+<dd>Keys.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.42L5.83 13H21V7z"/></svg></span> <strong>Return</strong></dt>
+<dd>The value.</dd>
+</dl>
+</div>
+<h3 id="sequence">sequence<a name="sequence"></a><a class="headerlink" href="#sequence" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">sequence_type&amp; sequence()</p>
+<p>Get this as a sequence.</p>
+</div>
+<div class="admonition function">
+<p class="admonition-title">const sequence_type&amp; sequence() const</p>
+<p>Get this as a sequence.</p>
+</div>
+<div class="admonition function">
+<p class="admonition-title">template&lt;class... Args&gt; sequence_type&amp; sequence(const key_type&amp; key, Args&amp;&amp;... keys)</p>
+<p>Get the sequence at a given path.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>key</code></dt>
+<dd>Key.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>keys...</code></dt>
+<dd>Keys.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.42L5.83 13H21V7z"/></svg></span> <strong>Return</strong></dt>
+<dd>The sequence.</dd>
+</dl>
+</div>
+<div class="admonition function">
+<p class="admonition-title">template&lt;class... Args&gt; const sequence_type&amp; sequence(const key_type&amp; key, Args&amp;&amp;... keys) const</p>
+<p>Get the sequence at a given path.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>key</code></dt>
+<dd>Key.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>keys...</code></dt>
+<dd>Keys.</dd>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.42L5.83 13H21V7z"/></svg></span> <strong>Return</strong></dt>
+<dd>The sequence.</dd>
 </dl>
 </div>
 <h3 id="mapping">mapping<a name="mapping"></a><a class="headerlink" href="#mapping" title="Permanent link">&para;</a></h3>
@@ -960,91 +1040,31 @@ value.</p>
 <dd>The mapping.</dd>
 </dl>
 </div>
-<h3 id="push">push<a name="push"></a><a class="headerlink" href="#push" title="Permanent link">&para;</a></h3>
-<div class="admonition function">
-<p class="admonition-title">YAMLNode&amp; push()</p>
-<p>For a sequence, push an uninitialized node onto the end and return it.</p>
-</div>
-<h3 id="sequence">sequence<a name="sequence"></a><a class="headerlink" href="#sequence" title="Permanent link">&para;</a></h3>
-<div class="admonition function">
-<p class="admonition-title">sequence_type&amp; sequence()</p>
-<p>Get this as a sequence.</p>
-</div>
-<div class="admonition function">
-<p class="admonition-title">const sequence_type&amp; sequence() const</p>
-<p>Get this as a sequence.</p>
-</div>
-<div class="admonition function">
-<p class="admonition-title">template&lt;class... Args&gt; sequence_type&amp; sequence(const key_type&amp; key, Args&amp;&amp;... keys)</p>
-<p>Get the sequence at a given path.</p>
-<dl>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>key</code></dt>
-<dd>Key.</dd>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>keys...</code></dt>
-<dd>Keys.</dd>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.42L5.83 13H21V7z"/></svg></span> <strong>Return</strong></dt>
-<dd>The sequence.</dd>
-</dl>
-</div>
-<div class="admonition function">
-<p class="admonition-title">template&lt;class... Args&gt; const sequence_type&amp; sequence(const key_type&amp; key, Args&amp;&amp;... keys) const</p>
-<p>Get the sequence at a given path.</p>
-<dl>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>key</code></dt>
-<dd>Key.</dd>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>keys...</code></dt>
-<dd>Keys.</dd>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.42L5.83 13H21V7z"/></svg></span> <strong>Return</strong></dt>
-<dd>The sequence.</dd>
-</dl>
-</div>
 <h3 id="set">set<a name="set"></a><a class="headerlink" href="#set" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
 <p class="admonition-title">void set(const variant_type&amp; contents)</p>
 <p>Set the value.</p>
-</div>
-<h3 id="setmapping">setMapping<a name="setMapping"></a><a class="headerlink" href="#setmapping" title="Permanent link">&para;</a></h3>
-<div class="admonition function">
-<p class="admonition-title">void setMapping()</p>
-<p>Set as a mapping.</p>
 </div>
 <h3 id="setsequence">setSequence<a name="setSequence"></a><a class="headerlink" href="#setsequence" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
 <p class="admonition-title">void setSequence()</p>
 <p>Set as a sequence.</p>
 </div>
-<h3 id="value">value<a name="value"></a><a class="headerlink" href="#value" title="Permanent link">&para;</a></h3>
+<h3 id="setmapping">setMapping<a name="setMapping"></a><a class="headerlink" href="#setmapping" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">value_type&amp; value()</p>
-<p>Get this as a value.</p>
+<p class="admonition-title">void setMapping()</p>
+<p>Set as a mapping.</p>
 </div>
+<h3 id="push">push<a name="push"></a><a class="headerlink" href="#push" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">const value_type&amp; value() const</p>
-<p>Get this as a value.</p>
+<p class="admonition-title">YAMLNode&amp; push()</p>
+<p>For a sequence, push an uninitialized node onto the end and return it.</p>
 </div>
+<h3 id="insert">insert<a name="insert"></a><a class="headerlink" href="#insert" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
-<p class="admonition-title">template&lt;class... Args&gt; value_type&amp; value(const key_type&amp; key, Args&amp;&amp;... keys)</p>
-<p>Get the value at a given path.</p>
-<dl>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>key</code></dt>
-<dd>Key.</dd>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>keys...</code></dt>
-<dd>Keys.</dd>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.42L5.83 13H21V7z"/></svg></span> <strong>Return</strong></dt>
-<dd>The value.</dd>
-</dl>
-</div>
-<div class="admonition function">
-<p class="admonition-title">template&lt;class... Args&gt; const value_type&amp; value(const key_type&amp; key, Args&amp;&amp;... keys) const</p>
-<p>Get the value at a given path.</p>
-<dl>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>key</code></dt>
-<dd>Key.</dd>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>keys...</code></dt>
-<dd>Keys.</dd>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.42L5.83 13H21V7z"/></svg></span> <strong>Return</strong></dt>
-<dd>The value.</dd>
-</dl>
+<p class="admonition-title">YAMLNode&amp; insert(const key_type&amp; key)</p>
+<p>For a mapping, insert a key with an uninitialized value and return the
+value.</p>
 </div>
 
 
@@ -1152,6 +1172,12 @@ value.</p>
     
     
       <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/sorts/tablesort.number.js"></script>
+      
+        <script src="../../../javascripts/tablesort.js"></script>
       
     
   </body>
