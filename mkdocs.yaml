@@ -1,5 +1,5 @@
 site_name: Doxide
-site_description: Modern documentation for Modern C++. Configure with YAML, output Markdown.
+site_description: Documentation and code coverage for modern C++. Configure with YAML, generate Markdown, publish with Material for MkDocs.
 site_url: https://doxide.org
 repo_url: https://github.com/lawmurray/doxide
 repo_name: lawmurray/doxide
