@@ -501,7 +501,7 @@ public:
   /**
    * Test member variable with initializer.
    */
-  int y = 0;
+  int y = 1;
 
   /**
    * Test member variable with brace initializer.
