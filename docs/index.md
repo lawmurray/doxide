@@ -1,5 +1,5 @@
 ---
-description: A documentation generator for modern C++. Configure with YAML, generate Markdown, publish with Material for MkDocs.
+description: Documentation and code coverage for modern C++. Configure with YAML, generate Markdown, publish with Material for MkDocs.
 ---
 
 <style>
@@ -14,17 +14,24 @@ description: A documentation generator for modern C++. Configure with YAML, gene
 </div>
 
 <div style="text-align:center;padding-bottom:1em;">
-<a href="/installation" class="md-button md-button--primary">Get Started</a></p>
+<a href="/installation" class="md-button md-button--primary">Get Started</a>
+<a href="/demo" class="md-button md-button--primary">See Demo</a>
 </div>
 
-Doxide is a documentation generator for modern C++. It consumes C++ sources annotated with `/** documentation comments */` containing `@special_commands`, generates Markdown, and publishes for the web. Doxide is an alternative to [Doxygen](https://doxygen.nl/){target="_blank"}, but aims at a more modern look and feel, with responsive design for desktop and mobile devices—just like this website.
+Doxide is a documentation generator for C++. It parses C++ source files annotated with documentation `/** comments */` or `/// comments` with additional `@commands` or arbitrary Markdown formatting. Doxide then publishes HTML documentation using [MkDocs](https://www.mkdocs.org/){target="_blank"} and the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/){target="_blank"} theme. This website is an example.
+
+Doxide also generates [code coverage reports](coverage-reports.md) with sunburst charts and sortable tables, based on `gcov` data and source code parsing. These interactive reports make it easy to drill into a codebase and determine where further testing may be warranted to increase code coverage. The underlying approach improves the accuracy of code coverage results with C++, being aware of function templates that have not been instantiated, which are a blind spot of other tools.
 
 * Doxide is configured with YAML, generates Markdown, and publishes HTML for the web.
-* Doxide is written in C++ so that its primary users, C++ developers, can readily contribute. It uses [Tree-sitter](https://tree-sitter.github.io) to parse C++.
-* Doxide is open source under an Apache 2.0 license, and runs on Linux, Mac, and Windows.
-* To ease migration from other documentation tools, many standard Doxygen commands are supported.
+* It aims at a modern look and feel, with responsive design for both desktop and mobile devices.
+* It is written in C++ so that its primary users, C++ developers, can readily contribute.
+* It is open source under an Apache 2.0 license, and runs on Linux, Mac, and Windows.
+* It parses C++, with support for CUDA extensions, using [Tree-sitter](https://tree-sitter.github.io).
+* To help with migration from other documentation tools, many standard [Doxygen](https://doxygen.nl) commands are supported.
 
-=== "C++"
+Development of Doxide is active, feedback is sought, and contributions very welcome. See the [GitHub repository](https://github.com/lawmurray/doxide){target="_blank"} to report an issue or contribute a bug fix or feature, or contact Lawrence Murray ([:material-github:](https://github.com/lawmurray){target="_blank"} [:material-mastodon:](https://fosstodon.org/@lawmurray){target="_blank"} [:material-web:](https://indii.org){target="_blank"} [:material-email:](mailto:lawrence@indii.org){target="_blank"}).
+
+=== "C++ Input"
 
     ```cpp
     /**
@@ -43,7 +50,7 @@ Doxide is a documentation generator for modern C++. It consumes C++ sources anno
     int f(int x, int& y);
     ```
 
-=== "Output"
+=== "HTML Output"
 
     !!! function "template&lt;class T&gt; int f(int x, int&amp; y)"
         
@@ -63,7 +70,3 @@ Doxide is a documentation generator for modern C++. It consumes C++ sources anno
 
         !!! tip
             There are plenty more [demonstrations available](/demo)!
-
-By generating Markdown, Doxide opens C++ documentation to the whole wide world of static site generation tools and themes. There is particular support for [MkDocs](https://www.mkdocs.org/){target="_blank"} and the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/){target="_blank"} theme, as on this website. A little extra effort enables alternative static site generation tools such as [Jekyll](https://jekyllrb.com/){target="_blank"} and [Hugo](https://gohugo.io/){target="_blank"}. Other formats such as PDF are possible too, via [Pandoc](https://pandoc.org/){target="_blank"}.
-
-This is all very new, a humble attempt to modernize documentation for the C++ community. Development is active, feedback is sought, and contributions very welcome. See the [GitHub repository](https://github.com/lawmurray/doxide){target="_blank"} to report an issue or contribute a bug fix or feature, or contact Lawrence Murray ([:material-github:](https://github.com/lawmurray){target="_blank"} [:material-mastodon:](https://fosstodon.org/@lawmurray){target="_blank"} [:material-web:](https://indii.org){target="_blank"} [:material-email:](mailto:lawrence@indii.org){target="_blank"}).

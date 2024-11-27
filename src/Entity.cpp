@@ -12,6 +12,10 @@ Entity::Entity() :
 }
 
 void Entity::add(Entity&& o) {
+  if (o.type == EntityType::NAMESPACE && !o.ingroup.empty()) {
+    warn("namespace cannot have @ingroup, ignoring");
+    o.ingroup.clear();
+  }
   if (!o.ingroup.empty()) {
     if (addToGroup(std::move(o))) {
       return;
