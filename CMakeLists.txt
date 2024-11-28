@@ -39,6 +39,19 @@ target_include_directories(doxide PRIVATE
     contrib/glob/single_include
     contrib/CLI11/include
 )
+
+# Find the system libyaml
+#
+# Note that on the default packages on linux (arch, etc) and macos/brew
+# do not contain any cmake package config files for libyaml
+# so find_package will error out.
+find_package(yaml QUIET HINTS /usr /usr/lib /usr/local/lib)
+
+option(BUILD_YAML "Build contrib/libyaml" OFF)
+if(BUILD_YAML)
+    add_subdirectory(contrib/libyaml)
+endif()
+
 target_link_libraries(doxide
     yaml
 )
