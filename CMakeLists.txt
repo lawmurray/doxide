@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(doxide
-    VERSION 0.0.0
+    VERSION 0.8.0
     DESCRIPTION "Modern documentation for modern C++"
     HOMEPAGE_URL "https://doxide.org")
 
@@ -41,6 +41,11 @@ target_include_directories(doxide PRIVATE
 )
 target_link_libraries(doxide
     yaml
+)
+
+configure_file(
+    ${CMAKE_SOURCE_DIR}/src/Version.h.in
+    ${CMAKE_SOURCE_DIR}/src/Version.h
 )
 
 include(GNUInstallDirs)
