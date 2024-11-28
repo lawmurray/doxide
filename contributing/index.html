@@ -730,7 +730,7 @@ The output is:
 <p class="admonition-title">Tip</p>
 <p>We could run <code>tree-sitter parse ../../demo/parsing.hpp</code> instead, but the parse tree is much larger, and it may be difficult to track down the specific problem that way.</p>
 </div>
-<p>Now, bring up the source file <code>src/doxide.cpp</code>, where Doxide's Tree-sitter queries are given as hard-coded strings in the <code>query_cpp</code> variable. These are patterns that match parse trees to select entities (e.g. types, variables, functions, macros, etc) from the source code to document. This section in particular plucks out variables and member variables:
+<p>Now, bring up the source file <a href="https://github.com/lawmurray/doxide/blob/main/src/CppParser.cpp">src/CppParser.cpp</a>, where Doxide's Tree-sitter queries are given as hard-coded strings in the <code>query_cpp</code> variable. These are patterns that match parse trees to select entities (e.g. types, variables, functions, macros, etc) from the source code to document. This section in particular plucks out variables and member variables:
 <div class="highlight"><pre><span></span><code>;; variable
 ((declaration
     declarator: [

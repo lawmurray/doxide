@@ -2,350 +2,350 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://doxide.org/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/command-line/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/configuring/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/contributing/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/coverage-reports/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/coverage/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/getting-started/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/installation/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/organizing/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/parsing/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/questions-and-answers/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/running/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/writing/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/demo/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/demo/parsing.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/demo/presentation.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/CppParser.cpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/CppParser.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/Doc.cpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/Doc.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/DocToken.cpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/DocToken.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/DocTokenizer.cpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/DocTokenizer.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/Driver.cpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/Driver.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/Entity.cpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/Entity.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/GcovCounter.cpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/GcovCounter.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/JSONCounter.cpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/JSONCounter.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/JSONGenerator.cpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/JSONGenerator.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/MarkdownGenerator.cpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/MarkdownGenerator.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/YAMLNode.cpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/YAMLNode.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/YAMLParser.cpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/YAMLParser.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/doxide.cpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/coverage/src/doxide.hpp/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/CppParser/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/Doc/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/DocToken/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/DocTokenType/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/DocTokenizer/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/Driver/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/Entity/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/EntityType/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/GcovCounter/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/JSONCounter/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/JSONGenerator/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/MarkdownGenerator/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/YAMLNode/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/YAMLParser/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/developer/Entity/list_type/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/ns1/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/ns1/ns2a/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/ns1/ns2a/ns3/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/ns1/ns2b/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/Class/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ClassTemplate/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ClassTemplateWithMembers/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ClassWithMembers/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/Enum/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/EnumAfter/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/EnumClass/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/EnumStruct/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ForwardClass/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/Struct/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/StructTemplate/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/TypeAlias/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/TypeAliasTemplate/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/TypeDef/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/Union/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/UnionTemplate/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ClassWithMembers/InnerClass/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ClassWithMembers/InnerEnum/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ClassWithMembers/InnerTypeAlias/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/parsing/ClassWithMembers/InnerTypeDef/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
     <url>
          <loc>https://doxide.org/demo/presentation/</loc>
-         <lastmod>2024-11-27</lastmod>
+         <lastmod>2024-11-28</lastmod>
     </url>
 </urlset>
