@@ -65,7 +65,7 @@ The output is:
 !!! tip
     We could run `tree-sitter parse ../../demo/parsing.hpp` instead, but the parse tree is much larger, and it may be difficult to track down the specific problem that way.
 
-Now, bring up the source file `src/doxide.cpp`, where Doxide's Tree-sitter queries are given as hard-coded strings in the `query_cpp` variable. These are patterns that match parse trees to select entities (e.g. types, variables, functions, macros, etc) from the source code to document. This section in particular plucks out variables and member variables:
+Now, bring up the source file [src/CppParser.cpp](https://github.com/lawmurray/doxide/blob/main/src/CppParser.cpp), where Doxide's Tree-sitter queries are given as hard-coded strings in the `query_cpp` variable. These are patterns that match parse trees to select entities (e.g. types, variables, functions, macros, etc) from the source code to document. This section in particular plucks out variables and member variables:
 ```
 ;; variable
 ((declaration
