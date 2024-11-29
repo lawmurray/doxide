@@ -8,6 +8,9 @@ Commands are:
 `doxide build`
 :   Build documentation in the output directory.
 
+`doxide watch`
+:   Watch the documentation's source files and rebuild it on changes.
+
 `doxide clean`
 :   Clean the output directory.
 

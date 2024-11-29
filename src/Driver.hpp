@@ -27,6 +27,11 @@ public:
   void build();
 
   /**
+   * Watch and build documentation on changes.
+   */
+  void watch();
+
+  /**
    * Output line coverage information.
    */
   void cover();
@@ -81,6 +86,16 @@ private:
    * Root entity.
    */
   Entity root;
+
+  /**
+   * Configuration file path.
+   */
+  std::filesystem::path config_file;
+
+  /**
+   * Files patterns.
+   */
+  std::list<std::string> files_patterns;
 
   /**
    * Macro definitions.

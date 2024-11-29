@@ -26,6 +26,7 @@ add_executable(doxide
     src/JSONCounter.cpp
     src/JSONGenerator.cpp
     src/MarkdownGenerator.cpp
+    src/SourceWatcher.cpp
     src/YAMLNode.cpp
     src/YAMLParser.cpp
 )

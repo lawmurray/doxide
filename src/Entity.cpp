@@ -209,3 +209,30 @@ std::list<Entity*> Entity::get(std::filesystem::path& path) {
 void Entity::clear() {
   *this = Entity();
 }
+
+void Entity::delete_by_predicate(std::function<bool(const Entity&)> p){
+	std::erase_if(namespaces, p);
+	std::erase_if(groups, p);
+	std::erase_if(types, p);
+	std::erase_if(concepts, p);
+	std::erase_if(variables, p);
+	std::erase_if(functions, p);
+	std::erase_if(operators, p);
+	std::erase_if(enums, p);
+	std::erase_if(macros, p);
+	std::erase_if(dirs, p);
+	std::erase_if(files, p);
+
+	auto r = [p](Entity& e){ e.delete_by_predicate(p); };
+        std::for_each(namespaces.begin(), namespaces.end(), r);
+	std::for_each(groups.begin(), groups.end(), r);
+	std::for_each(types.begin(), types.end(), r);
+	std::for_each(concepts.begin(), concepts.end(), r);
+        std::for_each(variables.begin(), variables.end(), r);
+        std::for_each(functions.begin(), functions.end(), r);
+        std::for_each(operators.begin(), operators.end(), r);
+	std::for_each(enums.begin(), enums.end(), r);
+	std::for_each(macros.begin(), macros.end(), r);
+	std::for_each(dirs.begin(), dirs.end(), r);
+	std::for_each(files.begin(), files.end(), r);
+}
