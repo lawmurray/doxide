@@ -243,7 +243,6 @@ void Driver::watch() {
   SourceWatcher watcher = SourceWatcher(files_patterns);
 
   CppParser parser;
-  MarkdownGenerator generator(output);
 
   for (;;){
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
@@ -252,7 +251,6 @@ void Driver::watch() {
       root.clear();
       build();
 
-      generator = MarkdownGenerator(output);
       config_watcher = SourceWatcher(config_file);
       watcher = SourceWatcher(files_patterns);
 
@@ -279,6 +277,7 @@ void Driver::watch() {
     if (!added_files.empty() || !changed_files.empty() || !deleted_files.empty()){
       count();
 
+      MarkdownGenerator generator(output);
       generator.generate(root);
       generator.coverage(root);
       generator.clean();
