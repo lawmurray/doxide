@@ -239,6 +239,8 @@ void Driver::watch() {
 
   build();
 
+  std::cout << "Start watching" << std::endl;
+
   SourceWatcher config_watcher = SourceWatcher(config_file);
   SourceWatcher watcher = SourceWatcher(files_patterns);
 
@@ -248,39 +250,59 @@ void Driver::watch() {
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     
     if (config_watcher.changed()){
+      std::cout << std::endl << "Detected configuration file change." << std::endl;
+      std::cout << "Rebuilding documentation..." << std::endl;
+
       root.clear();
       build();
 
       config_watcher = SourceWatcher(config_file);
       watcher = SourceWatcher(files_patterns);
 
+      std::cout << "Done" << std::endl;
+
       continue;
     }
 
     auto [added_files, changed_files, deleted_files] = watcher.diff();
-    filenames = watcher.filenames();
-
-    for (const auto& filename: deleted_files) {
-      root.delete_by_predicate([filename](const Entity& e) {return e.path == filename; });
-    }
-    for (const auto& filename: changed_files) {
-      root.delete_by_predicate([filename](const Entity& e) {return e.path == filename; });
-    }
-
-    for (const auto& filename: changed_files) {
-      parser.parse(filename, defines, root);
-    }
-    for (const auto& filename: added_files) {
-      parser.parse(filename, defines, root);
-    }
-
     if (!added_files.empty() || !changed_files.empty() || !deleted_files.empty()){
+
+      std::cout << std::endl << "Detected changes:" << std::endl;
+      for (const auto& filename: added_files) {
+        std::cout << "Added:   " << filename << std::endl;
+      }
+      for (const auto& filename: changed_files) {
+        std::cout << "Changed: " << filename << std::endl;
+      }
+      for (const auto& filename: deleted_files) {
+        std::cout << "Deleted: " << filename << std::endl;
+      }
+      std::cout << "Rebuilding documentation..." << std::endl;
+
+      filenames = watcher.filenames();
+
+      for (const auto& filename: deleted_files) {
+        root.delete_by_predicate([filename](const Entity& e) {return e.path == filename; });
+      }
+      for (const auto& filename: changed_files) {
+        root.delete_by_predicate([filename](const Entity& e) {return e.path == filename; });
+      }
+
+      for (const auto& filename: changed_files) {
+        parser.parse(filename, defines, root);
+      }
+      for (const auto& filename: added_files) {
+        parser.parse(filename, defines, root);
+      }
+
       count();
 
       MarkdownGenerator generator(output);
       generator.generate(root);
       generator.coverage(root);
       generator.clean();
+
+      std::cout << "Done" << std::endl;
     }
   }
 }
