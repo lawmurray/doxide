@@ -241,7 +241,7 @@ void Driver::watch() {
 
   std::cout << "Start watching" << std::endl;
 
-  SourceWatcher config_watcher = SourceWatcher(config_file);
+  SourceWatcher config_watcher = SourceWatcher(config_file.string());
   SourceWatcher watcher = SourceWatcher(files_patterns);
 
   CppParser parser;
@@ -256,7 +256,7 @@ void Driver::watch() {
       root.clear();
       build();
 
-      config_watcher = SourceWatcher(config_file);
+      config_watcher = SourceWatcher(config_file.string());
       watcher = SourceWatcher(files_patterns);
 
       std::cout << "Done" << std::endl;
