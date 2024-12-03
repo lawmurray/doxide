@@ -83,6 +83,13 @@ struct Entity {
   void clear();
 
   /**
+   * Recursively delete all child entities that satisfy the predicate.
+   *
+   * @param p Predicate.
+   */
+  void delete_by_predicate(std::function<bool(const Entity&)> p);
+
+  /**
    * Child namespaces.
    */
   list_type namespaces;

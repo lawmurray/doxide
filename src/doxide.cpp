@@ -65,6 +65,10 @@ int main(int argc, char** argv) {
       "Build documentation in output directory.")->
       fallthrough()->
       callback([&]() { driver.build(); });
+  app.add_subcommand("watch",
+      "Watch the documentation's source files and rebuild it on changes.")->
+      fallthrough()->
+      callback([&]() { driver.watch(); });
   app.add_subcommand("clean",
       "Clean output directory.")->
       fallthrough()->

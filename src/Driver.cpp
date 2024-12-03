@@ -5,6 +5,9 @@
 #include "GcovCounter.hpp"
 #include "JSONCounter.hpp"
 #include "JSONGenerator.hpp"
+#include "SourceWatcher.hpp"
+
+#include <thread>
 
 /**
  * Contents of initial `doxide.yaml` file.
@@ -232,6 +235,78 @@ void Driver::build() {
   generator.clean();
 }
 
+void Driver::watch() {
+
+  build();
+
+  std::cout << "Start watching" << std::endl;
+
+  SourceWatcher config_watcher = SourceWatcher(config_file.string());
+  SourceWatcher watcher = SourceWatcher(files_patterns);
+
+  CppParser parser;
+
+  for (;;){
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    
+    if (config_watcher.changed()){
+      std::cout << std::endl << "Detected configuration file change." << std::endl;
+      std::cout << "Rebuilding documentation..." << std::endl;
+
+      root.clear();
+      build();
+
+      config_watcher = SourceWatcher(config_file.string());
+      watcher = SourceWatcher(files_patterns);
+
+      std::cout << "Done" << std::endl;
+
+      continue;
+    }
+
+    auto [added_files, changed_files, deleted_files] = watcher.diff();
+    if (!added_files.empty() || !changed_files.empty() || !deleted_files.empty()){
+
+      std::cout << std::endl << "Detected changes:" << std::endl;
+      for (const auto& filename: added_files) {
+        std::cout << "Added:   " << filename << std::endl;
+      }
+      for (const auto& filename: changed_files) {
+        std::cout << "Changed: " << filename << std::endl;
+      }
+      for (const auto& filename: deleted_files) {
+        std::cout << "Deleted: " << filename << std::endl;
+      }
+      std::cout << "Rebuilding documentation..." << std::endl;
+
+      filenames = watcher.filenames();
+
+      for (const auto& filename: deleted_files) {
+        root.delete_by_predicate([filename](const Entity& e) {return e.path == filename; });
+      }
+      for (const auto& filename: changed_files) {
+        root.delete_by_predicate([filename](const Entity& e) {return e.path == filename; });
+      }
+
+      for (const auto& filename: changed_files) {
+        parser.parse(filename, defines, root);
+      }
+      for (const auto& filename: added_files) {
+        parser.parse(filename, defines, root);
+      }
+
+      count();
+
+      MarkdownGenerator generator(output);
+      generator.generate(root);
+      generator.coverage(root);
+      generator.clean();
+
+      std::cout << "Done" << std::endl;
+    }
+  }
+}
+
 void Driver::cover() {
   config();
   parse();
@@ -253,18 +328,17 @@ void Driver::clean() {
 
 void Driver::config() {
   /* find the configuration file */
-  std::string path;
   if (std::filesystem::exists("doxide.yaml")) {
-    path = "doxide.yaml";
+    config_file = "doxide.yaml";
   } else if (std::filesystem::exists("doxide.yml")) {
-    path = "doxide.yml";
+    config_file = "doxide.yml";
   } else if (std::filesystem::exists("doxide.json")) {
-    path = "doxide.json";
+    config_file = "doxide.json";
   }
 
   /* parse build configuration file */
   YAMLParser parser;
-  YAMLNode yaml = parser.parse(path);
+  YAMLNode yaml = parser.parse(config_file);
 
   if (yaml.has("title")) {
     if (yaml.isValue("title")) {
@@ -313,6 +387,7 @@ void Driver::config() {
     for (auto& node : yaml.sequence("files")) {
       if (node->isValue()) {
         auto& pattern = node->value();
+        files_patterns.push_back(pattern);
         auto paths = glob::rglob(pattern);
         if (paths.empty()) {
           /* print warning if pattern does not contain a wildcard '*' */
