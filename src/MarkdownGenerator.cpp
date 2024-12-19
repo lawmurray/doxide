@@ -730,7 +730,7 @@ std::string MarkdownGenerator::brief(const Entity& entity) {
   if (!entity.brief.empty()) {
     return entity.brief;
   } else {
-    static const std::regex reg("^(`.*?`|[^;:.?!])*[\\.\\?\\!](?=\\s|$)",
+    static const std::regex reg("^(`.*?`|\\[.*?\\]\\(.*?\\)|[^;:.?!])*[\\.\\?\\!](?=\\s|$)",
         regex_flags);
     std::string l = line(entity.docs);
     std::smatch match;
