@@ -66,6 +66,8 @@ void Entity::addToThis(Entity&& o) {
     groups.push_back(std::move(o));
   } else if (o.type == EntityType::TYPE) {
     types.push_back(std::move(o));
+  } else if (o.type == EntityType::TYPEDEF) {
+    typedefs.push_back(std::move(o));
   } else if (o.type == EntityType::CONCEPT) {
     concepts.push_back(std::move(o));
   } else if (o.type == EntityType::VARIABLE) {
@@ -121,6 +123,7 @@ void Entity::merge(Entity&& o) {
 
   groups.splice(groups.end(), std::move(o.groups));
   types.splice(types.end(), std::move(o.types));
+  typedefs.splice(types.end(), std::move(o.typedefs));
   concepts.splice(concepts.end(), std::move(o.concepts));
   variables.splice(variables.end(), std::move(o.variables));
   functions.splice(functions.end(), std::move(o.functions));

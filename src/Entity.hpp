@@ -15,6 +15,7 @@ enum class EntityType {
   TEMPLATE,
   GROUP,
   TYPE,
+  TYPEDEF,
   CONCEPT,
   VARIABLE,
   FUNCTION,
@@ -103,6 +104,11 @@ struct Entity {
    * Child types.
    */
   list_type types;
+
+  /**
+   * Child typedefs.
+   */
+  list_type typedefs;
 
   /**
    * Child concepts.

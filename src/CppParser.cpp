@@ -69,7 +69,7 @@ static const char* query_cpp = R""""(
 
   ;; typedef
   (type_definition
-       declarator: (type_identifier) @name .) @type
+       declarator: (type_identifier) @name .) @typedef
 
   ;; type alias
   (alias_declaration
@@ -423,6 +423,8 @@ void CppParser::parse(const std::filesystem::path& filename,
           entity.type = EntityType::TEMPLATE;
         } else if (strncmp(name, "type", length) == 0) {
           entity.type = EntityType::TYPE;
+        } else if (strncmp(name, "typedef", length) == 0) {
+          entity.type = EntityType::TYPEDEF;
         } else if (strncmp(name, "concept", length) == 0) {
           entity.type = EntityType::CONCEPT;
         } else if (strncmp(name, "variable", length) == 0) {
