@@ -73,7 +73,7 @@ static const char* query_cpp = R""""(
 
   ;; type alias
   (alias_declaration
-      name: (type_identifier) @name) @type
+      name: (type_identifier) @name) @typedef
 
   ;; concept
   (concept_definition

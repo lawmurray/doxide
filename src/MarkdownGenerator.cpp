@@ -144,7 +144,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         entity.type == EntityType::NAMESPACE ||
         entity.type == EntityType::GROUP);
     if (typedefs.size() > 0) {
-      out << "## Typedefs" << std::endl;
+      out << "## Typedefs and Type Aliases" << std::endl;
       out << std::endl;
       out << "| Name | Description |" << std::endl;
       out << "| ---- | ----------- |" << std::endl;
@@ -243,7 +243,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
 
     /* detailed descriptions */
     if (typedefs.size() > 0) {
-      out << "## Typedef Details" << std::endl;
+      out << "## Typedef and Type Alias Details" << std::endl;
       out << std::endl;
       for (auto& child : typedefs) {
         out << "### " << child->name;

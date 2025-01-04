@@ -106,7 +106,7 @@ struct Entity {
   list_type types;
 
   /**
-   * Child typedefs.
+   * Child typedefs and type aliases.
    */
   list_type typedefs;
 
