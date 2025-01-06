@@ -140,6 +140,21 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
       out << std::endl;
     }
 
+    auto typedefs = view(entity.typedefs,
+        entity.type == EntityType::NAMESPACE ||
+        entity.type == EntityType::GROUP);
+    if (typedefs.size() > 0) {
+      out << "## Type Aliases" << std::endl;
+      out << std::endl;
+      out << "| Name | Description |" << std::endl;
+      out << "| ---- | ----------- |" << std::endl;
+      for (auto& child : typedefs) {
+        out << "| [" << child->name << "](#" << sanitize(child->name) << ") | ";
+        out << line(brief(*child)) << " |" << std::endl;
+      }
+      out << std::endl;
+    }
+
     auto concepts = view(entity.concepts,
         entity.type == EntityType::NAMESPACE ||
         entity.type == EntityType::GROUP);
@@ -227,6 +242,19 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     }
 
     /* detailed descriptions */
+    if (typedefs.size() > 0) {
+      out << "## Type Alias Details" << std::endl;
+      out << std::endl;
+      for (auto& child : typedefs) {
+        out << "### " << child->name;
+        out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
+        out << std::endl;
+        out << "!!! typedef \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        out << std::endl;
+        out << indent(child->docs) << std::endl;
+        out << std::endl;
+      }
+    }
     if (concepts.size() > 0) {
       out << "## Concept Details" << std::endl;
       out << std::endl;
