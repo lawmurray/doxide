@@ -344,6 +344,8 @@ void Driver::config() {
     config_file = "doxide.yml";
   } else if (std::filesystem::exists("doxide.json")) {
     config_file = "doxide.json";
+  } else {
+    error("No configuration file found.");
   }
 
   /* parse build configuration file */
