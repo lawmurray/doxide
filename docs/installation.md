@@ -4,69 +4,16 @@ Follow the instructions below for your operating system.
 
 ## :simple-linux: Linux
 
-Install Doxide from your package manager by adding appropriate repository for your Linux distribution below. If your distribution is not listed, you can instead [install from source](#install-from-source).
+Install from the [download.indii.org](https://download.indii.org) software repository, following the instructions provided there. For Arch Linux and its derivatives (e.g. EndeavourOS, Garuda, Manjaro) you can find Doxide in the [Arch User Repository (AUR)](https://aur.archlinux.org/packages/doxide).
 
-??? info ":simple-ubuntu: Ubuntu 24.10 Oracular Oriole (amd64)"
-    Install Doxide:
-    ```
-    echo 'deb http://download.indii.org/deb oracular main' | sudo tee /etc/apt/sources.list.d/indii.org.list
-    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.org.gpg > /dev/null
-    sudo apt update
-    sudo apt install doxide
-    ```
-
-??? info ":simple-ubuntu: Ubuntu 24.04 Noble Numbat (amd64)"
-    Install Doxide:
-    ```
-    echo 'deb http://download.indii.org/deb noble main' | sudo tee /etc/apt/sources.list.d/indii.org.list
-    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.org.gpg > /dev/null
-    sudo apt update
-    sudo apt install doxide
-    ```
-
-??? info ":simple-debian: Debian 12 Bookworm (amd64)"
-    Install Doxide:
-    ```
-    echo 'deb http://download.indii.org/deb bookworm main' | sudo tee /etc/apt/sources.list.d/indii.org.list
-    curl -fsSL https://download.indii.org/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/indii.org.gpg > /dev/null
-    sudo apt update
-    sudo apt install doxide
-    ```
-
-??? info ":simple-fedora: Fedora 40 (x86_64)"
-    Install Doxide:
-    ```
-    sudo dnf config-manager --add-repo https://download.indii.org/rpm/fedora/40/indii.org.repo
-    sudo dnf update
-    sudo dnf install doxide
-    ```
-
-??? info ":simple-fedora: Fedora 39 (x86_64)"
-    Install Doxide:
-    ```
-    sudo dnf config-manager --add-repo https://download.indii.org/rpm/fedora/39/indii.org.repo
-    sudo dnf update
-    sudo dnf install doxide
-    ```
-
-??? info ":simple-opensuse: openSUSE Tumbleweed (x86_64)"
-    Install Doxide:
-    ```
-    sudo zypper addrepo https://download.indii.org/rpm/opensuse/tumbleweed/indii.org.repo
-    sudo zypper refresh
-    sudo zypper install doxide
-    ```
-
-??? info ":simple-archlinux: Arch"
-    Available from the [Arch User Repository (AUR)](https://aur.archlinux.org/packages/doxide).
-
-Then install [MkDocs][mkdocs] and [Material for MkDocs][material]:
+Also install [MkDocs][mkdocs] and [Material for MkDocs][material]:
 ```
 pip install mkdocs mkdocs-material
 ```
 [See below](#using-a-python-virtual-environment) for running MkDocs in a Python virtual environment instead.
 
-Material for MkDocs is included as a package in some Linux distributions, but typically an older version, and mileage may vary when using it with Doxide. As Material for MkDocs is updated frequently, it is recommended to install it with `pip` instead, to get the latest version.
+!!! tip
+    Some Linux distributions include Material for MkDocs as a package too. It is typically an older version than you will get from `pip`, but it may work for you.
 
 ## :simple-apple: Mac
 
