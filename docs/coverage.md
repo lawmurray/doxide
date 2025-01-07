@@ -77,8 +77,8 @@ To enable code coverage reports with Doxide, provide it with the file produced i
    description: Example configuration file.
    output: docs
    files:
-   - "*/**.hpp
-   - "*/**.cpp
+   - "*/**.hpp"
+   - "*/**.cpp"
    coverage: coverage.gcov
    ```
 
