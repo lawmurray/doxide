@@ -21,15 +21,9 @@ public:
    * Generate documentation.
    * 
    * @param root Root entity.
+   * @param cov Include code coverage report?
    */
-  void generate(const Entity& root);
-
-  /**
-   * Generate coverage.
-   * 
-   * @param root Root entity.
-   */
-  void coverage(const Entity& root);
+  void generate(const Entity& root, const bool cov);
 
   /**
    * Clean up after generation, removing files from old runs. Traverses the
@@ -45,8 +39,10 @@ private:
    * 
    * @param output Output directory.
    * @param entity Entity for which to generate documentation.
+   * @param cov Include code coverage report?
    */
-  void generate(const std::filesystem::path& output, const Entity& entity);
+  void generate(const std::filesystem::path& output, const Entity& entity,
+      const bool cov);
 
   /**
    * Recursively generate coverage.

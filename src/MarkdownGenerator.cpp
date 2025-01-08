@@ -6,12 +6,11 @@ MarkdownGenerator::MarkdownGenerator(const std::filesystem::path& output) :
   //
 }
 
-void MarkdownGenerator::generate(const Entity& root) {
-  generate(output, root);
-}
-
-void MarkdownGenerator::coverage(const Entity& root) {
-  coverage(output, root);
+void MarkdownGenerator::generate(const Entity& root, const bool cov) {
+  generate(output, root, cov);
+  if (cov) {
+    coverage(output, root);
+  }
 }
 
 void MarkdownGenerator::clean() {
@@ -51,7 +50,7 @@ void MarkdownGenerator::clean() {
 }
 
 void MarkdownGenerator::generate(const std::filesystem::path& output,
-    const Entity& entity) {
+    const Entity& entity, const bool cov) {
   std::string name = sanitize(entity.name);  // entity name, empty for root
   std::string dirname;   // directory name for this entity
   std::string filename;  // file name for this entity
@@ -119,7 +118,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     }
 
     /* code coverage */
-    if (entity.type == EntityType::ROOT) {
+    if (entity.type == EntityType::ROOT && cov) {
       out << ":material-chart-pie: [Code Coverage](coverage/index.md)" << std::endl;
       out << std::endl;
     }
@@ -334,13 +333,13 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
   /* child pages */
   std::filesystem::create_directories(output / name);
   for (auto& child : view(entity.groups, false)) {
-    generate(output / name, *child);
+    generate(output / name, *child, cov);
   }
   for (auto& child : view(entity.namespaces, false)) {
-    generate(output / name, *child);
+    generate(output / name, *child, cov);
   }
   for (auto& child : view(entity.types, false)) {
-    generate(output / name, *child);
+    generate(output / name, *child, cov);
   }
 }
 

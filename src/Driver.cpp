@@ -240,8 +240,7 @@ void Driver::build() {
   count();
 
   MarkdownGenerator generator(output);
-  generator.generate(root);
-  generator.coverage(root);
+  generator.generate(root, !coverage.empty());
   generator.clean();
 }
 
@@ -308,8 +307,7 @@ void Driver::watch() {
       count();
 
       MarkdownGenerator generator(output);
-      generator.generate(root);
-      generator.coverage(root);
+      generator.generate(root, !coverage.empty());
       generator.clean();
 
       std::cout << "Done" << std::endl;
