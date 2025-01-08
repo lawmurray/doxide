@@ -189,7 +189,7 @@ int* f(int x, int y);
  * 
  * @ingroup parsing
  */
-int (*g(int x, int y))(int, int);
+int (*f(int x, int y))(int, int);
 
 /**
  * Test function template.
@@ -594,7 +594,7 @@ public:
   /**
    * Test member function that returns a function pointer.
    */
-  int (*g(int x, int y))(int, int);
+  int (*f(int x, int y))(int, int);
 
   /**
    * Test member function template.
