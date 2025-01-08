@@ -69,7 +69,21 @@ static const char* query_cpp = R""""(
 
   ;; typedef
   (type_definition
-       declarator: (type_identifier) @name .) @typedef
+      declarator: [
+        (type_identifier) @name
+
+        ;; for function pointer types
+        (function_declarator
+          declarator: (parenthesized_declarator
+            (pointer_declarator
+              declarator: (type_identifier) @name)
+          )
+        )
+        (pointer_declarator
+          declarator: (function_declarator
+            declarator: (type_identifier) @name)
+        )
+      ]) @typedef
 
   ;; type alias
   (alias_declaration
@@ -95,6 +109,14 @@ static const char* query_cpp = R""""(
             (pointer_declarator (identifier) @name)
           ]
           value: (_) @value)
+
+        ;; for function pointer types
+        (function_declarator
+          declarator: (parenthesized_declarator
+            (pointer_declarator
+              declarator: (identifier) @name)
+          )
+        )
       ]
       default_value: (_)? @value
     ) @variable
@@ -118,6 +140,14 @@ static const char* query_cpp = R""""(
             (pointer_declarator (field_identifier) @name)
           ]
           value: (_) @value)
+
+        ;; for function pointer types
+        (function_declarator
+          declarator: (parenthesized_declarator
+            (pointer_declarator
+              declarator: (field_identifier) @name)
+          )
+        )
       ]
       default_value: (_)? @value
     ) @variable
@@ -148,6 +178,21 @@ static const char* query_cpp = R""""(
               (field_identifier) @name
               (destructor_name) @name
             ]
+          )
+        )
+
+        ;; for function pointer return types
+        (function_declarator
+          declarator: (parenthesized_declarator
+            (pointer_declarator
+              (function_declarator
+                declarator: [
+                  (identifier) @name
+                  (field_identifier) @name
+                  (destructor_name) @name
+                ]
+              )
+            )
           )
         )
       ]

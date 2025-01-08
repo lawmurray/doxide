@@ -157,6 +157,13 @@ int* ptr2 = &x;
 int λ;
 
 /**
+ * Test variable of function pointer type.
+ * 
+ * @ingroup parsing
+ */
+int (*fp)(int, int);
+
+/**
  * Test function.
  * 
  * @ingroup parsing
@@ -176,6 +183,13 @@ int& f(int x, int y);
  * @ingroup parsing
  */
 int* f(int x, int y);
+
+/**
+ * Test function that returns a function pointer.
+ * 
+ * @ingroup parsing
+ */
+int (*g(int x, int y))(int, int);
 
 /**
  * Test function template.
@@ -344,6 +358,20 @@ typedef int TypeDef;
  * @ingroup parsing
  */
 using TypeAlias = int;
+
+/**
+ * Test typedef of function pointer type.
+ * 
+ * @ingroup parsing
+ */
+typedef int (*TypeDefFunctionPointer)(int, int);
+
+/**
+ * Test type alias of function pointer type.
+ * 
+ * @ingroup parsing
+ */
+using TypeAliasFunctionPointer = int (*)(int, int);
 
 /**
  * Test type alias template.
@@ -540,10 +568,13 @@ public:
 
   /**
    * Test member variable with unicode character.
-   * 
-   * @ingroup parsing
    */
   int λ;
+
+  /**
+   * Test member variable of function pointer type.
+   */
+  int (*fp)(int, int);
 
   /**
    * Test member function.
@@ -559,6 +590,11 @@ public:
    * Test member function that returns a pointer.
    */
   int* f(int x, int y);
+
+  /**
+   * Test member function that returns a function pointer.
+   */
+  int (*g(int x, int y))(int, int);
 
   /**
    * Test member function template.
