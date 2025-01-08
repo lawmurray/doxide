@@ -241,6 +241,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     }
 
     /* detailed descriptions */
+    typedefs = view(entity.typedefs, true);
     if (typedefs.size() > 0) {
       out << "## Type Alias Details" << std::endl;
       out << std::endl;
@@ -254,6 +255,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << std::endl;
       }
     }
+
+    concepts = view(entity.concepts, true);
     if (concepts.size() > 0) {
       out << "## Concept Details" << std::endl;
       out << std::endl;
@@ -267,6 +270,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << std::endl;
       }
     }
+
+    macros = view(entity.macros, true);
     if (macros.size() > 0) {
       out << "## Macro Details" << std::endl;
       out << std::endl;
@@ -280,6 +285,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << std::endl;
       }
     }
+
+    variables = view(entity.variables, true);
     if (variables.size() > 0) {
       out << "## Variable Details" << std::endl;
       out << std::endl;
@@ -293,6 +300,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << std::endl;
       }
     }
+
+    operators = view(entity.operators, true);
     if (operators.size() > 0) {
       out << "## Operator Details" << std::endl;
       out << std::endl;
@@ -311,6 +320,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         prev = child->name;
       }
     }
+
+    functions = view(entity.functions, true);
     if (functions.size() > 0) {
       out << "## Function Details" << std::endl;
       out << std::endl;
