@@ -152,8 +152,80 @@ static const char* query_cpp = R""""(
       default_value: (_)? @value
     ) @variable
 
-  ;; function
-  (_
+  ;; function declaration
+  (declaration
+      declarator: [
+        (function_declarator
+          declarator: (identifier) @name
+        )
+        (reference_declarator
+          (function_declarator
+            declarator: (identifier) @name
+          )
+        )
+        (pointer_declarator
+          (function_declarator
+            declarator: (identifier) @name
+          )
+        )
+        (function_declarator  ;; for function pointer return types
+          declarator: (parenthesized_declarator
+            (pointer_declarator
+              (function_declarator
+                declarator: (identifier) @name
+              )
+            )
+          )
+        )
+      ]
+    ) @function
+
+  ;; member function declaration
+  (field_declaration
+      declarator: [
+        (function_declarator
+          declarator: [
+            (identifier) @name
+            (field_identifier) @name
+            (destructor_name) @name
+          ]
+        )
+        (reference_declarator
+          (function_declarator
+            declarator: [
+              (identifier) @name
+              (field_identifier) @name
+              (destructor_name) @name
+            ]
+          )
+        )
+        (pointer_declarator
+          (function_declarator
+            declarator: [
+              (identifier) @name
+              (field_identifier) @name
+              (destructor_name) @name
+            ]
+          )
+        )
+        (function_declarator  ;; for function pointer return types
+          declarator: (parenthesized_declarator
+            (pointer_declarator
+              (function_declarator
+                declarator: [
+                  (identifier) @name
+                  (field_identifier) @name
+                  (destructor_name) @name
+                ]
+              )
+            )
+          )
+        )
+      ]
+    ) @function
+
+  ;; function definition
+  (function_definition
       declarator: [
         (function_declarator
           declarator: [
@@ -199,11 +271,11 @@ static const char* query_cpp = R""""(
       [
         (field_initializer_list)
         body: (_)
-      ]? @body
+      ] @body
     ) @function
 
-  ;; operator
-  (_
+  ;; operator declaration
+  (declaration
       declarator: [
         (function_declarator
           declarator: (operator_name) @name
@@ -222,7 +294,51 @@ static const char* query_cpp = R""""(
           type: (_) @name
         )
       ]
-      body: (_)? @body
+    ) @operator
+
+  ;; member operator declaration
+  (field_declaration
+      declarator: [
+        (function_declarator
+          declarator: (operator_name) @name
+        )
+        (reference_declarator
+          (function_declarator
+            declarator: (operator_name) @name
+          )
+        )
+        (pointer_declarator
+          (function_declarator
+            declarator: (operator_name) @name
+          )
+        )
+        (operator_cast
+          type: (_) @name
+        )
+      ]
+    ) @operator
+
+  ;; member operator definition
+  (function_definition
+      declarator: [
+        (function_declarator
+          declarator: (operator_name) @name
+        )
+        (reference_declarator
+          (function_declarator
+            declarator: (operator_name) @name
+          )
+        )
+        (pointer_declarator
+          (function_declarator
+            declarator: (operator_name) @name
+          )
+        )
+        (operator_cast
+          type: (_) @name
+        )
+      ]
+      body: (_) @body
     ) @operator
 
   ;; enumeration value
