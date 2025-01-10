@@ -187,7 +187,6 @@ static const char* query_cpp = R""""(
           declarator: [
             (identifier) @name
             (field_identifier) @name
-            (destructor_name) @name
           ]
         )
         (reference_declarator
@@ -195,7 +194,6 @@ static const char* query_cpp = R""""(
             declarator: [
               (identifier) @name
               (field_identifier) @name
-              (destructor_name) @name
             ]
           )
         )
@@ -204,7 +202,6 @@ static const char* query_cpp = R""""(
             declarator: [
               (identifier) @name
               (field_identifier) @name
-              (destructor_name) @name
             ]
           )
         )
@@ -215,7 +212,6 @@ static const char* query_cpp = R""""(
                 declarator: [
                   (identifier) @name
                   (field_identifier) @name
-                  (destructor_name) @name
                 ]
               )
             )
@@ -272,6 +268,19 @@ static const char* query_cpp = R""""(
         (field_initializer_list)
         body: (_)
       ] @body
+    ) @function
+
+  ;; constructor & destructor declaration
+  (declaration
+      declarator: [
+        (function_declarator
+          declarator: [
+          (identifier) @name
+          (field_identifier) @name
+          (destructor_name) @name
+          ]
+        )
+      ]
     ) @function
 
   ;; operator declaration
