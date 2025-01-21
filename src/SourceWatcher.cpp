@@ -56,7 +56,7 @@ bool SourceWatcher::changed(){
 std::unordered_set<std::filesystem::path> SourceWatcher::filenames(){
   std::unordered_set<std::filesystem::path> filenames;
   for (auto pairs : tracked_files) {
-    auto result = filenames.insert(pairs.first);
+    filenames.insert(pairs.first);
   }
   return filenames;
 }
