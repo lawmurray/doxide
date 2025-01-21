@@ -4,16 +4,18 @@ Follow the instructions below for your operating system.
 
 ## :simple-linux: Linux
 
-Install from the [download.indii.org](https://download.indii.org) software repository, following the instructions provided there. For Arch Linux and its derivatives (e.g. EndeavourOS, Garuda, Manjaro) you can find Doxide in the [Arch User Repository (AUR)](https://aur.archlinux.org/packages/doxide).
+Install from the [software repository](https://download.indii.org), following the instructions provided there.
+
+Alternatively, for Arch Linux and derivatives (e.g. EndeavourOS, Garuda, Manjaro), install Doxide from the [Arch User Repository (AUR)](https://aur.archlinux.org/packages/doxide).
+
 
 Also install [MkDocs][mkdocs] and [Material for MkDocs][material]:
 ```
 pip install mkdocs mkdocs-material
 ```
-[See below](#using-a-python-virtual-environment) for running MkDocs in a Python virtual environment instead.
+Some Linux distributions include Material for MkDocs as a package too. It is typically an older version, but may be sufficient for you.
 
-!!! tip
-    Some Linux distributions include Material for MkDocs as a package too. It is typically an older version than you will get from `pip`, but it may work for you.
+[See below](#using-a-python-virtual-environment) for running MkDocs in a Python virtual environment instead.
 
 ## :simple-apple: Mac
 
@@ -51,7 +53,7 @@ First install Doxide via your preferred means:
     [Checksum](https://download.indii.org/win/doxide.exe.sha256) for the download above.
 
 ??? info "Windows Subsystem for Linux"
-    You can use [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install) and follow the instructions for your chosen Linux distribution above.
+    You can use [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install) and follow the instructions for Linux above.
 
 Then install [MkDocs][mkdocs] and [Material for MkDocs][material]. For this you will need a working [Python](https://python.org) installation; if you are using [Chocolatey](https://chocolatey.org), a simple way is `choco install python`. Then install:
 ```
