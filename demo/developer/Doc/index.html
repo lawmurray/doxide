@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../../assets/logo_red.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.0253249f.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.a40c8224.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
@@ -614,18 +614,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ingroup" class="md-nav__link">
+  <a href="#hide" class="md-nav__link">
     <span class="md-ellipsis">
-      ingroup
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#open" class="md-nav__link">
-    <span class="md-ellipsis">
-      open
+      hide
     </span>
   </a>
   
@@ -641,9 +632,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#hide" class="md-nav__link">
+  <a href="#ingroup" class="md-nav__link">
     <span class="md-ellipsis">
-      hide
+      ingroup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open" class="md-nav__link">
+    <span class="md-ellipsis">
+      open
     </span>
   </a>
   
@@ -751,6 +751,19 @@
 <p class="admonition-title">std::string docs</p>
 <p>Content of the documentation.</p>
 </div>
+<h3 id="hide">hide<a name="hide"></a><a class="headerlink" href="#hide" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">bool hide</p>
+<p>Hide the associated entity?</p>
+</div>
+<h3 id="indent">indent<a name="indent"></a><a class="headerlink" href="#indent" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">int indent</p>
+<p>Current indent level of the documentation comment for this entity. This
+    is used for tracking indenting across multiple end-of-line comments, for
+    example following a @note command, each following line should be
+    indented until the end of the paragraph.</p>
+</div>
 <h3 id="ingroup">ingroup<a name="ingroup"></a><a class="headerlink" href="#ingroup" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
 <p class="admonition-title">std::string ingroup</p>
@@ -761,19 +774,6 @@
 <div class="admonition variable">
 <p class="admonition-title">DocToken open</p>
 <p>Opening token, used to determine the type of comment.</p>
-</div>
-<h3 id="indent">indent<a name="indent"></a><a class="headerlink" href="#indent" title="Permanent link">&para;</a></h3>
-<div class="admonition variable">
-<p class="admonition-title">int indent</p>
-<p>Current indent level of the documentation comment for this entity. This
-    is used for tracking indenting across multiple end-of-line comments, for
-    example following a @note command, each following line should be
-    indented until the end of the paragraph.</p>
-</div>
-<h3 id="hide">hide<a name="hide"></a><a class="headerlink" href="#hide" title="Permanent link">&para;</a></h3>
-<div class="admonition variable">
-<p class="admonition-title">bool hide</p>
-<p>Hide the associated entity?</p>
 </div>
 <h2 id="function-details">Function Details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
 <h3 id="doc_1">Doc<a name="Doc"></a><a class="headerlink" href="#doc_1" title="Permanent link">&para;</a></h3>
@@ -889,10 +889,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.60a45f97.min.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js"></script>
       

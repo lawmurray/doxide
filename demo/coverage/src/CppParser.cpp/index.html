@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../../../assets/logo_red.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.0253249f.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.a40c8224.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.06af60db.min.css">
@@ -589,380 +589,178 @@
 <h1 id="cppparsercpp">CppParser.cpp<a class="headerlink" href="#cppparsercpp" title="Permanent link">&para;</a></h1>
 <style>
 .linenodiv pre span {padding-left:4px;padding-right:4px}
-.linenodiv pre span:nth-child(269) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(269)::before {content: "● ";}
-.linenodiv pre span:nth-child(270) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(270)::before {content: "● ";}
-.linenodiv pre span:nth-child(271) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(271)::before {content: "● ";}
-.linenodiv pre span:nth-child(272) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(272)::before {content: "● ";}
-.linenodiv pre span:nth-child(277) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(277)::before {content: "● ";}
-.linenodiv pre span:nth-child(278) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(278)::before {content: "● ";}
-.linenodiv pre span:nth-child(281) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(281)::before {content: "● ";}
-.linenodiv pre span:nth-child(282) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(282)::before {content: "● ";}
-.linenodiv pre span:nth-child(283) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(283)::before {content: "● ";}
-.linenodiv pre span:nth-child(284) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(284)::before {content: "○ ";}
-.linenodiv pre span:nth-child(285) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(285)::before {content: "○ ";}
-.linenodiv pre span:nth-child(286) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(286)::before {content: "○ ";}
-.linenodiv pre span:nth-child(289) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(289)::before {content: "● ";}
-.linenodiv pre span:nth-child(290) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(290)::before {content: "● ";}
-.linenodiv pre span:nth-child(291) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(291)::before {content: "● ";}
-.linenodiv pre span:nth-child(292) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(292)::before {content: "○ ";}
-.linenodiv pre span:nth-child(293) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(293)::before {content: "○ ";}
-.linenodiv pre span:nth-child(294) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(294)::before {content: "○ ";}
-.linenodiv pre span:nth-child(297) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(297)::before {content: "● ";}
-.linenodiv pre span:nth-child(298) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(298)::before {content: "● ";}
-.linenodiv pre span:nth-child(299) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(299)::before {content: "● ";}
-.linenodiv pre span:nth-child(300) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(300)::before {content: "○ ";}
-.linenodiv pre span:nth-child(301) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(301)::before {content: "○ ";}
-.linenodiv pre span:nth-child(302) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(302)::before {content: "○ ";}
-.linenodiv pre span:nth-child(307) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(307)::before {content: "● ";}
-.linenodiv pre span:nth-child(308) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(308)::before {content: "● ";}
-.linenodiv pre span:nth-child(309) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(309)::before {content: "● ";}
-.linenodiv pre span:nth-child(310) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(310)::before {content: "● ";}
-.linenodiv pre span:nth-child(316) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(316)::before {content: "● ";}
-.linenodiv pre span:nth-child(317) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(317)::before {content: "● ";}
-.linenodiv pre span:nth-child(318) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(318)::before {content: "● ";}
-.linenodiv pre span:nth-child(322) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(322)::before {content: "● ";}
-.linenodiv pre span:nth-child(323) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(323)::before {content: "● ";}
-.linenodiv pre span:nth-child(324) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(324)::before {content: "● ";}
-.linenodiv pre span:nth-child(325) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(325)::before {content: "● ";}
-.linenodiv pre span:nth-child(326) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(326)::before {content: "● ";}
-.linenodiv pre span:nth-child(327) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(327)::before {content: "● ";}
-.linenodiv pre span:nth-child(328) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(328)::before {content: "● ";}
-.linenodiv pre span:nth-child(331) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(331)::before {content: "● ";}
-.linenodiv pre span:nth-child(332) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(332)::before {content: "● ";}
-.linenodiv pre span:nth-child(333) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(333)::before {content: "● ";}
-.linenodiv pre span:nth-child(335) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(335)::before {content: "○ ";}
-.linenodiv pre span:nth-child(336) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(336)::before {content: "○ ";}
-.linenodiv pre span:nth-child(339) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(339)::before {content: "● ";}
-.linenodiv pre span:nth-child(343) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(343)::before {content: "● ";}
-.linenodiv pre span:nth-child(345) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(345)::before {content: "● ";}
-.linenodiv pre span:nth-child(346) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(346)::before {content: "● ";}
-.linenodiv pre span:nth-child(347) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(347)::before {content: "● ";}
-.linenodiv pre span:nth-child(350) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(350)::before {content: "● ";}
-.linenodiv pre span:nth-child(352) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(352)::before {content: "● ";}
-.linenodiv pre span:nth-child(353) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(353)::before {content: "● ";}
-.linenodiv pre span:nth-child(357) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(357)::before {content: "● ";}
-.linenodiv pre span:nth-child(360) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(360)::before {content: "● ";}
-.linenodiv pre span:nth-child(361) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(361)::before {content: "● ";}
-.linenodiv pre span:nth-child(362) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(362)::before {content: "● ";}
-.linenodiv pre span:nth-child(364) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(364)::before {content: "● ";}
-.linenodiv pre span:nth-child(365) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(365)::before {content: "● ";}
-.linenodiv pre span:nth-child(366) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(366)::before {content: "● ";}
-.linenodiv pre span:nth-child(368) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(368)::before {content: "● ";}
-.linenodiv pre span:nth-child(369) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(369)::before {content: "● ";}
-.linenodiv pre span:nth-child(370) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(370)::before {content: "● ";}
-.linenodiv pre span:nth-child(371) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(371)::before {content: "● ";}
-.linenodiv pre span:nth-child(372) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(372)::before {content: "● ";}
-.linenodiv pre span:nth-child(373) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(373)::before {content: "● ";}
-.linenodiv pre span:nth-child(374) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(374)::before {content: "● ";}
-.linenodiv pre span:nth-child(375) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(375)::before {content: "● ";}
-.linenodiv pre span:nth-child(377) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(377)::before {content: "● ";}
-.linenodiv pre span:nth-child(378) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(378)::before {content: "● ";}
-.linenodiv pre span:nth-child(379) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(379)::before {content: "● ";}
-.linenodiv pre span:nth-child(382) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(382)::before {content: "● ";}
-.linenodiv pre span:nth-child(393) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(393)::before {content: "● ";}
-.linenodiv pre span:nth-child(394) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(394)::before {content: "● ";}
-.linenodiv pre span:nth-child(396) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(396)::before {content: "● ";}
-.linenodiv pre span:nth-child(398) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(398)::before {content: "● ";}
-.linenodiv pre span:nth-child(401) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(401)::before {content: "● ";}
-.linenodiv pre span:nth-child(402) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(402)::before {content: "● ";}
-.linenodiv pre span:nth-child(404) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(404)::before {content: "● ";}
-.linenodiv pre span:nth-child(405) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(405)::before {content: "● ";}
-.linenodiv pre span:nth-child(407) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(407)::before {content: "● ";}
-.linenodiv pre span:nth-child(408) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(408)::before {content: "● ";}
-.linenodiv pre span:nth-child(409) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(409)::before {content: "● ";}
-.linenodiv pre span:nth-child(410) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(410)::before {content: "● ";}
-.linenodiv pre span:nth-child(411) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(411)::before {content: "● ";}
-.linenodiv pre span:nth-child(412) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(412)::before {content: "● ";}
-.linenodiv pre span:nth-child(413) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(413)::before {content: "● ";}
-.linenodiv pre span:nth-child(415) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(415)::before {content: "● ";}
-.linenodiv pre span:nth-child(416) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(416)::before {content: "● ";}
-.linenodiv pre span:nth-child(417) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(417)::before {content: "● ";}
-.linenodiv pre span:nth-child(418) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(418)::before {content: "● ";}
-.linenodiv pre span:nth-child(419) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(419)::before {content: "● ";}
-.linenodiv pre span:nth-child(421) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(421)::before {content: "● ";}
-.linenodiv pre span:nth-child(422) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(422)::before {content: "● ";}
-.linenodiv pre span:nth-child(423) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(423)::before {content: "● ";}
-.linenodiv pre span:nth-child(424) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(424)::before {content: "● ";}
-.linenodiv pre span:nth-child(425) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(425)::before {content: "● ";}
-.linenodiv pre span:nth-child(426) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(426)::before {content: "● ";}
-.linenodiv pre span:nth-child(427) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(427)::before {content: "● ";}
-.linenodiv pre span:nth-child(428) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(428)::before {content: "● ";}
-.linenodiv pre span:nth-child(429) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(429)::before {content: "● ";}
-.linenodiv pre span:nth-child(430) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(430)::before {content: "● ";}
-.linenodiv pre span:nth-child(431) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(431)::before {content: "● ";}
-.linenodiv pre span:nth-child(432) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(432)::before {content: "● ";}
-.linenodiv pre span:nth-child(433) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(433)::before {content: "● ";}
-.linenodiv pre span:nth-child(434) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(434)::before {content: "● ";}
-.linenodiv pre span:nth-child(435) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(435)::before {content: "● ";}
-.linenodiv pre span:nth-child(436) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(436)::before {content: "● ";}
-.linenodiv pre span:nth-child(437) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(437)::before {content: "● ";}
-.linenodiv pre span:nth-child(438) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(438)::before {content: "● ";}
+.linenodiv pre span:nth-child(439) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(439)::before {content: "● ";}
+.linenodiv pre span:nth-child(440) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(440)::before {content: "● ";}
+.linenodiv pre span:nth-child(441) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(441)::before {content: "● ";}
 .linenodiv pre span:nth-child(442) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(442)::before {content: "● ";}
-.linenodiv pre span:nth-child(446) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(446)::before {content: "● ";}
 .linenodiv pre span:nth-child(447) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(447)::before {content: "● ";}
 .linenodiv pre span:nth-child(448) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(448)::before {content: "● ";}
-.linenodiv pre span:nth-child(449) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(449)::before {content: "● ";}
-.linenodiv pre span:nth-child(450) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(450)::before {content: "● ";}
 .linenodiv pre span:nth-child(451) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(451)::before {content: "● ";}
 .linenodiv pre span:nth-child(452) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(452)::before {content: "● ";}
 .linenodiv pre span:nth-child(453) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(453)::before {content: "● ";}
-.linenodiv pre span:nth-child(456) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(456)::before {content: "● ";}
-.linenodiv pre span:nth-child(457) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(457)::before {content: "● ";}
-.linenodiv pre span:nth-child(458) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(458)::before {content: "● ";}
+.linenodiv pre span:nth-child(454) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(454)::before {content: "○ ";}
+.linenodiv pre span:nth-child(455) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(455)::before {content: "○ ";}
+.linenodiv pre span:nth-child(456) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(456)::before {content: "○ ";}
 .linenodiv pre span:nth-child(459) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(459)::before {content: "● ";}
 .linenodiv pre span:nth-child(460) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(460)::before {content: "● ";}
-.linenodiv pre span:nth-child(464) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(464)::before {content: "● ";}
+.linenodiv pre span:nth-child(461) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(461)::before {content: "● ";}
+.linenodiv pre span:nth-child(462) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(462)::before {content: "○ ";}
+.linenodiv pre span:nth-child(463) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(463)::before {content: "○ ";}
+.linenodiv pre span:nth-child(464) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(464)::before {content: "○ ";}
+.linenodiv pre span:nth-child(467) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(467)::before {content: "● ";}
 .linenodiv pre span:nth-child(468) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(468)::before {content: "● ";}
 .linenodiv pre span:nth-child(469) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(469)::before {content: "● ";}
-.linenodiv pre span:nth-child(470) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(470)::before {content: "● ";}
-.linenodiv pre span:nth-child(474) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(474)::before {content: "● ";}
-.linenodiv pre span:nth-child(476) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(476)::before {content: "● ";}
+.linenodiv pre span:nth-child(470) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(470)::before {content: "○ ";}
+.linenodiv pre span:nth-child(471) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(471)::before {content: "○ ";}
+.linenodiv pre span:nth-child(472) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(472)::before {content: "○ ";}
+.linenodiv pre span:nth-child(477) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(477)::before {content: "● ";}
 .linenodiv pre span:nth-child(478) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(478)::before {content: "● ";}
-.linenodiv pre span:nth-child(482) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(482)::before {content: "● ";}
+.linenodiv pre span:nth-child(479) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(479)::before {content: "● ";}
+.linenodiv pre span:nth-child(480) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(480)::before {content: "● ";}
+.linenodiv pre span:nth-child(486) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(486)::before {content: "● ";}
 .linenodiv pre span:nth-child(487) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(487)::before {content: "● ";}
-.linenodiv pre span:nth-child(489) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(489)::before {content: "● ";}
-.linenodiv pre span:nth-child(490) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(490)::before {content: "● ";}
-.linenodiv pre span:nth-child(491) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(491)::before {content: "● ";}
+.linenodiv pre span:nth-child(488) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(488)::before {content: "● ";}
+.linenodiv pre span:nth-child(492) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(492)::before {content: "● ";}
 .linenodiv pre span:nth-child(493) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(493)::before {content: "● ";}
-.linenodiv pre span:nth-child(500) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(500)::before {content: "● ";}
+.linenodiv pre span:nth-child(494) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(494)::before {content: "● ";}
+.linenodiv pre span:nth-child(495) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(495)::before {content: "● ";}
+.linenodiv pre span:nth-child(496) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(496)::before {content: "● ";}
+.linenodiv pre span:nth-child(497) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(497)::before {content: "● ";}
+.linenodiv pre span:nth-child(498) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(498)::before {content: "● ";}
 .linenodiv pre span:nth-child(501) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(501)::before {content: "● ";}
 .linenodiv pre span:nth-child(502) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(502)::before {content: "● ";}
 .linenodiv pre span:nth-child(503) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(503)::before {content: "● ";}
-.linenodiv pre span:nth-child(504) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(504)::before {content: "● ";}
-.linenodiv pre span:nth-child(505) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(505)::before {content: "● ";}
-.linenodiv pre span:nth-child(506) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(506)::before {content: "● ";}
-.linenodiv pre span:nth-child(508) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(508)::before {content: "● ";}
+.linenodiv pre span:nth-child(505) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(505)::before {content: "○ ";}
+.linenodiv pre span:nth-child(506) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(506)::before {content: "○ ";}
 .linenodiv pre span:nth-child(509) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(509)::before {content: "● ";}
-.linenodiv pre span:nth-child(510) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(510)::before {content: "● ";}
-.linenodiv pre span:nth-child(512) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(512)::before {content: "● ";}
-.linenodiv pre span:nth-child(514) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(514)::before {content: "● ";}
+.linenodiv pre span:nth-child(513) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(513)::before {content: "● ";}
 .linenodiv pre span:nth-child(515) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(515)::before {content: "● ";}
-.linenodiv pre span:nth-child(518) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(518)::before {content: "● ";}
-.linenodiv pre span:nth-child(519) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(519)::before {content: "● ";}
+.linenodiv pre span:nth-child(516) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(516)::before {content: "● ";}
+.linenodiv pre span:nth-child(517) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(517)::before {content: "● ";}
 .linenodiv pre span:nth-child(520) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(520)::before {content: "● ";}
-.linenodiv pre span:nth-child(523) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(523)::before {content: "○ ";}
-.linenodiv pre span:nth-child(524) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(524)::before {content: "○ ";}
-.linenodiv pre span:nth-child(529) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(529)::before {content: "● ";}
+.linenodiv pre span:nth-child(522) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(522)::before {content: "● ";}
+.linenodiv pre span:nth-child(523) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(523)::before {content: "● ";}
+.linenodiv pre span:nth-child(527) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(527)::before {content: "● ";}
+.linenodiv pre span:nth-child(530) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(530)::before {content: "● ";}
+.linenodiv pre span:nth-child(531) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(531)::before {content: "● ";}
 .linenodiv pre span:nth-child(532) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(532)::before {content: "● ";}
-.linenodiv pre span:nth-child(533) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(533)::before {content: "● ";}
 .linenodiv pre span:nth-child(534) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(534)::before {content: "● ";}
 .linenodiv pre span:nth-child(535) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(535)::before {content: "● ";}
 .linenodiv pre span:nth-child(536) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(536)::before {content: "● ";}
-.linenodiv pre span:nth-child(537) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(537)::before {content: "● ";}
 .linenodiv pre span:nth-child(538) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(538)::before {content: "● ";}
+.linenodiv pre span:nth-child(539) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(539)::before {content: "● ";}
 .linenodiv pre span:nth-child(540) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(540)::before {content: "● ";}
 .linenodiv pre span:nth-child(541) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(541)::before {content: "● ";}
 .linenodiv pre span:nth-child(542) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(542)::before {content: "● ";}
+.linenodiv pre span:nth-child(543) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(543)::before {content: "● ";}
 .linenodiv pre span:nth-child(544) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(544)::before {content: "● ";}
+.linenodiv pre span:nth-child(545) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(545)::before {content: "● ";}
 .linenodiv pre span:nth-child(547) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(547)::before {content: "● ";}
+.linenodiv pre span:nth-child(548) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(548)::before {content: "● ";}
 .linenodiv pre span:nth-child(549) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(549)::before {content: "● ";}
-.linenodiv pre span:nth-child(551) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(551)::before {content: "● ";}
 .linenodiv pre span:nth-child(552) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(552)::before {content: "● ";}
-.linenodiv pre span:nth-child(553) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(553)::before {content: "● ";}
-.linenodiv pre span:nth-child(554) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(554)::before {content: "● ";}
-.linenodiv pre span:nth-child(555) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(555)::before {content: "● ";}
-.linenodiv pre span:nth-child(556) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(556)::before {content: "● ";}
-.linenodiv pre span:nth-child(557) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(557)::before {content: "● ";}
+.linenodiv pre span:nth-child(563) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(563)::before {content: "● ";}
 .linenodiv pre span:nth-child(564) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(564)::before {content: "● ";}
-.linenodiv pre span:nth-child(567) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(567)::before {content: "● ";}
+.linenodiv pre span:nth-child(566) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(566)::before {content: "● ";}
 .linenodiv pre span:nth-child(568) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(568)::before {content: "● ";}
-.linenodiv pre span:nth-child(569) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(569)::before {content: "● ";}
 .linenodiv pre span:nth-child(571) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(571)::before {content: "● ";}
 .linenodiv pre span:nth-child(572) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(572)::before {content: "● ";}
-.linenodiv pre span:nth-child(573) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(573)::before {content: "● ";}
+.linenodiv pre span:nth-child(574) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(574)::before {content: "● ";}
+.linenodiv pre span:nth-child(575) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(575)::before {content: "● ";}
 .linenodiv pre span:nth-child(577) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(577)::before {content: "● ";}
 .linenodiv pre span:nth-child(578) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(578)::before {content: "● ";}
 .linenodiv pre span:nth-child(579) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(579)::before {content: "● ";}
+.linenodiv pre span:nth-child(580) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(580)::before {content: "● ";}
+.linenodiv pre span:nth-child(581) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(581)::before {content: "● ";}
+.linenodiv pre span:nth-child(582) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(582)::before {content: "● ";}
 .linenodiv pre span:nth-child(583) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(583)::before {content: "● ";}
-.linenodiv pre span:nth-child(584) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(584)::before {content: "● ";}
-.linenodiv pre span:nth-child(585) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(585)::before {content: "○ ";}
+.linenodiv pre span:nth-child(585) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(585)::before {content: "● ";}
 .linenodiv pre span:nth-child(586) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(586)::before {content: "● ";}
 .linenodiv pre span:nth-child(587) {background-color: #4cae4fdd;color: white;}
@@ -973,12 +771,32 @@
 .linenodiv pre span:nth-child(589)::before {content: "● ";}
 .linenodiv pre span:nth-child(591) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(591)::before {content: "● ";}
+.linenodiv pre span:nth-child(592) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(592)::before {content: "● ";}
 .linenodiv pre span:nth-child(593) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(593)::before {content: "● ";}
 .linenodiv pre span:nth-child(594) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(594)::before {content: "● ";}
+.linenodiv pre span:nth-child(595) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(595)::before {content: "● ";}
 .linenodiv pre span:nth-child(596) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(596)::before {content: "● ";}
+.linenodiv pre span:nth-child(597) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(597)::before {content: "● ";}
+.linenodiv pre span:nth-child(598) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(598)::before {content: "● ";}
+.linenodiv pre span:nth-child(599) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(599)::before {content: "● ";}
+.linenodiv pre span:nth-child(600) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(600)::before {content: "● ";}
+.linenodiv pre span:nth-child(601) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(601)::before {content: "● ";}
+.linenodiv pre span:nth-child(602) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(602)::before {content: "● ";}
+.linenodiv pre span:nth-child(603) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(603)::before {content: "● ";}
+.linenodiv pre span:nth-child(604) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(604)::before {content: "● ";}
 .linenodiv pre span:nth-child(605) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(605)::before {content: "● ";}
 .linenodiv pre span:nth-child(606) {background-color: #4cae4fdd;color: white;}
@@ -987,74 +805,64 @@
 .linenodiv pre span:nth-child(607)::before {content: "● ";}
 .linenodiv pre span:nth-child(608) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(608)::before {content: "● ";}
+.linenodiv pre span:nth-child(609) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(609)::before {content: "● ";}
 .linenodiv pre span:nth-child(610) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(610)::before {content: "● ";}
-.linenodiv pre span:nth-child(612) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(612)::before {content: "● ";}
-.linenodiv pre span:nth-child(613) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(613)::before {content: "● ";}
 .linenodiv pre span:nth-child(614) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(614)::before {content: "● ";}
-.linenodiv pre span:nth-child(617) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(617)::before {content: "● ";}
-.linenodiv pre span:nth-child(619) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(619)::before {content: "○ ";}
-.linenodiv pre span:nth-child(620) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(620)::before {content: "○ ";}
-.linenodiv pre span:nth-child(621) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(621)::before {content: "○ ";}
-.linenodiv pre span:nth-child(622) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(622)::before {content: "○ ";}
-.linenodiv pre span:nth-child(623) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(623)::before {content: "○ ";}
-.linenodiv pre span:nth-child(627) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(627)::before {content: "○ ";}
-.linenodiv pre span:nth-child(628) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(628)::before {content: "○ ";}
-.linenodiv pre span:nth-child(630) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(630)::before {content: "○ ";}
-.linenodiv pre span:nth-child(631) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(631)::before {content: "○ ";}
-.linenodiv pre span:nth-child(632) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(632)::before {content: "○ ";}
-.linenodiv pre span:nth-child(633) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(633)::before {content: "○ ";}
-.linenodiv pre span:nth-child(636) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(636)::before {content: "○ ";}
-.linenodiv pre span:nth-child(637) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(637)::before {content: "○ ";}
-.linenodiv pre span:nth-child(640) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(640)::before {content: "○ ";}
-.linenodiv pre span:nth-child(644) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(644)::before {content: "● ";}
-.linenodiv pre span:nth-child(645) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(645)::before {content: "● ";}
+.linenodiv pre span:nth-child(618) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(618)::before {content: "● ";}
+.linenodiv pre span:nth-child(619) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(619)::before {content: "● ";}
+.linenodiv pre span:nth-child(620) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(620)::before {content: "● ";}
+.linenodiv pre span:nth-child(621) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(621)::before {content: "● ";}
+.linenodiv pre span:nth-child(622) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(622)::before {content: "● ";}
+.linenodiv pre span:nth-child(623) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(623)::before {content: "● ";}
+.linenodiv pre span:nth-child(624) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(624)::before {content: "● ";}
+.linenodiv pre span:nth-child(625) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(625)::before {content: "● ";}
+.linenodiv pre span:nth-child(628) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(628)::before {content: "● ";}
+.linenodiv pre span:nth-child(629) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(629)::before {content: "● ";}
+.linenodiv pre span:nth-child(630) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(630)::before {content: "● ";}
+.linenodiv pre span:nth-child(631) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(631)::before {content: "● ";}
+.linenodiv pre span:nth-child(632) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(632)::before {content: "● ";}
+.linenodiv pre span:nth-child(636) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(636)::before {content: "● ";}
+.linenodiv pre span:nth-child(640) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(640)::before {content: "● ";}
+.linenodiv pre span:nth-child(641) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(641)::before {content: "● ";}
+.linenodiv pre span:nth-child(642) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(642)::before {content: "● ";}
 .linenodiv pre span:nth-child(646) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(646)::before {content: "● ";}
-.linenodiv pre span:nth-child(647) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(647)::before {content: "● ";}
+.linenodiv pre span:nth-child(648) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(648)::before {content: "● ";}
 .linenodiv pre span:nth-child(650) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(650)::before {content: "● ";}
-.linenodiv pre span:nth-child(652) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(652)::before {content: "● ";}
-.linenodiv pre span:nth-child(653) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(653)::before {content: "● ";}
-.linenodiv pre span:nth-child(657) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(657)::before {content: "● ";}
-.linenodiv pre span:nth-child(658) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(658)::before {content: "● ";}
-.linenodiv pre span:nth-child(660) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(660)::before {content: "● ";}
+.linenodiv pre span:nth-child(654) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(654)::before {content: "● ";}
+.linenodiv pre span:nth-child(659) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(659)::before {content: "● ";}
 .linenodiv pre span:nth-child(661) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(661)::before {content: "● ";}
 .linenodiv pre span:nth-child(662) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(662)::before {content: "● ";}
 .linenodiv pre span:nth-child(663) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(663)::before {content: "● ";}
-.linenodiv pre span:nth-child(668) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(668)::before {content: "● ";}
-.linenodiv pre span:nth-child(670) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(670)::before {content: "● ";}
+.linenodiv pre span:nth-child(665) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(665)::before {content: "● ";}
 .linenodiv pre span:nth-child(672) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(672)::before {content: "● ";}
 .linenodiv pre span:nth-child(673) {background-color: #4cae4fdd;color: white;}
@@ -1063,32 +871,228 @@
 .linenodiv pre span:nth-child(674)::before {content: "● ";}
 .linenodiv pre span:nth-child(675) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(675)::before {content: "● ";}
-.linenodiv pre span:nth-child(676) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(676)::before {content: "○ ";}
-.linenodiv pre span:nth-child(677) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(677)::before {content: "○ ";}
-.linenodiv pre span:nth-child(678) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(678)::before {content: "○ ";}
-.linenodiv pre span:nth-child(679) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(679)::before {content: "○ ";}
-.linenodiv pre span:nth-child(683) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(683)::before {content: "● ";}
+.linenodiv pre span:nth-child(676) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(676)::before {content: "● ";}
+.linenodiv pre span:nth-child(677) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(677)::before {content: "● ";}
+.linenodiv pre span:nth-child(678) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(678)::before {content: "● ";}
+.linenodiv pre span:nth-child(680) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(680)::before {content: "● ";}
+.linenodiv pre span:nth-child(681) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(681)::before {content: "● ";}
+.linenodiv pre span:nth-child(682) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(682)::before {content: "● ";}
 .linenodiv pre span:nth-child(684) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(684)::before {content: "● ";}
-.linenodiv pre span:nth-child(685) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(685)::before {content: "● ";}
+.linenodiv pre span:nth-child(686) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(686)::before {content: "● ";}
 .linenodiv pre span:nth-child(687) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(687)::before {content: "● ";}
-.linenodiv pre span:nth-child(689) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(689)::before {content: "● ";}
 .linenodiv pre span:nth-child(690) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(690)::before {content: "● ";}
-.linenodiv pre span:nth-child(693) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(693)::before {content: "● ";}
-.linenodiv pre span:nth-child(694) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(694)::before {content: "● ";}
-.linenodiv pre span:nth-child(695) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(695)::before {content: "● ";}
+.linenodiv pre span:nth-child(691) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(691)::before {content: "● ";}
+.linenodiv pre span:nth-child(692) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(692)::before {content: "● ";}
+.linenodiv pre span:nth-child(695) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(695)::before {content: "○ ";}
+.linenodiv pre span:nth-child(696) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(696)::before {content: "○ ";}
+.linenodiv pre span:nth-child(701) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(701)::before {content: "● ";}
+.linenodiv pre span:nth-child(704) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(704)::before {content: "● ";}
+.linenodiv pre span:nth-child(705) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(705)::before {content: "● ";}
+.linenodiv pre span:nth-child(706) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(706)::before {content: "● ";}
+.linenodiv pre span:nth-child(707) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(707)::before {content: "● ";}
+.linenodiv pre span:nth-child(708) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(708)::before {content: "● ";}
+.linenodiv pre span:nth-child(709) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(709)::before {content: "● ";}
+.linenodiv pre span:nth-child(710) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(710)::before {content: "● ";}
+.linenodiv pre span:nth-child(712) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(712)::before {content: "● ";}
+.linenodiv pre span:nth-child(713) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(713)::before {content: "● ";}
+.linenodiv pre span:nth-child(714) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(714)::before {content: "● ";}
+.linenodiv pre span:nth-child(716) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(716)::before {content: "● ";}
+.linenodiv pre span:nth-child(719) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(719)::before {content: "● ";}
+.linenodiv pre span:nth-child(721) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(721)::before {content: "● ";}
+.linenodiv pre span:nth-child(723) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(723)::before {content: "● ";}
+.linenodiv pre span:nth-child(724) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(724)::before {content: "● ";}
+.linenodiv pre span:nth-child(725) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(725)::before {content: "● ";}
+.linenodiv pre span:nth-child(726) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(726)::before {content: "● ";}
+.linenodiv pre span:nth-child(727) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(727)::before {content: "● ";}
+.linenodiv pre span:nth-child(728) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(728)::before {content: "● ";}
+.linenodiv pre span:nth-child(729) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(729)::before {content: "● ";}
+.linenodiv pre span:nth-child(736) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(736)::before {content: "● ";}
+.linenodiv pre span:nth-child(739) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(739)::before {content: "● ";}
+.linenodiv pre span:nth-child(740) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(740)::before {content: "● ";}
+.linenodiv pre span:nth-child(741) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(741)::before {content: "● ";}
+.linenodiv pre span:nth-child(743) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(743)::before {content: "● ";}
+.linenodiv pre span:nth-child(744) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(744)::before {content: "● ";}
+.linenodiv pre span:nth-child(745) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(745)::before {content: "● ";}
+.linenodiv pre span:nth-child(749) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(749)::before {content: "● ";}
+.linenodiv pre span:nth-child(750) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(750)::before {content: "● ";}
+.linenodiv pre span:nth-child(751) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(751)::before {content: "● ";}
+.linenodiv pre span:nth-child(755) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(755)::before {content: "● ";}
+.linenodiv pre span:nth-child(756) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(756)::before {content: "● ";}
+.linenodiv pre span:nth-child(757) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(757)::before {content: "○ ";}
+.linenodiv pre span:nth-child(758) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(758)::before {content: "● ";}
+.linenodiv pre span:nth-child(759) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(759)::before {content: "● ";}
+.linenodiv pre span:nth-child(760) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(760)::before {content: "● ";}
+.linenodiv pre span:nth-child(761) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(761)::before {content: "● ";}
+.linenodiv pre span:nth-child(763) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(763)::before {content: "● ";}
+.linenodiv pre span:nth-child(765) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(765)::before {content: "● ";}
+.linenodiv pre span:nth-child(766) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(766)::before {content: "● ";}
+.linenodiv pre span:nth-child(768) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(768)::before {content: "● ";}
+.linenodiv pre span:nth-child(777) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(777)::before {content: "● ";}
+.linenodiv pre span:nth-child(778) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(778)::before {content: "● ";}
+.linenodiv pre span:nth-child(779) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(779)::before {content: "● ";}
+.linenodiv pre span:nth-child(780) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(780)::before {content: "● ";}
+.linenodiv pre span:nth-child(782) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(782)::before {content: "● ";}
+.linenodiv pre span:nth-child(784) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(784)::before {content: "● ";}
+.linenodiv pre span:nth-child(785) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(785)::before {content: "● ";}
+.linenodiv pre span:nth-child(786) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(786)::before {content: "● ";}
+.linenodiv pre span:nth-child(789) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(789)::before {content: "● ";}
+.linenodiv pre span:nth-child(791) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(791)::before {content: "○ ";}
+.linenodiv pre span:nth-child(792) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(792)::before {content: "○ ";}
+.linenodiv pre span:nth-child(793) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(793)::before {content: "○ ";}
+.linenodiv pre span:nth-child(794) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(794)::before {content: "○ ";}
+.linenodiv pre span:nth-child(795) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(795)::before {content: "○ ";}
+.linenodiv pre span:nth-child(799) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(799)::before {content: "○ ";}
+.linenodiv pre span:nth-child(800) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(800)::before {content: "○ ";}
+.linenodiv pre span:nth-child(802) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(802)::before {content: "○ ";}
+.linenodiv pre span:nth-child(803) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(803)::before {content: "○ ";}
+.linenodiv pre span:nth-child(804) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(804)::before {content: "○ ";}
+.linenodiv pre span:nth-child(805) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(805)::before {content: "○ ";}
+.linenodiv pre span:nth-child(808) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(808)::before {content: "○ ";}
+.linenodiv pre span:nth-child(809) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(809)::before {content: "○ ";}
+.linenodiv pre span:nth-child(812) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(812)::before {content: "○ ";}
+.linenodiv pre span:nth-child(816) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(816)::before {content: "● ";}
+.linenodiv pre span:nth-child(817) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(817)::before {content: "● ";}
+.linenodiv pre span:nth-child(818) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(818)::before {content: "● ";}
+.linenodiv pre span:nth-child(819) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(819)::before {content: "● ";}
+.linenodiv pre span:nth-child(822) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(822)::before {content: "● ";}
+.linenodiv pre span:nth-child(824) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(824)::before {content: "● ";}
+.linenodiv pre span:nth-child(825) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(825)::before {content: "● ";}
+.linenodiv pre span:nth-child(829) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(829)::before {content: "● ";}
+.linenodiv pre span:nth-child(830) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(830)::before {content: "● ";}
+.linenodiv pre span:nth-child(832) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(832)::before {content: "● ";}
+.linenodiv pre span:nth-child(833) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(833)::before {content: "● ";}
+.linenodiv pre span:nth-child(834) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(834)::before {content: "● ";}
+.linenodiv pre span:nth-child(835) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(835)::before {content: "● ";}
+.linenodiv pre span:nth-child(840) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(840)::before {content: "● ";}
+.linenodiv pre span:nth-child(842) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(842)::before {content: "● ";}
+.linenodiv pre span:nth-child(844) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(844)::before {content: "● ";}
+.linenodiv pre span:nth-child(845) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(845)::before {content: "● ";}
+.linenodiv pre span:nth-child(846) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(846)::before {content: "● ";}
+.linenodiv pre span:nth-child(847) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(847)::before {content: "● ";}
+.linenodiv pre span:nth-child(848) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(848)::before {content: "○ ";}
+.linenodiv pre span:nth-child(849) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(849)::before {content: "○ ";}
+.linenodiv pre span:nth-child(850) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(850)::before {content: "○ ";}
+.linenodiv pre span:nth-child(851) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(851)::before {content: "○ ";}
+.linenodiv pre span:nth-child(855) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(855)::before {content: "● ";}
+.linenodiv pre span:nth-child(856) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(856)::before {content: "● ";}
+.linenodiv pre span:nth-child(857) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(857)::before {content: "● ";}
+.linenodiv pre span:nth-child(859) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(859)::before {content: "● ";}
+.linenodiv pre span:nth-child(861) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(861)::before {content: "● ";}
+.linenodiv pre span:nth-child(862) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(862)::before {content: "● ";}
+.linenodiv pre span:nth-child(865) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(865)::before {content: "● ";}
+.linenodiv pre span:nth-child(866) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(866)::before {content: "● ";}
+.linenodiv pre span:nth-child(867) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(867)::before {content: "● ";}
 </style>
 
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">  1</span>
@@ -1785,7 +1789,179 @@
 <span class="normal">692</span>
 <span class="normal">693</span>
 <span class="normal">694</span>
-<span class="normal">695</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;CppParser.hpp&quot;</span>
+<span class="normal">695</span>
+<span class="normal">696</span>
+<span class="normal">697</span>
+<span class="normal">698</span>
+<span class="normal">699</span>
+<span class="normal">700</span>
+<span class="normal">701</span>
+<span class="normal">702</span>
+<span class="normal">703</span>
+<span class="normal">704</span>
+<span class="normal">705</span>
+<span class="normal">706</span>
+<span class="normal">707</span>
+<span class="normal">708</span>
+<span class="normal">709</span>
+<span class="normal">710</span>
+<span class="normal">711</span>
+<span class="normal">712</span>
+<span class="normal">713</span>
+<span class="normal">714</span>
+<span class="normal">715</span>
+<span class="normal">716</span>
+<span class="normal">717</span>
+<span class="normal">718</span>
+<span class="normal">719</span>
+<span class="normal">720</span>
+<span class="normal">721</span>
+<span class="normal">722</span>
+<span class="normal">723</span>
+<span class="normal">724</span>
+<span class="normal">725</span>
+<span class="normal">726</span>
+<span class="normal">727</span>
+<span class="normal">728</span>
+<span class="normal">729</span>
+<span class="normal">730</span>
+<span class="normal">731</span>
+<span class="normal">732</span>
+<span class="normal">733</span>
+<span class="normal">734</span>
+<span class="normal">735</span>
+<span class="normal">736</span>
+<span class="normal">737</span>
+<span class="normal">738</span>
+<span class="normal">739</span>
+<span class="normal">740</span>
+<span class="normal">741</span>
+<span class="normal">742</span>
+<span class="normal">743</span>
+<span class="normal">744</span>
+<span class="normal">745</span>
+<span class="normal">746</span>
+<span class="normal">747</span>
+<span class="normal">748</span>
+<span class="normal">749</span>
+<span class="normal">750</span>
+<span class="normal">751</span>
+<span class="normal">752</span>
+<span class="normal">753</span>
+<span class="normal">754</span>
+<span class="normal">755</span>
+<span class="normal">756</span>
+<span class="normal">757</span>
+<span class="normal">758</span>
+<span class="normal">759</span>
+<span class="normal">760</span>
+<span class="normal">761</span>
+<span class="normal">762</span>
+<span class="normal">763</span>
+<span class="normal">764</span>
+<span class="normal">765</span>
+<span class="normal">766</span>
+<span class="normal">767</span>
+<span class="normal">768</span>
+<span class="normal">769</span>
+<span class="normal">770</span>
+<span class="normal">771</span>
+<span class="normal">772</span>
+<span class="normal">773</span>
+<span class="normal">774</span>
+<span class="normal">775</span>
+<span class="normal">776</span>
+<span class="normal">777</span>
+<span class="normal">778</span>
+<span class="normal">779</span>
+<span class="normal">780</span>
+<span class="normal">781</span>
+<span class="normal">782</span>
+<span class="normal">783</span>
+<span class="normal">784</span>
+<span class="normal">785</span>
+<span class="normal">786</span>
+<span class="normal">787</span>
+<span class="normal">788</span>
+<span class="normal">789</span>
+<span class="normal">790</span>
+<span class="normal">791</span>
+<span class="normal">792</span>
+<span class="normal">793</span>
+<span class="normal">794</span>
+<span class="normal">795</span>
+<span class="normal">796</span>
+<span class="normal">797</span>
+<span class="normal">798</span>
+<span class="normal">799</span>
+<span class="normal">800</span>
+<span class="normal">801</span>
+<span class="normal">802</span>
+<span class="normal">803</span>
+<span class="normal">804</span>
+<span class="normal">805</span>
+<span class="normal">806</span>
+<span class="normal">807</span>
+<span class="normal">808</span>
+<span class="normal">809</span>
+<span class="normal">810</span>
+<span class="normal">811</span>
+<span class="normal">812</span>
+<span class="normal">813</span>
+<span class="normal">814</span>
+<span class="normal">815</span>
+<span class="normal">816</span>
+<span class="normal">817</span>
+<span class="normal">818</span>
+<span class="normal">819</span>
+<span class="normal">820</span>
+<span class="normal">821</span>
+<span class="normal">822</span>
+<span class="normal">823</span>
+<span class="normal">824</span>
+<span class="normal">825</span>
+<span class="normal">826</span>
+<span class="normal">827</span>
+<span class="normal">828</span>
+<span class="normal">829</span>
+<span class="normal">830</span>
+<span class="normal">831</span>
+<span class="normal">832</span>
+<span class="normal">833</span>
+<span class="normal">834</span>
+<span class="normal">835</span>
+<span class="normal">836</span>
+<span class="normal">837</span>
+<span class="normal">838</span>
+<span class="normal">839</span>
+<span class="normal">840</span>
+<span class="normal">841</span>
+<span class="normal">842</span>
+<span class="normal">843</span>
+<span class="normal">844</span>
+<span class="normal">845</span>
+<span class="normal">846</span>
+<span class="normal">847</span>
+<span class="normal">848</span>
+<span class="normal">849</span>
+<span class="normal">850</span>
+<span class="normal">851</span>
+<span class="normal">852</span>
+<span class="normal">853</span>
+<span class="normal">854</span>
+<span class="normal">855</span>
+<span class="normal">856</span>
+<span class="normal">857</span>
+<span class="normal">858</span>
+<span class="normal">859</span>
+<span class="normal">860</span>
+<span class="normal">861</span>
+<span class="normal">862</span>
+<span class="normal">863</span>
+<span class="normal">864</span>
+<span class="normal">865</span>
+<span class="normal">866</span>
+<span class="normal">867</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;CppParser.hpp&quot;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Doc.hpp&quot;</span>
 
 <span class="cm">/**</span>
@@ -1856,11 +2032,25 @@
 
 <span class="s">  ;; typedef</span>
 <span class="s">  (type_definition</span>
-<span class="s">       declarator: (type_identifier) @name .) @type</span>
+<span class="s">      declarator: [</span>
+<span class="s">        (type_identifier) @name</span>
+
+<span class="s">        ;; for function pointer types</span>
+<span class="s">        (function_declarator</span>
+<span class="s">          declarator: (parenthesized_declarator</span>
+<span class="s">            (pointer_declarator</span>
+<span class="s">              declarator: (type_identifier) @name)</span>
+<span class="s">          )</span>
+<span class="s">        )</span>
+<span class="s">        (pointer_declarator</span>
+<span class="s">          declarator: (function_declarator</span>
+<span class="s">            declarator: (type_identifier) @name)</span>
+<span class="s">        )</span>
+<span class="s">      ]) @typedef</span>
 
 <span class="s">  ;; type alias</span>
 <span class="s">  (alias_declaration</span>
-<span class="s">      name: (type_identifier) @name) @type</span>
+<span class="s">      name: (type_identifier) @name) @typedef</span>
 
 <span class="s">  ;; concept</span>
 <span class="s">  (concept_definition</span>
@@ -1882,6 +2072,14 @@
 <span class="s">            (pointer_declarator (identifier) @name)</span>
 <span class="s">          ]</span>
 <span class="s">          value: (_) @value)</span>
+
+<span class="s">        ;; for function pointer types</span>
+<span class="s">        (function_declarator</span>
+<span class="s">          declarator: (parenthesized_declarator</span>
+<span class="s">            (pointer_declarator</span>
+<span class="s">              declarator: (identifier) @name)</span>
+<span class="s">          )</span>
+<span class="s">        )</span>
 <span class="s">      ]</span>
 <span class="s">      default_value: (_)? @value</span>
 <span class="s">    ) @variable</span>
@@ -1905,12 +2103,88 @@
 <span class="s">            (pointer_declarator (field_identifier) @name)</span>
 <span class="s">          ]</span>
 <span class="s">          value: (_) @value)</span>
+
+<span class="s">        ;; for function pointer types</span>
+<span class="s">        (function_declarator</span>
+<span class="s">          declarator: (parenthesized_declarator</span>
+<span class="s">            (pointer_declarator</span>
+<span class="s">              declarator: (field_identifier) @name)</span>
+<span class="s">          )</span>
+<span class="s">        )</span>
 <span class="s">      ]</span>
 <span class="s">      default_value: (_)? @value</span>
 <span class="s">    ) @variable</span>
 
-<span class="s">  ;; function</span>
-<span class="s">  (_</span>
+<span class="s">  ;; function declaration</span>
+<span class="s">  (declaration</span>
+<span class="s">      declarator: [</span>
+<span class="s">        (function_declarator</span>
+<span class="s">          declarator: (identifier) @name</span>
+<span class="s">        )</span>
+<span class="s">        (reference_declarator</span>
+<span class="s">          (function_declarator</span>
+<span class="s">            declarator: (identifier) @name</span>
+<span class="s">          )</span>
+<span class="s">        )</span>
+<span class="s">        (pointer_declarator</span>
+<span class="s">          (function_declarator</span>
+<span class="s">            declarator: (identifier) @name</span>
+<span class="s">          )</span>
+<span class="s">        )</span>
+<span class="s">        (function_declarator  ;; for function pointer return types</span>
+<span class="s">          declarator: (parenthesized_declarator</span>
+<span class="s">            (pointer_declarator</span>
+<span class="s">              (function_declarator</span>
+<span class="s">                declarator: (identifier) @name</span>
+<span class="s">              )</span>
+<span class="s">            )</span>
+<span class="s">          )</span>
+<span class="s">        )</span>
+<span class="s">      ]</span>
+<span class="s">    ) @function</span>
+
+<span class="s">  ;; member function declaration</span>
+<span class="s">  (field_declaration</span>
+<span class="s">      declarator: [</span>
+<span class="s">        (function_declarator</span>
+<span class="s">          declarator: [</span>
+<span class="s">            (identifier) @name</span>
+<span class="s">            (field_identifier) @name</span>
+<span class="s">          ]</span>
+<span class="s">        )</span>
+<span class="s">        (reference_declarator</span>
+<span class="s">          (function_declarator</span>
+<span class="s">            declarator: [</span>
+<span class="s">              (identifier) @name</span>
+<span class="s">              (field_identifier) @name</span>
+<span class="s">            ]</span>
+<span class="s">          )</span>
+<span class="s">        )</span>
+<span class="s">        (pointer_declarator</span>
+<span class="s">          (function_declarator</span>
+<span class="s">            declarator: [</span>
+<span class="s">              (identifier) @name</span>
+<span class="s">              (field_identifier) @name</span>
+<span class="s">            ]</span>
+<span class="s">          )</span>
+<span class="s">        )</span>
+<span class="s">        (function_declarator  ;; for function pointer return types</span>
+<span class="s">          declarator: (parenthesized_declarator</span>
+<span class="s">            (pointer_declarator</span>
+<span class="s">              (function_declarator</span>
+<span class="s">                declarator: [</span>
+<span class="s">                  (identifier) @name</span>
+<span class="s">                  (field_identifier) @name</span>
+<span class="s">                ]</span>
+<span class="s">              )</span>
+<span class="s">            )</span>
+<span class="s">          )</span>
+<span class="s">        )</span>
+<span class="s">      ]</span>
+<span class="s">    ) @function</span>
+
+<span class="s">  ;; function definition</span>
+<span class="s">  (function_definition</span>
 <span class="s">      declarator: [</span>
 <span class="s">        (function_declarator</span>
 <span class="s">          declarator: [</span>
@@ -1937,15 +2211,43 @@
 <span class="s">            ]</span>
 <span class="s">          )</span>
 <span class="s">        )</span>
+
+<span class="s">        ;; for function pointer return types</span>
+<span class="s">        (function_declarator</span>
+<span class="s">          declarator: (parenthesized_declarator</span>
+<span class="s">            (pointer_declarator</span>
+<span class="s">              (function_declarator</span>
+<span class="s">                declarator: [</span>
+<span class="s">                  (identifier) @name</span>
+<span class="s">                  (field_identifier) @name</span>
+<span class="s">                  (destructor_name) @name</span>
+<span class="s">                ]</span>
+<span class="s">              )</span>
+<span class="s">            )</span>
+<span class="s">          )</span>
+<span class="s">        )</span>
 <span class="s">      ]</span>
 <span class="s">      [</span>
 <span class="s">        (field_initializer_list)</span>
 <span class="s">        body: (_)</span>
-<span class="s">      ]? @body</span>
+<span class="s">      ] @body</span>
 <span class="s">    ) @function</span>
 
-<span class="s">  ;; operator</span>
-<span class="s">  (_</span>
+<span class="s">  ;; constructor &amp; destructor declaration</span>
+<span class="s">  (declaration</span>
+<span class="s">      declarator: [</span>
+<span class="s">        (function_declarator</span>
+<span class="s">          declarator: [</span>
+<span class="s">          (identifier) @name</span>
+<span class="s">          (field_identifier) @name</span>
+<span class="s">          (destructor_name) @name</span>
+<span class="s">          ]</span>
+<span class="s">        )</span>
+<span class="s">      ]</span>
+<span class="s">    ) @function</span>
+
+<span class="s">  ;; operator declaration</span>
+<span class="s">  (declaration</span>
 <span class="s">      declarator: [</span>
 <span class="s">        (function_declarator</span>
 <span class="s">          declarator: (operator_name) @name</span>
@@ -1964,7 +2266,51 @@
 <span class="s">          type: (_) @name</span>
 <span class="s">        )</span>
 <span class="s">      ]</span>
-<span class="s">      body: (_)? @body</span>
+<span class="s">    ) @operator</span>
+
+<span class="s">  ;; member operator declaration</span>
+<span class="s">  (field_declaration</span>
+<span class="s">      declarator: [</span>
+<span class="s">        (function_declarator</span>
+<span class="s">          declarator: (operator_name) @name</span>
+<span class="s">        )</span>
+<span class="s">        (reference_declarator</span>
+<span class="s">          (function_declarator</span>
+<span class="s">            declarator: (operator_name) @name</span>
+<span class="s">          )</span>
+<span class="s">        )</span>
+<span class="s">        (pointer_declarator</span>
+<span class="s">          (function_declarator</span>
+<span class="s">            declarator: (operator_name) @name</span>
+<span class="s">          )</span>
+<span class="s">        )</span>
+<span class="s">        (operator_cast</span>
+<span class="s">          type: (_) @name</span>
+<span class="s">        )</span>
+<span class="s">      ]</span>
+<span class="s">    ) @operator</span>
+
+<span class="s">  ;; member operator definition</span>
+<span class="s">  (function_definition</span>
+<span class="s">      declarator: [</span>
+<span class="s">        (function_declarator</span>
+<span class="s">          declarator: (operator_name) @name</span>
+<span class="s">        )</span>
+<span class="s">        (reference_declarator</span>
+<span class="s">          (function_declarator</span>
+<span class="s">            declarator: (operator_name) @name</span>
+<span class="s">          )</span>
+<span class="s">        )</span>
+<span class="s">        (pointer_declarator</span>
+<span class="s">          (function_declarator</span>
+<span class="s">            declarator: (operator_name) @name</span>
+<span class="s">          )</span>
+<span class="s">        )</span>
+<span class="s">        (operator_cast</span>
+<span class="s">          type: (_) @name</span>
+<span class="s">        )</span>
+<span class="s">      ]</span>
+<span class="s">      body: (_) @body</span>
 <span class="s">    ) @operator</span>
 
 <span class="s">  ;; enumeration value</span>
@@ -2210,6 +2556,8 @@
 <span class="w">          </span><span class="n">entity</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EntityType</span><span class="o">::</span><span class="n">TEMPLATE</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;type&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">          </span><span class="n">entity</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EntityType</span><span class="o">::</span><span class="n">TYPE</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;typedef&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">entity</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EntityType</span><span class="o">::</span><span class="n">TYPEDEF</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;concept&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">          </span><span class="n">entity</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EntityType</span><span class="o">::</span><span class="n">CONCEPT</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strncmp</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;variable&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -2583,10 +2931,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.60a45f97.min.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js"></script>
       

@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../../assets/logo_red.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.0253249f.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.a40c8224.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
@@ -605,18 +605,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#iter" class="md-nav__link">
+  <a href="#end" class="md-nav__link">
     <span class="md-ellipsis">
-      iter
+      end
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#end" class="md-nav__link">
+  <a href="#iter" class="md-nav__link">
     <span class="md-ellipsis">
-      end
+      iter
     </span>
   </a>
   
@@ -647,18 +647,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#next" class="md-nav__link">
+  <a href="#consume" class="md-nav__link">
     <span class="md-ellipsis">
-      next
+      consume
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#consume" class="md-nav__link">
+  <a href="#next" class="md-nav__link">
     <span class="md-ellipsis">
-      consume
+      next
     </span>
   </a>
   
@@ -733,15 +733,15 @@
 </tbody>
 </table>
 <h2 id="variable-details">Variable Details<a class="headerlink" href="#variable-details" title="Permanent link">&para;</a></h2>
-<h3 id="iter">iter<a name="iter"></a><a class="headerlink" href="#iter" title="Permanent link">&para;</a></h3>
-<div class="admonition variable">
-<p class="admonition-title">std::string_view::const_iterator iter</p>
-<p>Iterator over source.</p>
-</div>
 <h3 id="end">end<a name="end"></a><a class="headerlink" href="#end" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
 <p class="admonition-title">std::string_view::const_iterator end</p>
 <p>End of source.</p>
+</div>
+<h3 id="iter">iter<a name="iter"></a><a class="headerlink" href="#iter" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">std::string_view::const_iterator iter</p>
+<p>Iterator over source.</p>
 </div>
 <h2 id="function-details">Function Details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
 <h3 id="doctokenizer_1">DocTokenizer<a name="DocTokenizer"></a><a class="headerlink" href="#doctokenizer_1" title="Permanent link">&para;</a></h3>
@@ -752,19 +752,6 @@
 <dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>comment</code></dt>
 <dd>Comment to tokenize.</dd>
 </dl>
-</div>
-<h3 id="next">next<a name="next"></a><a class="headerlink" href="#next" title="Permanent link">&para;</a></h3>
-<div class="admonition function">
-<p class="admonition-title">DocToken next()</p>
-<p>Get the next token.</p>
-<dl>
-<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.42L5.83 13H21V7z"/></svg></span> <strong>Return</strong></dt>
-<dd>Next token.</dd>
-</dl>
-<p>The token is only valid for the lifetime of the DocTokenizer, as it
-contains a reference to a substring of the source file. If no tokens
-remain (i.e. the end of the file is reached), a token with a type of
-<code>NONE</code> is returned.</p>
 </div>
 <h3 id="consume">consume<a name="consume"></a><a class="headerlink" href="#consume" title="Permanent link">&para;</a></h3>
 <div class="admonition function">
@@ -779,6 +766,19 @@ remain (i.e. the end of the file is reached), a token with a type of
 <p>Tokens are consumed until one is encountered with a type in <code>stop,</code>
 which is then returned. If <code>stop</code> is <code>ANY</code> then the next token is
 returned.</p>
+</div>
+<h3 id="next">next<a name="next"></a><a class="headerlink" href="#next" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">DocToken next()</p>
+<p>Get the next token.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.42L5.83 13H21V7z"/></svg></span> <strong>Return</strong></dt>
+<dd>Next token.</dd>
+</dl>
+<p>The token is only valid for the lifetime of the DocTokenizer, as it
+contains a reference to a substring of the source file. If no tokens
+remain (i.e. the end of the file is reached), a token with a type of
+<code>NONE</code> is returned.</p>
 </div>
 
 
@@ -882,10 +882,10 @@ returned.</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.60a45f97.min.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js"></script>
       

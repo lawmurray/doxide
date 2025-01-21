@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../assets/logo_red.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.0253249f.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a40c8224.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -586,6 +586,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#type-aliases" class="md-nav__link">
+    <span class="md-ellipsis">
+      Type Aliases
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#concepts" class="md-nav__link">
     <span class="md-ellipsis">
       Concepts
@@ -627,6 +636,66 @@
       Functions
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-alias-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Type Alias Details
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Type Alias Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#typealias" class="md-nav__link">
+    <span class="md-ellipsis">
+      TypeAlias
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typealiasfunctionpointer" class="md-nav__link">
+    <span class="md-ellipsis">
+      TypeAliasFunctionPointer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typealiastemplate" class="md-nav__link">
+    <span class="md-ellipsis">
+      TypeAliasTemplate
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typedef" class="md-nav__link">
+    <span class="md-ellipsis">
+      TypeDef
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typedeffunctionpointer" class="md-nav__link">
+    <span class="md-ellipsis">
+      TypeDefFunctionPointer
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -782,6 +851,15 @@
   <a href="#e" class="md-nav__link">
     <span class="md-ellipsis">
       e
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fp" class="md-nav__link">
+    <span class="md-ellipsis">
+      fp
     </span>
   </a>
   
@@ -1013,24 +1091,43 @@
 <td>Test struct template.</td>
 </tr>
 <tr>
-<td><a href="TypeAlias/">TypeAlias</a></td>
-<td>Test type alias.</td>
-</tr>
-<tr>
-<td><a href="TypeAliasTemplate/">TypeAliasTemplate</a></td>
-<td>Test type alias template.</td>
-</tr>
-<tr>
-<td><a href="TypeDef/">TypeDef</a></td>
-<td>Test typedef.</td>
-</tr>
-<tr>
 <td><a href="Union/">Union</a></td>
 <td>Test union.</td>
 </tr>
 <tr>
 <td><a href="UnionTemplate/">UnionTemplate</a></td>
 <td>Test union template.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="type-aliases">Type Aliases<a class="headerlink" href="#type-aliases" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#TypeAlias">TypeAlias</a></td>
+<td>Test type alias.</td>
+</tr>
+<tr>
+<td><a href="#TypeAliasFunctionPointer">TypeAliasFunctionPointer</a></td>
+<td>Test type alias of function pointer type.</td>
+</tr>
+<tr>
+<td><a href="#TypeAliasTemplate">TypeAliasTemplate</a></td>
+<td>Test type alias template.</td>
+</tr>
+<tr>
+<td><a href="#TypeDef">TypeDef</a></td>
+<td>Test typedef.</td>
+</tr>
+<tr>
+<td><a href="#TypeDefFunctionPointer">TypeDefFunctionPointer</a></td>
+<td>Test typedef of function pointer type.</td>
 </tr>
 </tbody>
 </table>
@@ -1116,6 +1213,10 @@
 <tr>
 <td><a href="#e">e</a></td>
 <td>Documentation comment with * and / characters.</td>
+</tr>
+<tr>
+<td><a href="#fp">fp</a></td>
+<td>Test variable of function pointer type.</td>
 </tr>
 <tr>
 <td><a href="#ptr1">ptr1</a></td>
@@ -1221,6 +1322,10 @@
 </tr>
 <tr>
 <td><a href="#f">f</a></td>
+<td>Test function that returns a function pointer.</td>
+</tr>
+<tr>
+<td><a href="#f">f</a></td>
 <td>Test function template.</td>
 </tr>
 <tr>
@@ -1241,6 +1346,32 @@
 </tr>
 </tbody>
 </table>
+<h2 id="type-alias-details">Type Alias Details<a class="headerlink" href="#type-alias-details" title="Permanent link">&para;</a></h2>
+<h3 id="typealias">TypeAlias<a name="TypeAlias"></a><a class="headerlink" href="#typealias" title="Permanent link">&para;</a></h3>
+<div class="admonition typedef">
+<p class="admonition-title">using TypeAlias = int</p>
+<p>Test type alias.</p>
+</div>
+<h3 id="typealiasfunctionpointer">TypeAliasFunctionPointer<a name="TypeAliasFunctionPointer"></a><a class="headerlink" href="#typealiasfunctionpointer" title="Permanent link">&para;</a></h3>
+<div class="admonition typedef">
+<p class="admonition-title">using TypeAliasFunctionPointer = int (&#42;)(int, int)</p>
+<p>Test type alias of function pointer type.</p>
+</div>
+<h3 id="typealiastemplate">TypeAliasTemplate<a name="TypeAliasTemplate"></a><a class="headerlink" href="#typealiastemplate" title="Permanent link">&para;</a></h3>
+<div class="admonition typedef">
+<p class="admonition-title">template&lt;class T&gt; using TypeAliasTemplate = int</p>
+<p>Test type alias template.</p>
+</div>
+<h3 id="typedef">TypeDef<a name="TypeDef"></a><a class="headerlink" href="#typedef" title="Permanent link">&para;</a></h3>
+<div class="admonition typedef">
+<p class="admonition-title">typedef int TypeDef</p>
+<p>Test typedef.</p>
+</div>
+<h3 id="typedeffunctionpointer">TypeDefFunctionPointer<a name="TypeDefFunctionPointer"></a><a class="headerlink" href="#typedeffunctionpointer" title="Permanent link">&para;</a></h3>
+<div class="admonition typedef">
+<p class="admonition-title">typedef int (&#42;TypeDefFunctionPointer)(int, int)</p>
+<p>Test typedef of function pointer type.</p>
+</div>
 <h2 id="concept-details">Concept Details<a class="headerlink" href="#concept-details" title="Permanent link">&para;</a></h2>
 <h3 id="concept">Concept<a name="Concept"></a><a class="headerlink" href="#concept" title="Permanent link">&para;</a></h3>
 <div class="admonition concept">
@@ -1311,6 +1442,11 @@ lines and has multiple paragraphs.</p>
 <div class="admonition variable">
 <p class="admonition-title">int e</p>
 <p>Documentation comment with * and / characters.</p>
+</div>
+<h3 id="fp">fp<a name="fp"></a><a class="headerlink" href="#fp" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">int (&#42;fp)(int, int)</p>
+<p>Test variable of function pointer type.</p>
 </div>
 <h3 id="ptr1">ptr1<a name="ptr1"></a><a class="headerlink" href="#ptr1" title="Permanent link">&para;</a></h3>
 <div class="admonition variable">
@@ -1413,6 +1549,10 @@ comment. Details should show code if indenting is correctly preserved.</p>
 <div class="admonition function">
 <p class="admonition-title">int&#42; f(int x, int y)</p>
 <p>Test function that returns a pointer.</p>
+</div>
+<div class="admonition function">
+<p class="admonition-title">int (&#42;f(int x, int y))(int, int)</p>
+<p>Test function that returns a function pointer.</p>
 </div>
 <div class="admonition function">
 <p class="admonition-title">template&lt;class T&gt; T f(T x, T y)</p>
@@ -1536,10 +1676,10 @@ comment. Details should show code if indenting is correctly preserved.</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../assets/javascripts/bundle.60a45f97.min.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js"></script>
       

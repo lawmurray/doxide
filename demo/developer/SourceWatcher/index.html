@@ -10,21 +10,21 @@
       
       
       
-        <link rel="canonical" href="https://doxide.org/demo/parsing/TypeAliasTemplate/">
+        <link rel="canonical" href="https://doxide.org/demo/developer/SourceWatcher/">
       
       
       
       
       <link rel="icon" href="../../../assets/logo_red.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
     
     
       
-        <title>TypeAliasTemplate - Doxide</title>
+        <title>SourceWatcher - Doxide</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.0253249f.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.a40c8224.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
@@ -57,11 +57,11 @@
       
         <meta  property="og:type"  content="website" >
       
-        <meta  property="og:title"  content="TypeAliasTemplate - Doxide" >
+        <meta  property="og:title"  content="SourceWatcher - Doxide" >
       
         <meta  property="og:description"  content="Documentation and code coverage for modern C++. Configure with YAML, generate Markdown, publish with Material for MkDocs." >
       
-        <meta  property="og:image"  content="https://doxide.org/assets/images/social/demo/parsing/TypeAliasTemplate.png" >
+        <meta  property="og:image"  content="https://doxide.org/assets/images/social/demo/developer/SourceWatcher.png" >
       
         <meta  property="og:image:type"  content="image/png" >
       
@@ -69,15 +69,15 @@
       
         <meta  property="og:image:height"  content="630" >
       
-        <meta  property="og:url"  content="https://doxide.org/demo/parsing/TypeAliasTemplate/" >
+        <meta  property="og:url"  content="https://doxide.org/demo/developer/SourceWatcher/" >
       
         <meta  name="twitter:card"  content="summary_large_image" >
       
-        <meta  name="twitter:title"  content="TypeAliasTemplate - Doxide" >
+        <meta  name="twitter:title"  content="SourceWatcher - Doxide" >
       
         <meta  name="twitter:description"  content="Documentation and code coverage for modern C++. Configure with YAML, generate Markdown, publish with Material for MkDocs." >
       
-        <meta  name="twitter:image"  content="https://doxide.org/assets/images/social/demo/parsing/TypeAliasTemplate.png" >
+        <meta  name="twitter:image"  content="https://doxide.org/assets/images/social/demo/developer/SourceWatcher.png" >
       
     
     
@@ -100,7 +100,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#typealiastemplate" class="md-skip">
+        <a href="#sourcewatcher" class="md-skip">
           Skip to content
         </a>
       
@@ -135,7 +135,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              TypeAliasTemplate
+              SourceWatcher
             
           </span>
         </div>
@@ -570,6 +570,116 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Variables
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Functions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#variable-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Variable Details
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Variable Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      patterns
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tracked_files" class="md-nav__link">
+    <span class="md-ellipsis">
+      tracked_files
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Function Details
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Function Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sourcewatcher_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      SourceWatcher
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      changed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diff" class="md-nav__link">
+    <span class="md-ellipsis">
+      diff
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filenames" class="md-nav__link">
+    <span class="md-ellipsis">
+      filenames
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -586,9 +696,102 @@
   
 
 
-<h1 id="typealiastemplate">TypeAliasTemplate<a class="headerlink" href="#typealiastemplate" title="Permanent link">&para;</a></h1>
-<p><strong>template&lt;class T&gt; using TypeAliasTemplate = int</strong></p>
-<p>Test type alias template.</p>
+<h1 id="sourcewatcher">SourceWatcher<a class="headerlink" href="#sourcewatcher" title="Permanent link">&para;</a></h1>
+<p><strong>class SourceWatcher</strong></p>
+<p>Source Watcher.</p>
+<p>Watches for changes of source files. The files to watch are specified by a glob pattern.</p>
+<h2 id="variables">Variables<a class="headerlink" href="#variables" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#patterns">patterns</a></td>
+<td>The patterns to watch.</td>
+</tr>
+<tr>
+<td><a href="#tracked_files">tracked_files</a></td>
+<td>The tracked file paths and their last modification time.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#SourceWatcher">SourceWatcher</a></td>
+<td>Constructor for a list of patterns.</td>
+</tr>
+<tr>
+<td><a href="#SourceWatcher">SourceWatcher</a></td>
+<td>Constructor for a single pattern.</td>
+</tr>
+<tr>
+<td><a href="#changed">changed</a></td>
+<td>Check if any of the watched files changed since the last call to <code>changed()</code> or <code>diff()</code>.</td>
+</tr>
+<tr>
+<td><a href="#diff">diff</a></td>
+<td>Check if any of the watched files changed since the last call to <code>changed()</code> or <code>diff()</code>.</td>
+</tr>
+<tr>
+<td><a href="#filenames">filenames</a></td>
+<td>The current source files.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="variable-details">Variable Details<a class="headerlink" href="#variable-details" title="Permanent link">&para;</a></h2>
+<h3 id="patterns">patterns<a name="patterns"></a><a class="headerlink" href="#patterns" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">std::list&lt;std::string&gt; patterns</p>
+<p>The patterns to watch.</p>
+</div>
+<h3 id="tracked_files">tracked_files<a name="tracked_files"></a><a class="headerlink" href="#tracked_files" title="Permanent link">&para;</a></h3>
+<div class="admonition variable">
+<p class="admonition-title">std::unordered_map&lt;std::filesystem::path, std::filesystem::file_time_type&gt; tracked_files</p>
+<p>The tracked file paths and their last modification time.</p>
+</div>
+<h2 id="function-details">Function Details<a class="headerlink" href="#function-details" title="Permanent link">&para;</a></h2>
+<h3 id="sourcewatcher_1">SourceWatcher<a name="SourceWatcher"></a><a class="headerlink" href="#sourcewatcher_1" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">SourceWatcher(std::list&lt;std::string&gt; patterns)</p>
+<p>Constructor for a list of patterns.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 12-4-4v3H2v2h8v3m12-4a10 10 0 0 1-19.54 3h2.13a8 8 0 1 0 0-6H2.46A10 10 0 0 1 22 12"/></svg></span> <code>patterns</code>
+:</p>
+</div>
+<div class="admonition function">
+<p class="admonition-title">SourceWatcher(std::string pattern)</p>
+<p>Constructor for a single pattern.</p>
+</div>
+<h3 id="changed">changed<a name="changed"></a><a class="headerlink" href="#changed" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">bool changed()</p>
+<p>Check if any of the watched files changed since the last call to <code>changed()</code> or <code>diff()</code>.</p>
+</div>
+<h3 id="diff">diff<a name="diff"></a><a class="headerlink" href="#diff" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">std::tuple&lt;std::unordered_set&lt;std::filesystem::path&gt;, std::unordered_set&lt;std::filesystem::path&gt;, std::unordered_set&lt;std::filesystem::path&gt;&gt; diff()</p>
+<p>Check if any of the watched files changed since the last call to <code>changed()</code> or <code>diff()</code>.</p>
+<dl>
+<dt><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.42L5.83 13H21V7z"/></svg></span> <strong>Return</strong></dt>
+<dd>A tuple containing sets of added, modified and deleted file paths.</dd>
+</dl>
+</div>
+<h3 id="filenames">filenames<a name="filenames"></a><a class="headerlink" href="#filenames" title="Permanent link">&para;</a></h3>
+<div class="admonition function">
+<p class="admonition-title">std::unordered_set&lt;std::filesystem::path&gt; filenames()</p>
+<p>The current source files.</p>
+</div>
 
 
 
@@ -691,10 +894,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.60a45f97.min.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js"></script>
       

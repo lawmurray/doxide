@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../../../assets/logo_red.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.0253249f.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.a40c8224.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.06af60db.min.css">
@@ -589,94 +589,104 @@
 <h1 id="doxidecpp">doxide.cpp<a class="headerlink" href="#doxidecpp" title="Permanent link">&para;</a></h1>
 <style>
 .linenodiv pre span {padding-left:4px;padding-right:4px}
-.linenodiv pre span:nth-child(6) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(6)::before {content: "● ";}
 .linenodiv pre span:nth-child(7) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(7)::before {content: "● ";}
-.linenodiv pre span:nth-child(10) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(10)::before {content: "● ";}
-.linenodiv pre span:nth-child(11) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(11)::before {content: "○ ";}
-.linenodiv pre span:nth-child(13) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(13)::before {content: "● ";}
-.linenodiv pre span:nth-child(18) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(18)::before {content: "● ";}
+.linenodiv pre span:nth-child(8) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(8)::before {content: "● ";}
+.linenodiv pre span:nth-child(11) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(11)::before {content: "● ";}
+.linenodiv pre span:nth-child(12) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(12)::before {content: "○ ";}
+.linenodiv pre span:nth-child(14) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(14)::before {content: "● ";}
 .linenodiv pre span:nth-child(19) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(19)::before {content: "● ";}
-.linenodiv pre span:nth-child(21) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(21)::before {content: "● ";}
-.linenodiv pre span:nth-child(22) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(22)::before {content: "○ ";}
-.linenodiv pre span:nth-child(24) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(24)::before {content: "○ ";}
+.linenodiv pre span:nth-child(20) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(20)::before {content: "● ";}
+.linenodiv pre span:nth-child(22) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(22)::before {content: "● ";}
+.linenodiv pre span:nth-child(23) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(23)::before {content: "○ ";}
 .linenodiv pre span:nth-child(25) {background-color: #ef5552dd;color: white;}
 .linenodiv pre span:nth-child(25)::before {content: "○ ";}
 .linenodiv pre span:nth-child(26) {background-color: #ef5552dd;color: white;}
 .linenodiv pre span:nth-child(26)::before {content: "○ ";}
-.linenodiv pre span:nth-child(29) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(29)::before {content: "● ";}
-.linenodiv pre span:nth-child(36) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(36)::before {content: "● ";}
-.linenodiv pre span:nth-child(37) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(37)::before {content: "○ ";}
-.linenodiv pre span:nth-child(40) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(40)::before {content: "● ";}
+.linenodiv pre span:nth-child(27) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(27)::before {content: "○ ";}
+.linenodiv pre span:nth-child(30) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(30)::before {content: "● ";}
+.linenodiv pre span:nth-child(37) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(37)::before {content: "● ";}
+.linenodiv pre span:nth-child(38) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(38)::before {content: "○ ";}
 .linenodiv pre span:nth-child(41) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(41)::before {content: "● ";}
-.linenodiv pre span:nth-child(43) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(43)::before {content: "● ";}
+.linenodiv pre span:nth-child(42) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(42)::before {content: "● ";}
 .linenodiv pre span:nth-child(44) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(44)::before {content: "● ";}
-.linenodiv pre span:nth-child(50) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(50)::before {content: "● ";}
+.linenodiv pre span:nth-child(45) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(45)::before {content: "● ";}
 .linenodiv pre span:nth-child(51) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(51)::before {content: "● ";}
-.linenodiv pre span:nth-child(52) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(52)::before {content: "○ ";}
-.linenodiv pre span:nth-child(54) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(54)::before {content: "● ";}
-.linenodiv pre span:nth-child(55) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(55)::before {content: "○ ";}
-.linenodiv pre span:nth-child(57) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(57)::before {content: "● ";}
-.linenodiv pre span:nth-child(59) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(59)::before {content: "● ";}
-.linenodiv pre span:nth-child(61) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(61)::before {content: "● ";}
-.linenodiv pre span:nth-child(62) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(62)::before {content: "○ ";}
-.linenodiv pre span:nth-child(63) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(63)::before {content: "○ ";}
-.linenodiv pre span:nth-child(64) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(64)::before {content: "● ";}
-.linenodiv pre span:nth-child(65) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(65)::before {content: "● ";}
-.linenodiv pre span:nth-child(66) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(66)::before {content: "○ ";}
-.linenodiv pre span:nth-child(67) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(67)::before {content: "○ ";}
-.linenodiv pre span:nth-child(68) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(68)::before {content: "● ";}
-.linenodiv pre span:nth-child(69) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(69)::before {content: "● ";}
-.linenodiv pre span:nth-child(70) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(70)::before {content: "○ ";}
-.linenodiv pre span:nth-child(71) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(71)::before {content: "○ ";}
-.linenodiv pre span:nth-child(72) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(72)::before {content: "● ";}
-.linenodiv pre span:nth-child(73) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(73)::before {content: "● ";}
-.linenodiv pre span:nth-child(74) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(74)::before {content: "○ ";}
-.linenodiv pre span:nth-child(75) {background-color: #ef5552dd;color: white;}
-.linenodiv pre span:nth-child(75)::before {content: "○ ";}
-.linenodiv pre span:nth-child(76) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(76)::before {content: "● ";}
-.linenodiv pre span:nth-child(77) {background-color: #4cae4fdd;color: white;}
-.linenodiv pre span:nth-child(77)::before {content: "● ";}
+.linenodiv pre span:nth-child(52) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(52)::before {content: "● ";}
+.linenodiv pre span:nth-child(53) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(53)::before {content: "○ ";}
+.linenodiv pre span:nth-child(55) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(55)::before {content: "● ";}
+.linenodiv pre span:nth-child(56) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(56)::before {content: "○ ";}
+.linenodiv pre span:nth-child(58) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(58)::before {content: "● ";}
+.linenodiv pre span:nth-child(60) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(60)::before {content: "● ";}
+.linenodiv pre span:nth-child(62) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(62)::before {content: "● ";}
+.linenodiv pre span:nth-child(63) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(63)::before {content: "● ";}
+.linenodiv pre span:nth-child(64) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(64)::before {content: "○ ";}
+.linenodiv pre span:nth-child(65) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(65)::before {content: "○ ";}
+.linenodiv pre span:nth-child(66) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(66)::before {content: "● ";}
+.linenodiv pre span:nth-child(67) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(67)::before {content: "● ";}
+.linenodiv pre span:nth-child(68) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(68)::before {content: "○ ";}
+.linenodiv pre span:nth-child(69) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(69)::before {content: "○ ";}
+.linenodiv pre span:nth-child(70) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(70)::before {content: "● ";}
+.linenodiv pre span:nth-child(71) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(71)::before {content: "● ";}
+.linenodiv pre span:nth-child(72) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(72)::before {content: "○ ";}
+.linenodiv pre span:nth-child(73) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(73)::before {content: "○ ";}
+.linenodiv pre span:nth-child(74) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(74)::before {content: "● ";}
+.linenodiv pre span:nth-child(75) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(75)::before {content: "● ";}
+.linenodiv pre span:nth-child(76) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(76)::before {content: "○ ";}
+.linenodiv pre span:nth-child(77) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(77)::before {content: "○ ";}
 .linenodiv pre span:nth-child(78) {background-color: #4cae4fdd;color: white;}
 .linenodiv pre span:nth-child(78)::before {content: "● ";}
+.linenodiv pre span:nth-child(79) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(79)::before {content: "● ";}
+.linenodiv pre span:nth-child(80) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(80)::before {content: "○ ";}
+.linenodiv pre span:nth-child(81) {background-color: #ef5552dd;color: white;}
+.linenodiv pre span:nth-child(81)::before {content: "○ ";}
+.linenodiv pre span:nth-child(82) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(82)::before {content: "● ";}
+.linenodiv pre span:nth-child(83) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(83)::before {content: "● ";}
+.linenodiv pre span:nth-child(84) {background-color: #4cae4fdd;color: white;}
+.linenodiv pre span:nth-child(84)::before {content: "● ";}
 </style>
 
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
@@ -756,7 +766,14 @@
 <span class="normal">75</span>
 <span class="normal">76</span>
 <span class="normal">77</span>
-<span class="normal">78</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Driver.hpp&quot;</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Driver.hpp&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;config.h&quot;</span>
 
 <span class="kt">void</span><span class="w"> </span><span class="nf">write_file</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">contents</span><span class="p">,</span>
 <span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="o">&amp;</span><span class="w"> </span><span class="n">dst</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -815,6 +832,7 @@
 <span class="w">      </span><span class="s">&quot;Output directory.&quot;</span><span class="p">);</span>
 <span class="w">  </span><span class="n">app</span><span class="p">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--coverage&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">driver</span><span class="p">.</span><span class="n">coverage</span><span class="p">,</span>
 <span class="w">      </span><span class="s">&quot;Code coverage file (.gcov or .json).&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">app</span><span class="p">.</span><span class="n">set_version_flag</span><span class="p">(</span><span class="s">&quot;--version,-v&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">PACKAGE_VERSION</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Doxide version.&quot;</span><span class="p">);</span>
 <span class="w">  </span><span class="n">app</span><span class="p">.</span><span class="n">add_subcommand</span><span class="p">(</span><span class="s">&quot;init&quot;</span><span class="p">,</span>
 <span class="w">      </span><span class="s">&quot;Initialize configuration files.&quot;</span><span class="p">)</span><span class="o">-&gt;</span>
 <span class="w">      </span><span class="n">fallthrough</span><span class="p">()</span><span class="o">-&gt;</span>
@@ -823,6 +841,10 @@
 <span class="w">      </span><span class="s">&quot;Build documentation in output directory.&quot;</span><span class="p">)</span><span class="o">-&gt;</span>
 <span class="w">      </span><span class="n">fallthrough</span><span class="p">()</span><span class="o">-&gt;</span>
 <span class="w">      </span><span class="n">callback</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">driver</span><span class="p">.</span><span class="n">build</span><span class="p">();</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="n">app</span><span class="p">.</span><span class="n">add_subcommand</span><span class="p">(</span><span class="s">&quot;watch&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s">&quot;Watch the documentation&#39;s source files and rebuild it on changes.&quot;</span><span class="p">)</span><span class="o">-&gt;</span>
+<span class="w">      </span><span class="n">fallthrough</span><span class="p">()</span><span class="o">-&gt;</span>
+<span class="w">      </span><span class="n">callback</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">driver</span><span class="p">.</span><span class="n">watch</span><span class="p">();</span><span class="w"> </span><span class="p">});</span>
 <span class="w">  </span><span class="n">app</span><span class="p">.</span><span class="n">add_subcommand</span><span class="p">(</span><span class="s">&quot;clean&quot;</span><span class="p">,</span>
 <span class="w">      </span><span class="s">&quot;Clean output directory.&quot;</span><span class="p">)</span><span class="o">-&gt;</span>
 <span class="w">      </span><span class="n">fallthrough</span><span class="p">()</span><span class="o">-&gt;</span>
@@ -937,10 +959,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "navigation.footer", "announce.dismiss"], "search": "../../../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.60a45f97.min.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js"></script>
       
