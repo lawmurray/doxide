@@ -577,6 +577,16 @@ public:
   int (*fp)(int, int);
 
   /**
+   * Test constructor.
+   */
+  ClassWithMembers();
+
+  /**
+   * Test destructor.
+   */
+  ~ClassWithMembers();
+
+  /**
    * Test member function.
    */
   int f(int x, int y);
