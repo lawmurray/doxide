@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(doxide
-    VERSION 0.8.0
+    VERSION 0.9.0
     DESCRIPTION "Modern documentation for modern C++"
     HOMEPAGE_URL "https://doxide.org")
 
