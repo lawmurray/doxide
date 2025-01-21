@@ -58,8 +58,8 @@ target_link_libraries(doxide
 )
 
 configure_file(
-    ${CMAKE_SOURCE_DIR}/src/Version.h.in
-    ${CMAKE_SOURCE_DIR}/src/Version.h
+    ${CMAKE_SOURCE_DIR}/src/config.h.in
+    ${CMAKE_SOURCE_DIR}/src/config.h
 )
 
 include(GNUInstallDirs)

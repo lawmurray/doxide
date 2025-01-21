@@ -1,5 +1,5 @@
 #include "Driver.hpp"
-#include "Version.h"
+#include "config.h"
 
 void write_file(const std::string& contents,
     const std::filesystem::path& dst) {
@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
       "Output directory.");
   app.add_option("--coverage", driver.coverage,
       "Code coverage file (.gcov or .json).");
-  app.set_version_flag("--version,-v", DOXIDE_VERSION, "Doxide version.");
+  app.set_version_flag("--version,-v", PACKAGE_VERSION, "Doxide version.");
   app.add_subcommand("init",
       "Initialize configuration files.")->
       fallthrough()->
