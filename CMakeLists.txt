@@ -57,14 +57,25 @@ target_link_libraries(doxide
     yaml
 )
 
-configure_file(
-    ${CMAKE_SOURCE_DIR}/src/config.h.in
-    ${CMAKE_SOURCE_DIR}/src/config.h
-)
+# Configure files with version numbers, etc
+string(TIMESTAMP PACKAGE_TIMESTAMP_YEAR "%Y")
+string(TIMESTAMP PACKAGE_TIMESTAMP_RPM "%a %b %d %Y")
+string(TIMESTAMP PACKAGE_TIMESTAMP_DEB "%a, %d %b %Y %H:%M:%S %z")
 
+configure_file(${CMAKE_SOURCE_DIR}/src/config.h.in ${CMAKE_SOURCE_DIR}/src/config.h)
+configure_file(${CMAKE_SOURCE_DIR}/doxide.spec.in ${CMAKE_SOURCE_DIR}/doxide.spec)
+configure_file(${CMAKE_SOURCE_DIR}/debian/changelog.in ${CMAKE_SOURCE_DIR}/debian/changelog)
+configure_file(${CMAKE_SOURCE_DIR}/debian/copyright.in ${CMAKE_SOURCE_DIR}/debian/copyright)
+configure_file(${CMAKE_SOURCE_DIR}/doxide.rb.in ${CMAKE_SOURCE_DIR}/doxide.rb)
+configure_file(${CMAKE_SOURCE_DIR}/choco/doxide/doxide.nuspec.in ${CMAKE_SOURCE_DIR}/choco/doxide/doxide.nuspec)
+configure_file(${CMAKE_SOURCE_DIR}/choco/doxide.install/doxide.install.nuspec.in ${CMAKE_SOURCE_DIR}/choco/doxide.install/doxide.install.nuspec)
+configure_file(${CMAKE_SOURCE_DIR}/choco/doxide.portable/doxide.portable.nuspec.in ${CMAKE_SOURCE_DIR}/choco/doxide.install/doxide.portable.nuspec)
+
+# Installation
 include(GNUInstallDirs)
 install(TARGETS doxide RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
+# Source and NSIS packaging
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/win ${CMAKE_MODULE_PATH})
 string(REPLACE "/" "\\\\" NATIVE_SOURCE_DIR "${CMAKE_SOURCE_DIR}")
 set(CPACK_PACKAGE_NAME "Doxide")

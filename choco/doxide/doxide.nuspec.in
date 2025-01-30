@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
-    <id>doxide.install</id>
-    <version>0.0.0</version>
-    <packageSourceUrl>https://github.com/lawmurray/doxide/tree/main/choco/doxide.install</packageSourceUrl>
+    <id>doxide</id>
+    <version>@PROJECT_VERSION@</version>
+    <packageSourceUrl>https://github.com/lawmurray/doxide/tree/main/choco/doxide</packageSourceUrl>
     <releaseNotes>https://github.com/lawmurray/doxide/releases/</releaseNotes>
     <owners>Lawrence Murray</owners>
-    <title>doxide (Install)</title>
+    <title>doxide</title>
     <authors>Lawrence Murray</authors>
     <projectUrl>https://doxide.org</projectUrl>
     <iconUrl>https://doxide.org/assets/logo_red.png</iconUrl>
-    <copyright>2024 Lawrence Murray</copyright>
+    <copyright>@PACKAGE_TIMESTAMP_YEAR@ Lawrence Murray</copyright>
     <licenseUrl>https://apache.org/licenses/LICENSE-2.0</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectSourceUrl>https://github.com/lawmurray/doxide</projectSourceUrl>
     <tags>doxide development documentation c++</tags>
     <summary>Modern documentation for modern C++</summary>
     <description>Doxide generates documentation for C++ source code. It is configured with YAML, generates Markdown, and publishes HTML. Entities in the source code are documented with special comments containing commands. The source code is parsed and documentation processed into Markdown then HTML. Doxide aims at online documentation with a modern look and responsive design for desktop and mobile devices.</description>
+    <dependencies>
+      <dependency id="doxide.portable" version="[@PROJECT_VERSION@]" />
+    </dependencies>
   </metadata>
-  <files>
-    <file src="tools\**" target="tools" />
-  </files>
 </package>

@@ -1,0 +1,6 @@
+doxide (@PROJECT_VERSION@-1) main; urgency=medium
+
+  * Initial release.
+
+ -- Lawrence Murray <lawrence@indii.org>  @PACKAGE_TIMESTAMP_DEB@
+

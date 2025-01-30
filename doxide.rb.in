@@ -1,8 +1,8 @@
 class Doxide < Formula
   desc "Modern documentation for modern C++. Configure with YAML, output Markdown."
   homepage "https://doxide.org"
-  url "https://raw.githubusercontent.com/lawmurray/homebrew-all/master/doxide-0.0.0.tar.gz"
-  version "0.0.0"
+  url "https://raw.githubusercontent.com/lawmurray/homebrew-all/master/doxide-@PROJECT_VERSION@.tar.gz"
+  version "@PROJECT_VERSION@"
   sha256 "0000000000000000000000000000000000000000000000000000000000000000"
   license "Apache-2.0"
   depends_on "cmake" => :build

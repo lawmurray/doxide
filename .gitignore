@@ -4,4 +4,12 @@
 /docs/demo
 /.cache
 /src/config.h
-
+/coverage.json
+/coverage.gcov
+/choco/doxide.install/doxide.install.nuspec
+/choco/doxide.install/doxide.portable.nuspec
+/choco/doxide/doxide.nuspec
+/debian/changelog
+/debian/copyright
+/doxide.rb
+/doxide.spec
