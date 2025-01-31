@@ -1,5 +1,5 @@
 Name: doxide
-Version: @PROJECT_VERSION@
+Version: 0.0.0
 Release: 1
 Summary: Modern documentation for modern C++
 Vendor: Lawrence Murray <lawrence@indii.org>
@@ -33,5 +33,5 @@ responsive design for desktop and mobile devices.
 %{_bindir}/%{name}
 
 %changelog
-* @PACKAGE_TIMESTAMP_RPM@ Lawrence Murray <lawrence@indii.org> - 1:%{version}-1
-Packaged.
+* Sat Jun 3 2023 Lawrence Murray <lawrence@indii.org> - 1:0.0.0-1
+Initial setup.

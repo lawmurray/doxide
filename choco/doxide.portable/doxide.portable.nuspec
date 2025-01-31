@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>doxide.portable</id>
-    <version>@PROJECT_VERSION@</version>
+    <version>0.0.0</version>
     <releaseNotes>https://github.com/lawmurray/doxide/releases/</releaseNotes>
     <packageSourceUrl>https://github.com/lawmurray/doxide/tree/main/choco/doxide.portable</packageSourceUrl>
     <owners>Lawrence Murray</owners>
@@ -10,7 +10,7 @@
     <authors>Lawrence Murray</authors>
     <projectUrl>https://doxide.org</projectUrl>
     <iconUrl>https://doxide.org/assets/logo_red.png</iconUrl>
-    <copyright>@PACKAGE_TIMESTAMP_YEAR@ Lawrence Murray</copyright>
+    <copyright>2024 Lawrence Murray</copyright>
     <licenseUrl>https://apache.org/licenses/LICENSE-2.0</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectSourceUrl>https://github.com/lawmurray/doxide</projectSourceUrl>

@@ -12,6 +12,7 @@ function Update-Package {
         Invoke-WebRequest -Uri "https://download.indii.org/win/$Download.sha256" -OutFile "$Package\tools\$Download.sha256"
         Find-Replace -Path "$Package\tools\chocolateyinstall.ps1" ABCDEF0123456789 $(Get-Content -Path "$Package\tools\$Download.sha256")
     }
+    Find-Replace -Path "$Package\$Package.nuspec" 0.0.0 $version
 }
 
 function Build-Package {
