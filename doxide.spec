@@ -1,6 +1,6 @@
 Name: doxide
 Version: 0.0.0
-Release: 1
+Release: %autorelease
 Summary: Modern documentation for modern C++
 Vendor: Lawrence Murray <lawrence@indii.org>
 License: Apache-2.0
@@ -33,5 +33,4 @@ responsive design for desktop and mobile devices.
 %{_bindir}/%{name}
 
 %changelog
-* Sat Jun 3 2023 Lawrence Murray <lawrence@indii.org> - 1:0.0.0-1
-Initial setup.
+%autochangelog
