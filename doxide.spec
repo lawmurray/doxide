@@ -1,6 +1,6 @@
 Name: doxide
 Version: 0.0.0
-Release: %autorelease
+Release: 1
 Summary: Modern documentation for modern C++
 Vendor: Lawrence Murray <lawrence@indii.org>
 License: Apache-2.0
