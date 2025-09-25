@@ -2,19 +2,89 @@ cmake_minimum_required(VERSION 3.10)
 project(doxide
     VERSION 0.9.0
     DESCRIPTION "Modern documentation for modern C++"
-    HOMEPAGE_URL "https://doxide.org")
+    HOMEPAGE_URL "https://doxide.org"
+)
 
 set(CMAKE_CXX_STANDARD 20)
 if(MSVC)
     add_compile_definitions(_CRT_SECURE_NO_WARNINGS YAML_DECLARE_STATIC)
 endif()
 
-add_executable(doxide
-    contrib/tree-sitter/lib/src/lib.c
-    contrib/tree-sitter-cpp/src/parser.c
+# Available options to control how dependencies are sourced
+# - submodule: use only git submodules for dependencies (legacy behavior)
+# - target: look for CMake targets, if not found error
+# - auto: first look for CMake targets, if not found, use git submodules
+set(DEPS_STRATEGY_VALUES "auto;submodule;target")
+option(DEPS_SOURCE_STRATEGY "How to source dependencies; possible values are ${DEPS_STRATEGY_VALUES}" OFF)
+
+if(NOT DEPS_SOURCE_STRATEGY)
+    set(DEPS_STRATEGY "auto")
+else()
+    if(NOT ${DEPS_SOURCE_STRATEGY} IN_LIST DEPS_STRATEGY_VALUES)
+        message(FATAL_ERROR "the value of DEPS_SOURCE_STRATEGY \
+(=${DEPS_SOURCE_STRATEGY}) is not one of ${DEPS_STRATEGY_VALUES}"
+        )
+    endif()
+    set(DEPS_STRATEGY ${DEPS_SOURCE_STRATEGY})
+endif()
+
+if(DEPS_STRATEGY STREQUAL "auto" OR DEPS_STRATEGY STREQUAL "target")
+    set(DEPS_STRATEGY_FIND_PACKAGE ON)
+endif()
+
+if(DEPS_STRATEGY STREQUAL "target")
+    set(FORCED_REQUIRE REQUIRED)
+endif()
+
+
+if(NOT yaml_FOUND AND DEPS_STRATEGY_FIND_PACKAGE)
+    # Find the system libyaml
+    #
+    # Note that on the default packages on linux (arch, etc) and macos/brew
+    # do not contain any cmake package config files for libyaml
+    # so find_package will error out.
+    find_package(yaml ${FORCED_REQUIRE} HINTS /usr /usr/lib /usr/local/lib)
+endif()
+if(NOT yaml_FOUND)
+    add_subdirectory(contrib/libyaml)
+endif()
+
+# convenience macro to source a dependency: first look for a CMake target (if allowed)
+# then source it from the given files in the submodule
+macro(find_dep_dual_mode dep_name VAR val1)
+    if(NOT ${dep_name}_FOUND AND DEPS_STRATEGY_FIND_PACKAGE)
+        find_package(${dep_name} CONFIG ${FORCED_REQUIRE})
+    endif()
+    if(${dep_name}_FOUND)
+        list(APPEND DEPS_TARGETS ${dep_name}::${dep_name})
+    else()
+        set(__the_list ${ARGV})
+        if(${ARGC} GREATER 3)
+            list(SUBLIST __the_list 3 -1 __file_args)
+        endif()
+        message(STATUS "Sourcing ${dep_name} from submodule: ${val1};${__file_args}")
+        list(APPEND ${VAR} ${val1} ${__file_args})
+        unset(__file_args)
+    endif()
+endmacro()
+
+find_dep_dual_mode(tree-sitter-cpp DEPS_SOURCES
+    contrib/tree-sitter/lib/src/lib.c contrib/tree-sitter-cpp/src/parser.c
     contrib/tree-sitter-cpp/src/scanner.c
-    contrib/tree-sitter-cuda/src/parser.c
-    contrib/tree-sitter-cuda/src/scanner.c
+)
+if(NOT tree-sitter-cpp_FOUND)
+    list(APPEND DEPS_INCLUDE_DIRS contrib/tree-sitter/lib/include)
+endif()
+
+find_dep_dual_mode(tree-sitter-cuda DEPS_SOURCES
+    contrib/tree-sitter-cuda/src/parser.c contrib/tree-sitter-cuda/src/scanner.c
+)
+
+find_dep_dual_mode(CLI11 DEPS_INCLUDE_DIRS contrib/CLI11/include)
+find_dep_dual_mode(p-ranav-glob DEPS_INCLUDE_DIRS contrib/glob/single_include)
+
+add_executable(doxide
+    ${DEPS_SOURCES} # sources of the submodules (if any)
     src/doxide.cpp
     src/CppParser.cpp
     src/Doc.cpp
@@ -31,31 +101,15 @@ add_executable(doxide
     src/YAMLParser.cpp
 )
 if(WIN32)
-  # add icon
-  target_sources(doxide PRIVATE win/icon.rc)
+    # add icon
+    target_sources(doxide PRIVATE win/icon.rc)
 endif()
 target_include_directories(doxide PRIVATE
     src
-    contrib/tree-sitter/lib/include
-    contrib/glob/single_include
-    contrib/CLI11/include
+    ${DEPS_INCLUDE_DIRS}
 )
 
-# Find the system libyaml
-#
-# Note that on the default packages on linux (arch, etc) and macos/brew
-# do not contain any cmake package config files for libyaml
-# so find_package will error out.
-find_package(yaml QUIET HINTS /usr /usr/lib /usr/local/lib)
-
-option(BUILD_YAML "Build contrib/libyaml" OFF)
-if(BUILD_YAML)
-    add_subdirectory(contrib/libyaml)
-endif()
-
-target_link_libraries(doxide
-    yaml
-)
+target_link_libraries(doxide yaml ${DEPS_TARGETS})
 
 configure_file(
     ${CMAKE_SOURCE_DIR}/src/config.h.in
