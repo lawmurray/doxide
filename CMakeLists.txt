@@ -4,16 +4,18 @@ project(doxide
     DESCRIPTION "Modern documentation for modern C++"
     HOMEPAGE_URL "https://doxide.org"
 )
+cmake_policy(SET CMP0074 NEW) # use <PackageName>_ROOT to look for packages
 
 set(CMAKE_CXX_STANDARD 20)
 if(MSVC)
     add_compile_definitions(_CRT_SECURE_NO_WARNINGS YAML_DECLARE_STATIC)
 endif()
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # Available options to control how dependencies are sourced
 # - submodule: use only git submodules for dependencies (legacy behavior)
 # - target: look for CMake targets, if not found error
-# - auto: first look for CMake targets, if not found, use git submodules
+# - auto: (default) first look for CMake targets, if not found, use git submodules
 set(DEPS_STRATEGY_VALUES "auto;submodule;target")
 option(DEPS_SOURCE_STRATEGY "How to source dependencies; possible values are ${DEPS_STRATEGY_VALUES}" OFF)
 
@@ -22,7 +24,7 @@ if(NOT DEPS_SOURCE_STRATEGY)
 else()
     if(NOT ${DEPS_SOURCE_STRATEGY} IN_LIST DEPS_STRATEGY_VALUES)
         message(FATAL_ERROR "the value of DEPS_SOURCE_STRATEGY \
-(=${DEPS_SOURCE_STRATEGY}) is not one of ${DEPS_STRATEGY_VALUES}"
+(${DEPS_SOURCE_STRATEGY}) is not one of ${DEPS_STRATEGY_VALUES}"
         )
     endif()
     set(DEPS_STRATEGY ${DEPS_SOURCE_STRATEGY})
@@ -36,17 +38,16 @@ if(DEPS_STRATEGY STREQUAL "target")
     set(FORCED_REQUIRE REQUIRED)
 endif()
 
-
 if(NOT yaml_FOUND AND DEPS_STRATEGY_FIND_PACKAGE)
-    # Find the system libyaml
-    #
-    # Note that on the default packages on linux (arch, etc) and macos/brew
-    # do not contain any cmake package config files for libyaml
-    # so find_package will error out.
-    find_package(yaml ${FORCED_REQUIRE} HINTS /usr /usr/lib /usr/local/lib)
+    find_package(yaml CONFIG ${FORCED_REQUIRE})
+endif()
+if(NOT yaml_FOUND AND NOT DEPS_STRATEGY STREQUAL "submodule")
+    # use Findyaml.cmake module provided and find in system
+    find_package(yaml MODULE)
 endif()
 if(NOT yaml_FOUND)
-    add_subdirectory(contrib/libyaml)
+    message(STATUS "Sourcing yaml from submodule")
+    add_subdirectory(contrib/libyaml EXCLUDE_FROM_ALL SYSTEM)
 endif()
 
 # convenience macro to source a dependency: first look for a CMake target (if allowed)
@@ -62,7 +63,7 @@ macro(find_dep_dual_mode dep_name VAR val1)
         if(${ARGC} GREATER 3)
             list(SUBLIST __the_list 3 -1 __file_args)
         endif()
-        message(STATUS "Sourcing ${dep_name} from submodule: ${val1};${__file_args}")
+        message(STATUS "Sourcing ${dep_name} from submodule")
         list(APPEND ${VAR} ${val1} ${__file_args})
         unset(__file_args)
     endif()
