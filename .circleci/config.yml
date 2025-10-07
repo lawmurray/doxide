@@ -82,7 +82,7 @@ jobs:
           name: Install dependencies
           command: |
             HOMEBREW_NO_AUTO_UPDATE=1 brew install \
-              cmake \
+              cmake@3.30.3 \
               libyaml \
               cli11 \
               cairo
