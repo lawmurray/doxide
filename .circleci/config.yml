@@ -82,17 +82,14 @@ jobs:
           name: Install dependencies
           command: |
             HOMEBREW_NO_AUTO_UPDATE=1 brew install \
-              wget \
+              cmake \
               libyaml \
               cli11 \
               cairo
-            wget https://github.com/Kitware/CMake/releases/download/v3.31.9/cmake-3.31.9-macos-universal.tar.gz
-            tar xf cmake-3.31.9-macos-universal.tar.gz
             pip3 install mkdocs mkdocs-material mkdocs-material[imaging]
       - run:
           name: Build
           command: |
-              export PATH=$CIRCLE_WORKING_DIRECTORY/cmake-3.31.9-macos-universal/CMake.app/Contents/bin:$PATH
               mkdir build
               cd build
               cmake ..
@@ -110,8 +107,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            choco install -y cmake.portable --version 3.31.9
-            choco install -y python sudo
+            choco install -y cmake.portable python sudo
             pip3 install mkdocs mkdocs-material mkdocs-material[imaging]
             cd contrib\libyaml
             mkdir build
