@@ -112,7 +112,7 @@ jobs:
             cd contrib\libyaml
             mkdir build
             cd build
-            cmake .. -DCMAKE_INSTALL_PREFIX=c:\ProgramData\chocolatey
+            cmake .. -DCMAKE_INSTALL_PREFIX=c:\ProgramData\chocolatey -DCMAKE_POLICY_VERSION_MINIMUM="3.10"
             cmake --build . --config Debug --parallel
             sudo cmake --install . --config Debug
       - run:
