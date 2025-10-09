@@ -107,7 +107,18 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            choco install -y cmake.portable python sudo
+            choco upgrade -y chocolatey
+            choco install -y cmake.portable python sudo msys2
+            # Run for the first time
+            C:\tools\msys64\usr\bin\bash -lc ' '
+            # Update MSYS2
+            C:\tools\msys64\usr\bin\bash -lc 'pacman --noconfirm -Syuu'  # Core update
+            C:\tools\msys64\usr\bin\bash -lc 'pacman --noconfirm -Syuu'  # Normal update
+            # install cairo
+            C:\tools\msys64\usr\bin\bash -lc 'pacman --noconfirm -S mingw-w64-ucrt-x86_64-cairo'
+            # add cairo path to PATH env variable
+            New-Item $Profile.CurrentUserAllHosts -Force
+            Add-Content -Path $Profile.CurrentUserAllHosts -Value '$Env:PATH = "$Env:PATH;C:\tools\msys64\ucrt64\bin"'
             pip3 install mkdocs mkdocs-material mkdocs-material[imaging]
             cd contrib\libyaml
             mkdir build
