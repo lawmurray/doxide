@@ -1,8 +1,8 @@
 [requires]
 libyaml/0.2.5
 cli11/2.5.0
-tree-sitter-cpp/0.23.4
 p-ranav-glob/0.0.1
+tree-sitter-cuda/0.21.1
 
 [generators]
 CMakeDeps
