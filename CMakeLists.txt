@@ -69,17 +69,12 @@ macro(find_dep_dual_mode dep_name VAR val1)
     endif()
 endmacro()
 
-find_dep_dual_mode(tree-sitter-cpp DEPS_SOURCES
-    contrib/tree-sitter/lib/src/lib.c contrib/tree-sitter-cpp/src/parser.c
-    contrib/tree-sitter-cpp/src/scanner.c
+find_dep_dual_mode(tree-sitter-cuda DEPS_SOURCES
+    contrib/tree-sitter/lib/src/lib.c contrib/tree-sitter-cuda/src/parser.c contrib/tree-sitter-cuda/src/scanner.c
 )
-if(NOT tree-sitter-cpp_FOUND)
+if(NOT tree-sitter-cuda_FOUND)
     list(APPEND DEPS_INCLUDE_DIRS contrib/tree-sitter/lib/include)
 endif()
-
-find_dep_dual_mode(tree-sitter-cuda DEPS_SOURCES
-    contrib/tree-sitter-cuda/src/parser.c contrib/tree-sitter-cuda/src/scanner.c
-)
 
 find_dep_dual_mode(CLI11 DEPS_INCLUDE_DIRS contrib/CLI11/include)
 find_dep_dual_mode(p-ranav-glob DEPS_INCLUDE_DIRS contrib/glob/single_include)
