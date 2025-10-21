@@ -102,6 +102,16 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Prepare PowerShell environment
+          command: |
+            # save some env vars to the PS profile on the disk, for them to be sourced in the following runs
+            New-Item $Profile.CurrentUserAllHosts -Force
+            # add cairo path to PATH env variable
+            Add-Content -Path $Profile.CurrentUserAllHosts -Value '$Env:PATH = "$Env:PATH;C:\tools\msys64\ucrt64\bin"'
+            # force error and PS exit on non 0 termination code from command
+            Add-Content -Path $Profile.CurrentUserAllHosts -Value '$ErrorActionPreference = "Stop"'
+            Add-Content -Path $Profile.CurrentUserAllHosts -Value '$PSNativeCommandUseErrorActionPreference = $true'
+      - run:
           name: Checkout submodules
           command: git submodule update --init --recursive --depth 1
       - run:
@@ -116,9 +126,6 @@ jobs:
             C:\tools\msys64\usr\bin\bash -lc 'pacman --noconfirm -Syuu'  # Normal update
             # install cairo
             C:\tools\msys64\usr\bin\bash -lc 'pacman --noconfirm -S mingw-w64-ucrt-x86_64-cairo'
-            # add cairo path to PATH env variable
-            New-Item $Profile.CurrentUserAllHosts -Force
-            Add-Content -Path $Profile.CurrentUserAllHosts -Value '$Env:PATH = "$Env:PATH;C:\tools\msys64\ucrt64\bin"'
             pip3 install mkdocs mkdocs-material mkdocs-material[imaging]
             cd contrib\libyaml
             mkdir build
