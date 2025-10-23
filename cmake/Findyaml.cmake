@@ -33,9 +33,20 @@ find_package_handle_standard_args(yaml
 if(yaml_FOUND)
     mark_as_advanced(YAML_LIBRARY YAML_INCLUDE_DIR)
     add_library (yaml UNKNOWN IMPORTED)
+
+    # check whether it's a static library
+    string(REGEX MATCH "\.(a|lib)$" _EXTENSION ${YAML_LIBRARY})
+    # setting usage requirements, as from its CMake infra
+    # https://github.com/yaml/libyaml/blob/840b65c40675e2d06bf40405ad3f12dec7f35923/CMakeLists.txt#L71-L72
+    set(_TARGET_DEFS "$<$<BOOL:${MSVC}>:_CRT_SECURE_NO_WARNINGS>")
+    if (_EXTENSION STREQUAL ".a" OR _EXTENSION STREQUAL ".lib")
+        list(APPEND _TARGET_DEFS YAML_DECLARE_STATIC)
+    endif()
+
     set_target_properties(yaml
         PROPERTIES
         IMPORTED_LOCATION ${YAML_LIBRARY}
         INTERFACE_INCLUDE_DIRECTORIES ${YAML_INCLUDE_DIR}
+        INTERFACE_COMPILE_DEFINITIONS "${_TARGET_DEFS}"
     )
 endif()

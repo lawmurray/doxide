@@ -7,9 +7,6 @@ project(doxide
 cmake_policy(SET CMP0074 NEW) # use <PackageName>_ROOT to look for packages
 
 set(CMAKE_CXX_STANDARD 20)
-if(MSVC)
-    add_compile_definitions(_CRT_SECURE_NO_WARNINGS YAML_DECLARE_STATIC)
-endif()
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # Available options to control how dependencies are sourced
