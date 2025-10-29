@@ -1,0 +1,12 @@
+[requires]
+libyaml/0.2.5
+cli11/2.5.0
+p-ranav-glob/0.0.1
+tree-sitter-cuda/0.21.1
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
+[layout]
+cmake_layout
