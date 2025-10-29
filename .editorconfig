@@ -1,0 +1,41 @@
+root = true
+
+[*]
+# force UNIX newline, also on Win
+end_of_line = lf
+# useful when cat'ting from the terminal
+insert_final_newline = true
+# useful to minimize git diff
+trim_trailing_whitespace = true
+# consistency across editors
+charset = utf-8
+# consistency across users
+spelling_language = en
+
+[*.{c,cc,cpp,h,hh,hpp,h.in}]
+indent_size = 2
+indent_style = space
+
+[*.cmake]
+indent_size = 2
+indent_style = space
+
+[CMakeLists.txt]
+indent_size = 2
+indent_style = space
+
+[*.nuspec]
+indent_size = 2
+indent_style = space
+
+[*.rb]
+indent_size = 2
+indent_style = space
+
+[*.sh]
+indent_size = 2
+indent_style = space
+
+[*.{yml,yaml}]
+indent_size = 2
+indent_style = space
