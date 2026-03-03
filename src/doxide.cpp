@@ -59,14 +59,21 @@ int main(int argc, char** argv) {
   app.add_option("--coverage", driver.coverage,
       "Code coverage file (.gcov or .json).");
   app.set_version_flag("--version,-v", PACKAGE_VERSION, "Doxide version.");
-  app.add_subcommand("init",
-      "Initialize configuration files.")->
-      fallthrough()->
-      callback([&]() { driver.init(); });
+  auto init_cmd = app.add_subcommand("init",
+      "Initialize configuration files.");
+  init_cmd->add_flag("--plain",
+          driver.plain,
+          "Initialize with no Mkdocs noise.");
+  init_cmd->fallthrough()->
+      callback([&]() { driver.init(driver.plain); });
   app.add_subcommand("build",
       "Build documentation in output directory.")->
       fallthrough()->
       callback([&]() { driver.build(); });
+  app.add_subcommand("gitdoc",
+      "Build documentation ready for the GitHub webview in output directory.")->
+    fallthrough()->
+    callback([&]() { driver.git_build(); });
   app.add_subcommand("watch",
       "Watch the documentation's source files and rebuild it on changes.")->
       fallthrough()->

@@ -7,6 +7,7 @@ project(doxide
 cmake_policy(SET CMP0074 NEW) # use <PackageName>_ROOT to look for packages
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # Available options to control how dependencies are sourced
@@ -91,6 +92,7 @@ add_executable(doxide
   src/JSONCounter.cpp
   src/JSONGenerator.cpp
   src/MarkdownGenerator.cpp
+  src/PlainMarkdownGenerator.cpp
   src/SourceWatcher.cpp
   src/YAMLNode.cpp
   src/YAMLParser.cpp
