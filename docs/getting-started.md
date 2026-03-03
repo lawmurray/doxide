@@ -10,3 +10,10 @@ MkDocs](https://squidfunk.github.io/mkdocs-material/). To start, it is not
 necessary to modify any of these.
 
 Add at least `doxide.yaml` to version control, and the other files if you intend to use Material for MkDocs (highly recommended for a quick start---you can always try something else later).
+
+### For small projects
+Sometimes you don't want the dependencies of Mkdocs, and just plain Markdown. You can use:
+```
+doxide init --plain
+```
+This will skip the creation of the web oriented output (JavaScript, CSS, etc.) and use only Markdown.
