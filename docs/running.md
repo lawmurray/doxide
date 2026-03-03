@@ -26,4 +26,4 @@ If you don't want the Mkdocs noise, you can run:
 ```
 doxide gitdoc
 ```
-This will populate the output directory with GitHub webview-ready Markdown. Block quotes are substituted for Mkdocs admonitions, and uncupported icons are replaced with near-identical unicode characters.
+This will populate the output directory with GitHub webview-ready Markdown. Block quotes are substituted for Mkdocs admonitions, and unsupported icons are replaced with near-identical unicode characters.
