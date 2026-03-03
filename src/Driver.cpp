@@ -213,6 +213,16 @@ void Driver::build() {
   generator.clean();
 }
 
+void Driver::git_build() {
+  config();
+  parse();
+  count();
+
+  PlainMarkdownGenerator generator(output);
+  generator.generate(root, !coverage.empty());
+  generator.clean();
+}
+
 void Driver::watch() {
 
   build();
