@@ -2,6 +2,32 @@
 
 DocTokenizer::DocTokenizer(const TextLineCursor& src): source(src) {}
 
+/**
+ * Documentation comment token patterns. Order is important, as a match to an
+ * earlier pattern precludes a match to a later.
+ *
+ * @ingroup developer
+ */
+static auto regexes = {
+  std::make_pair(OPEN_AFTER, std::regex("(?:/\\*\\*|/\\*!|///|//!)<[ \\t]?", regex_flags)),
+  std::make_pair(OPEN_BEFORE, std::regex("(?:/\\*\\*|/\\*!|///|//!)[ \\t]?", regex_flags)),
+  std::make_pair(CLOSE, std::regex("\\*/", regex_flags)),
+  std::make_pair(COMMAND, std::regex("[@\\\\](?:param(?:\\[(?:in|out|in,out)\\])?|\\w+|@|\\\\|/|f[\\$\\[\\]])", regex_flags)),
+
+  /* the end of a paragraph is two new lines  */
+  std::make_pair(PARA, std::regex("(?:[ \\t]*\\n(?:[ \\t]*\\*(?!/))?[ \\t]?){2}", regex_flags)),
+
+  /* the end of a line is one new line, as long as there is not an end of
+   * comment to come */
+  std::make_pair(LINE, std::regex("[ \\t]*\\n(?:[ \\t]*\\*(?!/))?[ \\t]?", regex_flags)),
+
+  std::make_pair(SENTENCE, std::regex("[.!?]", regex_flags)),
+  std::make_pair(WHITESPACE, std::regex("\\s+", regex_flags)),
+  std::make_pair(WORD, std::regex("[^\\s\\*/]+", regex_flags)),
+  std::make_pair(STAR, std::regex("\\*", regex_flags)),
+  std::make_pair(SLASH, std::regex("/", regex_flags))
+};
+
 DocToken DocTokenizer::next() {
   DocToken token;
   auto iter = source.cbegin();
