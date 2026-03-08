@@ -2,20 +2,21 @@
 
 #include "doxide.hpp"
 #include "DocToken.hpp"
+#include "TextLineCursor.hpp"
 
 /**
  * Documentation of an entity.
- * 
+ *
  * @ingroup developer
  */
 struct Doc {
   /**
    * Constructor.
-   * 
+   *
    * @param comment Comment from which to populate documentation.
    * @param init_indent Initial indent level.
    */
-  Doc(const std::string_view comment, const int init_indent);
+  Doc(const TextLineCursor &comment, const int init_indent);
 
   /**
    * Content of the documentation.
@@ -26,7 +27,7 @@ struct Doc {
    * Group to which the entity belongs, obtained from @ingroup in the
    * documentation comment.
    */
-  std::string ingroup;
+  TextLineCursor ingroup;
 
   /**
    * Opening token, used to determine the type of comment.

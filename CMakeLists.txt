@@ -92,6 +92,7 @@ add_executable(doxide
   src/JSONGenerator.cpp
   src/MarkdownGenerator.cpp
   src/SourceWatcher.cpp
+  src/TextLineCursor.cpp
   src/YAMLNode.cpp
   src/YAMLParser.cpp
 )

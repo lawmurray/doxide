@@ -1,6 +1,7 @@
 #pragma once
 
 #include "doxide.hpp"
+#include "TextLineCursor.hpp"
 
 /**
  * Documentation comment token types. Closing delimiters must be one shift
@@ -52,21 +53,23 @@ static auto regexes = {
 
 /**
  * Token.
- * 
+ *
  * @ingroup developer
- * 
+ *
  * A token is only valid for the lifetime of the Tokenizer that produced it,
  * as it contains a reference to a substring of the source file.
  */
 struct DocToken {
   /**
    * Constructor.
-   * 
+   *
    * @param type Token type.
    * @param value Token value.
    */
   DocToken(const DocTokenType type = NONE,
-      std::string_view value = std::string_view());
+      TextLineCursor value = TextLineCursor());
+
+  const TextLineCursor& get() const;
 
   /**
    * Get token as string.
@@ -75,7 +78,7 @@ struct DocToken {
 
   /**
    * Get substring of the token as a string.
-   * 
+   *
    * @param pos Position of the first character.
    */
   std::string_view substr(size_t pos = 0) const;
@@ -88,5 +91,5 @@ struct DocToken {
   /**
    * Iterator to first character.
    */
-  std::string_view value;
+  TextLineCursor value;
 };

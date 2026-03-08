@@ -1,7 +1,7 @@
 #include "Doc.hpp"
 #include "DocTokenizer.hpp"
 
-Doc::Doc(const std::string_view comment, const int init_indent) :
+Doc::Doc(const TextLineCursor &comment, const int init_indent) :
     indent(init_indent),
     hide(false) {
   DocTokenizer tokenizer(comment);
@@ -73,7 +73,7 @@ Doc::Doc(const std::string_view comment, const int init_indent) :
           docs.append("\n");
           indent += 4;
         } else if (command == "ingroup") {
-          ingroup = tokenizer.consume(WORD).str();
+          ingroup = tokenizer.consume(WORD).get();
 
         /* legacy commands */
         } else if (command == "returns" ||
