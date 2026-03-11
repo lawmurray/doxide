@@ -167,9 +167,9 @@ void MarkdownGenerator::clean() {
 void MarkdownGenerator::generate(const std::filesystem::path& output,
   const Entity& entity, const bool cov, const std::string& style) {
   std::string name = sanitize(entity.name);  // entity name, empty for root
+  std::string style;     // Style of Markdown to output.
   std::string dirname;   // directory name for this entity
   std::string filename;  // file name for this entity
-  std::string childdir;  // directory name for children, relative to filename
   if (entity.type == EntityType::ROOT) {
     dirname = "";
     filename = "index";
@@ -201,12 +201,12 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     for (auto& child : view(entity.groups, false)) {
       if (style == "plain") {
         out << "§ [" << title(*child) << ']';
-        out << "(" << childdir << sanitize(child->name) << "/)" << std::endl;
+        out << "(" << sanitize(child->name) << "/)" << std::endl;
         out << "- " << line(brief(*child)) << std::endl;
         out << std::endl;
       } else if (style == "mkdocs") {
         out << ":material-format-section: [" << title(*child) << ']';
-        out << "(" << childdir << sanitize(child->name) << "/)" << std::endl;
+        out << "(" << sanitize(child->name) << "/)" << std::endl;
         out << ":   " << line(brief(*child)) << std::endl;
         out << std::endl;
       }
@@ -216,12 +216,12 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     for (auto& child : view(entity.namespaces, true)) {
       if (style == "plain") {
         out << "🗃 [" << child->name << ']';
-        out << "(" << childdir << sanitize(child->name) << "/)" << std::endl;
+        out << "(" << sanitize(child->name) << "/)" << std::endl;
         out << "- " << line(brief(*child)) << std::endl;
         out << std::endl;
       } else if (style == "mkdocs") {
         out << ":material-package: [" << child->name << ']';
-        out << "(" << childdir << sanitize(child->name) << "/)" << std::endl;
+        out << "(" << sanitize(child->name) << "/)" << std::endl;
         out << ":   " << line(brief(*child)) << std::endl;
         out << std::endl;
       }
@@ -507,16 +507,13 @@ void MarkdownGenerator::coverage(const std::filesystem::path& output,
       "coverage" : entity.name);  // entity name, "coverage"" for root
   std::string dirname;  // directory name for this entity
   std::string filename;  // file name for this entity
-  std::string childdir;  // directory name for children, relative to filename
   if (entity.type == EntityType::FILE) {
     /* as for types in generate(), working around some mkdocs behavior */
     dirname = "";
     filename = name;
-    childdir = name + "/";
   } else {
     dirname = name;
     filename = "index";
-    childdir = "";
   }
 
   std::filesystem::create_directories(output / dirname);
