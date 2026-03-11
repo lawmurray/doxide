@@ -8,6 +8,7 @@
 #include "JSONGenerator.hpp"
 #include "SourceWatcher.hpp"
 
+#include <regex>
 #include <thread>
 
 /**
@@ -16,7 +17,8 @@
  * @ingroup developer
  */
 static const char* init_doxide_yaml =
-R""""(title:
+R""""(style:
+title:
 description:
 files:
   - "*.hpp"
@@ -217,6 +219,13 @@ void Driver::init(bool plain_md) {
   std::string doxide_yaml = init_doxide_yaml;
   std::string mkdocs_yaml = init_mkdocs_yaml;
 
+  if (plain_md) {
+    doxide_yaml = std::regex_replace(doxide_yaml, std::regex("style:"),
+        "style: plain");
+  } else {
+    doxide_yaml = std::regex_replace(doxide_yaml, std::regex("style:"),
+        "style: mkdocs");
+  }
   doxide_yaml = std::regex_replace(doxide_yaml, std::regex("title:"),
       "title: " + title);
   doxide_yaml = std::regex_replace(doxide_yaml, std::regex("description:"),
@@ -243,16 +252,6 @@ void Driver::build() {
   count();
 
   MarkdownGenerator generator(output);
-  generator.generate(root, !coverage.empty());
-  generator.clean();
-}
-
-void Driver::git_build() {
-  config();
-  parse();
-  count();
-
-  PlainMarkdownGenerator generator(output);
   generator.generate(root, !coverage.empty());
   generator.clean();
 }
@@ -363,6 +362,13 @@ void Driver::config() {
   YAMLParser parser;
   YAMLNode yaml = parser.parse(config_file);
 
+  if (yaml.has("style")) {
+    if (yaml.isValue("style")) {
+      style = yaml.value("style");
+    } else {
+      warn("'style' must be a value in configuration.");
+    }
+  }
   if (yaml.has("title")) {
     if (yaml.isValue("title")) {
       title = yaml.value("title");
@@ -429,6 +435,7 @@ void Driver::config() {
 
   /* initialize root entity */
   groups(yaml, root);
+  root.style = style;
   root.title = title;
   root.docs = description;
 }

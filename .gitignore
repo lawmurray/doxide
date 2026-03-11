@@ -4,4 +4,6 @@
 /docs/demo
 /.cache
 /src/config.h
+cmbuild.sh
+
 

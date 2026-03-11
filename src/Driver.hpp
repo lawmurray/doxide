@@ -47,6 +47,11 @@ public:
   void clean();
 
   /**
+   * Style.
+   */
+  std::string style;
+
+  /**
    * Title.
    */
   std::string title;

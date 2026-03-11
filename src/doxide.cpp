@@ -70,10 +70,6 @@ int main(int argc, char** argv) {
       "Build documentation in output directory.")->
       fallthrough()->
       callback([&]() { driver.build(); });
-  app.add_subcommand("gitdoc",
-      "Build documentation ready for the GitHub webview in output directory.")->
-    fallthrough()->
-    callback([&]() { driver.git_build(); });
   app.add_subcommand("watch",
       "Watch the documentation's source files and rebuild it on changes.")->
       fallthrough()->
