@@ -278,7 +278,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << std::endl;
         if (style == "plain") {
           out << "> 𝙩 **Type**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
-        } else if (style == "plain") {
+        } else if (style == "mkdocs") {
           out << "!!! typedef \"" << htmlize(line(child->decl)) << '"' << std::endl;
         }
         out << std::endl;
