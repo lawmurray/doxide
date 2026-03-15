@@ -1,9 +1,13 @@
 #pragma once
 
-#include <string_view>
-
-#include "doxide.hpp"
 #include "Entity.hpp"
+
+#include <tree_sitter/api.h>
+#include <filesystem>
+#include <list>
+#include <string>
+#include <string_view>
+#include <unordered_map>
 
 /**
  * C++ source parser.

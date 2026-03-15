@@ -1,4 +1,8 @@
 #include "Entity.hpp"
+#include "Log.hpp"
+
+#include <cassert>
+#include <unordered_set>
 
 Entity::Entity() :
    start_line(0),

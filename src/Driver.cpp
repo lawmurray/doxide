@@ -6,12 +6,17 @@
 #include "JSONCounter.hpp"
 #include "JSONGenerator.hpp"
 #include "SourceWatcher.hpp"
+#include "Log.hpp"
+#include "doxide.hpp"
+
+#include <glob/glob.hpp>
 
 #include <thread>
+#include <regex>
 
 /**
  * Contents of initial `doxide.yaml` file.
- * 
+ *
  * @ingroup developer
  */
 static const char* init_doxide_yaml =
@@ -26,12 +31,12 @@ files:
 
 /**
  * Contents of initial `mkdocs.yaml` file.
- * 
+ *
  * @ingroup developer
  */
 static const char* init_mkdocs_yaml =
 R""""(site_name:
-site_description: 
+site_description:
 theme:
   name: material
   custom_dir: docs/overrides
@@ -43,7 +48,7 @@ theme:
       primary: red
       accent: red
       toggle:
-        icon: material/brightness-7 
+        icon: material/brightness-7
         name: Switch to dark mode
 
     # Palette toggle for dark mode
@@ -79,7 +84,7 @@ extra_javascript:
 
 /**
  * Contents of initial `docs/javascripts/mathjax.js` file.
- * 
+ *
  * @ingroup developer
  */
 static const char* init_docs_javascripts_mathjax_js =
@@ -96,14 +101,14 @@ R""""(window.MathJax = {
   }
 };
 
-document$.subscribe(() => { 
+document$.subscribe(() => {
   MathJax.typesetPromise()
 })
 )"""";
 
 /**
  * Contents of initial `docs/javascripts/tablesort.js` file.
- * 
+ *
  * @ingroup developer
  */
 static const char* init_docs_javascripts_tablesort_js =
@@ -117,7 +122,7 @@ R""""(document$.subscribe(function() {
 
 /**
  * Contents of initial `docs/stylesheets/doxide.css` file.
- * 
+ *
  * @ingroup developer
  */
 static const char* init_docs_stylesheets_doxide_css =
@@ -183,7 +188,7 @@ R""""(:root {
 
 /**
  * Contents of initial `docs/overrides/partials/copyright.html` file.
- * 
+ *
  * @ingroup developer
  */
 static const char* init_docs_overrides_partials_copyright_html =
@@ -220,7 +225,7 @@ void Driver::init() {
       "title: " + title);
   doxide_yaml = std::regex_replace(doxide_yaml, std::regex("description:"),
       "description: " + description);
-  
+
   mkdocs_yaml = std::regex_replace(mkdocs_yaml, std::regex("site_name:"),
       "site_name: " + title);
   mkdocs_yaml = std::regex_replace(mkdocs_yaml, std::regex("site_description:"),
@@ -257,7 +262,7 @@ void Driver::watch() {
 
   for (;;){
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-    
+
     if (config_watcher.changed()){
       std::cout << std::endl << "Detected configuration file change." << std::endl;
       std::cout << "Rebuilding documentation..." << std::endl;
@@ -390,7 +395,7 @@ void Driver::config() {
       warn("'defines' must be a mapping in configuration.");
     }
   }
-  
+
   /* expand file patterns in file list */
   filenames.clear();
   if (yaml.isSequence("files")) {

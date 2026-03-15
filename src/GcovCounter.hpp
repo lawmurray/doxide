@@ -1,6 +1,5 @@
 #pragma once
 
-#include "doxide.hpp"
 #include "Entity.hpp"
 
 /**
@@ -12,7 +11,7 @@ class GcovCounter {
 public:
   /**
    * Read in file and update coverage data.
-   * 
+   *
    * @param file Coverage file.
    * @param root Root entity.
    */

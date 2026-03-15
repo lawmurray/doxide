@@ -1,8 +1,10 @@
 #pragma once
 
-#include "doxide.hpp"
 #include "DocToken.hpp"
 #include "TextLineCursor.hpp"
+
+#include <string>
+#include <string_view>
 
 /**
  * Documentation of an entity.

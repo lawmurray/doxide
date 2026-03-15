@@ -1,7 +1,8 @@
 #pragma once
 
-#include "doxide.hpp"
 #include "TextLineCursor.hpp"
+
+#include <string_view>
 
 /**
  * Documentation comment token types. Closing delimiters must be one shift

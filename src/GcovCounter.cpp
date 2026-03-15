@@ -1,5 +1,9 @@
 #include "GcovCounter.hpp"
 #include "YAMLParser.hpp"
+#include "Regex.hpp"
+#include "Log.hpp"
+
+#include <fstream>
 
 void GcovCounter::count(const std::filesystem::path& coverage, Entity& root) {
   /*
@@ -29,9 +33,9 @@ void GcovCounter::count(const std::filesystem::path& coverage, Entity& root) {
   * recognized and ignored due to the repetition of line numbers seen before.
   */
   static const std::regex regex_source("^\\s*-:\\s*0:Source:(.*)$",
-      regex_flags);
+      REGEX_FLAGS);
   static const std::regex regex_covered("^\\s*(\\d+)\\*?:\\s*(\\d+):.*$",
-      regex_flags);
+      REGEX_FLAGS);
 
   std::ifstream in(coverage);
   if (!in.is_open()) {

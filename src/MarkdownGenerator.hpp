@@ -1,25 +1,30 @@
 #pragma once
 
-#include "doxide.hpp"
 #include "Entity.hpp"
+
+#include <unordered_set>
+#include <filesystem>
+#include <fstream>
+#include <string>
+#include <list>
 
 /**
  * Markdown generator.
- * 
+ *
  * @ingroup developer
  */
 class MarkdownGenerator {
 public:
   /**
    * Constructor.
-   * 
+   *
    * @param output Output directory.
    */
   MarkdownGenerator(const std::filesystem::path& output);
 
   /**
    * Generate documentation.
-   * 
+   *
    * @param root Root entity.
    * @param cov Include code coverage report?
    */
@@ -36,7 +41,7 @@ public:
 private:
   /**
    * Recursively generate documentation.
-   * 
+   *
    * @param output Output directory.
    * @param entity Entity for which to generate documentation.
    * @param cov Include code coverage report?
@@ -46,7 +51,7 @@ private:
 
   /**
    * Recursively generate coverage.
-   * 
+   *
    * @param output Output directory.
    * @param entity Entity for which to generate coverage.
    */
@@ -54,7 +59,7 @@ private:
 
   /**
    * Recursively generate coverage table data.
-   * 
+   *
    * @param entity Entity for which to generate coverage.
    * @param root Root entity for the current page. This is used to determine
    * which are rows should be visible initially.
@@ -65,7 +70,7 @@ private:
 
   /**
    * Recursively generate coverage table footer.
-   * 
+   *
    * @param entity Entity for which to generate coverage.
    * @param root Root entity for the current page. This is used to determine
    * which are rows should be visible initially.
@@ -76,7 +81,7 @@ private:
 
   /**
    * Produce sunburst chart of code coverage for entity.
-   * 
+   *
    * @param entity Entity for which to generate sunburst.
    * @param root Root entity for the current page. This is used to determine
    * paths relative to the root.
@@ -87,7 +92,7 @@ private:
 
   /**
    * Produce data for sunburst chart of code coverage for entity.
-   * 
+   *
    * @param entity Entity for which to generate sunburst.
    * @param root Root entity for the current page. This is used to determine
    * paths relative to the root.
@@ -162,7 +167,7 @@ private:
   /**
    * Convert a list of entities to a list of pointers to entities, optionally
    * sorting by name.
-   * 
+   *
    * @param entities List of entities.
    * @param sort Sort by name?
    */

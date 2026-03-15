@@ -1,5 +1,7 @@
 #include "JSONGenerator.hpp"
 
+#include <iostream>
+
 void JSONGenerator::generate(const Entity& root) {
   /* JSON header */
   std::cout << "{" << std::endl;
@@ -23,7 +25,7 @@ int JSONGenerator::generate(const Entity& root, int nfiles) {
   for (auto& file : root.files) {
     if (nfiles > 0) {
       std::cout << "," << std::endl;
-    }      
+    }
     std::cout << "    {" << std::endl;
     std::cout << "      \"file\": \"" << file.name << "\"," << std::endl;
     std::cout << "      \"functions\": []," << std::endl;

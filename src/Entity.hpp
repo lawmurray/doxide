@@ -1,8 +1,11 @@
 #pragma once
 
-#include "doxide.hpp"
-
 #include <filesystem>
+#include <list>
+#include <string>
+#include <vector>
+#include <cstdint>
+#include <functional>
 
 #include "TextLineCursor.hpp"
 
