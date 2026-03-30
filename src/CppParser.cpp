@@ -848,10 +848,10 @@ void CppParser::report(const std::filesystem::path& filename,
     uint32_t l = ts_node_end_byte(node);
     TSPoint from = ts_node_start_point(node);
     if (ts_node_is_error(node)) {
-      std::cerr << filename << ':' << (from.row + 1) << ':' << from.column <<
+      warn(filename << ':' << (from.row + 1) << ':' << from.column <<
           ": warning: parse error at '" <<
           in.substr(k, std::min(l - k, 40u)) <<
-          "', but will continue" << std::endl;
+          "', but will continue");
     }
 
     /* next node */

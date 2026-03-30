@@ -74,14 +74,14 @@ struct DocToken {
   /**
    * Get token as string.
    */
-  std::string_view str() const;
+  std::string_view view() const;
 
   /**
    * Get substring of the token as a string.
    *
    * @param pos Position of the first character.
    */
-  std::string_view substr(size_t pos = 0) const;
+  TextLineCursor substr(size_t pos = 0) const;
 
   /**
    * Token type.
