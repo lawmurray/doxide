@@ -6,7 +6,7 @@
 
 /**
  * Driver for running commands
- * 
+ *
  * @ingroup developer
  */
 class Driver {
@@ -19,12 +19,17 @@ public:
   /**
    * Create a new configuration file.
    */
-  void init();
+  void init(bool plain);
 
   /**
    * Build documentation.
    */
   void build();
+
+  /**
+   * Build GetHub webview ready documentation.
+   */
+  void git_build();
 
   /**
    * Watch and build documentation on changes.
@@ -40,6 +45,11 @@ public:
    * Clean documentation.
    */
   void clean();
+
+  /**
+   * Style.
+   */
+  std::string style;
 
   /**
    * Title.
@@ -60,6 +70,11 @@ public:
    * Output directory.
    */
   std::filesystem::path output;
+
+  /**
+   * Whether to remove Mkdocs noise.
+   */
+  bool plain;
 
 private:
   /**

@@ -1,19 +1,19 @@
-#include "MarkdownGenerator.hpp"
+#include "PlainMarkdownGenerator.hpp"
 #include "YAMLParser.hpp"
 
-MarkdownGenerator::MarkdownGenerator(const std::filesystem::path& output) :
+PlainMarkdownGenerator::PlainMarkdownGenerator(const std::filesystem::path& output) :
     output(output) {
   //
 }
 
-void MarkdownGenerator::generate(const Entity& root, const bool cov) {
+void PlainMarkdownGenerator::generate(const Entity& root, const bool cov) {
   generate(output, root, cov);
   if (cov) {
     coverage(output, root);
   }
 }
 
-void MarkdownGenerator::clean() {
+void PlainMarkdownGenerator::clean() {
   if (std::filesystem::exists(output) && std::filesystem::is_directory(output)) {
     for (auto& entry : std::filesystem::recursive_directory_iterator(output)) {
       if (entry.is_regular_file() && entry.path().extension() == ".md" &&
@@ -49,15 +49,13 @@ void MarkdownGenerator::clean() {
   }
 }
 
-void MarkdownGenerator::generate(const std::filesystem::path& output,
+void PlainMarkdownGenerator::generate(const std::filesystem::path& output,
     const Entity& entity, const bool cov) {
   std::string name = sanitize(entity.name);  // entity name, empty for root
-  std::string style;     // Style of Markdown to output.
   std::string dirname;   // directory name for this entity
   std::string filename;  // file name for this entity
   std::string childdir;  // directory name for children, relative to filename
   if (entity.type == EntityType::ROOT) {
-    style = entity.style;
     /* root node */
     dirname = "";
     filename = "index";
@@ -105,43 +103,24 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
 
     /* groups */
     for (auto& child : view(entity.groups, false)) {
-      if (style == "plain") {
-        out << "§ [" << title(*child) << ']';
-        out << "(" << childdir << sanitize(child->name) << "/index.md)" << std::endl;
-        out << "- " << line(brief(*child)) << std::endl;
-        out << std::endl;
-      } else if (style == "mkdocs") {
-        out << ":material-format-section: [" << title(*child) << ']';
-        out << "(" << childdir << sanitize(child->name) << "/index.md)" << std::endl;
-        out << ":   " << line(brief(*child)) << std::endl;
-        out << std::endl;
-      }
+      out << "§ [" << title(*child) << ']';
+      out << "(" << childdir << sanitize(child->name) << "/index.md)" << std::endl;
+      out << "- " << line(brief(*child)) << std::endl;
+      out << std::endl;
     }
 
     /* namespaces */
     for (auto& child : view(entity.namespaces, true)) {
-      if (style == "plain") {
-        out << "🗃 [" << child->name << ']';
-        out << "(" << childdir << sanitize(child->name) << "/index.md)" << std::endl;
-        out << "- " << line(brief(*child)) << std::endl;
-        out << std::endl;
-      } else if (style == "mkdocs") {
-        out << ":material-package: [" << child->name << ']';
-        out << "(" << childdir << sanitize(child->name) << "/index.md)" << std::endl;
-        out << ":   " << line(brief(*child)) << std::endl;
-        out << std::endl;
-      }
+      out << "🗃 [" << child->name << ']';
+      out << "(" << childdir << sanitize(child->name) << "/index.md)" << std::endl;
+      out << "- " << line(brief(*child)) << std::endl;
+      out << std::endl;
     }
 
     /* code coverage */
     if (entity.type == EntityType::ROOT && cov) {
-      if (style == "plain") {
-        out << "🗠 [Code Coverage](coverage/index.md)" << std::endl;
-        out << std::endl;
-      } else if (style == "mkdocs") {
-        out << ":material-chart-pie: [Code Coverage](coverage/index.md)" << std::endl;
-        out << std::endl;
-      }
+      out << "🗠 [Code Coverage](coverage/index.md)" << std::endl;
+      out << std::endl;
     }
 
     /* brief descriptions */
@@ -254,15 +233,9 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     auto enums = view(entity.enums, false);
     if (enums.size() > 0) {
       for (auto& child : enums) {
-        if (style == "plain") {
-          out << "**" << child->decl << "**" << std::endl;
-          out << "- " << child->docs << std::endl;
-          out << std::endl;
-        } else if (style == "mkdocs") {
-          out << "**" << child->decl << "**" << std::endl;
-          out << ":   " << child->docs << std::endl;
-          out << std::endl;
-        }
+        out << "**" << child->decl << "**" << std::endl;
+        out << "- " << child->docs << std::endl;
+        out << std::endl;
       }
       out << std::endl;
     }
@@ -276,11 +249,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "### " << child->name;
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
-        if (style == "plain") {
-          out << "> 𝙩 **Type**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
-        } else if (style == "mkdocs") {
-          out << "!!! typedef \"" << htmlize(line(child->decl)) << '"' << std::endl;
-        }
+        out << "> 𝙩 **Type**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
         out << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
@@ -295,11 +264,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "### " << child->name;
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
-        if (style == "plain") {
         out << "> ⛶ **Concept**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
-        } else if (style == "mkdocs") {
-        out << "!!! concept \"" << htmlize(line(child->decl)) << '"' << std::endl;
-        }
         out << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
@@ -314,11 +279,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "### " << child->name;
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
-        if (style == "plain") {
-          out << "> ＃**Macro**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
-        } else if (style == "plain") {
-          out << "!!! macro \"" << htmlize(line(child->decl)) << '"' << std::endl;
-        }
+        out << "> ＃**Macro**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
         out << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
@@ -333,11 +294,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "### " << child->name;
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
-        if (style == "plain") {
-          out << "> ⒳ **Variable**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
-        } else if (style == "mkdocs") {
-          out << "!!! variable \"" << htmlize(line(child->decl)) << '"' << std::endl;
-        }
+        out << "> ⒳ **Variable**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
         out << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
@@ -356,11 +313,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
           out << std::endl;
         }
-        if (style == "plain") {
-          out << "> ƒ **Operator**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
-        } else if (style == "mkdocs") {
-          out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
-        }
+        out << "> ƒ **Operator**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
         out << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
@@ -379,11 +332,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << "### " << child->name;
           out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         }
-        if (style == "plain") {
-          out << "> ƒ **Function**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
-        } else if (style == "mkdocs") {
-          out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
-        }
+        out << "> ƒ **Function**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
         out << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
@@ -405,7 +354,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
   }
 }
 
-void MarkdownGenerator::coverage(const std::filesystem::path& output,
+void PlainMarkdownGenerator::coverage(const std::filesystem::path& output,
     const Entity& entity) {
   std::string name = sanitize(entity.type == EntityType::ROOT ?
       "coverage" : entity.name);  // entity name, "coverage"" for root
@@ -528,7 +477,7 @@ void MarkdownGenerator::coverage(const std::filesystem::path& output,
   }
 }
 
-void MarkdownGenerator::coverage_data(const Entity& entity,
+void PlainMarkdownGenerator::coverage_data(const Entity& entity,
     const Entity& root, std::ofstream& out) {
   /* icons */
   static std::string material_file_outline("<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm4 18H6V4h7v5h5z\"/></svg></span>");
@@ -588,7 +537,7 @@ void MarkdownGenerator::coverage_data(const Entity& entity,
   }
 }
 
-void MarkdownGenerator::coverage_foot(const Entity& entity,
+void PlainMarkdownGenerator::coverage_foot(const Entity& entity,
     const Entity& root, std::ofstream& out) {
   auto dirs = view(entity.dirs, true);
   for (auto& child : dirs) {
@@ -616,7 +565,7 @@ void MarkdownGenerator::coverage_foot(const Entity& entity,
   out << "</tr>" << std::endl;
 }
 
-void MarkdownGenerator::sunburst(const Entity& entity, const Entity& root,
+void PlainMarkdownGenerator::sunburst(const Entity& entity, const Entity& root,
     std::ofstream& out) {
   out <<
   R""""(
@@ -712,7 +661,7 @@ void MarkdownGenerator::sunburst(const Entity& entity, const Entity& root,
   )"""";
 }
 
-void MarkdownGenerator::sunburst_data(const Entity& entity,
+void PlainMarkdownGenerator::sunburst_data(const Entity& entity,
     const Entity& root, std::ofstream& out) {
   bool first = true;
   for (auto& dir: view(entity.dirs, true)) {
@@ -764,7 +713,7 @@ void MarkdownGenerator::sunburst_data(const Entity& entity,
   }
 }
 
-bool MarkdownGenerator::can_write(const std::filesystem::path& path) {
+bool PlainMarkdownGenerator::can_write(const std::filesystem::path& path) {
   bool canWrite = true;
   if (std::filesystem::exists(path)) {
     try {
@@ -782,7 +731,7 @@ bool MarkdownGenerator::can_write(const std::filesystem::path& path) {
   return canWrite;
 }
 
-std::string MarkdownGenerator::relative(const std::filesystem::path& path,
+std::string PlainMarkdownGenerator::relative(const std::filesystem::path& path,
     const std::filesystem::path& base) {
   if (base.empty()) {
     return path.string();
@@ -796,7 +745,7 @@ std::string MarkdownGenerator::relative(const std::filesystem::path& path,
   }
 }
 
-std::string MarkdownGenerator::frontmatter(const Entity& entity) {
+std::string PlainMarkdownGenerator::frontmatter(const Entity& entity) {
   /* use YAML frontmatter to ensure correct capitalization of title, and to
    * mark as managed by Doxide */
   std::stringstream buf;
@@ -807,7 +756,7 @@ std::string MarkdownGenerator::frontmatter(const Entity& entity) {
   return buf.str();
 }
 
-std::string MarkdownGenerator::title(const Entity& entity) {
+std::string PlainMarkdownGenerator::title(const Entity& entity) {
   if (!entity.title.empty()) {
     return entity.title;
   } else {
@@ -815,7 +764,7 @@ std::string MarkdownGenerator::title(const Entity& entity) {
   }
 }
 
-std::string MarkdownGenerator::brief(const Entity& entity) {
+std::string PlainMarkdownGenerator::brief(const Entity& entity) {
   if (!entity.brief.empty()) {
     return entity.brief;
   } else {
@@ -831,17 +780,17 @@ std::string MarkdownGenerator::brief(const Entity& entity) {
   }
 }
 
-std::string MarkdownGenerator::line(const std::string& str) {
+std::string PlainMarkdownGenerator::line(const std::string& str) {
   static const std::regex newline("\\s*\\n\\s*", regex_flags);
   return std::regex_replace(str, newline, " ");
 }
 
-std::string MarkdownGenerator::indent(const std::string& str) {
+std::string PlainMarkdownGenerator::indent(const std::string& str) {
   static const std::regex start("\\n", regex_flags);
   return "    " + std::regex_replace(str, start, "\n    ");
 }
 
-std::string MarkdownGenerator::stringify(const std::string& str) {
+std::string PlainMarkdownGenerator::stringify(const std::string& str) {
   static const std::regex quote("(\"|\\\\)", regex_flags);
   std::string r;
   r.append("\"");
@@ -850,7 +799,7 @@ std::string MarkdownGenerator::stringify(const std::string& str) {
   return r;
 }
 
-std::string MarkdownGenerator::htmlize(const std::string& str) {
+std::string PlainMarkdownGenerator::htmlize(const std::string& str) {
   /* basic replacements */
   static const std::regex amp("&", regex_flags);
   static const std::regex lt("<", regex_flags);
@@ -873,7 +822,7 @@ std::string MarkdownGenerator::htmlize(const std::string& str) {
   return r;
 }
 
-std::string MarkdownGenerator::sanitize(const std::string& str) {
+std::string PlainMarkdownGenerator::sanitize(const std::string& str) {
   static const std::regex word("\\w|[./\\\\]", regex_flags);
   static const std::regex space("\\s", regex_flags);
 
@@ -895,7 +844,7 @@ std::string MarkdownGenerator::sanitize(const std::string& str) {
   return buf.str().substr(0, 255 - 5);
 }
 
-const std::string& MarkdownGenerator::color(const double percent) {
+const std::string& PlainMarkdownGenerator::color(const double percent) {
   assert(0.0 <= percent && percent <= 100.0);
 
   static const std::string red = "ef5552";
@@ -917,7 +866,7 @@ const std::string& MarkdownGenerator::color(const double percent) {
   }
 }
 
-const std::string& MarkdownGenerator::icon(const double percent) {
+const std::string& PlainMarkdownGenerator::icon(const double percent) {
   assert(0.0 <= percent && percent <= 100.0);
 
   static const std::string icon0 = "○○○○";
@@ -939,7 +888,7 @@ const std::string& MarkdownGenerator::icon(const double percent) {
   }
 }
 
-std::list<const Entity*> MarkdownGenerator::view(
+std::list<const Entity*> PlainMarkdownGenerator::view(
     const std::list<Entity>& entities, const bool sort) {
   auto pointer = [](const Entity& e) {
     return &e;

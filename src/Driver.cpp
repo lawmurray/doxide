@@ -2,20 +2,23 @@
 #include "YAMLParser.hpp"
 #include "CppParser.hpp"
 #include "MarkdownGenerator.hpp"
+#include "PlainMarkdownGenerator.hpp"
 #include "GcovCounter.hpp"
 #include "JSONCounter.hpp"
 #include "JSONGenerator.hpp"
 #include "SourceWatcher.hpp"
 
+#include <regex>
 #include <thread>
 
 /**
  * Contents of initial `doxide.yaml` file.
- * 
+ *
  * @ingroup developer
  */
 static const char* init_doxide_yaml =
-R""""(title:
+R""""(style:
+title:
 description:
 files:
   - "*.hpp"
@@ -26,12 +29,12 @@ files:
 
 /**
  * Contents of initial `mkdocs.yaml` file.
- * 
+ *
  * @ingroup developer
  */
 static const char* init_mkdocs_yaml =
 R""""(site_name:
-site_description: 
+site_description:
 theme:
   name: material
   custom_dir: docs/overrides
@@ -43,7 +46,7 @@ theme:
       primary: red
       accent: red
       toggle:
-        icon: material/brightness-7 
+        icon: material/brightness-7
         name: Switch to dark mode
 
     # Palette toggle for dark mode
@@ -79,7 +82,7 @@ extra_javascript:
 
 /**
  * Contents of initial `docs/javascripts/mathjax.js` file.
- * 
+ *
  * @ingroup developer
  */
 static const char* init_docs_javascripts_mathjax_js =
@@ -96,14 +99,14 @@ R""""(window.MathJax = {
   }
 };
 
-document$.subscribe(() => { 
+document$.subscribe(() => {
   MathJax.typesetPromise()
 })
 )"""";
 
 /**
  * Contents of initial `docs/javascripts/tablesort.js` file.
- * 
+ *
  * @ingroup developer
  */
 static const char* init_docs_javascripts_tablesort_js =
@@ -117,7 +120,7 @@ R""""(document$.subscribe(function() {
 
 /**
  * Contents of initial `docs/stylesheets/doxide.css` file.
- * 
+ *
  * @ingroup developer
  */
 static const char* init_docs_stylesheets_doxide_css =
@@ -183,7 +186,7 @@ R""""(:root {
 
 /**
  * Contents of initial `docs/overrides/partials/copyright.html` file.
- * 
+ *
  * @ingroup developer
  */
 static const char* init_docs_overrides_partials_copyright_html =
@@ -212,26 +215,35 @@ Driver::Driver() :
   //
 }
 
-void Driver::init() {
+void Driver::init(bool plain_md) {
   std::string doxide_yaml = init_doxide_yaml;
   std::string mkdocs_yaml = init_mkdocs_yaml;
 
+  if (plain_md) {
+    doxide_yaml = std::regex_replace(doxide_yaml, std::regex("style:"),
+        "style: plain");
+  } else {
+    doxide_yaml = std::regex_replace(doxide_yaml, std::regex("style:"),
+        "style: mkdocs");
+  }
   doxide_yaml = std::regex_replace(doxide_yaml, std::regex("title:"),
       "title: " + title);
   doxide_yaml = std::regex_replace(doxide_yaml, std::regex("description:"),
       "description: " + description);
-  
+
   mkdocs_yaml = std::regex_replace(mkdocs_yaml, std::regex("site_name:"),
       "site_name: " + title);
   mkdocs_yaml = std::regex_replace(mkdocs_yaml, std::regex("site_description:"),
       "site_description: " + description);
 
   write_file_prompt(doxide_yaml, "doxide.yaml");
-  write_file_prompt(mkdocs_yaml, "mkdocs.yaml");
-  write_file_prompt(init_docs_javascripts_mathjax_js, "docs/javascripts/mathjax.js");
-  write_file_prompt(init_docs_javascripts_tablesort_js, "docs/javascripts/tablesort.js");
-  write_file_prompt(init_docs_stylesheets_doxide_css, "docs/stylesheets/doxide.css");
-  write_file_prompt(init_docs_overrides_partials_copyright_html, "docs/overrides/partials/copyright.html");
+  if (!plain_md) {
+    write_file_prompt(mkdocs_yaml, "mkdocs.yaml");
+    write_file_prompt(init_docs_javascripts_mathjax_js, "docs/javascripts/mathjax.js");
+    write_file_prompt(init_docs_javascripts_tablesort_js, "docs/javascripts/tablesort.js");
+    write_file_prompt(init_docs_stylesheets_doxide_css, "docs/stylesheets/doxide.css");
+    write_file_prompt(init_docs_overrides_partials_copyright_html, "docs/overrides/partials/copyright.html");
+  }
 }
 
 void Driver::build() {
@@ -257,7 +269,7 @@ void Driver::watch() {
 
   for (;;){
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-    
+
     if (config_watcher.changed()){
       std::cout << std::endl << "Detected configuration file change." << std::endl;
       std::cout << "Rebuilding documentation..." << std::endl;
@@ -350,6 +362,13 @@ void Driver::config() {
   YAMLParser parser;
   YAMLNode yaml = parser.parse(config_file);
 
+  if (yaml.has("style")) {
+    if (yaml.isValue("style")) {
+      style = yaml.value("style");
+    } else {
+      warn("'style' must be a value in configuration.");
+    }
+  }
   if (yaml.has("title")) {
     if (yaml.isValue("title")) {
       title = yaml.value("title");
@@ -390,7 +409,7 @@ void Driver::config() {
       warn("'defines' must be a mapping in configuration.");
     }
   }
-  
+
   /* expand file patterns in file list */
   filenames.clear();
   if (yaml.isSequence("files")) {
@@ -416,6 +435,7 @@ void Driver::config() {
 
   /* initialize root entity */
   groups(yaml, root);
+  root.style = style;
   root.title = title;
   root.docs = description;
 }
