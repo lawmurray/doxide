@@ -1,7 +1,7 @@
 #include "Doc.hpp"
 #include "DocTokenizer.hpp"
 
-Doc::Doc(const std::string_view comment, const int init_indent) :
+Doc::Doc(const TextLineCursor &comment, const int init_indent) :
     indent(init_indent),
     hide(false) {
   DocTokenizer tokenizer(comment);
@@ -16,31 +16,32 @@ Doc::Doc(const std::string_view comment, const int init_indent) :
       indent = std::max(indent - 4, 0);
     } else while (token.type) {
       if (token.type & COMMAND) {
-        std::string_view command = token.substr(1);
+        auto command_token = token.substr(1);
+        std::string_view command = command_token.view();
         if (command == "param" ||
             command == "param[in]") {
           docs.append("\n:material-location-enter: `");
-          docs.append(tokenizer.consume(WORD).str());
+          docs.append(tokenizer.consume(WORD).view());
           docs.append("`\n:   ");
           indent = 4;
         } else if (command == "param[out]") {
           docs.append("\n:material-location-exit: `");
-          docs.append(tokenizer.consume(WORD).str());
+          docs.append(tokenizer.consume(WORD).view());
           docs.append("`\n:   ");
           indent = 4;
         } else if (command == "param[in,out]") {
           docs.append("\n:material-location-enter::material-location-exit: `");
-          docs.append(tokenizer.consume(WORD).str());
+          docs.append(tokenizer.consume(WORD).view());
           docs.append("`\n:   ");
           indent = 4;
         } else if (command == "tparam") {
           docs.append("\n:material-code-tags: `");
-          docs.append(tokenizer.consume(WORD).str());
+          docs.append(tokenizer.consume(WORD).view());
           docs.append("`\n:   ");
           indent = 4;
         } else if (command == "p") {
           docs.append("`");
-          docs.append(tokenizer.consume(WORD).str());
+          docs.append(tokenizer.consume(WORD).view());
           docs.append("`");
         } else if (command == "return") {
           docs.append("\n:material-keyboard-return: **Return**\n:   ");
@@ -54,7 +55,7 @@ Doc::Doc(const std::string_view comment, const int init_indent) :
           docs.append("\n:material-eye-outline: **See**\n:   ");
         } else if (command == "anchor") {
           docs.append("<a name=\"");
-          docs.append(tokenizer.consume(WORD).str());
+          docs.append(tokenizer.consume(WORD).view());
           docs.append("\"></a>");
         } else if (command == "note" ||
             command == "abstract" ||
@@ -73,7 +74,7 @@ Doc::Doc(const std::string_view comment, const int init_indent) :
           docs.append("\n");
           indent += 4;
         } else if (command == "ingroup") {
-          ingroup = tokenizer.consume(WORD).str();
+          ingroup = tokenizer.consume(WORD).get();
 
         /* legacy commands */
         } else if (command == "returns" ||
@@ -88,15 +89,15 @@ Doc::Doc(const std::string_view comment, const int init_indent) :
             command == "em" ||
             command == "a") {
           docs.append("*");
-          docs.append(tokenizer.consume(WORD).str());
+          docs.append(tokenizer.consume(WORD).view());
           docs.append("*");
         } else if (command == "b") {
           docs.append("**");
-          docs.append(tokenizer.consume(WORD).str());
+          docs.append(tokenizer.consume(WORD).view());
           docs.append("**");
         } else if (command == "c") {
           docs.append("`");
-          docs.append(tokenizer.consume(WORD).str());
+          docs.append(tokenizer.consume(WORD).view());
           docs.append("`");
         } else if (command == "f$") {
           docs.append("$");
@@ -110,9 +111,9 @@ Doc::Doc(const std::string_view comment, const int init_indent) :
           auto href = tokenizer.consume(WORD);
           auto text = tokenizer.consume(WORD);
           docs.append("[");
-          docs.append(text.str());
+          docs.append(text.view());
           docs.append("](#");
-          docs.append(href.str());
+          docs.append(href.view());
           docs.append(")");
         } else if (command == "code" ||
             command == "endcode" ||
@@ -149,17 +150,19 @@ Doc::Doc(const std::string_view comment, const int init_indent) :
           docs.append("@");
         } else if (command == "/") {
           docs.append("/");
-        } else if (token.str().at(0) == '\\') {
+        } else if (token.view().at(0) == '\\') {
           /* unrecognized command starting with legacy backslash, could just
            * be e.g. a LaTeX macro, output as is */
-          docs.append(token.str());
+          docs.append(token.view());
         } else {
           /* keep track of warnings and don't repeat them */
           static std::unordered_set<std::string> warned;
           if (warned.insert(std::string(command)).second) {
-            warn("unrecognized command: " << command);
+            warn("line " << command_token.get_line_number()
+              << ": unrecognized command '" << command << "'");
           }
-          docs.append(token.str());
+          docs.append(token.view
+            ());
         }
       } else if (token.type & PARA) {
         if (!first) {
@@ -175,7 +178,7 @@ Doc::Doc(const std::string_view comment, const int init_indent) :
         //
       } else {
         docs.append(first*indent, ' ');  // indent on first token
-        docs.append(token.str());
+        docs.append(token.view());
       }
       token = tokenizer.next();
       first = false;

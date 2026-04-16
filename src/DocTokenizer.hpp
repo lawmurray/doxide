@@ -2,21 +2,22 @@
 
 #include "doxide.hpp"
 #include "DocToken.hpp"
+#include "TextLineCursor.hpp"
 
 /**
  * Documentation comment tokenizer.
- * 
+ *
  * @ingroup developer
  */
 class DocTokenizer {
 public:
   /**
    * Constructor.
-   * 
+   *
    * @param comment Comment to tokenize.
    */
-  DocTokenizer(const std::string_view& source);
-  
+  DocTokenizer(const TextLineCursor& source);
+
   /**
    * Get the next token.
    *
@@ -31,11 +32,11 @@ public:
 
   /**
    * Consume tokens until stopping criterion.
-   * 
+   *
    * @param stop Bitmask giving the token types on which to stop and return.
-   * 
+   *
    * @return Last token consumed.
-   * 
+   *
    * Tokens are consumed until one is encountered with a type in @p stop,
    * which is then returned. If @p stop is `ANY` then the next token is
    * returned.
@@ -43,13 +44,6 @@ public:
   DocToken consume(const int stop = ANY);
 
 private:
-  /**
-   * Iterator over source.
-   */
-  std::string_view::const_iterator iter;
 
-  /**
-   * End of source.
-   */
-  std::string_view::const_iterator end;
+  TextLineCursor source;
 };

@@ -1,11 +1,13 @@
 #pragma once
 
+#include <string_view>
+
 #include "doxide.hpp"
 #include "Entity.hpp"
 
 /**
  * C++ source parser.
- * 
+ *
  * @ingroup developer
  */
 class CppParser {
@@ -22,7 +24,7 @@ public:
 
   /**
    * Parse C++ source.
-   * 
+   *
    * @param file C++ source file name.
    * @param defines Macro definitions.
    * @param[in,out] root Root entity.
@@ -34,7 +36,7 @@ public:
 private:
   /**
    * Push onto the stack.
-   * 
+   *
    * @param entity Entity to push.
    * @param start Start byte of range.
    * @param end End byte of range.
@@ -44,12 +46,12 @@ private:
   /**
    * Pop the stack down to the parent of an entity, according to its byte
    * range.
-   * 
+   *
    * @param start Start byte of range.
    * @param end End byte of range.
-   * 
+   *
    * @return The parent.
-   * 
+   *
    * If both @p start and @p end are zero, this is interpreting as popping the
    * stack down to the root node and returning it.
    */
@@ -71,12 +73,12 @@ private:
 
   /**
    * Report errors after preprocessing.
-   * 
+   *
    * @param file C++ source file name.
    * @param in Preprocessed source.
    * @param tree Parse tree for file.
    */
-  void report(const std::filesystem::path& file, const std::string& in,
+  void report(const std::filesystem::path& file, const std::string_view in,
       TSTree* tree);
 
   /**
@@ -88,7 +90,7 @@ private:
    * Stack of start bytes, corresponding to `entities`, while parsing.
    */
   std::list<uint32_t> starts;
-  
+
   /**
    * Stack of end bytes, corresponding to `entities`, while parsing.
    */

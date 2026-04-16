@@ -13,7 +13,8 @@ Entity::Entity() :
 
 void Entity::add(Entity&& o) {
   if (o.type == EntityType::NAMESPACE && !o.ingroup.empty()) {
-    warn("namespace cannot have @ingroup, ignoring");
+    warn("file " << o.path << " line " << o.ingroup.get_line_number() <<
+        "namespace cannot have @ingroup, ignoring");
     o.ingroup.clear();
   }
   if (!o.ingroup.empty()) {
@@ -22,9 +23,10 @@ void Entity::add(Entity&& o) {
     } else {
       /* keep track of warnings and don't repeat them */
       static std::unordered_set<std::string> warned;
-      if (warned.insert(o.ingroup).second) {
-        warn("unrecognized group " << o.ingroup <<
-            ", groups must be defined in config file, ignoring @ingroup");
+      if (warned.insert(o.ingroup.to_string()).second) {
+        warn("file " << o.path << " line " << o.ingroup.get_line_number() <<
+            ": unrecognized group '" << o.ingroup.view() <<
+            "', groups must be defined in config file, ignoring @ingroup");
       }
     }
   }
