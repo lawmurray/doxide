@@ -1,8 +1,6 @@
 #include <TextLineCursor.hpp>
-
-#include <stdexcept>
 #include <algorithm>
-#include <compare>
+#include <stdexcept>
 
 TextLineCursor::TextLineCursor(): _start(nullptr), _size(0), _line_num(0) {}
 

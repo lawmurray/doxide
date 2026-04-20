@@ -1,6 +1,11 @@
 #include "DocTokenizer.hpp"
-#include "Regex.hpp"
+
 #include "Log.hpp"
+#include "Regex.hpp"
+
+#include <initializer_list>
+#include <regex>
+#include <utility>
 
 DocTokenizer::DocTokenizer(const TextLineCursor& src): source(src) {}
 

@@ -2,6 +2,8 @@
 
 #include "Entity.hpp"
 
+#include <filesystem>
+
 /**
  * JSON processor for coverage data following gcov/gcovr schema.
  *

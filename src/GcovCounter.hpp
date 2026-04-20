@@ -2,6 +2,8 @@
 
 #include "Entity.hpp"
 
+#include <filesystem>
+
 /**
  * Gcov processor for coverage data.
  *

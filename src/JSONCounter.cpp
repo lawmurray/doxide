@@ -1,6 +1,16 @@
 #include "JSONCounter.hpp"
-#include "YAMLParser.hpp"
+
+#include "Entity.hpp"
 #include "Log.hpp"
+#include "YAMLNode.hpp"
+#include "YAMLParser.hpp"
+
+#include <stddef.h>
+#include <list>
+#include <memory>
+#include <ostream>
+#include <string>
+#include <vector>
 
 void JSONCounter::count(const std::filesystem::path& coverage, Entity& root) {
   YAMLParser parser;

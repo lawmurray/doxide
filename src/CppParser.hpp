@@ -2,6 +2,7 @@
 
 #include "Entity.hpp"
 
+#include <stdint.h>
 #include <tree_sitter/api.h>
 #include <filesystem>
 #include <list>

@@ -1,11 +1,20 @@
 #include "CppParser.hpp"
+
 #include "Doc.hpp"
-#include "TextLineCursor.hpp"
-#include "Regex.hpp"
+#include "DocToken.hpp"
+#include "Entity.hpp"
 #include "Log.hpp"
+#include "Regex.hpp"
+#include "TextLineCursor.hpp"
 #include "doxide.hpp"
 
+#include <algorithm>
 #include <cassert>
+#include <cstring>
+#include <ostream>
+#include <regex>
+#include <utility>
+#include <vector>
 
 /**
  * Query for entities in C++ sources.

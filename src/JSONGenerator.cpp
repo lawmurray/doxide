@@ -1,6 +1,12 @@
 #include "JSONGenerator.hpp"
 
+#include "Entity.hpp"
+
+#include <stdint.h>
 #include <iostream>
+#include <list>
+#include <string>
+#include <vector>
 
 void JSONGenerator::generate(const Entity& root) {
   /* JSON header */

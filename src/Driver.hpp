@@ -1,13 +1,14 @@
 #pragma once
 
-#include "YAMLNode.hpp"
 #include "Entity.hpp"
 
-#include <string>
 #include <filesystem>
 #include <list>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
+
+class YAMLNode;
 
 /**
  * Driver for running commands

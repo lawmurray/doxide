@@ -1,10 +1,20 @@
 #include "MarkdownGenerator.hpp"
-#include "YAMLParser.hpp"
-#include "Regex.hpp"
-#include "Log.hpp"
 
+#include "Log.hpp"
+#include "Regex.hpp"
+#include "YAMLNode.hpp"
+#include "YAMLParser.hpp"
+
+#include <stdint.h>
+#include <algorithm>
 #include <cassert>
+#include <compare>
+#include <iomanip>
+#include <iterator>
+#include <regex>
 #include <sstream>
+#include <stdexcept>
+#include <vector>
 
 MarkdownGenerator::MarkdownGenerator(const std::filesystem::path& output) :
     output(output) {

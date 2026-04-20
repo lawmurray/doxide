@@ -1,9 +1,9 @@
 #pragma once
 
-#include <string_view>
-#include <string>
+#include <cstddef>
 #include <ostream>
-#include <utility>
+#include <string>
+#include <string_view>
 
 /**
  * Allows cursoring through external text keeping track of the line number.

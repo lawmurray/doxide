@@ -4,7 +4,6 @@
 #include "TextLineCursor.hpp"
 
 #include <string>
-#include <string_view>
 
 /**
  * Documentation of an entity.

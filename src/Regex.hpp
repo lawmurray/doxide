@@ -2,7 +2,6 @@
 
 #include <regex>
 
-
 /**
  * Regular expression configuration.
  *

@@ -2,6 +2,7 @@
 
 #include "TextLineCursor.hpp"
 
+#include <stddef.h>
 #include <string_view>
 
 /**

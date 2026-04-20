@@ -1,13 +1,13 @@
 #pragma once
 
+#include "TextLineCursor.hpp"
+
 #include <filesystem>
 #include <list>
 #include <string>
 #include <vector>
 #include <cstdint>
 #include <functional>
-
-#include "TextLineCursor.hpp"
 
 /**
  * Entity types.

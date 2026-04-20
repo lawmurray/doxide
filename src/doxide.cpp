@@ -2,6 +2,13 @@
 #include "config.h"
 
 #include <CLI/CLI.hpp>
+#include <filesystem>
+#include <fstream>
+#include <functional>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
 
 /**
  * Write a whole file.

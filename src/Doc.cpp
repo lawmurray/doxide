@@ -1,8 +1,14 @@
 #include "Doc.hpp"
+
 #include "DocTokenizer.hpp"
 #include "Log.hpp"
 
+#include <algorithm>
+#include <cctype>
+#include <ostream>
+#include <string_view>
 #include <unordered_set>
+#include <utility>
 
 Doc::Doc(const TextLineCursor &comment, const int init_indent) :
     indent(init_indent),

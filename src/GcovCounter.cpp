@@ -1,9 +1,17 @@
 #include "GcovCounter.hpp"
-#include "YAMLParser.hpp"
-#include "Regex.hpp"
-#include "Log.hpp"
 
+#include "Entity.hpp"
+#include "Log.hpp"
+#include "Regex.hpp"
+
+#include <stddef.h>
+#include <algorithm>
 #include <fstream>
+#include <list>
+#include <regex>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
 void GcovCounter::count(const std::filesystem::path& coverage, Entity& root) {
   /*
