@@ -1,12 +1,18 @@
 #pragma once
 
-#include "doxide.hpp"
-#include "YAMLNode.hpp"
 #include "Entity.hpp"
+
+#include <filesystem>
+#include <list>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+
+class YAMLNode;
 
 /**
  * Driver for running commands
- * 
+ *
  * @ingroup developer
  */
 class Driver {

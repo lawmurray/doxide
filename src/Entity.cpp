@@ -1,5 +1,14 @@
 #include "Entity.hpp"
 
+#include "Log.hpp"
+
+#include <algorithm>
+#include <cassert>
+#include <ostream>
+#include <string_view>
+#include <unordered_set>
+#include <utility>
+
 Entity::Entity() :
    start_line(0),
    end_line(0),

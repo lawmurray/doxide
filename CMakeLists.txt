@@ -100,7 +100,10 @@ if(WIN32)
   # add icon
   target_sources(doxide PRIVATE win/icon.rc)
 endif()
-target_include_directories(doxide PRIVATE src ${DEPS_INCLUDE_DIRS})
+target_include_directories(doxide PRIVATE src)
+if(DEPS_INCLUDE_DIRS)
+  target_include_directories(doxide SYSTEM PRIVATE ${DEPS_INCLUDE_DIRS})
+endif()
 
 target_link_libraries(doxide yaml ${DEPS_TARGETS})
 

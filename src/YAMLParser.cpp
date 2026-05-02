@@ -1,5 +1,9 @@
 #include "YAMLParser.hpp"
 
+#include <stdio.h>
+#include <stdexcept>
+#include <string>
+
 YAMLParser::YAMLParser() {
   yaml_parser_initialize(&parser);
 }

@@ -1,8 +1,11 @@
 #pragma once
 
-#include "doxide.hpp"
-
 #include <filesystem>
+#include <list>
+#include <unordered_set>
+#include <unordered_map>
+#include <tuple>
+#include <string>
 
 /**
  * Source Watcher.

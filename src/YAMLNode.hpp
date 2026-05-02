@@ -1,10 +1,15 @@
 #pragma once
 
-#include "doxide.hpp"
+#include <list>
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <utility>
+#include <variant>
 
 /**
  * Node in a YAML document.
- * 
+ *
  * @ingroup developer
  */
 class YAMLNode {
@@ -27,7 +32,7 @@ public:
 
   /**
    * Is there a value at a given path?
-   * 
+   *
    * @param key Key.
    * @param keys... Keys.
    */
@@ -44,7 +49,7 @@ public:
 
   /**
    * Is there a sequence at a given path?
-   * 
+   *
    * @param key Key.
    * @param keys... Keys.
    */
@@ -61,7 +66,7 @@ public:
 
   /**
    * Is there a mapping at a given path?
-   * 
+   *
    * @param key Key.
    * @param keys... Keys.
    */
@@ -83,10 +88,10 @@ public:
 
   /**
    * Get the value at a given path.
-   * 
+   *
    * @param key Key.
    * @param keys... Keys.
-   * 
+   *
    * @return The value.
    */
   template<class... Args>
@@ -96,10 +101,10 @@ public:
 
   /**
    * Get the value at a given path.
-   * 
+   *
    * @param key Key.
    * @param keys... Keys.
-   * 
+   *
    * @return The value.
    */
   template<class... Args>
@@ -119,10 +124,10 @@ public:
 
   /**
    * Get the sequence at a given path.
-   * 
+   *
    * @param key Key.
    * @param keys... Keys.
-   * 
+   *
    * @return The sequence.
    */
   template<class... Args>
@@ -132,10 +137,10 @@ public:
 
   /**
    * Get the sequence at a given path.
-   * 
+   *
    * @param key Key.
    * @param keys... Keys.
-   * 
+   *
    * @return The sequence.
    */
   template<class... Args>
@@ -155,10 +160,10 @@ public:
 
   /**
    * Get the mapping at a given path.
-   * 
+   *
    * @param key Key.
    * @param keys... Keys.
-   * 
+   *
    * @return The mapping.
    */
   template<class... Args>
@@ -168,10 +173,10 @@ public:
 
   /**
    * Get the mapping at a given path.
-   * 
+   *
    * @param key Key.
    * @param keys... Keys.
-   * 
+   *
    * @return The mapping.
    */
   template<class... Args>

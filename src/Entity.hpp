@@ -1,10 +1,13 @@
 #pragma once
 
-#include "doxide.hpp"
+#include "TextLineCursor.hpp"
 
 #include <filesystem>
-
-#include "TextLineCursor.hpp"
+#include <list>
+#include <string>
+#include <vector>
+#include <cstdint>
+#include <functional>
 
 /**
  * Entity types.

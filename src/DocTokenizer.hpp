@@ -1,6 +1,5 @@
 #pragma once
 
-#include "doxide.hpp"
 #include "DocToken.hpp"
 #include "TextLineCursor.hpp"
 
