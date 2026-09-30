@@ -218,17 +218,12 @@ Driver::Driver() :
   //
 }
 
-void Driver::init(bool plain_md) {
+void Driver::init(const std::string& style) {
   std::string doxide_yaml = init_doxide_yaml;
   std::string mkdocs_yaml = init_mkdocs_yaml;
 
-  if (plain_md) {
-    doxide_yaml = std::regex_replace(doxide_yaml, std::regex("style:"),
-        "style: plain");
-  } else {
-    doxide_yaml = std::regex_replace(doxide_yaml, std::regex("style:"),
-        "style: mkdocs");
-  }
+  doxide_yaml = std::regex_replace(doxide_yaml, std::regex("style:"),
+      "style: " + style);
   doxide_yaml = std::regex_replace(doxide_yaml, std::regex("title:"),
       "title: " + title);
   doxide_yaml = std::regex_replace(doxide_yaml, std::regex("description:"),
@@ -240,7 +235,7 @@ void Driver::init(bool plain_md) {
       "site_description: " + description);
 
   write_file_prompt(doxide_yaml, "doxide.yaml");
-  if (!plain_md) {
+  if (style == "mkdocs") {
     write_file_prompt(mkdocs_yaml, "mkdocs.yaml");
     write_file_prompt(init_docs_javascripts_mathjax_js, "docs/javascripts/mathjax.js");
     write_file_prompt(init_docs_javascripts_tablesort_js, "docs/javascripts/tablesort.js");
@@ -368,6 +363,10 @@ void Driver::config() {
   if (yaml.has("style")) {
     if (yaml.isValue("style")) {
       style = yaml.value("style");
+      if (style != "plain" && style != "mkdocs") {
+        warn("'style' must be either 'plain' or 'mkdocs'. Using 'mkdocs'.");
+        style = "mkdocs";
+      }
     } else {
       warn("'style' must be a value in configuration.");
     }

@@ -25,7 +25,7 @@ public:
   /**
    * Create a new configuration file.
    */
-  void init(bool plain);
+  void init(const std::string& style);
 
   /**
    * Build documentation.
@@ -55,7 +55,7 @@ public:
   /**
    * Style.
    */
-  std::string style;
+  std::string style = "mkdocs";
 
   /**
    * Title.
@@ -76,11 +76,6 @@ public:
    * Output directory.
    */
   std::filesystem::path output;
-
-  /**
-   * Whether to remove Mkdocs noise.
-   */
-  bool plain;
 
 private:
   /**

@@ -22,7 +22,7 @@ MarkdownGenerator::MarkdownGenerator(const std::filesystem::path& output) :
 }
 
 void MarkdownGenerator::generate(const Entity& root, const bool cov) {
-  generate(output, root, cov);
+  generate(output, root, cov, root.style);
   if (cov) {
     coverage(output, root);
   }
@@ -65,14 +65,12 @@ void MarkdownGenerator::clean() {
 }
 
 void MarkdownGenerator::generate(const std::filesystem::path& output,
-    const Entity& entity, const bool cov) {
+  const Entity& entity, const bool cov, const std::string& style) {
   std::string name = sanitize(entity.name);  // entity name, empty for root
-  std::string style;     // Style of Markdown to output.
   std::string dirname;   // directory name for this entity
   std::string filename;  // file name for this entity
   std::string childdir;  // directory name for children, relative to filename
   if (entity.type == EntityType::ROOT) {
-    style = entity.style;
     /* root node */
     dirname = "";
     filename = "index";
@@ -331,7 +329,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << std::endl;
         if (style == "plain") {
           out << "> ＃**Macro**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
-        } else if (style == "plain") {
+        } else if (style == "mkdocs") {
           out << "!!! macro \"" << htmlize(line(child->decl)) << '"' << std::endl;
         }
         out << std::endl;
@@ -410,13 +408,13 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
   /* child pages */
   std::filesystem::create_directories(output / name);
   for (auto& child : view(entity.groups, false)) {
-    generate(output / name, *child, cov);
+    generate(output / name, *child, cov, style);
   }
   for (auto& child : view(entity.namespaces, false)) {
-    generate(output / name, *child, cov);
+    generate(output / name, *child, cov, style);
   }
   for (auto& child : view(entity.types, false)) {
-    generate(output / name, *child, cov);
+    generate(output / name, *child, cov, style);
   }
 }
 
