@@ -7,17 +7,8 @@
 #include "Log.hpp"
 #include "MarkdownGenerator.hpp"
 #include "SourceWatcher.hpp"
-#include "YAMLNode.hpp"
-#include "YAMLParser.hpp"
-#include "doxide.hpp"
 
-#include <glob/glob.hpp>
-#include <chrono>
-#include <functional>
-#include <iostream>
-#include <memory>
 #include <regex>
-#include <stdexcept>
 #include <thread>
 #include <tuple>
 #include <utility>
@@ -29,7 +20,8 @@
  * @ingroup developer
  */
 static const char* init_doxide_yaml =
-R""""(title:
+R""""(style:
+title:
 description:
 files:
   - "*.hpp"
@@ -226,10 +218,12 @@ Driver::Driver() :
   //
 }
 
-void Driver::init() {
+void Driver::init(const std::string& style) {
   std::string doxide_yaml = init_doxide_yaml;
   std::string mkdocs_yaml = init_mkdocs_yaml;
 
+  doxide_yaml = std::regex_replace(doxide_yaml, std::regex("style:"),
+      "style: " + style);
   doxide_yaml = std::regex_replace(doxide_yaml, std::regex("title:"),
       "title: " + title);
   doxide_yaml = std::regex_replace(doxide_yaml, std::regex("description:"),
@@ -241,11 +235,13 @@ void Driver::init() {
       "site_description: " + description);
 
   write_file_prompt(doxide_yaml, "doxide.yaml");
-  write_file_prompt(mkdocs_yaml, "mkdocs.yaml");
-  write_file_prompt(init_docs_javascripts_mathjax_js, "docs/javascripts/mathjax.js");
-  write_file_prompt(init_docs_javascripts_tablesort_js, "docs/javascripts/tablesort.js");
-  write_file_prompt(init_docs_stylesheets_doxide_css, "docs/stylesheets/doxide.css");
-  write_file_prompt(init_docs_overrides_partials_copyright_html, "docs/overrides/partials/copyright.html");
+  if (style == "mkdocs") {
+    write_file_prompt(mkdocs_yaml, "mkdocs.yaml");
+    write_file_prompt(init_docs_javascripts_mathjax_js, "docs/javascripts/mathjax.js");
+    write_file_prompt(init_docs_javascripts_tablesort_js, "docs/javascripts/tablesort.js");
+    write_file_prompt(init_docs_stylesheets_doxide_css, "docs/stylesheets/doxide.css");
+    write_file_prompt(init_docs_overrides_partials_copyright_html, "docs/overrides/partials/copyright.html");
+  }
 }
 
 void Driver::build() {
@@ -364,6 +360,17 @@ void Driver::config() {
   YAMLParser parser;
   YAMLNode yaml = parser.parse(config_file);
 
+  if (yaml.has("style")) {
+    if (yaml.isValue("style")) {
+      style = yaml.value("style");
+      if (style != "plain" && style != "mkdocs") {
+        warn("'style' must be either 'plain' or 'mkdocs'. Using 'mkdocs'.");
+        style = "mkdocs";
+      }
+    } else {
+      warn("'style' must be a value in configuration.");
+    }
+  }
   if (yaml.has("title")) {
     if (yaml.isValue("title")) {
       title = yaml.value("title");
@@ -430,6 +437,7 @@ void Driver::config() {
 
   /* initialize root entity */
   groups(yaml, root);
+  root.style = style;
   root.title = title;
   root.docs = description;
 }

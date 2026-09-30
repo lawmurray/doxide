@@ -173,6 +173,11 @@ struct Entity {
   std::string docs;
 
   /**
+   * Entity style. This is used to generate certain types of Markdown.
+   */
+  std::string style;
+
+  /**
    * Entity title. This is used for the title of the page.
    */
   std::string title;

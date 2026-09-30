@@ -47,7 +47,7 @@ private:
    * @param cov Include code coverage report?
    */
   void generate(const std::filesystem::path& output, const Entity& entity,
-      const bool cov);
+      const bool cov, const std::string& style);
 
   /**
    * Recursively generate coverage.

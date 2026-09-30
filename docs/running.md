@@ -20,3 +20,10 @@ To serve the documentation locally, use:
 mkdocs serve
 ```
 and point your browser to the URL reported, usually `localhost:8000`.
+
+### For small projects
+If you don't want the Mkdocs noise, you can run:
+```
+doxide gitdoc
+```
+This will populate the output directory with GitHub webview-ready Markdown. Block quotes are substituted for Mkdocs admonitions, and unsupported icons are replaced with near-identical unicode characters.

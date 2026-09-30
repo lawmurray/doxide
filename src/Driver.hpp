@@ -25,12 +25,17 @@ public:
   /**
    * Create a new configuration file.
    */
-  void init();
+  void init(const std::string& style);
 
   /**
    * Build documentation.
    */
   void build();
+
+  /**
+   * Build GetHub webview ready documentation.
+   */
+  void git_build();
 
   /**
    * Watch and build documentation on changes.
@@ -46,6 +51,11 @@ public:
    * Clean documentation.
    */
   void clean();
+
+  /**
+   * Style.
+   */
+  std::string style = "mkdocs";
 
   /**
    * Title.
