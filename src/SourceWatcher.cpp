@@ -1,5 +1,10 @@
 #include "SourceWatcher.hpp"
 
+#include <glob/glob.hpp>
+#include <chrono>
+#include <utility>
+#include <vector>
+
 SourceWatcher::SourceWatcher(std::list<std::string> patterns): patterns{patterns}{
   for (auto pattern : patterns){
     auto paths = glob::rglob(pattern);

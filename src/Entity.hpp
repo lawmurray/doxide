@@ -1,8 +1,13 @@
 #pragma once
 
-#include "doxide.hpp"
+#include "TextLineCursor.hpp"
 
 #include <filesystem>
+#include <list>
+#include <string>
+#include <vector>
+#include <cstdint>
+#include <functional>
 
 /**
  * Entity types.
@@ -185,7 +190,7 @@ struct Entity {
   /**
    * Group to which this belongs.
    */
-  std::string ingroup;
+  TextLineCursor ingroup;
 
   /**
    * Path of source file.

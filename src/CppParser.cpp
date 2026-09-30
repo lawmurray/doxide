@@ -1,9 +1,24 @@
 #include "CppParser.hpp"
+
 #include "Doc.hpp"
+#include "DocToken.hpp"
+#include "Entity.hpp"
+#include "Log.hpp"
+#include "Regex.hpp"
+#include "TextLineCursor.hpp"
+#include "doxide.hpp"
+
+#include <algorithm>
+#include <cassert>
+#include <cstring>
+#include <ostream>
+#include <regex>
+#include <utility>
+#include <vector>
 
 /**
  * Query for entities in C++ sources.
- * 
+ *
  * @ingroup developer
  */
 static const char* query_cpp = R""""(
@@ -366,7 +381,7 @@ static const char* query_cpp = R""""(
 
 /**
  * Query for entities to explicitly exclude from  line counts in C++ sources.
- * 
+ *
  * @ingroup developer
  */
 static const char* query_cpp_exclude = R""""(
@@ -400,7 +415,7 @@ static const char* query_cpp_exclude = R""""(
 
 /**
  * Query for entities to explicitly include in line counts in C++ sources.
- * 
+ *
  * @ingroup developer
  */
 static const char* query_cpp_include = R""""(
@@ -433,6 +448,13 @@ static const char* query_cpp_include = R""""(
 
 ]
 )"""";
+
+/**
+ * Tree-sitter CUDA language handle.
+ *
+ * @ingroup developer
+ */
+extern "C" const TSLanguage* tree_sitter_cuda();
 
 CppParser::CppParser() :
     parser(nullptr),
@@ -495,17 +517,19 @@ void CppParser::parse(const std::filesystem::path& filename,
   file.end_line = 0;
   file.type = EntityType::FILE;
   file.visible = true;
+  TextLineCursor file_content(file.decl);
+
 
   /* parse */
-  TSTree* tree = ts_parser_parse_string(parser, NULL, file.decl.data(),
-      uint32_t(file.decl.size()));
+  TSTree* tree = ts_parser_parse_string(parser, NULL, file_content.data(),
+      uint32_t(file_content.size()));
   if (!tree) {
     /* something went very wrong */
     warn("cannot parse " << filename << ", skipping");
     return;
   } else {
     /* report on any remaining parse errors */
-    report(filename, file.decl, tree);
+    report(filename, file_content.view(), tree);
   }
 
   /* query entity information */
@@ -523,19 +547,19 @@ void CppParser::parse(const std::filesystem::path& filename,
   TSQueryMatch match;
   Entity entity;
   int indent = 0;
-  while (ts_query_cursor_next_match(cursor, &match)) {    
+  while (ts_query_cursor_next_match(cursor, &match)) {
     uint32_t start = 0, middle = 0, end = 0;
     uint32_t start_line = -1, end_line = -1;
     for (uint16_t i = 0; i < match.capture_count; ++i) {
       node = match.captures[i].node;
-      uint32_t id = match.captures[i].index; 
+      uint32_t id = match.captures[i].index;
       uint32_t length = 0;
       const char* name = ts_query_capture_name_for_id(query, id, &length);
       uint32_t k = ts_node_start_byte(node);
       uint32_t l = ts_node_end_byte(node);
 
       if (strncmp(name, "docs", length) == 0) {
-        Doc doc(file.decl.substr(k, l - k), indent);
+        Doc doc(file_content.substr(k, l - k), indent);
         Entity& e = doc.open.type == OPEN_BEFORE ? entity : entities.back();
         e.docs.append(doc.docs);
         e.hide = e.hide || doc.hide;
@@ -553,8 +577,8 @@ void CppParser::parse(const std::filesystem::path& filename,
         /* nested namespace specifier, e.g. `namespace a::b::c`, split up the
          * name on `::`, push namespaces for the first n - 1 identifiers, and
          * assign the last as the name of this entity */
-        static const std::regex sep("\\s*::\\s*", regex_flags);
-        
+        static const std::regex sep("\\s*::\\s*", REGEX_FLAGS);
+
         /* load into a std::string and use std::sregex_token_iterator;
          * maintaining the std::string_view and using
          * std::cregex_token_iterator seems to have memory issues when mixed
@@ -569,6 +593,7 @@ void CppParser::parse(const std::filesystem::path& filename,
           Entity parent;
           parent.type = EntityType::NAMESPACE;
           parent.name = prev;
+          parent.path = filename;
 
           push(std::move(parent), start, end);
           prev = *ns_iter;
@@ -625,7 +650,7 @@ void CppParser::parse(const std::filesystem::path& filename,
       }
 
       entity.decl = file.decl.substr(start, middle - start);
-      entity.path = filename;
+      entity.path = filename; // set in case of error, to report the file
       entity.start_line = start_line;
       entity.end_line = end_line;
       entity.visible = !entity.docs.empty();
@@ -667,14 +692,14 @@ void CppParser::parse(const std::filesystem::path& filename,
   std::list<std::pair<uint32_t,uint32_t>> excluded;
   bool constexpr_context = false;
   static const std::regex regex_if_constexpr("^(?:if\\s+)?constexpr",
-      regex_flags);
+      REGEX_FLAGS);
   cursor = ts_query_cursor_new();
   node = ts_tree_root_node(tree);
   ts_query_cursor_exec(cursor, query_exclude, node);
-  while (ts_query_cursor_next_match(cursor, &match)) {    
+  while (ts_query_cursor_next_match(cursor, &match)) {
     for (uint16_t i = 0; i < match.capture_count; ++i) {
       node = match.captures[i].node;
-      uint32_t id = match.captures[i].index; 
+      uint32_t id = match.captures[i].index;
       uint32_t length = 0;
       uint32_t start = ts_node_start_byte(node);
       uint32_t end = ts_node_end_byte(node);
@@ -706,7 +731,7 @@ void CppParser::parse(const std::filesystem::path& filename,
   while (ts_query_cursor_next_match(cursor, &match)) {
     for (uint16_t i = 0; i < match.capture_count; ++i) {
       node = match.captures[i].node;
-      uint32_t id = match.captures[i].index; 
+      uint32_t id = match.captures[i].index;
       uint32_t length = 0;
       uint32_t start = ts_node_start_byte(node);
       uint32_t end = ts_node_end_byte(node);
@@ -737,7 +762,7 @@ void CppParser::parse(const std::filesystem::path& filename,
   /* finish up */
   root.add(std::move(file));
   ts_tree_delete(tree);
-  ts_parser_reset(parser);  
+  ts_parser_reset(parser);
 
   assert(entities.empty());
   assert(starts.empty());
@@ -771,7 +796,7 @@ std::string CppParser::preprocess(const std::filesystem::path& filename,
     const std::unordered_map<std::string,std::string>& defines) {
   /* regex to detect preprocessor macro names */
   static const std::regex macro(R"([A-Z_][A-Z0-9_]{2,})",
-      regex_flags);
+      REGEX_FLAGS);
 
   std::string in = gulp(filename);
   TSTree* tree = ts_parser_parse_string(parser, NULL, in.data(),
@@ -835,7 +860,7 @@ std::string CppParser::preprocess(const std::filesystem::path& filename,
 }
 
 void CppParser::report(const std::filesystem::path& filename,
-    const std::string& in, TSTree* tree) {
+    const std::string_view in, TSTree* tree) {
   TSNode root = ts_tree_root_node(tree);
   TSNode node = root;
   TSTreeCursor cursor = ts_tree_cursor_new(root);
@@ -844,10 +869,10 @@ void CppParser::report(const std::filesystem::path& filename,
     uint32_t l = ts_node_end_byte(node);
     TSPoint from = ts_node_start_point(node);
     if (ts_node_is_error(node)) {
-      std::cerr << filename << ':' << (from.row + 1) << ':' << from.column <<
+      warn(filename << ':' << (from.row + 1) << ':' << from.column <<
           ": warning: parse error at '" <<
           in.substr(k, std::min(l - k, 40u)) <<
-          "', but will continue" << std::endl;
+          "', but will continue");
     }
 
     /* next node */

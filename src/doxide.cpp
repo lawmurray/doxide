@@ -1,7 +1,21 @@
 #include "Driver.hpp"
 #include "config.h"
 
-void write_file(const std::string& contents,
+#include <CLI/CLI.hpp>
+#include <filesystem>
+#include <fstream>
+#include <functional>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
+
+/**
+ * Write a whole file.
+ *
+ * @ingroup developer
+ */
+static void write_file(const std::string& contents,
     const std::filesystem::path& dst) {
   if (dst.has_parent_path()) {
     std::filesystem::create_directories(dst.parent_path());

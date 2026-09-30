@@ -1,15 +1,18 @@
 #include "Driver.hpp"
-#include "YAMLParser.hpp"
+
 #include "CppParser.hpp"
-#include "MarkdownGenerator.hpp"
-#include "PlainMarkdownGenerator.hpp"
 #include "GcovCounter.hpp"
 #include "JSONCounter.hpp"
 #include "JSONGenerator.hpp"
+#include "Log.hpp"
+#include "MarkdownGenerator.hpp"
 #include "SourceWatcher.hpp"
 
 #include <regex>
 #include <thread>
+#include <tuple>
+#include <utility>
+#include <vector>
 
 /**
  * Contents of initial `doxide.yaml` file.

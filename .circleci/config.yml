@@ -135,11 +135,14 @@ jobs:
       - run:
           name: Build
           command: |
-              mkdir build
-              cd build
-              cmake .. -DCMAKE_INSTALL_PREFIX=c:\ProgramData\chocolatey
-              cmake --build . --config Debug --parallel
-              sudo cmake --install . --config Debug
+            mkdir build
+            cd build
+            cmake .. -DCMAKE_INSTALL_PREFIX=c:\ProgramData\chocolatey
+            # since we're building with MSBuild, tell it to propagate errors up
+            cmake --build . --config Debug --parallel -- /p:ContinueOnError=false /p:StopOnFirstFailure=true
+            if ($LASTEXITCODE -ne 0) { throw "Build failed!" }
+            sudo cmake --install . --config Debug
+            if ($LASTEXITCODE -ne 0) { throw "Installation failed!" }
       - test
 
   deploy:
