@@ -695,7 +695,7 @@ void MarkdownGenerator::coverage_foot(const Entity& entity,
   double lines_percent = (lines_included > 0) ?
       100.0*lines_covered/lines_included : 100.0;
   const std::string& lines_color = color(lines_percent);
-  std::string style = (name == root.path.string()) ? "" : ", style=\"display:none;\"";
+  std::string style = (name == root.path.string()) ? "" : " style=\"display:none;\"";
 
   out << "<tr id=\"summary." << name << "\" data-parent=\"" << name << "\"" << style << ">" << std::endl;
   out << "<td style=\"text-align:left;font-weight:bold;\">Summary</td>" << std::endl;
