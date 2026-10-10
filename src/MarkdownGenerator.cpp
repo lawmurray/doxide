@@ -18,9 +18,7 @@
 
 static const char* sunburst_html =
 R""""(
-<div style="position:relative;width:100%;padding-top:100%;">
-  <div id="coverage-sunburst" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
-</div>
+<div id="coverage-sunburst" style="aspect-ratio:1/1;width:100%;max-width:600px;margin:auto;"></div>
 )"""";
 
 static const char* sunburst_js =
