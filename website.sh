@@ -4,6 +4,7 @@ set -eox pipefail
 # build the doxide website in a reproducible way
 
 # build doxide with code coverage enabled
+rm -rf build
 mkdir build
 cd build
 CXXFLAGS="--coverage -O0 -fno-inline -fno-elide-constructors -Wall" \
