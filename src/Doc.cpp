@@ -184,7 +184,7 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent) :
           docs.append(indent, ' ');
         }
       } else if (token.type & CLOSE) {
-        //
+        indent = 0;
       } else {
         docs.append(first*indent, ' ');  // indent on first token
         docs.append(token.view());
