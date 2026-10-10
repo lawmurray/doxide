@@ -16,18 +16,17 @@
 #include <stdexcept>
 #include <vector>
 
-static const char* sunburst_header =
+static const char* sunburst_html =
 R""""(
 <div style="position:relative;width:100%;padding-top:100%;">
   <div id="coverage-sunburst" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
-<script type="text/javascript">
 )"""";
 
-static const char* sunburst_footer =
+static const char* sunburst_js =
 R""""(
 var coverage_root = "";  // current root of coverage report
+
 function update_coverage_table(params) {
   if (typeof params.data.name === 'undefined') {
     // occurs when the central circle is selected to go up one level
@@ -58,54 +57,66 @@ function update_coverage_table(params) {
   coverage_root = path;
 }
 
-var coverage_sunburst = echarts.init(document.getElementById('coverage-sunburst'));
-var option = {
-  series: {
-    type: 'sunburst',
-    data: data,
-    sort: null,
-    radius: ['5%', '95%'],
-    startAngle: 0,
-    clockwise: false,
-    itemStyle: {
-      borderWidth: 1
-    },
-    label: {
-      color: 'white',
-      fontSize: 10,
-      textBorderWidth: 1,
-      align: 'center',
-      rotate: 'radial',
-      width: 80,
-      minAngle: 4,
-      overflow: 'truncate',
-      formatter: function (params) {
-        if (params.data.icon) {
-          return params.name + '\n' + params.data.icon;
-        } else {
-          return params.name;
+window.addEventListener("load", () => {
+  var coverage_sunburst = echarts.init(document.getElementById('coverage-sunburst'));
+  var option = {
+    series: {
+      type: 'sunburst',
+      data: data,
+      sort: null,
+      radius: ['5%', '95%'],
+      startAngle: 0,
+      clockwise: false,
+      itemStyle: {
+        borderWidth: 1
+      },
+      label: {
+        color: 'white',
+        fontSize: 10,
+        textBorderWidth: 1,
+        align: 'center',
+        rotate: 'radial',
+        width: 80,
+        minAngle: 4,
+        overflow: 'truncate',
+        formatter: function (params) {
+          if (params.data.icon) {
+            return params.name + '\n' + params.data.icon;
+          } else {
+            return params.name;
+          }
         }
-      }
-    },
-    labelLayout: {
-      hideOverlap: true
-    },
-    levels: [
-      {
-        itemStyle: {
-          opacity: 0.2
+      },
+      labelLayout: {
+        hideOverlap: true
+      },
+      levels: [
+        {
+          itemStyle: {
+            opacity: 0.2
+          }
         }
-      }
-    ]
-  }
-};
-coverage_sunburst.setOption(option);
-coverage_sunburst.on('click', update_coverage_table);
-window.addEventListener("resize", () => {
-  coverage_sunburst.resize();
+      ]
+    }
+  };
+  coverage_sunburst.setOption(option);
+  coverage_sunburst.on('click', update_coverage_table);
+  window.addEventListener("resize", () => {
+    coverage_sunburst.resize();
+  });
 });
-</script>
 )"""";
+
+static const char* tablesort_js =
+R""""(
+window.addEventListener("load", () => {
+  var tables = document.querySelectorAll("article table:not([class])");
+  tables.forEach(function(table) {
+    new Tablesort(table);
+  });
+});
+)"""";
+
 
 MarkdownGenerator::MarkdownGenerator(const std::filesystem::path& output) :
     output(output) {
@@ -162,30 +173,11 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
   std::string filename;  // file name for this entity
   std::string childdir;  // directory name for children, relative to filename
   if (entity.type == EntityType::ROOT) {
-    /* root node */
     dirname = "";
     filename = "index";
-    childdir = "";
-  } else if (entity.type == EntityType::TYPE) {
-    /* when building the navigation menu, mkdocs modifies directory names by
-     * replacing underscores and capitalizing words; this is problematic for
-     * type names; rather than generating the docs for a class at
-     * ClassName/index.md, they are generated at ClassName.md, but children
-     * still go in a ClassName/ subdirectory; final URLs are the same, but
-     * this unfortunately adds two links to the menu, one for the class,
-     * another with the same name that expands for the children, if they
-     * exist; this is not such a problem for classes, which don't often have
-     * children, so we prefer the option... */
-    dirname = "";
-    filename = name;
-    childdir = name + "/";
   } else {
-    /* ...whereas namespaces and groups tend to have simpler names not
-     * affected by the mkdocs changes, while two links in the menu is a
-     * more unsightly, so don't change them */
     dirname = name;
     filename = "index";
-    childdir = "";
   }
 
   std::filesystem::create_directories(output / dirname);
@@ -211,12 +203,12 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     for (auto& child : view(entity.groups, false)) {
       if (style == "plain") {
         out << "§ [" << title(*child) << ']';
-        out << "(" << childdir << sanitize(child->name) << "/index.md)" << std::endl;
+        out << "(" << childdir << sanitize(child->name) << "/)" << std::endl;
         out << "- " << line(brief(*child)) << std::endl;
         out << std::endl;
       } else if (style == "mkdocs") {
         out << ":material-format-section: [" << title(*child) << ']';
-        out << "(" << childdir << sanitize(child->name) << "/index.md)" << std::endl;
+        out << "(" << childdir << sanitize(child->name) << "/)" << std::endl;
         out << ":   " << line(brief(*child)) << std::endl;
         out << std::endl;
       }
@@ -226,12 +218,12 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     for (auto& child : view(entity.namespaces, true)) {
       if (style == "plain") {
         out << "🗃 [" << child->name << ']';
-        out << "(" << childdir << sanitize(child->name) << "/index.md)" << std::endl;
+        out << "(" << childdir << sanitize(child->name) << "/)" << std::endl;
         out << "- " << line(brief(*child)) << std::endl;
         out << std::endl;
       } else if (style == "mkdocs") {
         out << ":material-package: [" << child->name << ']';
-        out << "(" << childdir << sanitize(child->name) << "/index.md)" << std::endl;
+        out << "(" << childdir << sanitize(child->name) << "/)" << std::endl;
         out << ":   " << line(brief(*child)) << std::endl;
         out << std::endl;
       }
@@ -240,10 +232,12 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     /* code coverage */
     if (entity.type == EntityType::ROOT && cov) {
       if (style == "plain") {
-        out << "🗠 [Code Coverage](coverage/index.md)" << std::endl;
+        out << "🗠 [Code Coverage](coverage/)" << std::endl;
+        out << ":    " << std::endl;
         out << std::endl;
       } else if (style == "mkdocs") {
-        out << ":material-chart-pie: [Code Coverage](coverage/index.md)" << std::endl;
+        out << ":material-chart-pie: [Code Coverage](coverage/)" << std::endl;
+        out << ":    " << std::endl;
         out << std::endl;
       }
     }
@@ -258,7 +252,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
       out << "| Name | Description |" << std::endl;
       out << "| ---- | ----------- |" << std::endl;
       for (auto& child : types) {
-        out << "| [" << child->name << "](" << childdir << sanitize(child->name) << ".md) | ";
+        out << "| [" << child->name << "](" << sanitize(child->name) << "/) | ";
         out << line(brief(*child)) << " |" << std::endl;
       }
       out << std::endl;
@@ -766,11 +760,14 @@ void MarkdownGenerator::coverage_foot(const Entity& entity,
 
 void MarkdownGenerator::sunburst(const Entity& entity, const Entity& root,
     std::ofstream& out) {
-  out << sunburst_header;
-  out << "var data = [";
+  out << sunburst_html << std::endl;
+  out << "<script type=\"text/javascript\">" << std::endl;
+  out << "var data = [" << std::endl;
   sunburst_data(entity, root, out);
   out << ']' << std::endl;
-  out << sunburst_footer;
+  out << sunburst_js << std::endl;
+  out << tablesort_js << std::endl;
+  out << "</script>" << std::endl;
 }
 
 void MarkdownGenerator::sunburst_data(const Entity& entity,
