@@ -37,6 +37,14 @@
  * /* nested comment in code *@/
  * void f(int x, int y);
  * ```
+ *
+ * #### Math
+ *
+ * The expected value of a continuous random variable $X$, denoted $\mathbb{E}(X)$, is given by:
+ *
+ * $$
+ * \mathbb{E}(X) = \int_{-\infty}^\infty x p(x) \mathrm{d}x.
+ * $$
  * 
  * #### Images
  * 
