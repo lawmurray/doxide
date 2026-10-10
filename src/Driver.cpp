@@ -87,7 +87,7 @@ extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js
   - https://cdn.jsdelivr.net/npm/echarts@6.1.0/dist/echarts.min.js
   - https://cdn.jsdelivr.net/npm/tablesort@5.7.1/src/tablesort.min.js
-  - https://cdn.jsdelivr.net/npm/tablesort@5.7.1/src/sorts/tablesort.number.js
+  - https://cdn.jsdelivr.net/npm/tablesort@5.7.1/src/sorts/tablesort.number.min.js
 )"""";
 
 /**
