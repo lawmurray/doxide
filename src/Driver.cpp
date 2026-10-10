@@ -84,49 +84,10 @@ plugins:
 extra_css:
   - stylesheets/doxide.css
 extra_javascript:
-  - javascripts/mathjax.js
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js
   - https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js
   - https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/sorts/tablesort.number.js
-  - javascripts/tablesort.js
-)"""";
-
-/**
- * Contents of initial `docs/javascripts/mathjax.js` file.
- *
- * @ingroup developer
- */
-static const char* init_docs_javascripts_mathjax_js =
-R""""(window.MathJax = {
-  tex: {
-    inlineMath: [["\\(", "\\)"]],
-    displayMath: [["\\[", "\\]"]],
-    processEscapes: true,
-    processEnvironments: true
-  },
-  options: {
-    ignoreHtmlClass: ".*|",
-    processHtmlClass: "arithmatex"
-  }
-};
-
-document$.subscribe(() => {
-  MathJax.typesetPromise()
-})
-)"""";
-
-/**
- * Contents of initial `docs/javascripts/tablesort.js` file.
- *
- * @ingroup developer
- */
-static const char* init_docs_javascripts_tablesort_js =
-R""""(document$.subscribe(function() {
-  var tables = document.querySelectorAll("article table:not([class])")
-  tables.forEach(function(table) {
-    new Tablesort(table)
-  })
-})
 )"""";
 
 /**
@@ -242,8 +203,6 @@ void Driver::init() {
 
   write_file_prompt(doxide_yaml, "doxide.yaml");
   write_file_prompt(mkdocs_yaml, "mkdocs.yaml");
-  write_file_prompt(init_docs_javascripts_mathjax_js, "docs/javascripts/mathjax.js");
-  write_file_prompt(init_docs_javascripts_tablesort_js, "docs/javascripts/tablesort.js");
   write_file_prompt(init_docs_stylesheets_doxide_css, "docs/stylesheets/doxide.css");
   write_file_prompt(init_docs_overrides_partials_copyright_html, "docs/overrides/partials/copyright.html");
 }
