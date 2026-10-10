@@ -151,10 +151,14 @@ private:
 
 /**
  * Compares the text in the view `v` against that in the cursor `w`.
+ *
+ * @ingroup developer
  */
 inline bool operator==(const std::string_view& v, const TextLineCursor& w) { return v == w.view(); }
 
 /**
  * Allows printing the cursor `v` into the stream `s`.
+ *
+ * @ingroup developer
  */
 inline std::ostream& operator<<(std::ostream& s, const TextLineCursor& v) { return s << v.view(); }
