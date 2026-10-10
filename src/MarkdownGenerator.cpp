@@ -481,19 +481,23 @@ void MarkdownGenerator::coverage(const std::filesystem::path& output,
       out << "</table>" << std::endl;
       out << std::endl;
     } else if (entity.type == EntityType::FILE) {
-      /* for a file, output the whole contents; line numbers are added with
-       * the Markdown notation `linenums="1"`, which ultimately creates a HTML
-       * <table> of one row <tr>, with two cells <td>, the first holding the
-       * line numbers and the second the code; the line number cell contains
-       * a further <pre> with one empty <span></span>, then each line number
-       * in a separate <span> within it; to indicate code coverage we apply
-       * styles to those <span>, which are readily selected by number using
-       * the CSS nth-child() pseudo-class */
+      /* for a file, output the whole contents; lines are highlighted with
+       * CSS; two styles are given, one that works with MkDocs output, one
+       * that works with pandoc output */
+
       const std::string& covered_color = color(100.0);
       const std::string& uncovered_color = color(0.0);
 
-      /* style sheet to highlight lines according to code coverage */
       out << "<style>" << std::endl;
+
+      /* for MkDocs, line numbers are added with the Markdown notation
+       * `{linenums="1"}` below, which ultimately creates a HTML <table> of
+       * one row <tr>, with two cells <td>, the first holding the line
+       * numbers and the second the code; the line number cell contains a
+       * further <pre> with one empty <span></span>, then each line number
+       * in a separate <span> within it; to indicate code coverage we apply
+       * styles to those <span>, which are readily selected by number using
+       * the CSS nth-child() pseudo-class */
       out << ".linenodiv pre span {";
       out << "padding-left:4px;padding-right:4px";
       out << "}" << std::endl;
@@ -520,11 +524,52 @@ void MarkdownGenerator::coverage(const std::filesystem::path& output,
           out << "}" << std::endl;
         }
       }
+
+      /* for pandoc, line numbers are added through the CSS; there is a <span>
+       * per line that is readily selectable with nth-child(), and it contains
+       * an <a> at the start that is expanded to add the line number and
+       * colour it */
+      out << "<style>" << std::endl;
+      out << ".sourceCode pre span a {";
+      out << "padding-left:8px;padding-right:8px";
+      out << "}" << std::endl;
+      for (uint32_t line = 0; line < entity.line_counts.size(); ++line) {
+        if (entity.line_counts[line] > 0) {
+          /* line is covered; line + 1 here to account for 0-base to 1-base
+           * conversion */
+          out << ".sourceCode pre span:nth-child(" << (line + 1) << ") a {";
+          out << "background-color: #" << covered_color << "dd;";
+          out << "color: white;";
+          out << "}" << std::endl;
+          out << ".sourceCode pre span:nth-child(" << (line + 1) << ")::before a {";
+          out << "content: \"● " << std::setw(4) << line << "\";";
+          out << "}" << std::endl;
+        } else if (entity.line_counts[line] == 0) {
+          /* line is uncovered; line + 1 here to account for 0-base to 1-base
+           * conversion */
+          out << ".sourceCode pre span:nth-child(" << (line + 1) << ") a {";
+          out << "background-color: #" << uncovered_color << "dd;";
+          out << "color: white;";
+          out << "}" << std::endl;
+          out << ".sourceCode pre span:nth-child(" << (line + 1) << ")::before a {";
+          out << "content: \"○ " << std::setw(4) << line << "\";";
+          out << "}" << std::endl;
+        } else {
+          /* line is skipped, just add line number */
+          out << ".sourceCode pre span:nth-child(" << (line + 1) << ") a {";
+          out << "color: currentColor;";
+          out << "}" << std::endl;
+          out << ".sourceCode pre span:nth-child(" << (line + 1) << ")::before a {";
+          out << "content: \"  " << std::setw(4) << line << "\";";
+          out << "}" << std::endl;
+        }
+      }
+
       out << "</style>" << std::endl;
       out << std::endl;
 
       /* lines numbers and source code */
-      out << "```cpp linenums=\"1\"" << std::endl;
+      out << "```cpp {linenums=\"1\"}" << std::endl;
       out << entity.decl << std::endl;
       out << "```" << std::endl;
       out << std::endl;
@@ -544,8 +589,8 @@ void MarkdownGenerator::coverage(const std::filesystem::path& output,
 void MarkdownGenerator::coverage_data(const Entity& entity,
     const Entity& root, std::ofstream& out) {
   /* icons */
-  static std::string material_file_outline("<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm4 18H6V4h7v5h5z\"/></svg></span>");
-  static std::string material_folder("<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M10 4H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8z\"/></svg></span>");
+  static std::string material_file_outline("<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm4 18H6V4h7v5h5z\"/></svg></span>");
+  static std::string material_folder("<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path d=\"M10 4H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8z\"/></svg></span>");
 
   /* <tr> includes a data-parent attribute to facilitate filtering the table
    * dynamically based on the currently-selected directory */
