@@ -620,9 +620,8 @@ void MarkdownGenerator::coverage(const std::filesystem::path& output,
        * per line that is readily selectable with nth-child(), and it contains
        * an <a> at the start that is expanded to add the line number and
        * colour it */
-      out << "<style>" << std::endl;
       out << ".sourceCode pre span a {";
-      out << "padding-left:8px;padding-right:8px";
+      out << "padding-left:8px;padding-right:8px;text-decoration:none;";
       out << "}" << std::endl;
       for (uint32_t line = 0; line < entity.line_counts.size(); ++line) {
         if (entity.line_counts[line] > 0) {
@@ -632,7 +631,7 @@ void MarkdownGenerator::coverage(const std::filesystem::path& output,
           out << "background-color: #" << covered_color << "dd;";
           out << "color: white;";
           out << "}" << std::endl;
-          out << ".sourceCode pre span:nth-child(" << (line + 1) << ")::before a {";
+          out << ".sourceCode pre span:nth-child(" << (line + 1) << ") a::before {";
           out << "content: \"● " << std::setw(4) << line << "\";";
           out << "}" << std::endl;
         } else if (entity.line_counts[line] == 0) {
@@ -642,7 +641,7 @@ void MarkdownGenerator::coverage(const std::filesystem::path& output,
           out << "background-color: #" << uncovered_color << "dd;";
           out << "color: white;";
           out << "}" << std::endl;
-          out << ".sourceCode pre span:nth-child(" << (line + 1) << ")::before a {";
+          out << ".sourceCode pre span:nth-child(" << (line + 1) << ") a::before {";
           out << "content: \"○ " << std::setw(4) << line << "\";";
           out << "}" << std::endl;
         } else {
@@ -650,7 +649,7 @@ void MarkdownGenerator::coverage(const std::filesystem::path& output,
           out << ".sourceCode pre span:nth-child(" << (line + 1) << ") a {";
           out << "color: currentColor;";
           out << "}" << std::endl;
-          out << ".sourceCode pre span:nth-child(" << (line + 1) << ")::before a {";
+          out << ".sourceCode pre span:nth-child(" << (line + 1) << ") a::before {";
           out << "content: \"  " << std::setw(4) << line << "\";";
           out << "}" << std::endl;
         }
