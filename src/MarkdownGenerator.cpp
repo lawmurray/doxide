@@ -16,6 +16,97 @@
 #include <stdexcept>
 #include <vector>
 
+static const char* sunburst_header =
+R""""(
+<div style="position:relative;width:100%;padding-top:100%;">
+  <div id="coverage-sunburst" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<script type="text/javascript">
+)"""";
+
+static const char* sunburst_footer =
+R""""(
+var coverage_root = "";  // current root of coverage report
+function update_coverage_table(params) {
+  if (typeof params.data.name === 'undefined') {
+    // occurs when the central circle is selected to go up one level
+    var path = coverage_root.substring(0, coverage_root.lastIndexOf('/'));
+    var is_dir = true;
+  } else {
+    var path = params.data.path;
+    var is_dir = params.data.type === 'dir';
+  }
+  let rows = document.querySelectorAll('[data-parent]');
+  if (is_dir) {
+    for (let row of rows) {
+      if (row.dataset.parent === path) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    }
+  } else {
+    for (let row of rows) {
+      if (row.id === path) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    }
+  }
+  coverage_root = path;
+}
+
+var coverage_sunburst = echarts.init(document.getElementById('coverage-sunburst'));
+var option = {
+  series: {
+    type: 'sunburst',
+    data: data,
+    sort: null,
+    radius: ['5%', '95%'],
+    startAngle: 0,
+    clockwise: false,
+    itemStyle: {
+      borderWidth: 1
+    },
+    label: {
+      color: 'white',
+      fontSize: 10,
+      textBorderWidth: 1,
+      align: 'center',
+      rotate: 'radial',
+      width: 80,
+      minAngle: 4,
+      overflow: 'truncate',
+      formatter: function (params) {
+        if (params.data.icon) {
+          return params.name + '\n' + params.data.icon;
+        } else {
+          return params.name;
+        }
+      }
+    },
+    labelLayout: {
+      hideOverlap: true
+    },
+    levels: [
+      {
+        itemStyle: {
+          opacity: 0.2
+        }
+      }
+    ]
+  }
+};
+coverage_sunburst.setOption(option);
+coverage_sunburst.on('click', update_coverage_table);
+window.addEventListener("resize", () => {
+  coverage_sunburst.resize();
+});
+</script>
+)"""";
+
 MarkdownGenerator::MarkdownGenerator(const std::filesystem::path& output) :
     output(output) {
   //
@@ -676,98 +767,11 @@ void MarkdownGenerator::coverage_foot(const Entity& entity,
 
 void MarkdownGenerator::sunburst(const Entity& entity, const Entity& root,
     std::ofstream& out) {
-  out <<
-  R""""(
-  <div style="position:relative;width:100%;padding-top:100%;">
-    <div id="coverage-sunburst" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
-  <script type="text/javascript">
-  )"""";
+  out << sunburst_header;
   out << "var data = [";
   sunburst_data(entity, root, out);
   out << ']' << std::endl;
-  out <<
-  R""""(
-  var coverage_root = "";  // current root of coverage report
-  function update_coverage_table(params) {
-    if (typeof params.data.name === 'undefined') {
-      // occurs when the central circle is selected to go up one level
-      var path = coverage_root.substring(0, coverage_root.lastIndexOf('/'));
-      var is_dir = true;
-    } else {
-      var path = params.data.path;
-      var is_dir = params.data.type === 'dir';
-    }
-    let rows = document.querySelectorAll('[data-parent]');
-    if (is_dir) {
-      for (let row of rows) {
-        if (row.dataset.parent === path) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      }
-    } else {
-      for (let row of rows) {
-        if (row.id === path) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      }
-    }
-    coverage_root = path;
-  }
-
-  var coverage_sunburst = echarts.init(document.getElementById('coverage-sunburst'));
-  var option = {
-    series: {
-      type: 'sunburst',
-      data: data,
-      sort: null,
-      radius: ['5%', '95%'],
-      startAngle: 0,
-      clockwise: false,
-      itemStyle: {
-        borderWidth: 1
-      },
-      label: {
-        color: 'white',
-        fontSize: 10,
-        textBorderWidth: 1,
-        align: 'center',
-        rotate: 'radial',
-        width: 80,
-        minAngle: 4,
-        overflow: 'truncate',
-        formatter: function (params) {
-          if (params.data.icon) {
-            return params.name + '\n' + params.data.icon;
-          } else {
-            return params.name;
-          }
-        }
-      },
-      labelLayout: {
-        hideOverlap: true
-      },
-      levels: [
-        {
-          itemStyle: {
-            opacity: 0.2
-          }
-        }
-      ]
-    }
-  };
-  coverage_sunburst.setOption(option);
-  coverage_sunburst.on('click', update_coverage_table);
-  window.addEventListener("resize", () => {
-    coverage_sunburst.resize();
-  });
-  </script>
-  )"""";
+  out << sunburst_footer;
 }
 
 void MarkdownGenerator::sunburst_data(const Entity& entity,
