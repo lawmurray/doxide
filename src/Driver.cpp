@@ -211,7 +211,7 @@ void Driver::build() {
   parse();
   count();
 
-  MarkdownGenerator generator(output);
+  MarkdownGenerator generator(output, style);
   generator.generate(root, !coverage.empty());
   generator.clean();
 }
@@ -278,7 +278,7 @@ void Driver::watch() {
 
       count();
 
-      MarkdownGenerator generator(output);
+      MarkdownGenerator generator(output, style);
       generator.generate(root, !coverage.empty());
       generator.clean();
 
@@ -302,7 +302,7 @@ void Driver::clean() {
   /* can use MarkdownGenerator::clean() for this just by not calling
    * generate() first; this will remove all files with `generator: doxide` in
    * their YAML frontmatter */
-  MarkdownGenerator generator(output);
+  MarkdownGenerator generator(output, style);
   generator.clean();
 }
 
@@ -399,7 +399,6 @@ void Driver::config() {
 
   /* initialize root entity */
   groups(yaml, root);
-  root.style = style;
   root.title = title;
   root.docs = description;
 }

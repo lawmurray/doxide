@@ -19,8 +19,10 @@ public:
    * Constructor.
    *
    * @param output Output directory.
+   * @param style Markdown style.
    */
-  MarkdownGenerator(const std::filesystem::path& output);
+  MarkdownGenerator(const std::filesystem::path& output,
+      const std::string& style);
 
   /**
    * Generate documentation.
@@ -47,7 +49,7 @@ private:
    * @param cov Include code coverage report?
    */
   void generate(const std::filesystem::path& output, const Entity& entity,
-      const bool cov, const std::string& style);
+      const bool cov);
 
   /**
    * Recursively generate coverage.
@@ -178,6 +180,11 @@ private:
    * Output directory.
    */
   std::filesystem::path output;
+
+  /**
+   * Style.
+   */
+  std::string style;
 
   /**
    * Set of files generated during the last call to generate().
