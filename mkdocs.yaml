@@ -1,19 +1,8 @@
 site_name: Doxide
 site_description: Documentation and code coverage for modern C++. Configure with YAML, generate Markdown, publish with Material for MkDocs.
-site_url: https://doxide.indii.org
+site_url: https://indii.org/software/doxide
 repo_url: https://github.com/lawmurray/doxide
 repo_name: lawmurray/doxide
-extra:
-  social:
-    - icon: material/github
-      link: https://github.com/lawmurray
-    - icon: material/mastodon 
-      link: https://fosstodon.org/@lawmurray
-    - icon: material/web
-      link: https://indii.org
-    - icon: material/email
-      link: mailto:lawrence@indii.org
-
 theme:
   name: material
   custom_dir: docs/overrides
@@ -22,7 +11,6 @@ theme:
   features:
     - navigation.indexes
     - navigation.footer
-    - announce.dismiss
   palette:
     # Palette toggle for light mode
     - scheme: default
@@ -54,11 +42,6 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_div_format
   - pymdownx.tabbed:
       alternate_style: true 
 plugins:
@@ -71,19 +54,3 @@ extra_javascript:
   - https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js
   - https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/tablesort.min.js
   - https://cdn.jsdelivr.net/npm/tablesort@5.3.0/src/sorts/tablesort.number.js
-
-nav:
-  - index.md
-  - installation.md
-  - getting-started.md
-  - configuring.md
-  - running.md
-  - writing.md
-  - organizing.md
-  - parsing.md
-  - coverage.md
-  - coverage-reports.md
-  - command-line.md
-  - contributing.md
-  - demo/index.md
-  - questions-and-answers.md
