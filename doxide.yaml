@@ -10,7 +10,7 @@ files:
   - "src/**.hpp"
   - "src/**.cpp"
   - "demo/*.hpp"
-output: docs/demo
+output: docs
 groups:
   - name: parsing
     title: Parsing
