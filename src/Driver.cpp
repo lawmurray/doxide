@@ -177,6 +177,7 @@ R""""(<div class="md-copyright">
 )"""";
 
 Driver::Driver() :
+    style("mkdocs"),
     title("Untitled"),
     output("docs") {
   //

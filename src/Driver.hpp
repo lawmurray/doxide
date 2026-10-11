@@ -48,9 +48,9 @@ public:
   void clean();
 
   /**
-   * Style.
+   * Markdown style.
    */
-  std::string style = "mkdocs";
+  std::string style;
 
   /**
    * Title.

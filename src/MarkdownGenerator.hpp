@@ -182,7 +182,7 @@ private:
   std::filesystem::path output;
 
   /**
-   * Style.
+   * Markdown style.
    */
   std::string style;
 

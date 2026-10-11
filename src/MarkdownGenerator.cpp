@@ -115,7 +115,6 @@ window.addEventListener("load", () => {
 });
 )"""";
 
-
 MarkdownGenerator::MarkdownGenerator(const std::filesystem::path& output,
     const std::string& style) :
     output(output),
@@ -167,7 +166,7 @@ void MarkdownGenerator::clean() {
 }
 
 void MarkdownGenerator::generate(const std::filesystem::path& output,
-  const Entity& entity, const bool cov) {
+    const Entity& entity, const bool cov) {
   std::string name = sanitize(entity.name);  // entity name, empty for root
   std::string dirname;   // directory name for this entity
   std::string filename;  // file name for this entity
@@ -374,7 +373,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
         if (style == "plain") {
-          out << "> 𝙩 **Type**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
+          out << "> 𝙩 **Type**" << std::endl;
+          out << "> " << htmlize(line(child->decl)) << std::endl;
         } else {
           out << "!!! typedef \"" << htmlize(line(child->decl)) << '"' << std::endl;
         }
@@ -393,9 +393,10 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
         if (style == "plain") {
-        out << "> ⛶ **Concept**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
+          out << "> ⛶ **Concept**" << std::endl;
+          out << "> " << htmlize(line(child->decl)) << std::endl;
         } else {
-        out << "!!! concept \"" << htmlize(line(child->decl)) << '"' << std::endl;
+          out << "!!! concept \"" << htmlize(line(child->decl)) << '"' << std::endl;
         }
         out << std::endl;
         out << indent(child->docs) << std::endl;
@@ -412,7 +413,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
         if (style == "plain") {
-          out << "> ＃**Macro**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
+          out << "> ＃ **Macro**" << std::endl;
+          out << "> " << htmlize(line(child->decl)) << std::endl;
         } else {
           out << "!!! macro \"" << htmlize(line(child->decl)) << '"' << std::endl;
         }
@@ -431,7 +433,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
         if (style == "plain") {
-          out << "> ⒳ **Variable**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
+          out << "> ⒳ **Variable**" << std::endl;
+          out << "> " << htmlize(line(child->decl)) << std::endl;
         } else {
           out << "!!! variable \"" << htmlize(line(child->decl)) << '"' << std::endl;
         }
@@ -454,7 +457,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << std::endl;
         }
         if (style == "plain") {
-          out << "> ƒ **Operator**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
+          out << "> ƒ **Operator**" << std::endl;
+          out << "> " << htmlize(line(child->decl)) << std::endl;
         } else {
           out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
         }
@@ -477,7 +481,8 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         }
         if (style == "plain") {
-          out << "> ƒ **Function**" << std::endl << "> " << htmlize(line(child->decl)) << std::endl;
+          out << "> ƒ **Function**" << std::endl;
+          out << "> " << htmlize(line(child->decl)) << std::endl;
         } else {
           out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
         }
