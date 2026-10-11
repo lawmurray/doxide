@@ -4,10 +4,13 @@
 #include "GcovCounter.hpp"
 #include "JSONCounter.hpp"
 #include "JSONGenerator.hpp"
+#include "YAMLParser.hpp"
 #include "Log.hpp"
 #include "MarkdownGenerator.hpp"
 #include "SourceWatcher.hpp"
+#include "doxide.hpp"
 
+#include <glob/glob.hpp>
 #include <regex>
 #include <thread>
 #include <tuple>
