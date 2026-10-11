@@ -33,11 +33,6 @@ public:
   void build();
 
   /**
-   * Build GetHub webview ready documentation.
-   */
-  void git_build();
-
-  /**
    * Watch and build documentation on changes.
    */
   void watch();
