@@ -25,7 +25,7 @@ public:
   /**
    * Create a new configuration file.
    */
-  void init(const std::string& style);
+  void init();
 
   /**
    * Build documentation.

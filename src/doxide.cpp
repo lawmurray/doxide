@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
         "Specify the style of documentation: `plain` or `mkdocs`.")
       ->check(CLI::IsMember({"plain", "mkdocs"}));
   init_cmd->fallthrough()->
-      callback([&]() { driver.init(driver.style); });
+      callback([&]() { driver.init(); });
   app.add_subcommand("build",
       "Build documentation in output directory.")->
       fallthrough()->

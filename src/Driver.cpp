@@ -182,7 +182,7 @@ Driver::Driver() :
   //
 }
 
-void Driver::init(const std::string& style) {
+void Driver::init() {
   std::string doxide_yaml = init_doxide_yaml;
   std::string mkdocs_yaml = init_mkdocs_yaml;
 
