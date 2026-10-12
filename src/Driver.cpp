@@ -208,7 +208,6 @@ void Driver::init() {
 }
 
 void Driver::build() {
-  config();
   parse();
   count();
 
@@ -218,7 +217,6 @@ void Driver::build() {
 }
 
 void Driver::watch() {
-
   build();
 
   std::cout << "Start watching" << std::endl;
@@ -289,7 +287,6 @@ void Driver::watch() {
 }
 
 void Driver::cover() {
-  config();
   parse();
   count();
 
@@ -298,7 +295,6 @@ void Driver::cover() {
 }
 
 void Driver::clean() {
-  config();
 
   /* can use MarkdownGenerator::clean() for this just by not calling
    * generate() first; this will remove all files with `generator: doxide` in
@@ -316,7 +312,8 @@ void Driver::config() {
   } else if (std::filesystem::exists("doxide.json")) {
     config_file = "doxide.json";
   } else {
-    error("no configuration file found; create a doxide.yaml file to configure Doxide.");
+    /* not required to use a config file */
+    return;
   }
 
   /* parse build configuration file */
@@ -394,6 +391,7 @@ void Driver::config() {
     }
   }
 
+  /* validation */
   if (style != "mkdocs" && style != "pandoc" && style != "plain") {
     warn("'style' must be either 'mkdocs', 'pandoc', or 'plain'. Using 'mkdocs'.");
     style = "mkdocs";

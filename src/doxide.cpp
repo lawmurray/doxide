@@ -68,9 +68,13 @@ std::string capitalize(const std::string_view s) {
   return r;
 }
 
-
 int main(int argc, char** argv) {
   Driver driver;
+
+  /* read config file first, so that command-line options can override */
+  driver.config();
+
+  /* handle command line */
   CLI::App app{"Modern documentation for modern C++.\n"};
   app.get_formatter()->column_width(30);
   app.add_option("--title",

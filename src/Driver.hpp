@@ -23,6 +23,11 @@ public:
   Driver();
 
   /**
+   * Read in the configuration file.
+   */
+  void config();
+
+  /**
    * Create a new configuration file.
    */
   void init();
@@ -73,11 +78,6 @@ public:
   std::filesystem::path output;
 
 private:
-  /**
-   * Read in the configuration file.
-   */
-  void config();
-
   /**
    * Parse files.
    */
