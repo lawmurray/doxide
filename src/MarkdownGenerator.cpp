@@ -197,7 +197,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << ":   " << line(brief(*child)) << std::endl;
         out << std::endl;
       } else if (style == "pandoc") {
-        out << '[' << title(*child) << ']';
+        out << "§ [" << title(*child) << ']';
         out << "(" << sanitize(child->name) << "/)" << std::endl;
         out << ":   " << line(brief(*child)) << std::endl;
         out << std::endl;
@@ -217,12 +217,12 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << ":   " << line(brief(*child)) << std::endl;
         out << std::endl;
       } else if (style == "pandoc") {
-        out << '[' << child->name << ']';
+        out << "§ [" << child->name << ']';
         out << "(" << sanitize(child->name) << "/)" << std::endl;
         out << ":   " << line(brief(*child)) << std::endl;
         out << std::endl;
       } else {
-        out << "  - 🗃 [" << child->name << ']';
+        out << "  - § [" << child->name << ']';
         out << "(" << sanitize(child->name) << "/)" << std::endl;
         out << "    " << line(brief(*child)) << std::endl;
         out << std::endl;
