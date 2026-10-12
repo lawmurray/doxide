@@ -365,12 +365,11 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
         if (style == "plain") {
-          out << "> 𝙩 **Type**" << std::endl;
-          out << "> " << htmlize(line(child->decl)) << std::endl;
+          out << "> 𝙩 **" << htmlize(line(child->decl)) << "**" << std::endl;
         } else {
           out << "!!! typedef \"" << htmlize(line(child->decl)) << '"' << std::endl;
         }
-        out << std::endl;
+        out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
       }
@@ -385,12 +384,11 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
         if (style == "plain") {
-          out << "> ⛶ **Concept**" << std::endl;
-          out << "> " << htmlize(line(child->decl)) << std::endl;
+          out << "> ⛶ **" << htmlize(line(child->decl)) << "**" << std::endl;
         } else {
           out << "!!! concept \"" << htmlize(line(child->decl)) << '"' << std::endl;
         }
-        out << std::endl;
+        out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
       }
@@ -405,12 +403,11 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
         if (style == "plain") {
-          out << "> ＃ **Macro**" << std::endl;
-          out << "> " << htmlize(line(child->decl)) << std::endl;
+          out << "> ＃ **" << htmlize(line(child->decl)) << "**" << std::endl;
         } else {
           out << "!!! macro \"" << htmlize(line(child->decl)) << '"' << std::endl;
         }
-        out << std::endl;
+        out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
       }
@@ -425,12 +422,11 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
         if (style == "plain") {
-          out << "> ⒳ **Variable**" << std::endl;
-          out << "> " << htmlize(line(child->decl)) << std::endl;
+          out << "> ⒳ **" << htmlize(line(child->decl)) << "**" << std::endl;
         } else {
           out << "!!! variable \"" << htmlize(line(child->decl)) << '"' << std::endl;
         }
-        out << std::endl;
+        out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
       }
@@ -449,12 +445,11 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << std::endl;
         }
         if (style == "plain") {
-          out << "> ƒ **Operator**" << std::endl;
-          out << "> " << htmlize(line(child->decl)) << std::endl;
+          out << "> ƒ **" << htmlize(line(child->decl)) << "**" << std::endl;
         } else {
           out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
         }
-        out << std::endl;
+        out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
         prev = child->name;
@@ -473,12 +468,11 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         }
         if (style == "plain") {
-          out << "> ƒ **Function**" << std::endl;
-          out << "> " << htmlize(line(child->decl)) << std::endl;
+          out << "> ƒ **" << htmlize(line(child->decl)) << "**" << std::endl;
         } else {
           out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
         }
-        out << std::endl;
+        out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
         prev = child->name;

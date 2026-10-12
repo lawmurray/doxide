@@ -138,7 +138,7 @@ private:
   /**
    * Indent lines for current Markdown style.
    */
-  std::string indent(const std::string& str);
+  std::string indent(const std::string& str = "");
 
   /**
    * Sanitize for a string, escaping double quotes and backslashes.
