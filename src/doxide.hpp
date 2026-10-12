@@ -16,3 +16,8 @@ void write_file_prompt(const std::string& contents, const std::filesystem::path&
  * @ingroup developer
  */
 std::string gulp(const std::filesystem::path& src);
+
+/**
+ * Convert a string to lowercase with uppercase first character.
+ */
+std::string capitalize(const std::string_view s);

@@ -58,6 +58,17 @@ std::string gulp(const std::filesystem::path& src) {
   return contents;
 }
 
+std::string capitalize(const std::string_view s) {
+  std::string r(s);
+  std::transform(r.begin(), r.end(), r.begin(),
+      [](auto c){ return std::tolower(c); });
+  if (!r.empty()) {
+    r.front() = std::toupper(r.front());
+  }
+  return r;
+}
+
+
 int main(int argc, char** argv) {
   Driver driver;
   CLI::App app{"Modern documentation for modern C++.\n"};

@@ -129,6 +129,24 @@
  * tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
  * veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
  * commodo consequat.
+ * 
+ * @attention
+ * Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+ * tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+ * veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+ * commodo consequat.
+ * 
+ * @todo
+ * Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+ * tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+ * veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+ * commodo consequat.
+ * 
+ * @remark
+ * Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+ * tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+ * veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+ * commodo consequat.
  */
 int f(int x, int y);
 
@@ -249,6 +267,24 @@ int f(int x, int y);
 /// commodo consequat.
 /// 
 /// @quote
+/// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+/// tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+/// veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+/// commodo consequat.
+///
+/// @attention
+/// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+/// tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+/// veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+/// commodo consequat.
+/// 
+/// @todo
+/// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+/// tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+/// veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+/// commodo consequat.
+/// 
+/// @remark
 /// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
 /// tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
 /// veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea

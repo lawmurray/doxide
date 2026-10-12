@@ -22,6 +22,14 @@ struct Doc {
       const std::string& style);
 
   /**
+   * Add an indent to the docs in the given style.
+   *
+   * @param indent Indentation level.
+   * @param style Markdown style.
+   */
+  void add_indent(const int indent, const std::string& style);
+
+  /**
    * Content of the documentation.
    */
   std::string docs;

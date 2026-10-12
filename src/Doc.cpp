@@ -2,6 +2,7 @@
 
 #include "DocTokenizer.hpp"
 #include "Log.hpp"
+#include "doxide.hpp"
 
 #include <algorithm>
 #include <cctype>
@@ -37,7 +38,6 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
           docs.append("`");
           docs.append(tokenizer.consume(WORD).view());
           docs.append("`\n:   ");
-          indent = 4;
         } else if (command == "param[out]") {
           docs.append("\n");
           if (style == "mkdocs") {
@@ -46,7 +46,6 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
           docs.append("`");
           docs.append(tokenizer.consume(WORD).view());
           docs.append("`\n:   ");
-          indent = 4;
         } else if (command == "param[in,out]") {
           docs.append("\n");
           if (style == "mkdocs") {
@@ -55,7 +54,6 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
           docs.append("`");
           docs.append(tokenizer.consume(WORD).view());
           docs.append("`\n:   ");
-          indent = 4;
         } else if (command == "tparam") {
           docs.append("\n");
           if (style == "mkdocs") {
@@ -64,7 +62,6 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
           docs.append("`");
           docs.append(tokenizer.consume(WORD).view());
           docs.append("`\n:   ");
-          indent = 4;
         } else if (command == "p") {
           docs.append("`");
           docs.append(tokenizer.consume(WORD).view());
@@ -115,9 +112,16 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
             command == "bug" ||
             command == "example" ||
             command == "quote") {
-          docs.append("\n!!! ");
-          docs.append(command);
-          docs.append("\n");
+          if (style == "mkdocs") {
+            docs.append("\n!!! ");
+            docs.append(command);
+            docs.append("\n");
+          } else {
+            docs.append("> **");
+            docs.append(capitalize(command));
+            docs.append("**\n");
+            docs.append("> ");
+          }
           indent += 4;
         } else if (command == "ingroup") {
           ingroup = tokenizer.consume(WORD).get();
@@ -175,17 +179,29 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
             command == "endverbatim") {
           docs.append("\n```");
         } else if (command == "attention") {
-          docs.append("\n!!! warning \"Attention\"\n");
+          if (style == "mkdocs") {
+            docs.append("\n!!! warning \"Attention\"\n");
+          } else {
+            docs.append("> **Attention**\n");
+            docs.append("> ");
+          }
           indent += 4;
-          docs.append(indent, ' ');
         } else if (command == "todo") {
-          docs.append("\n!!! example \"To-do\"\n");
+          if (style == "mkdocs") {
+            docs.append("\n!!! example \"To-do\"\n");
+          } else {
+            docs.append("> **To-do**\n");
+            docs.append("> ");
+          }
           indent += 4;
-          docs.append(indent, ' ');
         } else if (command == "remark") {
-          docs.append("\n!!! quote \"Remark\"\n");
+          if (style == "mkdocs") {
+            docs.append("\n!!! quote \"Remark\"\n");
+          } else {
+            docs.append("> **Remark**\n");
+            docs.append("> ");
+          }
           indent += 4;
-          docs.append(indent, ' ');
         } else if (command == "def" ||
             command == "var" ||
             command == "fn" ||
@@ -226,12 +242,12 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
       } else if (token.type & LINE) {
         if (!first) {
           docs.append("\n");
-          docs.append(indent, ' ');
+          add_indent(indent, style);
         }
       } else if (token.type & CLOSE) {
         indent = 0;
       } else {
-        docs.append(first*indent, ' ');  // indent on first token
+        add_indent(first*indent, style);  // indent on first token
         docs.append(token.view());
       }
       token = tokenizer.next();
@@ -243,5 +259,15 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
       docs.resize(docs.length() - 1);
     }
     docs.append("\n");
+  }
+}
+
+void Doc::add_indent(const int indent, const std::string& style) {
+  if (style == "mkdocs") {
+    docs.append(indent, ' ');
+  } else {
+    for (int i = 0; i < indent; i += 4) {
+      docs.append("> ");
+    }
   }
 }
