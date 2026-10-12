@@ -35,6 +35,10 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
             docs.append("\n:material-location-enter: `");
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n:   ");
+          } else if (style == "pandoc") {
+            docs.append("\n`");
+            docs.append(tokenizer.consume(WORD).view());
+            docs.append("`\n:   ");
           } else {
             docs.append("\n  - `");
             docs.append(tokenizer.consume(WORD).view());
@@ -44,6 +48,10 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
           docs.append("\n");
           if (style == "mkdocs") {
             docs.append(":material-location-exit: `");
+            docs.append(tokenizer.consume(WORD).view());
+            docs.append("`\n:   ");
+          } else if (style == "pandoc") {
+            docs.append("`");
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n:   ");
           } else {
@@ -57,6 +65,10 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
             docs.append(":material-location-enter::material-location-exit: `");
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n:   ");
+          } else if (style == "pandoc") {
+            docs.append("`");
+            docs.append(tokenizer.consume(WORD).view());
+            docs.append("`\n:   ");
           } else {
             docs.append("\n  - `");
             docs.append(tokenizer.consume(WORD).view());
@@ -68,6 +80,10 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
             docs.append(":material-code-tags: `");
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n:   ");
+          } else if (style == "pandoc") {
+            docs.append("`");
+            docs.append(tokenizer.consume(WORD).view());
+            docs.append("`\n:   ");
           } else {
             docs.append("\n  - `");
             docs.append(tokenizer.consume(WORD).view());
@@ -77,10 +93,14 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
           docs.append("`");
           docs.append(tokenizer.consume(WORD).view());
           docs.append("`");
-        } else if (command == "return") {
+        } else if (command == "return" ||
+            command == "returns" ||
+            command == "result") {
           docs.append("\n");
           if (style == "mkdocs") {
             docs.append(":material-keyboard-return: **Return**\n:   ");
+          } else if (style == "pandoc") {
+            docs.append("Return\n:   ");
           } else {
             docs.append("\n  - **Return**\n");
             docs.append("\n\n    ");
@@ -89,6 +109,8 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
           docs.append("\n");
           if (style == "mkdocs") {
             docs.append(":material-check-circle-outline: **Pre-condition**\n:   ");
+          } else if (style == "pandoc") {
+            docs.append("Pre-condition\n:   ");
           } else {
             docs.append("\n  - **Pre-condition**\n");
             docs.append("\n\n    ");
@@ -97,6 +119,8 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
           docs.append("\n");
           if (style == "mkdocs") {
             docs.append(":material-check-circle-outline: **Post-condition**\n:   ");
+          } else if (style == "pandoc") {
+            docs.append("Post-condition\n:   ");
           } else {
             docs.append("\n  - **Post-condition**\n");
             docs.append("\n\n    ");
@@ -105,14 +129,19 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
           docs.append("\n");
           if (style == "mkdocs") {
             docs.append(":material-alert-circle-outline: **Throw**\n:   ");
+          } else if (style == "pandoc") {
+            docs.append("Throw\n:   ");
           } else {
             docs.append("\n  - **Throw**\n");
             docs.append("\n\n    ");
           }
-        } else if (command == "see") {
+        } else if (command == "see" ||
+            command == "sa") {
           docs.append("\n");
           if (style == "mkdocs") {
             docs.append(":material-eye-outline: **See**\n:   ");
+          } else if (style == "pandoc") {
+            docs.append("See\n:   ");
           } else {
             docs.append("\n  - **See**\n");
             docs.append("\n\n    ");
@@ -148,19 +177,6 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
           ingroup = tokenizer.consume(WORD).get();
 
         /* legacy commands */
-        } else if (command == "returns" ||
-            command == "result") {
-          docs.append("\n");
-          if (style == "mkdocs") {
-            docs.append(":material-location-exit: ");
-          }
-          docs.append("**Return**\n:   ");
-        } else if (command == "sa") {
-          docs.append("\n");
-          if (style == "mkdocs") {
-            docs.append(":material-eye-outline: ");
-          }
-          docs.append("**See**\n:   ");
         } else if (command == "file" ||
             command == "internal") {
           hide = true;
@@ -285,6 +301,8 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
 
 void Doc::add_indent(const int indent, const std::string& style) {
   if (style == "mkdocs") {
+    docs.append(indent, ' ');
+  } else if (style == "pandoc") {
     docs.append(indent, ' ');
   } else {
     for (int i = 0; i < indent; i += 4) {
