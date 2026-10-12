@@ -34,16 +34,17 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
         std::string_view command = command_token.view();
         if (command == "param" ||
             command == "param[in]") {
+          docs.append("\n");
           if (style == "mkdocs") {
-            docs.append("\n:material-location-enter: `");
+            docs.append(":material-location-enter: `");
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n:   ");
           } else if (style == "pandoc") {
-            docs.append("\n`");
+            docs.append("`");
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n:   ");
           } else {
-            docs.append("\n  - `");
+            docs.append("  - `");
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n\n    ");
           }
@@ -58,7 +59,7 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n:   ");
           } else {
-            docs.append("\n  - `");
+            docs.append("  - `");
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n\n    ");
           }
@@ -73,7 +74,7 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n:   ");
           } else {
-            docs.append("\n  - `");
+            docs.append("  - `");
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n\n    ");
           }
@@ -88,7 +89,7 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n:   ");
           } else {
-            docs.append("\n  - `");
+            docs.append("  - `");
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n\n    ");
           }
