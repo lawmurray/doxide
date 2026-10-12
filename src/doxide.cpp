@@ -72,6 +72,9 @@ int main(int argc, char** argv) {
       "Output directory.");
   app.add_option("--coverage", driver.coverage,
       "Code coverage file (.gcov or .json).");
+  app.add_option("--style", driver.style,
+      "Specify the style of documentation: `plain` or `mkdocs`.")->
+      check(CLI::IsMember({"plain", "mkdocs"}));
   app.set_version_flag("--version,-v", PACKAGE_VERSION, "Doxide version.");
   app.add_subcommand("init",
       "Initialize configuration files.")->

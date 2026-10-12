@@ -115,9 +115,10 @@ window.addEventListener("load", () => {
 });
 )"""";
 
-
-MarkdownGenerator::MarkdownGenerator(const std::filesystem::path& output) :
-    output(output) {
+MarkdownGenerator::MarkdownGenerator(const std::filesystem::path& output,
+    const std::string& style) :
+    output(output),
+    style(style) {
   //
 }
 
@@ -169,7 +170,6 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
   std::string name = sanitize(entity.name);  // entity name, empty for root
   std::string dirname;   // directory name for this entity
   std::string filename;  // file name for this entity
-  std::string childdir;  // directory name for children, relative to filename
   if (entity.type == EntityType::ROOT) {
     dirname = "";
     filename = "index";
@@ -199,25 +199,45 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
 
     /* groups */
     for (auto& child : view(entity.groups, false)) {
-      out << ":material-format-section: [" << title(*child) << ']';
-      out << "(" << sanitize(child->name) << "/)" << std::endl;
-      out << ":   " << line(brief(*child)) << std::endl;
-      out << std::endl;
+      if (style == "plain") {
+        out << "§ [" << title(*child) << ']';
+        out << "(" << sanitize(child->name) << "/)" << std::endl;
+        out << "- " << line(brief(*child)) << std::endl;
+        out << std::endl;
+      } else {
+        out << ":material-format-section: [" << title(*child) << ']';
+        out << "(" << sanitize(child->name) << "/)" << std::endl;
+        out << ":   " << line(brief(*child)) << std::endl;
+        out << std::endl;
+      }
     }
 
     /* namespaces */
     for (auto& child : view(entity.namespaces, true)) {
-      out << ":material-package: [" << child->name << ']';
-      out << "(" << sanitize(child->name) << "/)" << std::endl;
-      out << ":   " << line(brief(*child)) << std::endl;
-      out << std::endl;
+      if (style == "plain") {
+        out << "🗃 [" << child->name << ']';
+        out << "(" << sanitize(child->name) << "/)" << std::endl;
+        out << "- " << line(brief(*child)) << std::endl;
+        out << std::endl;
+      } else {
+        out << ":material-package: [" << child->name << ']';
+        out << "(" << sanitize(child->name) << "/)" << std::endl;
+        out << ":   " << line(brief(*child)) << std::endl;
+        out << std::endl;
+      }
     }
 
     /* code coverage */
     if (entity.type == EntityType::ROOT && cov) {
-      out << ":material-chart-pie: [Code Coverage](coverage/)" << std::endl;
-      out << ":    " << std::endl;
-      out << std::endl;
+      if (style == "plain") {
+        out << "🗠 [Code Coverage](coverage/)" << std::endl;
+        out << ":    " << std::endl;
+        out << std::endl;
+      } else {
+        out << ":material-chart-pie: [Code Coverage](coverage/)" << std::endl;
+        out << ":    " << std::endl;
+        out << std::endl;
+      }
     }
 
     /* brief descriptions */
@@ -330,9 +350,15 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     auto enums = view(entity.enums, false);
     if (enums.size() > 0) {
       for (auto& child : enums) {
-        out << "**" << child->decl << "**" << std::endl;
-        out << ":   " << child->docs << std::endl;
-        out << std::endl;
+        if (style == "plain") {
+          out << "**" << child->decl << "**" << std::endl;
+          out << "- " << child->docs << std::endl;
+          out << std::endl;
+        } else {
+          out << "**" << child->decl << "**" << std::endl;
+          out << ":   " << child->docs << std::endl;
+          out << std::endl;
+        }
       }
       out << std::endl;
     }
@@ -346,7 +372,12 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "### " << child->name;
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
-        out << "!!! typedef \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        if (style == "plain") {
+          out << "> 𝙩 **Type**" << std::endl;
+          out << "> " << htmlize(line(child->decl)) << std::endl;
+        } else {
+          out << "!!! typedef \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        }
         out << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
@@ -361,7 +392,12 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "### " << child->name;
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
-        out << "!!! concept \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        if (style == "plain") {
+          out << "> ⛶ **Concept**" << std::endl;
+          out << "> " << htmlize(line(child->decl)) << std::endl;
+        } else {
+          out << "!!! concept \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        }
         out << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
@@ -376,7 +412,12 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "### " << child->name;
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
-        out << "!!! macro \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        if (style == "plain") {
+          out << "> ＃ **Macro**" << std::endl;
+          out << "> " << htmlize(line(child->decl)) << std::endl;
+        } else {
+          out << "!!! macro \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        }
         out << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
@@ -391,7 +432,12 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "### " << child->name;
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
-        out << "!!! variable \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        if (style == "plain") {
+          out << "> ⒳ **Variable**" << std::endl;
+          out << "> " << htmlize(line(child->decl)) << std::endl;
+        } else {
+          out << "!!! variable \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        }
         out << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
@@ -410,7 +456,12 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
           out << std::endl;
         }
-        out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        if (style == "plain") {
+          out << "> ƒ **Operator**" << std::endl;
+          out << "> " << htmlize(line(child->decl)) << std::endl;
+        } else {
+          out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        }
         out << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
@@ -429,7 +480,12 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << "### " << child->name;
           out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         }
-        out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        if (style == "plain") {
+          out << "> ƒ **Function**" << std::endl;
+          out << "> " << htmlize(line(child->decl)) << std::endl;
+        } else {
+          out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        }
         out << std::endl;
         out << indent(child->docs) << std::endl;
         out << std::endl;
@@ -457,16 +513,13 @@ void MarkdownGenerator::coverage(const std::filesystem::path& output,
       "coverage" : entity.name);  // entity name, "coverage"" for root
   std::string dirname;  // directory name for this entity
   std::string filename;  // file name for this entity
-  std::string childdir;  // directory name for children, relative to filename
   if (entity.type == EntityType::FILE) {
     /* as for types in generate(), working around some mkdocs behavior */
     dirname = "";
     filename = name;
-    childdir = name + "/";
   } else {
     dirname = name;
     filename = "index";
-    childdir = "";
   }
 
   std::filesystem::create_directories(output / dirname);

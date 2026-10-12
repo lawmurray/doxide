@@ -4,20 +4,14 @@
 #include "GcovCounter.hpp"
 #include "JSONCounter.hpp"
 #include "JSONGenerator.hpp"
+#include "YAMLParser.hpp"
 #include "Log.hpp"
 #include "MarkdownGenerator.hpp"
 #include "SourceWatcher.hpp"
-#include "YAMLNode.hpp"
-#include "YAMLParser.hpp"
 #include "doxide.hpp"
 
 #include <glob/glob.hpp>
-#include <chrono>
-#include <functional>
-#include <iostream>
-#include <memory>
 #include <regex>
-#include <stdexcept>
 #include <thread>
 #include <tuple>
 #include <utility>
@@ -29,7 +23,8 @@
  * @ingroup developer
  */
 static const char* init_doxide_yaml =
-R""""(title:
+R""""(style:
+title:
 description:
 files:
   - "*.hpp"
@@ -182,6 +177,7 @@ R""""(<div class="md-copyright">
 )"""";
 
 Driver::Driver() :
+    style("mkdocs"),
     title("Untitled"),
     output("docs") {
   //
@@ -191,6 +187,8 @@ void Driver::init() {
   std::string doxide_yaml = init_doxide_yaml;
   std::string mkdocs_yaml = init_mkdocs_yaml;
 
+  doxide_yaml = std::regex_replace(doxide_yaml, std::regex("style:"),
+      "style: " + style);
   doxide_yaml = std::regex_replace(doxide_yaml, std::regex("title:"),
       "title: " + title);
   doxide_yaml = std::regex_replace(doxide_yaml, std::regex("description:"),
@@ -202,9 +200,11 @@ void Driver::init() {
       "site_description: " + description);
 
   write_file_prompt(doxide_yaml, "doxide.yaml");
-  write_file_prompt(mkdocs_yaml, "mkdocs.yaml");
-  write_file_prompt(init_docs_stylesheets_doxide_css, "docs/stylesheets/doxide.css");
-  write_file_prompt(init_docs_overrides_partials_copyright_html, "docs/overrides/partials/copyright.html");
+  if (style == "mkdocs") {
+    write_file_prompt(mkdocs_yaml, "mkdocs.yaml");
+    write_file_prompt(init_docs_stylesheets_doxide_css, "docs/stylesheets/doxide.css");
+    write_file_prompt(init_docs_overrides_partials_copyright_html, "docs/overrides/partials/copyright.html");
+  }
 }
 
 void Driver::build() {
@@ -212,7 +212,7 @@ void Driver::build() {
   parse();
   count();
 
-  MarkdownGenerator generator(output);
+  MarkdownGenerator generator(output, style);
   generator.generate(root, !coverage.empty());
   generator.clean();
 }
@@ -279,7 +279,7 @@ void Driver::watch() {
 
       count();
 
-      MarkdownGenerator generator(output);
+      MarkdownGenerator generator(output, style);
       generator.generate(root, !coverage.empty());
       generator.clean();
 
@@ -303,7 +303,7 @@ void Driver::clean() {
   /* can use MarkdownGenerator::clean() for this just by not calling
    * generate() first; this will remove all files with `generator: doxide` in
    * their YAML frontmatter */
-  MarkdownGenerator generator(output);
+  MarkdownGenerator generator(output, style);
   generator.clean();
 }
 
@@ -323,6 +323,17 @@ void Driver::config() {
   YAMLParser parser;
   YAMLNode yaml = parser.parse(config_file);
 
+  if (yaml.has("style")) {
+    if (yaml.isValue("style")) {
+      style = yaml.value("style");
+      if (style != "plain" && style != "mkdocs") {
+        warn("'style' must be either 'plain' or 'mkdocs'. Using 'mkdocs'.");
+        style = "mkdocs";
+      }
+    } else {
+      warn("'style' must be a value in configuration.");
+    }
+  }
   if (yaml.has("title")) {
     if (yaml.isValue("title")) {
       title = yaml.value("title");

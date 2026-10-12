@@ -48,6 +48,11 @@ public:
   void clean();
 
   /**
+   * Markdown style.
+   */
+  std::string style;
+
+  /**
    * Title.
    */
   std::string title;

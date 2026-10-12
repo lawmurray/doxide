@@ -19,8 +19,10 @@ public:
    * Constructor.
    *
    * @param output Output directory.
+   * @param style Markdown style.
    */
-  MarkdownGenerator(const std::filesystem::path& output);
+  MarkdownGenerator(const std::filesystem::path& output,
+      const std::string& style);
 
   /**
    * Generate documentation.
@@ -178,6 +180,11 @@ private:
    * Output directory.
    */
   std::filesystem::path output;
+
+  /**
+   * Markdown style.
+   */
+  std::string style;
 
   /**
    * Set of files generated during the last call to generate().
