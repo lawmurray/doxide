@@ -23,9 +23,9 @@
  * @ingroup developer
  */
 static const char* init_doxide_yaml =
-R""""(style:
-title:
+R""""(title:
 description:
+style: mkdocs
 files:
   - "*.hpp"
   - "**/*.hpp"
@@ -187,12 +187,12 @@ void Driver::init() {
   std::string doxide_yaml = init_doxide_yaml;
   std::string mkdocs_yaml = init_mkdocs_yaml;
 
-  doxide_yaml = std::regex_replace(doxide_yaml, std::regex("style:"),
-      "style: " + style);
   doxide_yaml = std::regex_replace(doxide_yaml, std::regex("title:"),
       "title: " + title);
   doxide_yaml = std::regex_replace(doxide_yaml, std::regex("description:"),
       "description: " + description);
+  doxide_yaml = std::regex_replace(doxide_yaml, std::regex("style:"),
+      "style: " + style);
 
   mkdocs_yaml = std::regex_replace(mkdocs_yaml, std::regex("site_name:"),
       "site_name: " + title);
@@ -271,10 +271,10 @@ void Driver::watch() {
       }
 
       for (const auto& filename: changed_files) {
-        parser.parse(filename, defines, root);
+        parser.parse(filename, style, defines, root);
       }
       for (const auto& filename: added_files) {
-        parser.parse(filename, defines, root);
+        parser.parse(filename, style, defines, root);
       }
 
       count();
@@ -326,10 +326,6 @@ void Driver::config() {
   if (yaml.has("style")) {
     if (yaml.isValue("style")) {
       style = yaml.value("style");
-      if (style != "plain" && style != "mkdocs") {
-        warn("'style' must be either 'plain' or 'mkdocs'. Using 'mkdocs'.");
-        style = "mkdocs";
-      }
     } else {
       warn("'style' must be a value in configuration.");
     }
@@ -398,6 +394,11 @@ void Driver::config() {
     }
   }
 
+  if (style != "plain" && style != "mkdocs") {
+    warn("'style' must be either 'plain' or 'mkdocs'. Using 'mkdocs'.");
+    style = "mkdocs";
+  }
+
   /* initialize root entity */
   groups(yaml, root);
   root.title = title;
@@ -407,7 +408,7 @@ void Driver::config() {
 void Driver::parse() {
   CppParser parser;
   for (const auto& filename: filenames) {
-    parser.parse(filename, defines, root);
+    parser.parse(filename, style, defines, root);
   }
 }
 

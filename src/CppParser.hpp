@@ -31,10 +31,11 @@ public:
    * Parse C++ source.
    *
    * @param file C++ source file name.
+   * @param style Markdown style.
    * @param defines Macro definitions.
    * @param[in,out] root Root entity.
    */
-  void parse(const std::filesystem::path& filename,
+  void parse(const std::filesystem::path& filename, const std::string& style,
       const std::unordered_map<std::string,std::string>& defines,
       Entity& root);
 

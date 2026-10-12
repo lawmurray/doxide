@@ -10,7 +10,8 @@
 #include <unordered_set>
 #include <utility>
 
-Doc::Doc(const TextLineCursor &comment, const int init_indent) :
+Doc::Doc(const TextLineCursor &comment, const int init_indent,
+    const std::string& style) :
     indent(init_indent),
     hide(false) {
   DocTokenizer tokenizer(comment);
@@ -29,22 +30,38 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent) :
         std::string_view command = command_token.view();
         if (command == "param" ||
             command == "param[in]") {
-          docs.append("\n:material-location-enter: `");
+          docs.append("\n");
+          if (style == "mkdocs") {
+            docs.append(":material-location-enter: ");
+          }
+          docs.append("`");
           docs.append(tokenizer.consume(WORD).view());
           docs.append("`\n:   ");
           indent = 4;
         } else if (command == "param[out]") {
-          docs.append("\n:material-location-exit: `");
+          docs.append("\n");
+          if (style == "mkdocs") {
+            docs.append(":material-location-exit: ");
+          }
+          docs.append("`");
           docs.append(tokenizer.consume(WORD).view());
           docs.append("`\n:   ");
           indent = 4;
         } else if (command == "param[in,out]") {
-          docs.append("\n:material-location-enter::material-location-exit: `");
+          docs.append("\n");
+          if (style == "mkdocs") {
+            docs.append(":material-location-enter::material-location-exit: ");
+          }
+          docs.append("`");
           docs.append(tokenizer.consume(WORD).view());
           docs.append("`\n:   ");
           indent = 4;
         } else if (command == "tparam") {
-          docs.append("\n:material-code-tags: `");
+          docs.append("\n:");
+          if (style == "mkdocs") {
+            docs.append("material-code-tags: ");
+          }
+          docs.append("`");
           docs.append(tokenizer.consume(WORD).view());
           docs.append("`\n:   ");
           indent = 4;
@@ -53,15 +70,35 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent) :
           docs.append(tokenizer.consume(WORD).view());
           docs.append("`");
         } else if (command == "return") {
-          docs.append("\n:material-keyboard-return: **Return**\n:   ");
+          docs.append("\n");
+          if (style == "mkdocs") {
+            docs.append(":material-keyboard-return: ");
+          }
+          docs.append("**Return**\n:   ");
         } else if (command == "pre") {
-          docs.append("\n:material-check-circle-outline: **Pre-condition**\n:   ");
+          docs.append("\n");
+          if (style == "mkdocs") {
+            docs.append(":material-check-circle-outline: ");
+          }
+          docs.append("**Pre-condition**\n:   ");
         } else if (command == "post") {
-          docs.append("\n:material-check-circle-outline: **Post-condition**\n:   ");
+          docs.append("\n");
+          if (style == "mkdocs") {
+            docs.append(":material-check-circle-outline: ");
+          }
+          docs.append("**Post-condition**\n:   ");
         } else if (command == "throw") {
-          docs.append("\n:material-alert-circle-outline: **Throw**\n:   ");
+          docs.append("\n");
+          if (style == "mkdocs") {
+            docs.append(":material-alert-circle-outline: ");
+          }
+          docs.append("**Throw**\n:   ");
         } else if (command == "see") {
-          docs.append("\n:material-eye-outline: **See**\n:   ");
+          docs.append("\n");
+          if (style == "mkdocs") {
+            docs.append(":material-eye-outline: ");
+          }
+          docs.append("**See**\n:   ");
         } else if (command == "anchor") {
           docs.append("<a name=\"");
           docs.append(tokenizer.consume(WORD).view());
@@ -88,9 +125,17 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent) :
         /* legacy commands */
         } else if (command == "returns" ||
             command == "result") {
-          docs.append("\n:material-location-exit: **Return**\n:   ");
+          docs.append("\n");
+          if (style == "mkdocs") {
+            docs.append(":material-location-exit: ");
+          }
+          docs.append("**Return**\n:   ");
         } else if (command == "sa") {
-          docs.append("\n:material-eye-outline: **See**\n:   ");
+          docs.append("\n");
+          if (style == "mkdocs") {
+            docs.append(":material-eye-outline: ");
+          }
+          docs.append("**See**\n:   ");
         } else if (command == "file" ||
             command == "internal") {
           hide = true;

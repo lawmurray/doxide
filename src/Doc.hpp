@@ -16,8 +16,10 @@ struct Doc {
    *
    * @param comment Comment from which to populate documentation.
    * @param init_indent Initial indent level.
+   * @param style Markdown style.
    */
-  Doc(const TextLineCursor &comment, const int init_indent);
+  Doc(const TextLineCursor &comment, const int init_indent,
+      const std::string& style);
 
   /**
    * Content of the documentation.

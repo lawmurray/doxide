@@ -502,6 +502,7 @@ CppParser::~CppParser() {
 }
 
 void CppParser::parse(const std::filesystem::path& filename,
+    const std::string& style,
     const std::unordered_map<std::string,std::string>& defines,
     Entity& root) {
   assert(entities.empty());
@@ -559,7 +560,7 @@ void CppParser::parse(const std::filesystem::path& filename,
       uint32_t l = ts_node_end_byte(node);
 
       if (strncmp(name, "docs", length) == 0) {
-        Doc doc(file_content.substr(k, l - k), indent);
+        Doc doc(file_content.substr(k, l - k), indent, style);
         Entity& e = doc.open.type == OPEN_BEFORE ? entity : entities.back();
         e.docs.append(doc.docs);
         e.hide = e.hide || doc.hide;
