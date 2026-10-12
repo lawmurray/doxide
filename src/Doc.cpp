@@ -24,6 +24,9 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
     bool first = true;  // is this the first token in the comment?
     if (!token.type) {
       /* empty end-of-line comment, consider end of paragraph */
+      if (indent && style == "pandoc") {
+        docs.append("\n:::");
+      }
       indent = std::max(indent - 4, 0);
     } else while (token.type) {
       if (token.type & COMMAND) {
@@ -166,6 +169,10 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
             docs.append("\n!!! ");
             docs.append(command);
             docs.append("\n");
+          } else if (style == "pandoc") {
+            docs.append("\n::: ");
+            docs.append(command);
+            docs.append("\n");
           } else {
             docs.append("> **");
             docs.append(capitalize(command));
@@ -218,6 +225,8 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
         } else if (command == "attention") {
           if (style == "mkdocs") {
             docs.append("\n!!! warning \"Attention\"\n");
+          } else if (style == "pandoc") {
+            docs.append("\n::: warning\n");
           } else {
             docs.append("> **Attention**\n");
             docs.append("> ");
@@ -226,6 +235,8 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
         } else if (command == "todo") {
           if (style == "mkdocs") {
             docs.append("\n!!! example \"To-do\"\n");
+          } else if (style == "pandoc") {
+            docs.append("\n::: example\n");
           } else {
             docs.append("> **To-do**\n");
             docs.append("> ");
@@ -234,6 +245,8 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
         } else if (command == "remark") {
           if (style == "mkdocs") {
             docs.append("\n!!! quote \"Remark\"\n");
+          } else if (style == "pandoc") {
+            docs.append("\n::: quote\n");
           } else {
             docs.append("> **Remark**\n");
             docs.append("> ");
@@ -273,6 +286,9 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
         }
       } else if (token.type & PARA) {
         if (!first) {
+          if (indent && style == "pandoc") {
+            docs.append("\n:::");
+          }
           docs.append("\n\n");
           indent = std::max(indent - 4, 0);
         }
@@ -282,6 +298,12 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
           add_indent(indent, style);
         }
       } else if (token.type & CLOSE) {
+        if (style == "pandoc") {
+          while (indent) {
+            docs.append("\n:::");
+            indent -= 4;
+          }
+        }
         indent = 0;
       } else {
         add_indent(first*indent, style);  // indent on first token
@@ -303,7 +325,7 @@ void Doc::add_indent(const int indent, const std::string& style) {
   if (style == "mkdocs") {
     docs.append(indent, ' ');
   } else if (style == "pandoc") {
-    docs.append(indent, ' ');
+    //
   } else {
     for (int i = 0; i < indent; i += 4) {
       docs.append("> ");
