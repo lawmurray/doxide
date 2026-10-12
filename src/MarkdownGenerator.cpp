@@ -191,43 +191,43 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
 
     /* groups */
     for (auto& child : view(entity.groups, false)) {
-      if (style == "plain") {
-        out << "§ [" << title(*child) << ']';
-        out << "(" << sanitize(child->name) << "/)" << std::endl;
-        out << "- " << line(brief(*child)) << std::endl;
-        out << std::endl;
-      } else {
+      if (style == "mkdocs") {
         out << ":material-format-section: [" << title(*child) << ']';
         out << "(" << sanitize(child->name) << "/)" << std::endl;
         out << ":   " << line(brief(*child)) << std::endl;
+        out << std::endl;
+      } else {
+        out << "  - § [" << title(*child) << ']';
+        out << "(" << sanitize(child->name) << "/)" << std::endl;
+        out << "    " << line(brief(*child)) << std::endl;
         out << std::endl;
       }
     }
 
     /* namespaces */
     for (auto& child : view(entity.namespaces, true)) {
-      if (style == "plain") {
-        out << "🗃 [" << child->name << ']';
-        out << "(" << sanitize(child->name) << "/)" << std::endl;
-        out << "- " << line(brief(*child)) << std::endl;
-        out << std::endl;
-      } else {
+      if (style == "mkdocs") {
         out << ":material-package: [" << child->name << ']';
         out << "(" << sanitize(child->name) << "/)" << std::endl;
         out << ":   " << line(brief(*child)) << std::endl;
+        out << std::endl;
+      } else {
+        out << "  - 🗃 [" << child->name << ']';
+        out << "(" << sanitize(child->name) << "/)" << std::endl;
+        out << "    " << line(brief(*child)) << std::endl;
         out << std::endl;
       }
     }
 
     /* code coverage */
     if (entity.type == EntityType::ROOT && cov) {
-      if (style == "plain") {
-        out << "🗠 [Code Coverage](coverage/)" << std::endl;
+      if (style == "mkdocs") {
+        out << ":material-chart-pie: [Code Coverage](coverage/)" << std::endl;
         out << ":    " << std::endl;
         out << std::endl;
       } else {
-        out << ":material-chart-pie: [Code Coverage](coverage/)" << std::endl;
-        out << ":    " << std::endl;
+        out << "  - 🗠 [Code Coverage](coverage/)" << std::endl;
+        out << "    " << std::endl;
         out << std::endl;
       }
     }
@@ -342,13 +342,13 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     auto enums = view(entity.enums, false);
     if (enums.size() > 0) {
       for (auto& child : enums) {
-        if (style == "plain") {
-          out << "**" << child->decl << "**" << std::endl;
-          out << "- " << child->docs << std::endl;
-          out << std::endl;
-        } else {
+        if (style == "mkdocs") {
           out << "**" << child->decl << "**" << std::endl;
           out << ":   " << child->docs << std::endl;
+          out << std::endl;
+        } else {
+          out << "  - **" << child->decl << "**" << std::endl;
+          out << "    " << child->docs << std::endl;
           out << std::endl;
         }
       }
@@ -364,10 +364,10 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "### " << child->name;
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
-        if (style == "plain") {
-          out << "> 𝙩 **" << htmlize(line(child->decl)) << "**" << std::endl;
-        } else {
+        if (style == "mkdocs") {
           out << "!!! typedef \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        } else {
+          out << "> 𝙩 **" << htmlize(line(child->decl)) << "**" << std::endl;
         }
         out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
@@ -383,10 +383,10 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "### " << child->name;
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
-        if (style == "plain") {
-          out << "> ⛶ **" << htmlize(line(child->decl)) << "**" << std::endl;
-        } else {
+        if (style == "mkdocs") {
           out << "!!! concept \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        } else {
+          out << "> ⛶ **" << htmlize(line(child->decl)) << "**" << std::endl;
         }
         out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
@@ -402,10 +402,10 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "### " << child->name;
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
-        if (style == "plain") {
-          out << "> ＃ **" << htmlize(line(child->decl)) << "**" << std::endl;
-        } else {
+        if (style == "mkdocs") {
           out << "!!! macro \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        } else {
+          out << "> ＃ **" << htmlize(line(child->decl)) << "**" << std::endl;
         }
         out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
@@ -421,10 +421,10 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
         out << "### " << child->name;
         out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         out << std::endl;
-        if (style == "plain") {
-          out << "> ⒳ **" << htmlize(line(child->decl)) << "**" << std::endl;
-        } else {
+        if (style == "mkdocs") {
           out << "!!! variable \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        } else {
+          out << "> ⒳ **" << htmlize(line(child->decl)) << "**" << std::endl;
         }
         out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
@@ -444,10 +444,10 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
           out << std::endl;
         }
-        if (style == "plain") {
-          out << "> ƒ **" << htmlize(line(child->decl)) << "**" << std::endl;
-        } else {
+        if (style == "mkdocs") {
           out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        } else {
+          out << "> ƒ **" << htmlize(line(child->decl)) << "**" << std::endl;
         }
         out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
@@ -467,10 +467,10 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << "### " << child->name;
           out << "<a name=\"" << sanitize(child->name) << "\"></a>" << std::endl;
         }
-        if (style == "plain") {
-          out << "> ƒ **" << htmlize(line(child->decl)) << "**" << std::endl;
-        } else {
+        if (style == "mkdocs") {
           out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
+        } else {
+          out << "> ƒ **" << htmlize(line(child->decl)) << "**" << std::endl;
         }
         out << indent() << std::endl;
         out << indent(child->docs) << std::endl;

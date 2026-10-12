@@ -394,8 +394,8 @@ void Driver::config() {
     }
   }
 
-  if (style != "plain" && style != "mkdocs") {
-    warn("'style' must be either 'plain' or 'mkdocs'. Using 'mkdocs'.");
+  if (style != "mkdocs" && style != "plain") {
+    warn("'style' must be either 'mkdocs' or 'plain'. Using 'mkdocs'.");
     style = "mkdocs";
   }
 

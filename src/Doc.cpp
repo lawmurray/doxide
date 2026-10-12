@@ -31,37 +31,48 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
         std::string_view command = command_token.view();
         if (command == "param" ||
             command == "param[in]") {
-          docs.append("\n");
           if (style == "mkdocs") {
-            docs.append(":material-location-enter: ");
+            docs.append("\n:material-location-enter: `");
+            docs.append(tokenizer.consume(WORD).view());
+            docs.append("`\n:   ");
+          } else {
+            docs.append("\n  - `");
+            docs.append(tokenizer.consume(WORD).view());
+            docs.append("`\n\n    ");
           }
-          docs.append("`");
-          docs.append(tokenizer.consume(WORD).view());
-          docs.append("`\n:   ");
         } else if (command == "param[out]") {
           docs.append("\n");
           if (style == "mkdocs") {
-            docs.append(":material-location-exit: ");
+            docs.append(":material-location-exit: `");
+            docs.append(tokenizer.consume(WORD).view());
+            docs.append("`\n:   ");
+          } else {
+            docs.append("\n  - `");
+            docs.append(tokenizer.consume(WORD).view());
+            docs.append("`\n\n    ");
           }
-          docs.append("`");
-          docs.append(tokenizer.consume(WORD).view());
-          docs.append("`\n:   ");
         } else if (command == "param[in,out]") {
           docs.append("\n");
           if (style == "mkdocs") {
-            docs.append(":material-location-enter::material-location-exit: ");
+            docs.append(":material-location-enter::material-location-exit: `");
+            docs.append(tokenizer.consume(WORD).view());
+            docs.append("`\n:   ");
+          } else {
+            docs.append("\n  - `");
+            docs.append(tokenizer.consume(WORD).view());
+            docs.append("`\n\n    ");
           }
-          docs.append("`");
-          docs.append(tokenizer.consume(WORD).view());
-          docs.append("`\n:   ");
         } else if (command == "tparam") {
           docs.append("\n");
           if (style == "mkdocs") {
-            docs.append(":material-code-tags: ");
+            docs.append(":material-code-tags: `");
+            docs.append(tokenizer.consume(WORD).view());
+            docs.append("`\n:   ");
+          } else {
+            docs.append("\n  - `");
+            docs.append(tokenizer.consume(WORD).view());
+            docs.append("`\n\n    ");
           }
-          docs.append("`");
-          docs.append(tokenizer.consume(WORD).view());
-          docs.append("`\n:   ");
         } else if (command == "p") {
           docs.append("`");
           docs.append(tokenizer.consume(WORD).view());
@@ -69,33 +80,43 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
         } else if (command == "return") {
           docs.append("\n");
           if (style == "mkdocs") {
-            docs.append(":material-keyboard-return: ");
+            docs.append(":material-keyboard-return: **Return**\n:   ");
+          } else {
+            docs.append("\n  - **Return**\n");
+            docs.append("\n\n    ");
           }
-          docs.append("**Return**\n:   ");
         } else if (command == "pre") {
           docs.append("\n");
           if (style == "mkdocs") {
-            docs.append(":material-check-circle-outline: ");
+            docs.append(":material-check-circle-outline: **Pre-condition**\n:   ");
+          } else {
+            docs.append("\n  - **Pre-condition**\n");
+            docs.append("\n\n    ");
           }
-          docs.append("**Pre-condition**\n:   ");
         } else if (command == "post") {
           docs.append("\n");
           if (style == "mkdocs") {
-            docs.append(":material-check-circle-outline: ");
+            docs.append(":material-check-circle-outline: **Post-condition**\n:   ");
+          } else {
+            docs.append("\n  - **Post-condition**\n");
+            docs.append("\n\n    ");
           }
-          docs.append("**Post-condition**\n:   ");
         } else if (command == "throw") {
           docs.append("\n");
           if (style == "mkdocs") {
-            docs.append(":material-alert-circle-outline: ");
+            docs.append(":material-alert-circle-outline: **Throw**\n:   ");
+          } else {
+            docs.append("\n  - **Throw**\n");
+            docs.append("\n\n    ");
           }
-          docs.append("**Throw**\n:   ");
         } else if (command == "see") {
           docs.append("\n");
           if (style == "mkdocs") {
-            docs.append(":material-eye-outline: ");
+            docs.append(":material-eye-outline: **See**\n:   ");
+          } else {
+            docs.append("\n  - **See**\n");
+            docs.append("\n\n    ");
           }
-          docs.append("**See**\n:   ");
         } else if (command == "anchor") {
           docs.append("<a name=\"");
           docs.append(tokenizer.consume(WORD).view());
