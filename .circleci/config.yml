@@ -131,7 +131,7 @@ jobs:
             cd build
             cmake .. -DCMAKE_INSTALL_PREFIX=c:\ProgramData\chocolatey -DCMAKE_POLICY_VERSION_MINIMUM="3.10"
             cmake --build . --config Debug --parallel
-            sudo cmake --install . --config Debug
+            cmake --install . --config Debug
       - run:
           name: Build
           command: |
@@ -141,7 +141,7 @@ jobs:
             # since we're building with MSBuild, tell it to propagate errors up
             cmake --build . --config Debug --parallel -- /p:ContinueOnError=false /p:StopOnFirstFailure=true
             if ($LASTEXITCODE -ne 0) { throw "Build failed!" }
-            sudo cmake --install . --config Debug
+            cmake --install . --config Debug
             if ($LASTEXITCODE -ne 0) { throw "Installation failed!" }
       - test
 
