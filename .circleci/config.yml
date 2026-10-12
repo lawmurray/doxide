@@ -47,7 +47,7 @@ jobs:
       - checkout
       - run:
           name: Checkout submodules
-          command: git submodule update --init
+          command: git submodule update --init --depth 1
       - run:
           name: Install dependencies
           command: |
@@ -76,7 +76,7 @@ jobs:
       - checkout
       - run:
           name: Checkout submodules
-          command: git submodule update --init
+          command: git submodule update --init --depth 1
       - run:
           name: Install dependencies
           command: |
@@ -112,7 +112,7 @@ jobs:
             Add-Content -Path $Profile.CurrentUserAllHosts -Value '$PSNativeCommandUseErrorActionPreference = $true'
       - run:
           name: Checkout submodules
-          command: git submodule update --init
+          command: git submodule update --init --depth 1
       - run:
           name: Install dependencies
           command: |

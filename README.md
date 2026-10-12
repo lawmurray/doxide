@@ -58,9 +58,10 @@ There are further dependencies that do not need to be installed separately. They
 
 To install from source, clone the Doxide repo with:
 ```
-git clone https://github.com/lawmurray/doxide --recurse-submodules
+git clone https://github.com/lawmurray/doxide
+git submodule update --init --depth 1
 ```
-The `--recurse-submodules` is necessary to bring in some dependencies that are not universally available in package managers.
+The second line is necessary to bring in some dependencies that are not universally available in package managers. It can be skipped if you acquire these by another means.
 
 Build and install with:
 ```
