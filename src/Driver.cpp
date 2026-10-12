@@ -25,7 +25,7 @@
 static const char* init_doxide_yaml =
 R""""(title:
 description:
-style: mkdocs
+style:
 files:
   - "*.hpp"
   - "**/*.hpp"
