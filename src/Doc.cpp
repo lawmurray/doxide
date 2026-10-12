@@ -57,9 +57,9 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
           docs.append("`\n:   ");
           indent = 4;
         } else if (command == "tparam") {
-          docs.append("\n:");
+          docs.append("\n");
           if (style == "mkdocs") {
-            docs.append("material-code-tags: ");
+            docs.append(":material-code-tags: ");
           }
           docs.append("`");
           docs.append(tokenizer.consume(WORD).view());
