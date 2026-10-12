@@ -19,5 +19,7 @@ std::string gulp(const std::filesystem::path& src);
 
 /**
  * Convert a string to lowercase with uppercase first character.
+ *
+ * @ingroup developer
  */
 std::string capitalize(const std::string_view s);
