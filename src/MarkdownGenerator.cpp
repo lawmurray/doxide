@@ -168,18 +168,10 @@ void MarkdownGenerator::clean() {
 void MarkdownGenerator::generate(const std::filesystem::path& output,
     const Entity& entity, const bool cov) {
   std::string name = sanitize(entity.name);  // entity name, empty for root
-  std::string dirname;   // directory name for this entity
-  std::string filename;  // file name for this entity
-  if (entity.type == EntityType::ROOT) {
-    dirname = "";
-    filename = "index";
-  } else {
-    dirname = name;
-    filename = "index";
-  }
+  std::string dirname = entity.type == EntityType::ROOT ? "" : name;
 
   std::filesystem::create_directories(output / dirname);
-  std::filesystem::path file = output / dirname / (filename + ".md");
+  std::filesystem::path file = output / dirname / "index.md";
   if (can_write(file)) {
     files.insert(file);
     std::ofstream out(file);
@@ -511,19 +503,9 @@ void MarkdownGenerator::coverage(const std::filesystem::path& output,
     const Entity& entity) {
   std::string name = sanitize(entity.type == EntityType::ROOT ?
       "coverage" : entity.name);  // entity name, "coverage"" for root
-  std::string dirname;  // directory name for this entity
-  std::string filename;  // file name for this entity
-  if (entity.type == EntityType::FILE) {
-    /* as for types in generate(), working around some mkdocs behavior */
-    dirname = "";
-    filename = name;
-  } else {
-    dirname = name;
-    filename = "index";
-  }
 
-  std::filesystem::create_directories(output / dirname);
-  std::filesystem::path file = output / dirname / (filename + ".md");
+  std::filesystem::create_directories(output / name);
+  std::filesystem::path file = output / name / "index.md";
   if (can_write(file)) {
     files.insert(file);
     std::ofstream out(file);
