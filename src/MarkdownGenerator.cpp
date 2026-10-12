@@ -879,7 +879,11 @@ std::string MarkdownGenerator::line(const std::string& str) {
 
 std::string MarkdownGenerator::indent(const std::string& str) {
   static const std::regex start("\\n", REGEX_FLAGS);
-  return "    " + std::regex_replace(str, start, "\n    ");
+  if (style == "mkdocs") {
+    return "    " + std::regex_replace(str, start, "\n    ");
+  } else {
+    return "> " + std::regex_replace(str, start, "\n> ");
+  }
 }
 
 std::string MarkdownGenerator::stringify(const std::string& str) {

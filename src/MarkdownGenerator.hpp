@@ -136,9 +136,9 @@ private:
   static std::string line(const std::string& str);
 
   /**
-   * Indent lines.
+   * Indent lines for current Markdown style.
    */
-  static std::string indent(const std::string& str);
+  std::string indent(const std::string& str);
 
   /**
    * Sanitize for a string, escaping double quotes and backslashes.
