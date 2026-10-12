@@ -183,7 +183,7 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     out << "# " << title(entity) << std::endl;
     out << std::endl;
     if (entity.type == EntityType::TYPE) {
-      out << "**" << htmlize(line(entity.decl)) << "**" << std::endl;
+      out << "**`" << line(entity.decl) << "`**" << std::endl;
       out << std::endl;
     }
     out << entity.docs << std::endl;
@@ -357,15 +357,15 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
     if (enums.size() > 0) {
       for (auto& child : enums) {
         if (style == "mkdocs") {
-          out << "**" << child->decl << "**" << std::endl;
+          out << "`" << child->decl << "`" << std::endl;
           out << ":   " << child->docs << std::endl;
           out << std::endl;
         } else if (style == "pandoc") {
-          out << "**" << child->decl << "**" << std::endl;
+          out << "`" << child->decl << "`" << std::endl;
           out << ":   " << child->docs << std::endl;
           out << std::endl;
         } else {
-          out << "  - **" << child->decl << "**" << std::endl;
+          out << "  - `" << child->decl << "`" << std::endl;
           out << "    " << child->docs << std::endl;
           out << std::endl;
         }
@@ -386,9 +386,9 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << "!!! typedef \"" << htmlize(line(child->decl)) << '"' << std::endl;
         } else if (style == "pandoc") {
           out << "::: typedef" << std::endl;
-          out << "**" << htmlize(line(child->decl)) << "**" << std::endl;
+          out << "**`" << line(child->decl) << "`**" << std::endl;
         } else {
-          out << "> **" << htmlize(line(child->decl)) << "**" << std::endl;
+          out << "> **`" << line(child->decl) << "`**" << std::endl;
         }
         out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
@@ -411,9 +411,9 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << "!!! concept \"" << htmlize(line(child->decl)) << '"' << std::endl;
         } else if (style == "pandoc") {
           out << "::: concept" << std::endl;
-          out << "**" << htmlize(line(child->decl)) << "**" << std::endl;
+          out << "**`" << line(child->decl) << "`**" << std::endl;
         } else {
-          out << "> **" << htmlize(line(child->decl)) << "**" << std::endl;
+          out << "> **`" << line(child->decl) << "`**" << std::endl;
         }
         out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
@@ -436,9 +436,9 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << "!!! macro \"" << htmlize(line(child->decl)) << '"' << std::endl;
         } else if (style == "pandoc") {
           out << "::: macro" << std::endl;
-          out << "**" << htmlize(line(child->decl)) << "**" << std::endl;
+          out << "**`" << line(child->decl) << "`**" << std::endl;
         } else {
-          out << "> **" << htmlize(line(child->decl)) << "**" << std::endl;
+          out << "> **`" << line(child->decl) << "`**" << std::endl;
         }
         out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
@@ -461,9 +461,9 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << "!!! variable \"" << htmlize(line(child->decl)) << '"' << std::endl;
         } else if (style == "pandoc") {
           out << "::: variable" << std::endl;
-          out << "**" << htmlize(line(child->decl)) << "**" << std::endl;
+          out << "**`" << line(child->decl) << "`**" << std::endl;
         } else {
-          out << "> **" << htmlize(line(child->decl)) << "**" << std::endl;
+          out << "> **`" << line(child->decl) << "`**" << std::endl;
         }
         out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
@@ -490,9 +490,9 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
         } else if (style == "pandoc") {
           out << "::: function" << std::endl;
-          out << "**" << htmlize(line(child->decl)) << "**" << std::endl;
+          out << "**`" << line(child->decl) << "`**" << std::endl;
         } else {
-          out << "> **" << htmlize(line(child->decl)) << "**" << std::endl;
+          out << "> **`" << line(child->decl) << "`**" << std::endl;
         }
         out << indent() << std::endl;
         out << indent(child->docs) << std::endl;
@@ -519,9 +519,9 @@ void MarkdownGenerator::generate(const std::filesystem::path& output,
           out << "!!! function \"" << htmlize(line(child->decl)) << '"' << std::endl;
         } else if (style == "pandoc") {
           out << "::: function" << std::endl;
-          out << "**" << htmlize(line(child->decl)) << "**" << std::endl;
+          out << "**`" << line(child->decl) << "`**" << std::endl;
         } else {
-          out << "> **" << htmlize(line(child->decl)) << "**" << std::endl;
+          out << "> **`" << line(child->decl) << "`**" << std::endl;
         }
         out << indent() << std::endl;
         out << indent(child->docs) << std::endl;

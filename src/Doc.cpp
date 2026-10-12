@@ -44,9 +44,9 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n:   ");
           } else {
-            docs.append("  - `");
+            docs.append("  - **`");
             docs.append(tokenizer.consume(WORD).view());
-            docs.append("`\n\n    ");
+            docs.append("`**\n\n    ");
           }
         } else if (command == "param[out]") {
           docs.append("\n");
@@ -59,9 +59,9 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n:   ");
           } else {
-            docs.append("  - `");
+            docs.append("  - **`");
             docs.append(tokenizer.consume(WORD).view());
-            docs.append("`\n\n    ");
+            docs.append("`**\n\n    ");
           }
         } else if (command == "param[in,out]") {
           docs.append("\n");
@@ -74,9 +74,9 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n:   ");
           } else {
-            docs.append("  - `");
+            docs.append("  - **`");
             docs.append(tokenizer.consume(WORD).view());
-            docs.append("`\n\n    ");
+            docs.append("`**\n\n    ");
           }
         } else if (command == "tparam") {
           docs.append("\n");
@@ -85,18 +85,18 @@ Doc::Doc(const TextLineCursor &comment, const int init_indent,
             docs.append(tokenizer.consume(WORD).view());
             docs.append("`\n:   ");
           } else if (style == "pandoc") {
-            docs.append("`");
+            docs.append("**`");
             docs.append(tokenizer.consume(WORD).view());
-            docs.append("`\n:   ");
+            docs.append("`**\n:   ");
           } else {
-            docs.append("  - `");
+            docs.append("  - **`");
             docs.append(tokenizer.consume(WORD).view());
-            docs.append("`\n\n    ");
+            docs.append("`**\n\n    ");
           }
         } else if (command == "p") {
-          docs.append("`");
+          docs.append("**`");
           docs.append(tokenizer.consume(WORD).view());
-          docs.append("`");
+          docs.append("`**");
         } else if (command == "return" ||
             command == "returns" ||
             command == "result") {
