@@ -21,7 +21,6 @@
 #include "Sanitize.hpp"
 
 #include <format>
-#include <stdexcept>
 #include <optional>
 #include <regex>
 #include <vector>
@@ -30,7 +29,7 @@ struct MkdDocRender {
   sink_t& sink;
 
   template<entity U> void print_link_section(const FwdRef<U>& e, std::string_view section) {
-    sink.println(":{}: [{}]({}/)\n:   {}", section, get_title(e),
+    sink.println(":{}: [{}]({}/)\n:   {}\n", section, get_title(e),
       sanitize(e->get_name()), line(brief(e)));
   }
 

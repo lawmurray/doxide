@@ -103,13 +103,13 @@ std::stack<CppParser::StackEntry>::const_reference CppParser::pop_entities_downt
     )
   ) {
     // if the child is visible, make the parent visible too
-    const bool is_child_visible = entities_stack.top().ref.is_visible();
+    // const bool is_child_visible = entities_stack.top().ref.is_visible();
     // force visibility of parent only if child does not belong to a group
-    const bool child_has_no_group =  entities_stack.top().ref.get_group().empty();
+    // const bool child_has_no_group =  entities_stack.top().ref.get_group().empty();
     entities_stack.pop();
-    if (entities_stack.size() > 0 and child_has_no_group) {
-      entities_stack.top().ref.set_visible_child(is_child_visible);
-    }
+    // if (entities_stack.size() > 0 and child_has_no_group) {
+      // entities_stack.top().ref.set_visible_child(is_child_visible);
+    // }
   }
   if (entities_stack.size() == 0) {
     throw std::runtime_error("no more elements in stack");
@@ -119,12 +119,12 @@ std::stack<CppParser::StackEntry>::const_reference CppParser::pop_entities_downt
 
 void CppParser::pop_all() {
   while(entities_stack.size() > 0) {
-    const bool is_child_visible = entities_stack.top().ref.is_visible();
-    const bool child_has_no_group =  entities_stack.top().ref.get_group().empty();
+    // const bool is_child_visible = entities_stack.top().ref.is_visible();
+    // const bool child_has_no_group =  entities_stack.top().ref.get_group().empty();
     entities_stack.pop();
-    if (entities_stack.size() > 0 and child_has_no_group) {
-      entities_stack.top().ref.set_visible_child(is_child_visible);
-    }
+    // if (entities_stack.size() > 0 and child_has_no_group) {
+      // entities_stack.top().ref.set_visible_child(is_child_visible);
+    // }
   }
 }
 
@@ -446,13 +446,13 @@ std::pair<RefVariant, RefVariant> make_namespace(
   Doc& doc
 ) {
   auto& ms = match_state;
-  bool visible = not doc.docs.empty();
+  const bool final_visible = not doc.docs.empty();
   auto name_coords = std::make_pair(
     static_cast<std::size_t>(ms.name_field.start - ms.decl_field.start),
     ms.name_field.len());
   std::string_view decl_view = ps.file_content.view().substr(ms.decl_field.start, ms.decl_field.len());
   if (not ms.is_nested) {
-    RefVariant first = ps.inserter.add_namespace(parent, decl_view, name_coords, ps.file, ms.decl_field.start_line, ms.decl_field.end_line, std::move(doc), visible);
+    RefVariant first = ps.inserter.add_namespace(parent, decl_view, name_coords, ps.file, ms.decl_field.start_line, ms.decl_field.end_line, std::move(doc), final_visible);
     return std::make_pair(first, first);
   }
   std::optional<FwdRef<NamespaceEntity>> first_opt;
@@ -471,6 +471,7 @@ std::pair<RefVariant, RefVariant> make_namespace(
       empty_doc = Doc();
     }
     Doc& d = not is_last? empty_doc : doc;
+    const bool visible = is_last and final_visible;
     FwdRef<NamespaceEntity> entity = previous_opt ?
       ps.inserter.add_namespace(*previous_opt, decl, name, ps.file, ms.decl_field.start_line, ms.decl_field.end_line, std::move(d), visible) :
       ps.inserter.add_namespace(parent, decl, name, ps.file, ms.decl_field.start_line, ms.decl_field.end_line, std::move(d), visible);
