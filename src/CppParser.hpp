@@ -43,9 +43,12 @@ public:
    * @param defines Macro definitions.
    * @param[in,out] root Root entity.
    */
-  std::optional<FwdRef<FileEntity>> parse(EntityRegistry& registry,
+  std::optional<FwdRef<FileEntity>> parse(
+    EntityRegistry& registry,
     const std::filesystem::path& filename,
-    const std::unordered_map<std::string, std::string>& defines);
+    const std::unordered_map<std::string, std::string>& defines,
+    bool has_coverage
+  );
 
 private:
   /**
@@ -86,6 +89,15 @@ private:
   void pop_all();
 
   std::stack<StackEntry>::reference push(RefVariant ref, uint32_t start, uint32_t end);
+
+  FwdRef<FileEntity> parse_entities(
+    TSTree* tree,
+    std::string&& content,
+    EntityRegistry& registry,
+    const std::filesystem::path& filename
+  );
+
+  void parse_line_count(FwdRef<FileEntity>&, TSTree*) const;
 
   /**
    * C++ parser.

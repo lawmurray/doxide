@@ -97,6 +97,8 @@ private:
 
   void aggregate_stats();
 
+  bool has_coverage() const noexcept;
+
   std::optional<std::filesystem::path> get_coverage_path() const;
 
   std::optional<std::string_view> get_coverage_suffix() const;

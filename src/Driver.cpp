@@ -293,10 +293,10 @@ void Driver::watch() {
       }
 
       for (const auto& filename: changed_files) {
-        parser.parse(registry, filename, defines);
+        parser.parse(registry, filename, defines, has_coverage());
       }
       for (const auto& filename: added_files) {
-        parser.parse(registry, filename, defines);
+        parser.parse(registry, filename, defines, has_coverage());
       }
 
       count();
@@ -330,7 +330,7 @@ void Driver::parse() {
     if (fsinfo.contains(fp)) {
       throw std::runtime_error(std::format("file \"{}\" is already parsed", fp.native()));
     }
-    std::optional<FwdRef<FileEntity>> file = parser.parse(registry, fp, defines);
+    std::optional<FwdRef<FileEntity>> file = parser.parse(registry, fp, defines, has_coverage());
     if (not file) {
       continue;
     }
@@ -371,26 +371,29 @@ void Driver::aggregate_stats() {
   }
 }
 
+bool Driver::has_coverage() const noexcept {
+  return not coverage.empty();
+}
+
 std::optional<std::filesystem::path> Driver::get_coverage_path() const {
-  if (not coverage.empty()) {
+  if (has_coverage()) {
     return output / "coverage";
   }
   return {};
 }
 
 std::optional<std::string_view> Driver::get_coverage_suffix() const {
-  if (not coverage.empty()) {
+  if (has_coverage()) {
     return "coverage";
   }
   return {};
 }
 
 void Driver::run_generation() {
-  auto coverage_path = get_coverage_path();
   auto coverage_suffix = get_coverage_suffix();
   MarkdownGenerator generator(output, fscleaner, style);
   generator.generate(registry, coverage_suffix);
-  if (coverage_path) {
+  if (auto coverage_path = get_coverage_path(); coverage_path) {
     MdCoverageGenerator cov_gen(*coverage_path, fscleaner);
     cov_gen.generate(fsinfo);
   }

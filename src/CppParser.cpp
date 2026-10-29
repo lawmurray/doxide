@@ -484,35 +484,74 @@ std::pair<RefVariant, RefVariant> make_namespace(
   return std::make_pair(first_opt.value(), previous_opt.value());
 }
 
-using unique_cursor_ptr = std::unique_ptr<TSQueryCursor, decltype(&ts_query_cursor_delete)>;
+template<typename PtrT, auto Deleter> struct _uptr_holder:
+  std::unique_ptr<PtrT, decltype(Deleter)> {
+  _uptr_holder(PtrT* p):
+  std::unique_ptr<PtrT, decltype(Deleter)>(p, Deleter) {}
+
+  _uptr_holder<PtrT, Deleter>(_uptr_holder<PtrT, Deleter>&&) = default;
+
+  _uptr_holder<PtrT, Deleter>& operator=(_uptr_holder<PtrT, Deleter>&&) = default;
+
+  _uptr_holder<PtrT, Deleter>& operator=(PtrT* p) {
+    this->reset(p);
+    return *this;
+  }
+};
+
+using query_cursor_uptr = _uptr_holder<TSQueryCursor, ts_query_cursor_delete>;
+
+using parse_tree_uptr = _uptr_holder<TSTree, ts_tree_delete>;
+
+struct tree_cursor_uptr: private TSTreeCursor {
+  tree_cursor_uptr(TSTreeCursor&& c): TSTreeCursor{std::move(c)} {}
+
+  TSTreeCursor* operator&() { return this; }
+
+  ~tree_cursor_uptr() {
+    ts_tree_cursor_delete(this);
+  }
+};
 
 std::optional<FwdRef<FileEntity>> CppParser::parse(
   EntityRegistry& registry,
   const std::filesystem::path& filename,
-  const std::unordered_map<std::string, std::string>& defines
+  const std::unordered_map<std::string, std::string>& defines,
+  bool has_coverage
 ) {
   std::string _content = preprocess(filename, defines);
-  TSTree* tree = ts_parser_parse_string(parser, NULL, _content.data(), static_cast<uint32_t>(_content.size()));
-  if (!tree) {
+  parse_tree_uptr tree(ts_parser_parse_string(parser, NULL, _content.data(), static_cast<uint32_t>(_content.size())));
+  if (not tree) {
     /* something went very wrong */
     warn("cannot parse " << filename << ", skipping");
     return {};
   } else {
     /* report on any remaining parse errors */
-    report(filename, _content, tree);
+    report(filename, _content, tree.get());
   }
+  FwdRef<FileEntity> file = parse_entities(tree.get(), std::move(_content), registry, filename);
+  if (has_coverage) {
+    parse_line_count(file, tree.get());
+  }
+  return file;
+}
 
+FwdRef<FileEntity> CppParser::parse_entities(
+  TSTree* tree,
+  std::string&& content,
+  EntityRegistry& registry,
+  const std::filesystem::path& filename
+) {
   TSNode node = ts_tree_root_node(tree);
   FwdRef<FileEntity> file_ref = registry.add_file(filename,
-    std::move(_content), ts_node_end_point(node).row);
+    std::move(content), ts_node_end_point(node).row);
   FwdRef<RootEntity> root_ref = registry.get_root_ref();
   EntityRegistry::EntityFileInserter inserter = registry.get_inserter(file_ref);
 
   push(root_ref, 0, ts_node_end_byte(node));
 
   const TextLineCursor file_content(file_ref->get_content());
-
-  unique_cursor_ptr cursor(ts_query_cursor_new(), &ts_query_cursor_delete);
+  query_cursor_uptr cursor(ts_query_cursor_new());
   ts_query_cursor_exec(cursor.get(), query, node);
   TSQueryMatch match;
   EntityState match_state;
@@ -643,12 +682,18 @@ std::optional<FwdRef<FileEntity>> CppParser::parse(
   // pop remaining entries to apply the child's visibility and empty the stack
   pop_all();
 
+  return file_ref;
+}
+
+void CppParser::parse_line_count(FwdRef<FileEntity>& file, TSTree* tree) const {
   // sorted map of END, START, for optimized lookup of lower_bound (result >= query)
   std::map<uint32_t,uint32_t> excluded;
   bool constexpr_context = false;
-  cursor = unique_cursor_ptr(ts_query_cursor_new(), &ts_query_cursor_delete);
-  node = ts_tree_root_node(tree);
+  query_cursor_uptr cursor(ts_query_cursor_new());
+  TSNode node = ts_tree_root_node(tree);
   ts_query_cursor_exec(cursor.get(), query_exclude, node);
+  TSQueryMatch match;
+  std::string_view file_content = file->get_content();
   while (ts_query_cursor_next_match(cursor.get(), &match)) {
     for (uint16_t i = 0; i < match.capture_count; ++i) {
       node = match.captures[i].node;
@@ -681,10 +726,10 @@ std::optional<FwdRef<FileEntity>> CppParser::parse(
     }
   }
 
-  cursor = unique_cursor_ptr(ts_query_cursor_new(), &ts_query_cursor_delete);
+  cursor = query_cursor_uptr(ts_query_cursor_new());
   node = ts_tree_root_node(tree);
   ts_query_cursor_exec(cursor.get(), query_include, node);
-  auto& line_counts = file_ref->get_line_counts();
+  auto& line_counts = file->get_line_counts();
   while (ts_query_cursor_next_match(cursor.get(), &match)) {
     for (uint16_t i = 0; i < match.capture_count; ++i) {
       node = match.captures[i].node;
@@ -703,7 +748,7 @@ std::optional<FwdRef<FileEntity>> CppParser::parse(
             for (uint32_t line = start_line; line <= end_line; ++line) {
               if (line_counts[line] < 0) {
                 line_counts[line] = 0;
-                file_ref->get_included_lines()++;
+                file->get_included_lines()++;
               }
             }
           }
@@ -712,17 +757,16 @@ std::optional<FwdRef<FileEntity>> CppParser::parse(
       }
     }
   }
-  return file_ref;
 }
 
 std::string CppParser::preprocess(const std::filesystem::path& filename,
     const std::unordered_map<std::string,std::string>& defines) {
   std::string in = gulp(filename);
-  TSTree* tree = ts_parser_parse_string(parser, NULL, in.data(),
-      uint32_t(in.size()));
-  TSNode root = ts_tree_root_node(tree);
+  parse_tree_uptr tree(ts_parser_parse_string(parser, NULL, in.data(),
+      uint32_t(in.size())));
+  TSNode root = ts_tree_root_node(tree.get());
   TSNode node = root;
-  TSTreeCursor cursor = ts_tree_cursor_new(root);
+  tree_cursor_uptr cursor{ts_tree_cursor_new(root)};
   do {
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = ts_node_end_byte(node);
@@ -739,13 +783,14 @@ std::string CppParser::preprocess(const std::filesystem::path& filename,
 
       /* update tree */
       TSInputEdit edit{k, old_size, new_size, from, root_to, root_to};
-      ts_tree_edit(tree, &edit);
+      ts_tree_edit(tree.get(), &edit);
       ts_parser_reset(parser);
-      TSTree* old_tree = tree;
-      tree = ts_parser_parse_string(parser, old_tree, in.data(),
-          uint32_t(in.size()));
-      ts_tree_delete(old_tree);
-      root = ts_tree_root_node(tree);
+      {
+        parse_tree_uptr old_tree(std::move(tree));
+        tree = ts_parser_parse_string(parser, old_tree.get(), in.data(),
+            uint32_t(in.size()));
+      }
+      root = ts_tree_root_node(tree.get());
 
       /* restore cursor to same byte position as edit */
       ts_tree_cursor_reset(&cursor, root);
@@ -774,8 +819,6 @@ std::string CppParser::preprocess(const std::filesystem::path& filename,
     node = ts_tree_cursor_current_node(&cursor);
   } while (!ts_node_eq(node, root));
 
-  ts_tree_cursor_delete(&cursor);
-  ts_tree_delete(tree);
   ts_parser_reset(parser);
   return in;
 }
@@ -784,7 +827,7 @@ void CppParser::report(const std::filesystem::path& filename,
     const std::string_view in, TSTree* tree) {
   TSNode root = ts_tree_root_node(tree);
   TSNode node = root;
-  TSTreeCursor cursor = ts_tree_cursor_new(root);
+  tree_cursor_uptr cursor = ts_tree_cursor_new(root);
   do {
     uint32_t k = ts_node_start_byte(node);
     uint32_t l = ts_node_end_byte(node);
@@ -809,5 +852,4 @@ void CppParser::report(const std::filesystem::path& filename,
     }
     node = ts_tree_cursor_current_node(&cursor);
   } while (!ts_node_eq(node, root));
-  ts_tree_cursor_delete(&cursor);
 }
