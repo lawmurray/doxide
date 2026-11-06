@@ -11,17 +11,20 @@ public:
   _sink_t(stream_t& s): _it(s) {}
 
   template<class... Args> iter_t print(std::format_string<Args...> fmt, Args&&... args ) {
-    return std::format_to(_it, fmt, std::forward<Args>(args)...);
+    _it = std::format_to(_it, fmt, std::forward<Args>(args)...);
+    return _it;
   }
 
   template<class... Args> iter_t println(std::format_string<Args...> fmt, Args&&... args ) {
     iter_t it = this->print(fmt, std::forward<Args>(args)...);
-    it = '\n';
+    *it = '\n';
+    ++_it;
     return it;
   }
 
   inline iter_t println() {
-    _it = '\n';
+    *_it = '\n';
+    ++_it;
     return _it;
   }
 

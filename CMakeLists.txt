@@ -127,8 +127,6 @@ configure_file(
 add_executable(doxide
   src/doxide.cpp
   src/CppParser.cpp
-  src/DocToken.cpp
-  src/DocTokenizer.cpp
   src/Driver.cpp
   src/DriverConfigParser.cpp
   src/FileSystemDeleter.cpp
@@ -142,6 +140,8 @@ add_executable(doxide
   src/Utils.cpp
   src/YAMLNode.cpp
   src/YAMLParser.cpp
+  src/doc_parser/DocToken.cpp
+  src/doc_parser/DocTokenizer.cpp
   src/doc_parser/StyleParsers.cpp
   src/generation/DocRenderers.cpp
   src/generation/MarkdownGenerator.cpp

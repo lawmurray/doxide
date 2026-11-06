@@ -4,8 +4,9 @@
 #include "entities/FwdRef.hpp"
 #include "entities/RefVariant.hpp"
 
-#include <cstdint>
 #include <tree_sitter/api.h>
+
+#include <cstdint>
 #include <filesystem>
 #include <memory>
 #include <optional>
@@ -17,6 +18,9 @@
 class DocParser;
 class EntityRegistry;
 enum class StyleOption;
+struct ParserState;
+struct EntityFieldsMatch;
+struct CommentMatch;
 
 /**
  * C++ source parser.
@@ -28,7 +32,7 @@ public:
   /**
    * Constructor.
    */
-  CppParser(StyleOption style);
+  CppParser(EntityRegistry& registry, StyleOption style);
 
   /**
    * Destructor.
@@ -44,7 +48,6 @@ public:
    * @param[in,out] root Root entity.
    */
   std::optional<FwdRef<FileEntity>> parse(
-    EntityRegistry& registry,
     const std::filesystem::path& filename,
     const std::unordered_map<std::string, std::string>& defines,
     bool has_coverage
@@ -78,6 +81,7 @@ private:
     RefVariant ref;
     uint32_t start;
     uint32_t end;
+    bool child_nogroup;
   };
 
   template<entity T> std::stack<StackEntry>::reference emplace_entity(FwdRef<T> ref, uint32_t start, uint32_t end) {
@@ -88,16 +92,40 @@ private:
 
   void pop_all();
 
-  std::stack<StackEntry>::reference push(RefVariant ref, uint32_t start, uint32_t end);
+  std::stack<StackEntry>::reference push(RefVariant ref, uint32_t start, uint32_t end, bool child_nogroup);
 
-  FwdRef<FileEntity> parse_entities(
-    TSTree* tree,
-    std::string&& content,
-    EntityRegistry& registry,
-    const std::filesystem::path& filename
+  void parse_entities(
+    const FwdRef<FileEntity>& file_ref,
+    TSNode& root_node
   );
 
   void parse_line_count(FwdRef<FileEntity>&, TSTree*) const;
+
+  void register_entity(ParserState& parser_state, const EntityFieldsMatch& entity_match, Doc&& docs);
+
+  void flush_entity(ParserState&, EntityFieldsMatch&);
+
+  void flush_entity_with_comment(ParserState&, EntityFieldsMatch&, CommentMatch&, const TextLineCursor&, bool);
+
+RefVariant make_nested_namespace(
+    const EntityFieldsMatch &match_state,
+    const RefVariant& parent,
+    ParserState& ps,
+    Doc&& doc
+  );
+
+FwdRef<NamespaceEntity> make_single_namespace(
+    const EntityFieldsMatch &match_state,
+    const RefVariant& parent,
+    ParserState& ps,
+    Doc&& doc
+  );
+
+  void check_group(Doc& docs, const ParserState& ps) const;
+
+  EntityRegistry& registry;
+
+  std::unique_ptr<DocParser> doc_parser;
 
   /**
    * C++ parser.
@@ -119,8 +147,5 @@ private:
    */
   TSQuery* query_include;
 
-  std::unique_ptr<DocParser> doc_parser;
-
   std::stack<StackEntry> entities_stack;
-
 };

@@ -53,8 +53,8 @@ struct MkDocsStyle {
 
   void see() { sink.print(":material-eye-outline: **See**\n:   "); }
 
-  void emp(std::string_view command) {
-    sink.print("\n!!! {}\n", command);
+  void command(std::string_view command) {
+    sink.print("\n!!! {}", command);
   }
 
   void attention() { sink.print("\n!!! warning \"Attention\"\n"); }
@@ -101,7 +101,7 @@ struct PandocStyle {
 
   void see() { sink.print("See\n:   "); }
 
-  void emp(std::string_view command) {
+  void command(std::string_view command) {
     sink.print("\n::: {}\n", command);
   }
 
@@ -146,7 +146,7 @@ struct PlainStyle {
 
   void see() { sink.print("\n  - **See**\n\n\n    "); }
 
-  void emp(std::string_view command) {
+  void command(std::string_view command) {
     sink.print("> **{}**\n> ", UpperStr{command});
   }
 
@@ -173,8 +173,7 @@ public:
     int indent = 0;
     bool hide = false;
     DocTokenizer tokenizer(comment);
-    DocToken token = tokenizer.next();
-    DocToken open = token;
+    DocToken open = tokenizer.next();
     std::ostringstream docsbuf;
     ossink_t sink(docsbuf);
     Style style(sink);
@@ -185,7 +184,7 @@ public:
     }
 
     /* documentation comment, not just an ordinary comment */
-    token = tokenizer.next();
+    DocToken token = tokenizer.next();
     bool first = true;  // is this the first token in the comment?
     if (!token.type) {
       /* empty end-of-line comment, consider end of paragraph */
@@ -212,7 +211,7 @@ public:
           sink.println();
           style.tparam(tokenizer.consume(WORD).view());
         } else if (command == "p") {
-          style.tparam(tokenizer.consume(WORD).view());
+          sink.print("**`{}`**", tokenizer.consume(WORD).view());
         } else if (command == "return" ||
                     command == "returns" ||
                     command == "result") {
@@ -245,7 +244,7 @@ public:
             command == "bug" ||
             command == "example" ||
             command == "quote") {
-          style.emp(command);
+          style.command(command);
           indent += 4;
         } else if (command == "ingroup") {
           ingroup = tokenizer.consume(WORD).get();
@@ -322,7 +321,7 @@ public:
       } else if (token.type & PARA) {
         if (!first) {
           if (indent) {
-            style.add_indent(indent);
+            style.end_of_paragraph();
           }
           sink.print("\n\n");
           indent = std::max(indent - 4, 0);
@@ -349,14 +348,19 @@ public:
     std::string docs = std::move(docsbuf).str();
 
     /* trim whitespace from the end and add single new line */
-    while (docs.length() > 0 && std::isspace(docs.back())) {
-      docs.resize(docs.length() - 1);
+    unsigned to_trim = 0;
+    for(auto rit = docs.rbegin(); rit != docs.rend() and std::isspace(*rit); ++rit) {
+      to_trim++;
     }
-    sink.println();
+    if (to_trim > 0) {
+      docs[docs.size() - to_trim] = '\n';
+      docs.resize(docs.length() - to_trim + 1);
+    } else {
+      docs.append("\n");
+    }
 
     return Doc(std::move(docs), std::move(ingroup), hide);
   }
-
 };
 
 std::unique_ptr<DocParser> make_doc_parser(StyleOption style) {

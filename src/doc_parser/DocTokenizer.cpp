@@ -1,7 +1,7 @@
 #include "DocTokenizer.hpp"
 
-#include "Log.hpp"
-#include "Regex.hpp"
+#include <Log.hpp>
+#include <Regex.hpp>
 
 #include <regex>
 #include <utility>
@@ -21,7 +21,7 @@ static auto regexes = {
   std::make_pair(COMMAND, std::regex("[@\\\\](?:param(?:\\[(?:in|out|in,out)\\])?|\\w+|@|\\\\|/|f[\\$\\[\\]])", REGEX_FLAGS)),
 
   /* the end of a paragraph is two new lines  */
-  std::make_pair(PARA, std::regex("(?:[ \\t]*\\n(?:[ \\t]*\\*(?!/))?[ \\t]?){2}", REGEX_FLAGS)),
+  std::make_pair(PARA, std::regex("(?:[ \\t]*\\n(?:[ \\t]*(?:\\*|//[/|!]<?|/\\*[\\*|!]<?)(?!/))?[ \\t]?){2}", REGEX_FLAGS)),
 
   /* the end of a line is one new line, as long as there is not an end of
    * comment to come */

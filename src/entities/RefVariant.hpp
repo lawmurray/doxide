@@ -35,12 +35,8 @@ class RefVariant: public EntityVariant<FwdRef> {
 public:
   using EntityVariant<FwdRef>::EntityVariant;
 
-  constexpr std::string& get_docs() noexcept {
-    return std::visit([]<entity T>(FwdRef<T>& e) -> std::string& { return e->get_docs(); }, *this);
-  }
-
-  constexpr const std::string& get_docs() const noexcept {
-    return std::visit([]<entity T>(const FwdRef<T>& e) -> const std::string& { return e->get_docs(); }, *this);
+  constexpr const std::string_view get_docs() const noexcept {
+    return std::visit([]<entity T>(const FwdRef<T>& e) { return e->get_docs(); }, *this);
   }
 
   // free helper: get entity name from a RefVariant instance
@@ -66,12 +62,6 @@ public:
 
   constexpr bool is_visible() const noexcept {
     return std::visit([]<typename T>(const FwdRef<T>& e) { return e->is_visible(); }, *this);
-  }
-
-  constexpr bool set_visible_child(bool visible_child) noexcept {
-    return std::visit([visible_child]<typename T>(FwdRef<T>& e) {
-      return e->set_visible_child(visible_child);
-    }, *this);
   }
 
   constexpr std::string_view get_group() const noexcept {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TextLineCursor.hpp"
+#include <TextLineCursor.hpp>
 
 #include <cstddef>
 #include <stddef.h>

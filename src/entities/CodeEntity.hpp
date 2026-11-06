@@ -5,10 +5,11 @@
 #include "FileEntity.hpp"
 #include "Entities.hpp"
 #include "FwdRef.hpp"
+#include "TextCoordinates.hpp"
 
+#include <cstdint>
 #include <string>
 #include <string_view>
-#include <cstdint>
 #include <format>
 #include <utility>
 
@@ -24,8 +25,6 @@ class _DeclStorage {
     constexpr std::string_view get_decl() const noexcept { return decl; }
 };
 
-using TextCoordinates = std::pair<std::size_t, std::size_t>;
-
 class CodeEntity: public _DeclStorage, public Documentable {
 protected:
   std::string_view path;
@@ -35,19 +34,34 @@ protected:
 public:
   constexpr CodeEntity(std::string_view decl, const TextCoordinates& name_coords, const FwdRef<FileEntity>& file, uint32_t start_line, uint32_t end_line, const Doc& docs, bool visible):
     _DeclStorage{decl},
-    Documentable(this->get_decl().substr(name_coords.first, name_coords.second), docs, visible), path(file->get_path()), start_line(start_line), end_line(end_line)
+    Documentable(this->get_decl().substr(name_coords.offset(), name_coords.len()), docs, visible),
+    path{file->get_path()},
+    start_line{start_line},
+    end_line{end_line}
     {}
 
-  constexpr CodeEntity(std::string_view decl, const TextCoordinates& name_coords, const FwdRef<FileEntity>& file, uint32_t start_line, uint32_t end_line, Doc&& docs, bool visible): _DeclStorage{decl},
-  Documentable(this->get_decl().substr(name_coords.first, name_coords.second), std::move(docs), visible), path(file->get_path()), start_line(start_line), end_line(end_line)
+  constexpr CodeEntity(std::string_view decl, const TextCoordinates& name_coords, const FwdRef<FileEntity>& file, uint32_t start_line, uint32_t end_line, Doc&& docs, bool visible):
+  _DeclStorage{decl},
+  Documentable(this->get_decl().substr(name_coords.offset(), name_coords.len()), std::move(docs), visible),
+  path{file->get_path()},
+  start_line{start_line},
+  end_line{end_line}
   {}
 
-  constexpr CodeEntity(std::string&& decl, const TextCoordinates& name_coords, const FwdRef<FileEntity>& file, uint32_t start_line, uint32_t end_line, const Doc& docs, bool visible): _DeclStorage{std::move(decl)},
-  Documentable(this->get_decl().substr(name_coords.first, name_coords.second), docs, visible), path(file->get_path()), start_line(start_line), end_line(end_line)
+  constexpr CodeEntity(std::string&& decl, const TextCoordinates& name_coords, const FwdRef<FileEntity>& file, uint32_t start_line, uint32_t end_line, const Doc& docs, bool visible):
+  _DeclStorage{std::move(decl)},
+  Documentable(this->get_decl().substr(name_coords.offset(), name_coords.len()), docs, visible),
+  path{file->get_path()},
+  start_line{start_line},
+  end_line{end_line}
   {}
 
-  constexpr CodeEntity(std::string&& decl, const TextCoordinates& name_coords, const FwdRef<FileEntity>& file, uint32_t start_line, uint32_t end_line, Doc&& docs, bool visible): _DeclStorage{std::move(decl)},
-  Documentable(this->get_decl().substr(name_coords.first, name_coords.second), std::move(docs), visible), path(file->get_path()), start_line(start_line), end_line(end_line)
+  constexpr CodeEntity(std::string&& decl, const TextCoordinates& name_coords, const FwdRef<FileEntity>& file, uint32_t start_line, uint32_t end_line, Doc&& docs, bool visible):
+  _DeclStorage{std::move(decl)},
+  Documentable(this->get_decl().substr(name_coords.offset(), name_coords.len()), std::move(docs), visible),
+  path{file->get_path()},
+  start_line{start_line},
+  end_line{end_line}
   {}
 
 public:

@@ -23,7 +23,7 @@
 #include <format>
 #include <optional>
 #include <regex>
-#include <vector>
+#include <span>
 
 struct MkdDocRender {
   sink_t& sink;
@@ -49,25 +49,27 @@ struct MkdDocRender {
     sink.println("`{}`\n:   {}\n", e->get_decl(), e->get_docs());
   }
 
-  void print_indent_line() {
-    sink.println("    ");
-  }
-
   void print_indent_line(std::string_view s) {
     static const std::regex start("\\n", REGEX_FLAGS);
     sink.print("    ");
     std::regex_replace(sink.iter(), s.begin(), s.end(), start, "\n    ");
+    sink.println();
   }
 
+  static constexpr std::string_view NEWLINE_INDENT = "\n    ";
+  static constexpr std::string_view INDENT = NEWLINE_INDENT.substr(1);
   template<entity U> void print_detail(const FwdRef<U>& e, std::string_view name) {
-    sink.println("!!! {} \"{}\"\n", name, htmlize(line(e->get_decl())));
+    static const std::regex start("\\n", REGEX_FLAGS);
+    sink.print("!!! {1} \"{2}\"\n{0}\n{0}",
+      INDENT, name, htmlize(line(e->get_decl())));
+    std::string_view docs = e->get_docs();
+    std::regex_replace(sink.iter(), docs.begin(), docs.end(), start, NEWLINE_INDENT.cbegin());
+    sink.println("\n{}\n", INDENT);
   }
 
   void print_detail(const FwdRef<TypedefEntity>& e) {
     print_detail(e, "typedef");
   }
-
-  void print_paragraph_end() {}
 
   void print_detail(const FwdRef<ConceptEntity>& e) {
     print_detail(e, "concept");
@@ -114,24 +116,15 @@ struct PandocRender {
     sink.println("`{}`\n:   {}\n", e->get_decl(), e->get_docs());
   }
 
-  void print_indent_line() {
-    sink.println("> ");
-  }
-
-  void print_indent_line(std::string_view s) {
-    sink.print("{}", s);
-  }
-
+  static constexpr std::string_view INDENT = "> ";
+  static constexpr std::string_view PAR_DEL = ":::";
   template<entity U> void print_detail(const FwdRef<U>& e, std::string_view name) {
-    sink.println("::: {}\n**`{}`**\n", name, line(e->get_decl()));
+    sink.println("{0} {2}\n**`{3}`**\n{1}\n{1}{4}\n{1}\n{0}\n",
+      PAR_DEL, INDENT, name, line(e->get_decl()), e->get_docs());
   }
 
   void print_detail(const FwdRef<TypedefEntity>& e) {
     print_detail(e, "typedef");
-  }
-
-  void print_paragraph_end() {
-    sink.println(":::");
   }
 
   void print_detail(const FwdRef<ConceptEntity>& e) {
@@ -176,18 +169,14 @@ struct PlainRender {
     sink.println("  - `{}`\n    {}\n", e->get_decl(), e->get_docs());
   }
 
-  void print_indent_line() {
-    sink.println("> ");
-  }
-
-  void print_indent_line(std::string_view s) {
-    static const std::regex start("\\n", REGEX_FLAGS);
-    sink.print("> ");
-    std::regex_replace(sink.iter(), s.begin(), s.end(), start, "\n> ");
-  }
-
+  static constexpr std::string_view NEWLINE_INDENT = "\n> ";
+  static constexpr std::string_view INDENT = NEWLINE_INDENT.substr(1);
   template<entity U> void _print_detail(const FwdRef<U>& e) {
-    sink.println("> **`{}`**", line(e->get_decl()));
+    static const std::regex start("\\n", REGEX_FLAGS);
+    sink.println("{0}**`{1}`**\n{0}\n{0}", INDENT, line(e->get_decl()));
+    std::string_view docs = e->get_docs();
+    std::regex_replace(sink.iter(), docs.begin(), docs.end(), start, NEWLINE_INDENT.cbegin());
+    sink.println("\n{0}\n", INDENT);
   }
 
   void print_detail(const FwdRef<TypedefEntity>& e) {
@@ -229,15 +218,15 @@ public:
   }
 
   template<entity E>
-    void print_md_section_link(const std::vector<FwdRef<E>>& vec) {
+    void print_md_section_link(const std::span<const FwdRef<E>>& vec) {
     for (const auto&  e: vec) { printer.print(e); }
   }
 
-  void render_groups(const std::vector<FwdRef<GroupEntity>>& groups) override {
+  void render_groups(std::span<const FwdRef<GroupEntity>> groups) override {
     print_md_section_link(groups);
   }
 
-  void render_ns(const std::vector<FwdRef<NamespaceEntity>>& ns) override {
+  void render_ns(std::span<const FwdRef<NamespaceEntity>> ns) override {
     print_md_section_link(ns);
   }
 
@@ -245,63 +234,50 @@ public:
     printer.print_coverage(dir);
   }
 
-  void render_enums(const std::vector<FwdRef<EnumEntity>>& ns) override {
+  void render_enums(std::span<const FwdRef<EnumEntity>> ns) override {
     print_md_section_link(ns);
   }
 
-  template<entity E>
-    void print_html_details(const std::vector<FwdRef<E>>& vec, std::string_view caption) {
-    sink.println("## {} Details\n", caption);
-    for (const auto& e: vec) {
-      sink.println("### {}<a name=\"{}\"></a>\n", e->get_name(), sanitize(e->get_name()));
-      printer.print_detail(e);
-      printer.print_indent_line();
-      printer.print_indent_line(e->get_docs());
-      printer.print_paragraph_end();
-      sink.println();
-    }
-  }
-
-  void render_details(const std::vector<FwdRef<TypedefEntity>>& td) override {
-    print_html_details(td, "Type Alias");
-  }
-
-  void render_details(const std::vector<FwdRef<ConceptEntity>>& td) override {
-    print_html_details(td, "Concept");
-  }
-
-  void render_details(const std::vector<FwdRef<MacroEntity>>& td) override {
-    print_html_details(td, "Macro");
-  }
-
-  void render_details(const std::vector<FwdRef<VariableEntity>>& td) override {
-    print_html_details(td, "Variable");
-  }
-
-  template<entity E>
-    void print_html_details_first_only(const std::vector<FwdRef<E>>& vec, std::string_view caption) {
+  template<bool FIRST_ONLY, entity E>
+    void print_html_details(const std::span<const FwdRef<E>>& vec, std::string_view caption) {
     sink.println("## {} Details\n", caption);
     std::string_view prev = "";
     for (const auto& e: vec) {
       std::string_view name = e->get_name();
-      if (name != prev) {
-        sink.println("### {}<a name=\"{}\"></a>\n", e->get_name(), sanitize(e->get_name()));
+      if constexpr (FIRST_ONLY) {
+        if (name != prev) {
+          sink.println("### {}<a name=\"{}\"></a>\n", name, sanitize(name));
+        }
+      } else {
+        sink.println("### {}<a name=\"{}\"></a>\n", name, sanitize(name));
       }
       printer.print_detail(e);
-      printer.print_indent_line();
-      printer.print_indent_line(e->get_docs());
-      printer.print_paragraph_end();
-      sink.println("\n");
       prev = name;
     }
   }
 
-  void render_details(const std::vector<FwdRef<OperatorEntity>>& td) override {
-    print_html_details_first_only(td, "Operator");
+  void render_details(std::span<const FwdRef<TypedefEntity>> td) override {
+    print_html_details<false>(td, "Type Alias");
   }
 
-  void render_details(const std::vector<FwdRef<FunctionEntity>>& td) override {
-    print_html_details_first_only(td, "Function");
+  void render_details(std::span<const FwdRef<ConceptEntity>> td) override {
+    print_html_details<false>(td, "Concept");
+  }
+
+  void render_details(std::span<const FwdRef<MacroEntity>> td) override {
+    print_html_details<true>(td, "Macro");
+  }
+
+  void render_details(std::span<const FwdRef<VariableEntity>> td) override {
+    print_html_details<true>(td, "Variable");
+  }
+
+  void render_details(std::span<const FwdRef<OperatorEntity>> td) override {
+    print_html_details<true>(td, "Operator");
+  }
+
+  void render_details(std::span<const FwdRef<FunctionEntity>> td) override {
+    print_html_details<true>(td, "Function");
   }
 
 private:

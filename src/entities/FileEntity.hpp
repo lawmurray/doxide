@@ -43,7 +43,9 @@ public:
 
   constexpr std::string_view get_filename() const noexcept { return filename; }
 
-  constexpr const std::string& get_content() const noexcept { return content; }
+  // constexpr const std::string& get_content() const noexcept { return content; }
+
+  constexpr const std::string_view get_content() const noexcept { return content; }
 
   constexpr uint32_t get_num_lines() const noexcept { return num_lines; }
 

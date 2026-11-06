@@ -246,7 +246,7 @@ void Driver::watch() {
     std::optional<SourceWatcher>{SourceWatcher(*config_file)} : std::optional<SourceWatcher>{};
   SourceWatcher watcher = SourceWatcher(files_patterns);
 
-  CppParser parser(style);
+  CppParser parser(registry, style);
 
   for (;;){
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
@@ -293,10 +293,10 @@ void Driver::watch() {
       }
 
       for (const auto& filename: changed_files) {
-        parser.parse(registry, filename, defines, has_coverage());
+        parser.parse(filename, defines, has_coverage());
       }
       for (const auto& filename: added_files) {
-        parser.parse(registry, filename, defines, has_coverage());
+        parser.parse(filename, defines, has_coverage());
       }
 
       count();
@@ -324,13 +324,13 @@ void Driver::clean() {
 }
 
 void Driver::parse() {
-  CppParser parser(style);
+  CppParser parser(registry, style);
   for (const auto& filename: filenames) {
     auto fp = filename.lexically_normal();
     if (fsinfo.contains(fp)) {
       throw std::runtime_error(std::format("file \"{}\" is already parsed", fp.native()));
     }
-    std::optional<FwdRef<FileEntity>> file = parser.parse(registry, fp, defines, has_coverage());
+    std::optional<FwdRef<FileEntity>> file = parser.parse(fp, defines, has_coverage());
     if (not file) {
       continue;
     }

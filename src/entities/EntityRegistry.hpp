@@ -265,6 +265,9 @@ public:
     auto& destinations = cat.destinations.get_for<T>();
     auto& entities = code_entities.get_for<T>();
     for(const auto& e: destinations) {
+      if constexpr (std::same_as<T, NamespaceEntity>) {
+        namespace_map.erase(e->get_full_name());
+      }
       entities.erase(e);
     }
     destinations.clear();
@@ -304,6 +307,10 @@ public:
         // get source per child type: the same parent can thus appear as father
         // of children of multiple types
         cat.sources.get_for<ChildT>().insert(parent);
+        registry.code_edges.get_for<ChildT>()[parent].back_iter()->push_back(child);
+      }
+      if constexpr (std::same_as<ChildT, NamespaceEntity>) {
+        registry.namespace_map.try_emplace(child->get_full_name(), child);
       }
       cat.destinations.get_for<ChildT>().push_back(child);
     }
@@ -314,8 +321,10 @@ public:
         registry.code_entities.get_for<ChildT>().emplace_back(std::forward<decltype(args)>(args)...));
       std::visit([this, &result]<entity ParentT>(const FwdRef<ParentT>& p) {
         if constexpr (not container_of<ParentT, ChildT>) {
+          std::string child_name{result->get_name()};
           registry.code_entities.get_for<ChildT>().erase(result);
-          throw std::runtime_error(std::format("Cannot insert {} into {}", entity_name<ChildT>(), entity_name<ParentT>()));
+          throw std::runtime_error(std::format("Cannot insert {} \"{}\" into {} \"{}\"",
+            entity_name<ChildT>(), child_name, entity_name<ParentT>(), p->get_name()));
         } else {
           this->_add_to_parent(p, result);
         }
@@ -441,6 +450,15 @@ public:
   inline std::optional<FwdRef<GroupEntity>> get_group(std::string_view name) const {
     auto it = name_group_map.find(name);
     if (it != name_group_map.cend()) {
+      return {it->second};
+    } else {
+        return {};
+    }
+  }
+
+  inline std::optional<FwdRef<NamespaceEntity>> get_namespace(std::string_view name) const {
+    auto it = namespace_map.find(name);
+    if (it != namespace_map.cend()) {
       return {it->second};
     } else {
         return {};
@@ -583,6 +601,7 @@ public:
     };
 
     catalog.clear();
+    namespace_map.clear();
     type_dispatcher(code_edges, [](auto&& em) { em.clear(); });
     group_edges.clear();
     type_dispatcher(code_entities, [](auto&& em) { em.clear(); });
@@ -614,5 +633,7 @@ private:
   // map: source entity (FwdHashable) -> [destinations sequences]
   // the source entity can be **any** entity: root, group, ...
   entity_content<edges_map_t> code_edges;
+  std::unordered_map<std::string_view, FwdRef<NamespaceEntity>> namespace_map;
+
   std::unordered_map<std::string_view, file_catalog_t> catalog;
 };

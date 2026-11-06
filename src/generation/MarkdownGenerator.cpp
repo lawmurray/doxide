@@ -42,15 +42,21 @@ template<entity_range R> using entity_range_value_t = std::remove_cvref_t<declty
 template<entity_range R> static auto get_visible_view(R&& entities) {
   return entities | std::views::filter([](const auto& el) { return el->is_visible(); });
 }
-static auto name_getter = []<entity T>(const FwdRef<T>& e) {
-  return e->get_name();
-};
 
 template<typename R>
   requires (std::ranges::random_access_range<R> and entity_range<R>)
   static void sort_by_name(R&& entities) {
-  std::ranges::sort(entities, {}, name_getter);
-  return;
+  std::ranges::sort(entities, []<entity T>(const FwdRef<T>& e1, const FwdRef<T>& e2) {
+    std::string_view n1 = e1->get_name(), n2 = e2->get_name();
+    if (n1 != n2) {
+      return n1 < n2;
+    }
+    std::string_view p1 = e1->get_path(), p2 = e2->get_path();
+    if (p1 == p2) {
+      return e1->get_start_line() < e2->get_start_line();
+    }
+    return p1 < p2;
+  });
 }
 
 template <typename T>
@@ -120,7 +126,7 @@ template<entity T> void MarkdownGenerator::render_entity(
   sink.println("\n# {}\n", get_title(root));
 
   if constexpr (std::is_same_v<T, TypeEntity>) {
-    sink.println("**{}**\n", htmlize(line(root->get_decl())));
+    sink.println("**`{}`**\n", line(root->get_decl()));
   }
   sink.println("{}\n", root->get_docs());
 
@@ -140,7 +146,8 @@ template<entity T> void MarkdownGenerator::render_entity(
 
   if constexpr (std::same_as<T, RootEntity>) {
     if (coverage_directory) {
-      doc_renderer.print_coverage(*coverage_directory);    }
+      doc_renderer.print_coverage(*coverage_directory);
+    }
   }
 
   if constexpr (types_container<T>) {

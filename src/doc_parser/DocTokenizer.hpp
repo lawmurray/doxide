@@ -1,7 +1,8 @@
 #pragma once
 
 #include "DocToken.hpp"
-#include "TextLineCursor.hpp"
+
+#include <TextLineCursor.hpp>
 
 /**
  * Documentation comment tokenizer.

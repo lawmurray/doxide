@@ -21,17 +21,9 @@ protected:
 public:
   constexpr inline std::string_view get_name() const noexcept { return name; }
 
-  constexpr inline std::string& get_docs() noexcept { return doc.docs; }
-
-  constexpr inline const std::string& get_docs() const noexcept { return doc.docs; }
+  constexpr inline const std::string_view get_docs() const noexcept { return doc.docs; }
 
   constexpr bool is_visible() const noexcept { return visible; }
-
-  // if any of the children is visible, set this to visible
-  constexpr bool set_visible_child(bool visible_child) noexcept {
-    visible = visible or visible_child;
-    return visible;
-  }
 
   constexpr const TextLineCursor& get_ingroup() const noexcept { return doc.ingroup; }
 
