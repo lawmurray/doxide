@@ -3,8 +3,6 @@
 #include <Regex.hpp>
 #include <entities/FwdRef.hpp>
 #include <entities/Entities.hpp>
-#include <entities/Titled.hpp>
-
 
 #include <concepts>
 #include <regex>
@@ -12,6 +10,7 @@
 #include <string_view>
 
 class Documentable;
+class Titled;
 
 std::string sanitize(const std::string_view str);
 

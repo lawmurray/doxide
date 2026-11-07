@@ -4,6 +4,8 @@
 #include "Sink.hpp"
 #include "Utils.hpp"
 
+#include <string_view>
+
 constexpr std::string_view FRONT = R""""({{
   "format_version:": "2",
   "gcovr/format_version": "0.6",

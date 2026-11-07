@@ -1,14 +1,17 @@
 #pragma once
 
 #include <algorithm>
+#include <concepts>
 #include <coroutine>
 #include <cctype>
+#include <cstddef>
 #include <filesystem>
 #include <format>
 #include <optional>
 #include <stack>
 #include <string>
 #include <string_view>
+#include <type_traits>
 #include <utility>
 
 /**

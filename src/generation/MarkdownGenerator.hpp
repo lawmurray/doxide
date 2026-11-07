@@ -2,6 +2,7 @@
 
 #include <entities/Entities.hpp>
 
+#include "DocRenderer.hpp"
 #include "DocRenderers.hpp"
 #include "entities/FwdRef.hpp"
 
@@ -12,7 +13,6 @@
 #include <vector>
 
 class ConceptEntity;
-class DocRendererFactory;
 class EntityRegistry;
 class EnumEntity;
 class FileSystemDeleter;

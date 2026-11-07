@@ -11,6 +11,6 @@ std::string_view DocToken::view() const {
   return value.view();
 }
 
-TextLineCursor DocToken::substr(size_t pos) const {
+TextLineCursor DocToken::substr(std::size_t pos) const {
   return value.substr(pos);
 }

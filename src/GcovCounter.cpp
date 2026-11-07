@@ -1,12 +1,15 @@
 #include "GcovCounter.hpp"
 
+#include "FileSystemStatsInfo.hpp"
 #include "Log.hpp"
 #include "Regex.hpp"
+#include "entities/FileEntity.hpp"
+#include "entities/FwdRef.hpp"
 
-#include "FileSystemStatsInfo.hpp"
-
-#include <stddef.h>
+#include <algorithm>
+#include <cstddef>
 #include <fstream>
+#include <optional>
 #include <regex>
 #include <stdexcept>
 #include <string>

@@ -8,15 +8,14 @@
 #include "YAMLNode.hpp"
 #include "Log.hpp"
 #include "SourceWatcher.hpp"
+#include "StyleOption.hpp"
 #include "Utils.hpp"
 #include "entities/FileEntity.hpp"
+#include "entities/GroupEntity.hpp"
 #include "entities/FwdRef.hpp"
 #include "entities/LineStats.hpp"
 #include "generation/MarkdownGenerator.hpp"
 #include "generation/MdCoverageGenerator.hpp"
-
-
-#include <glob/glob.hpp>
 
 #include <algorithm>
 #include <cctype>
@@ -26,10 +25,10 @@
 #include <iostream>
 #include <optional>
 #include <regex>
+#include <stack>
 #include <stdexcept>
 #include <thread>
 #include <tuple>
-#include <utility>
 
 /**
  * Contents of initial `doxide.yaml` file.
@@ -426,7 +425,8 @@ void Driver::groups(const YAMLNode& groups_root) {
     std::string_view title = node.isValue("title") ? std::string_view{node.value("title")} : "";
     std::string_view desc = node.isValue("description") ? std::string_view{node.value("description")} : "";
     parent_t group = parent;
-    if (name.size() == 0 or std::all_of(name.begin(), name.end(), isspace)) {
+    if (name.size() == 0 or std::all_of(name.begin(), name.end(),
+      [](unsigned char c) {return std::isspace(c); })) {
       // ignore the group
       warn("a group is missing a name in the configuration file.");
     } else {

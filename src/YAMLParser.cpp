@@ -4,6 +4,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
 YAMLParser::YAMLParser() {
   yaml_parser_initialize(&parser);

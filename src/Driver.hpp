@@ -4,7 +4,6 @@
 #include "FileSystemDeleter.hpp"
 #include "FileSystemStatsInfo.hpp"
 #include "StyleOption.hpp"
-#include "YAMLNode.hpp"
 #include "entities/EntityRegistry.hpp"
 
 #include <filesystem>

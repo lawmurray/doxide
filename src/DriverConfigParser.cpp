@@ -23,7 +23,6 @@ void DriverConfigParser::parse_init_info(DriverInitInfo& info) const {
       }
     }
   };
-
   parse_value("style", info.style);
   /* validation */
   if (info.style != "mkdocs" && info.style != "pandoc" && info.style != "plain") {
@@ -36,7 +35,8 @@ void DriverConfigParser::parse_init_info(DriverInitInfo& info) const {
   parse_value("output", info.output);
 }
 
-std::unordered_map<std::string,std::string> DriverConfigParser::get_defines() const {
+std::unordered_map<std::string,std::string>
+  DriverConfigParser::get_defines() const {
   if (not root.has("defines")) {
     return {};
   }
@@ -54,7 +54,8 @@ std::unordered_map<std::string,std::string> DriverConfigParser::get_defines() co
   return defines;
 }
 
-std::pair<std::unordered_set<std::filesystem::path>, std::vector<std::string>> DriverConfigParser::get_filenames_and_patterns() const {
+std::pair<std::unordered_set<std::filesystem::path>, std::vector<std::string>>
+  DriverConfigParser::get_filenames_and_patterns() const {
   if (not root.isSequence("files")) {
     return std::pair<std::unordered_set<std::filesystem::path>, std::vector<std::string>>();
   }

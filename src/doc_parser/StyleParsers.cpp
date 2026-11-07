@@ -11,7 +11,6 @@
 
 #include <algorithm>
 #include <cctype>
-#include <format>
 #include <iterator>
 #include <sstream>
 #include <stdexcept>

@@ -1,11 +1,9 @@
 #pragma once
 
-#include <FileSystemStatsInfo.hpp>
-
 #include <filesystem>
 
 class FileSystemDeleter;
-class sink_t;
+class FileSystemStatsInfo;
 
 class MdCoverageGenerator {
 public:

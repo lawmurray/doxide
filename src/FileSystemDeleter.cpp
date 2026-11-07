@@ -5,7 +5,6 @@
 #include "Log.hpp"
 
 #include <stdexcept>
-
 #include <vector>
 
 void FileSystemDeleter::delete_all_files() {

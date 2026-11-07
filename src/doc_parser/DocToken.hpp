@@ -103,7 +103,7 @@ struct DocToken {
    *
    * @param pos Position of the first character.
    */
-  TextLineCursor substr(size_t pos = 0) const;
+  TextLineCursor substr(std::size_t pos = 0) const;
 
   /**
    * Token type.

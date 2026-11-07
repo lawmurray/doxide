@@ -1,29 +1,25 @@
 #include "DocRenderers.hpp"
 
+#include "Sanitize.hpp"
 #include <Regex.hpp>
 #include <Sink.hpp>
 #include "entities/ConceptEntity.hpp"
 #include <entities/Entities.hpp>
-#include <entities/EntityRegistry.hpp>
 #include "entities/EnumEntity.hpp"
-#include "entities/FunctionEntity.hpp"
+#include <entities/FunctionEntity.hpp>
 #include <entities/FwdRef.hpp>
-#include "entities/GroupEntity.hpp"
-#include "entities/MacroEntity.hpp"
+#include <entities/GroupEntity.hpp>
+#include <entities/MacroEntity.hpp>
 #include <entities/NamespaceEntity.hpp>
-#include "entities/OperatorEntity.hpp"
-#include <entities/RefVariant.hpp>
-#include "entities/TypedefEntity.hpp"
-#include <entities/TypeEntity.hpp>
-#include "entities/VariableEntity.hpp"
-#include "generation/DocRenderer.hpp"
+#include <entities/OperatorEntity.hpp>
+#include <entities/TypedefEntity.hpp>
+#include <entities/VariableEntity.hpp>
+#include <generation/DocRenderer.hpp>
 
-#include "Sanitize.hpp"
-
-#include <format>
 #include <optional>
 #include <regex>
 #include <span>
+#include <string_view>
 
 struct MkdDocRender {
   sink_t& sink;

@@ -7,11 +7,11 @@
 #include <entities/FileEntity.hpp>
 #include <entities/FwdRef.hpp>
 #include <entities/LineStats.hpp>
-#include <entities/RefVariant.hpp>
 
 #include "MdCommon.hpp"
 #include "Sanitize.hpp"
 
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <fstream>

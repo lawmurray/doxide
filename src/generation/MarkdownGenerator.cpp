@@ -25,6 +25,8 @@
 #include <type_traits>
 #include <utility>
 
+class RootEntity;
+
 // checks that R is a range whose double de-ref value is an entity
 template<typename R> concept entity_range = requires (R r) {
   requires std::ranges::range<R>; // it's a range

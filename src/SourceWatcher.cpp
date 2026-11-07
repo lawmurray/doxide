@@ -1,7 +1,6 @@
 #include "SourceWatcher.hpp"
 
 #include <glob/glob.hpp>
-#include <utility>
 
 SourceWatcher::SourceWatcher(const std::vector<std::string>& patterns): patterns{patterns}{
   for (auto pattern : patterns){

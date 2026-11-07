@@ -4,9 +4,12 @@
 #include "YAMLNode.hpp"
 #include "YAMLParser.hpp"
 #include "FileSystemStatsInfo.hpp"
+#include "entities/FileEntity.hpp"
+#include "entities/FwdRef.hpp"
 
-#include <stddef.h>
+#include <cstddef>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <string>
 #include <vector>

@@ -5,7 +5,6 @@
 #include "entities/FwdRef.hpp"
 #include "entities/LineStats.hpp"
 
-#include <cstddef>
 #include <filesystem>
 #include <format>
 #include <functional>

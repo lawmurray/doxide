@@ -1,7 +1,9 @@
 #pragma once
 
+#include "entities/Entities.hpp"
 #include "entities/FileEntity.hpp"
 #include "entities/FwdRef.hpp"
+#include "entities/NamespaceEntity.hpp"
 #include "entities/RefVariant.hpp"
 
 #include <tree_sitter/api.h>
@@ -15,12 +17,14 @@
 #include <string_view>
 #include <unordered_map>
 
-class DocParser;
-class EntityRegistry;
-enum class StyleOption;
-struct ParserState;
-struct EntityFieldsMatch;
 struct CommentMatch;
+struct Doc;
+class DocParser;
+struct EntityFieldsMatch;
+class EntityRegistry;
+struct ParserState;
+enum class StyleOption;
+class TextLineCursor;
 
 /**
  * C++ source parser.

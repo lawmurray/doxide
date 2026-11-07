@@ -1,5 +1,6 @@
 #include "FileSystemStatsInfo.hpp"
 
+#include <cstddef>
 #include <format>
 #include <stdexcept>
 

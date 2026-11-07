@@ -9,15 +9,14 @@
 #include "StyleOption.hpp"
 #include "Utils.hpp"
 #include <doc_parser/StyleParsers.hpp>
-#include <entities/CodeEntity.hpp>
 #include <entities/EntityRegistry.hpp>
 #include <entities/FileEntity.hpp>
 #include <entities/RefVariant.hpp>
+#include <entities/TextCoordinates.hpp>
 #include <generated/cpp_query_enums.hpp>
 
 #include <algorithm>
-#include <cctype>
-#include <cstring>
+#include <cstddef>
 #include <format>
 #include <iostream>
 #include <iterator>
@@ -27,13 +26,13 @@
 #include <regex>
 #include <stdexcept>
 #include <string.h>
+#include <tuple>
 #include <unordered_map>
 #include <utility>
+#include <variant>
 
 
-class NamespaceEntity;
 class RootEntity;
-class TypeEntity;
 class VariableEntity;
 
 /**
@@ -62,7 +61,7 @@ CppParser::CppParser(EntityRegistry& _reg, StyleOption style) :
       uint32_t(QUERY_CPP.length()), &error_offset, &error_type);
   if (error_type != TSQueryErrorNone) {
     std::string_view from = QUERY_CPP.substr(error_offset,
-        std::min(size_t(40), QUERY_CPP.length() - error_offset));
+        std::min(std::size_t(40), QUERY_CPP.length() - error_offset));
     error("invalid query starting '" << from << "'...");
   }
 
@@ -70,7 +69,7 @@ CppParser::CppParser(EntityRegistry& _reg, StyleOption style) :
       uint32_t(QUERY_CPP_EXCLUDE.length()), &error_offset, &error_type);
   if (error_type != TSQueryErrorNone) {
     std::string_view from = QUERY_CPP_EXCLUDE.substr(error_offset,
-        std::min(size_t(40), QUERY_CPP_EXCLUDE.length() - error_offset));
+        std::min(std::size_t(40), QUERY_CPP_EXCLUDE.length() - error_offset));
     error("invalid query starting '" << from << "'...");
   }
 
@@ -78,7 +77,7 @@ CppParser::CppParser(EntityRegistry& _reg, StyleOption style) :
       uint32_t(QUERY_CPP_INCLUDE.length()), &error_offset, &error_type);
   if (error_type != TSQueryErrorNone) {
     std::string_view from = QUERY_CPP_INCLUDE.substr(error_offset,
-        std::min(size_t(40), QUERY_CPP_INCLUDE.length() - error_offset));
+        std::min(std::size_t(40), QUERY_CPP_INCLUDE.length() - error_offset));
     error("invalid query starting '" << from << "'...");
   }
 }
@@ -801,8 +800,8 @@ void CppParser::report(const std::filesystem::path& filename,
           "', but will continue");
     }
     /* next node */
-    if (strcmp(ts_node_type(node), "preproc_def") != 0 &&
-        strcmp(ts_node_type(node), "preproc_function_def") != 0 &&
+    if (std::strcmp(ts_node_type(node), "preproc_def") != 0 &&
+        std::strcmp(ts_node_type(node), "preproc_function_def") != 0 &&
         ts_tree_cursor_goto_first_child(&cursor)) {
       // ^ do not recurse into preprocessor definitions
     } else if (ts_tree_cursor_goto_next_sibling(&cursor)) {
