@@ -17,7 +17,6 @@
 #include <stdexcept>
 #include <tuple>
 #include <type_traits>
-#include <utility>
 
 class FileSystemStatsInfo {
 public:
@@ -80,7 +79,7 @@ template<bool IS_CONST> struct _DirStackController {
     std::unordered_set<std::string_view>::const_iterator,
     std::unordered_set<std::string_view>::iterator>;
   using stack_value = std::tuple<std::string_view, _dirinfo_t&, iter_t>;
-  using yield_value = std::pair<std::string_view, _dirinfo_t&>;
+  using yield_value = std::tuple<std::string_view, _dirinfo_t&>;
 
   _fsinfo_t& fsinfo;
   std::string_view root_dir = FileSystemStatsInfo::DEF_ROOT_PATH;
@@ -94,8 +93,12 @@ template<bool IS_CONST> struct _DirStackController {
     return stack_value{root_dir, d, d.subdirs.begin()};
   }
 
-  yield_value make_yield(const stack_value& top) {
+  yield_value make_yield_pre(const stack_value& top) {
     return yield_value{std::get<0>(top), std::get<1>(top)};
+  }
+
+  yield_value make_yield_post(const stack_value& top) {
+    return make_yield_pre(top);
   }
 
   bool has_next(const stack_value& top) const {
@@ -113,8 +116,6 @@ template<bool IS_CONST> struct _DirStackController {
     _dirinfo_t& d = opt->get();
     return stack_value{next_path, d, d.subdirs.begin()};
   }
-
-  void before_pop(const stack_value&) {}
 
   void after_pop(const stack_value&) {}
 };

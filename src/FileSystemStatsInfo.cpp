@@ -75,11 +75,19 @@ void FileSystemStatsInfo::explore() const {
   std::cout << "DIRS\n";
   for(const auto& [k, v]: dir_info_map) {
     std::cout << "----- " << k << ":\n";
+    const auto& stats = lookup_dir(k)->get().stats;
+    std::cout << "    - covered_lines " << stats.covered_lines << std::endl;
+    std::cout << "    - included_lines " << stats.included_lines << std::endl;
     for(const auto& f: v.subdirs) {
       std::cout << "  dir: " << f << "\n";
+      const auto& stats = lookup_dir(f)->get().stats;
+      std::cout << "    - covered_lines " << stats.covered_lines << std::endl;
+      std::cout << "    - included_lines " << stats.included_lines << std::endl;
     }
     for(const auto& f: v.files) {
       std::cout << "  file: " << f->get_name() << "\n";
+      std::cout << "    - covered_lines " << f->get_covered_lines() << std::endl;
+      std::cout << "    - included_lines " << f->get_included_lines() << std::endl;
     }
     std::cout << "\n";
   }

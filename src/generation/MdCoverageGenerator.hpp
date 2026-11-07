@@ -3,7 +3,6 @@
 #include <FileSystemStatsInfo.hpp>
 
 #include <filesystem>
-#include <string_view>
 
 class FileSystemDeleter;
 class sink_t;
@@ -17,7 +16,7 @@ public:
     * @param style Markdown style.
     */
   MdCoverageGenerator(const std::filesystem::path& output, FileSystemDeleter& _fscleaner):
-    output(output),
+    output_root(output),
     fscleaner(_fscleaner)
     {}
 
@@ -31,27 +30,10 @@ public:
 
 private:
 
-  struct GenInfo {
-    const FileSystemStatsInfo& fsinfo;
-    sink_t& sink;
-    std::string_view dirpath;
-    const FileSystemStatsInfo::DirInfo& dirinfo;
-    std::string_view title;
-    bool is_not_root;
-  };
-
-  void render_dir_coverage(GenInfo& info);
-
-  void sunburst(GenInfo& info);
-
-  void coverage_data(GenInfo& info);
-
-  void coverage_foot(GenInfo& info);
-
   /**
    * Output directory.
    */
-  std::filesystem::path output;
+  std::filesystem::path output_root;
 
   FileSystemDeleter& fscleaner;
 };

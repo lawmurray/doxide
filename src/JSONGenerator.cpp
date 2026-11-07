@@ -2,7 +2,7 @@
 
 #include "FileSystemStatsInfo.hpp"
 #include "Sink.hpp"
-#include "generation/Dfs_traversal.hpp"
+#include "Utils.hpp"
 
 constexpr std::string_view FRONT = R""""({{
   "format_version:": "2",
@@ -40,7 +40,8 @@ void JSONGenerator::generate(const FileSystemStatsInfo& fsinfo) {
 
   bool first = true;
   ConstDirStackController controller{fsinfo};
-  for (const auto& [_, dirinfo]: traverse_dfs_preorder<ConstDirStackController, false>(controller)) {
+  for (const auto& [_, dirinfo]:
+    dag_dfs_traverse<DfsTraversalType::POST>(controller)) {
     if (dirinfo.files.empty()) {
       continue;
     }

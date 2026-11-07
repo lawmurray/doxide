@@ -12,7 +12,6 @@
 #include "entities/FileEntity.hpp"
 #include "entities/FwdRef.hpp"
 #include "entities/LineStats.hpp"
-#include "generation/Dfs_traversal.hpp"
 #include "generation/MarkdownGenerator.hpp"
 #include "generation/MdCoverageGenerator.hpp"
 
@@ -361,7 +360,8 @@ void Driver::count() {
 
 void Driver::aggregate_stats() {
   DirStackController controller{fsinfo};
-  for (auto& [path, dirinfo]: traverse_dfs_preorder<DirStackController, false>(controller)) {
+  for (auto& [path, dirinfo]:
+    dag_dfs_traverse<DfsTraversalType::POST>(controller)) {
     for(const FwdRef<FileEntity> fe: dirinfo.files) {
       dirinfo.stats += *fe;
     }
@@ -369,6 +369,7 @@ void Driver::aggregate_stats() {
       dirinfo.stats += fsinfo.lookup_dir(sd)->get().stats;
     }
   }
+  fsinfo.explore();
 }
 
 bool Driver::has_coverage() const noexcept {

@@ -4,18 +4,17 @@
 #include <FileSystemStatsInfo.hpp>
 #include <Sink.hpp>
 #include <Utils.hpp>
-#include "entities/FileEntity.hpp"
+#include <entities/FileEntity.hpp>
 #include <entities/FwdRef.hpp>
-#include "entities/LineStats.hpp"
+#include <entities/LineStats.hpp>
 #include <entities/RefVariant.hpp>
 
-#include "Dfs_traversal.hpp"
 #include "MdCommon.hpp"
 #include "Sanitize.hpp"
 
+#include <cassert>
 #include <cstddef>
 #include <fstream>
-#include <stack>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -26,8 +25,10 @@
 
 static constexpr std::string_view SUNBURST_PRELUDE = R""""(
 <div id="coverage-sunburst" style="aspect-ratio:1/1;width:100%;max-width:600px;margin:auto;"></div>
+
 <script type="text/javascript">
-var data = [)"""";
+var data = [
+)"""";
 
 static constexpr std::string_view SUNBURST_POSTLUDE = R""""(]
 
@@ -145,9 +146,9 @@ static constexpr std::string_view TABLE_COVERAGE_2 = R""""(</tfoot>
 </table>
 )"""";
 
-static constexpr std::string_view material_file_outline = "<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm4 18H6V4h7v5h5z\"/></svg></span>";
+static constexpr std::string_view material_file_outline = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm4 18H6V4h7v5h5z\"/></svg>";
 
-static constexpr std::string_view material_folder = "<span class=\"twemoji\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path d=\"M10 4H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8z\"/></svg></span>";
+static constexpr std::string_view material_folder = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M10 4H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8z\"/></svg>";
 
 struct DisplayStats {
   double percent;
@@ -159,70 +160,58 @@ struct DisplayStats {
   {}
 
   static constexpr double get_percent(const LineStats& s) {
-    return s.included_lines > 0 ? 100.0 * s.covered_lines / s.included_lines : 100.0;
+    return s.included_lines > 0 ? (100.0 * s.covered_lines) / s.included_lines : 100.0;
+  }
+
+  static inline constexpr std::string_view _get_value(
+    const std::array<std::string_view, 5>& values, double percent) {
+      assert(0.0 <= percent && percent <= 100.0);
+      if (percent < 60.0) {
+        return values[0];
+      } else if (percent < 70.0) {
+        return values[1];
+      } else if (percent < 80.0) {
+        return values[2];
+      } else if (percent < 90.0) {
+        return values[3];
+      }
+      return values[4];
   }
 
   static constexpr std::string_view get_color(double percent) {
-    constexpr std::string_view red = "ef5552";
-    constexpr std::string_view orange = "f78b2b";
-    constexpr std::string_view amber = "ffc105";
-    constexpr std::string_view olive = "a5b72a";
-    constexpr std::string_view green = "4cae4f";
-    if (percent < 60.0) {
-      return red;
-    } else if (percent < 70.0) {
-      return orange;
-    } else if (percent < 80.0) {
-      return amber;
-    } else if (percent < 90.0) {
-      return olive;
-    } else {
-      return green;
-    }
+    constexpr std::array<std::string_view, 5> colors = {
+      "ef5552" /* red */, "f78b2b" /* orange */, "ffc105" /* amber */,
+      "a5b72a" /* olive */, "4cae4f" /* green */
+    };
+    return _get_value(colors, percent);
   }
 
   static constexpr std::string_view get_icon(double percent) {
-    // assert(0.0 <= percent && percent <= 100.0);
-    constexpr std::string_view icon0 = "○○○○";
-    constexpr std::string_view icon1 = "●○○○";
-    constexpr std::string_view icon2 = "●●○○";
-    constexpr std::string_view icon3 = "●●●○";
-    constexpr std::string_view icon4 = "●●●●";
-    if (percent < 60.0) {
-      return icon0;
-    } else if (percent < 70.0) {
-      return icon1;
-    } else if (percent < 80.0) {
-      return icon2;
-    } else if (percent < 90.0) {
-      return icon3;
-    } else {
-      return icon4;
-    }
+    constexpr std::array<std::string_view, 5> icons = {
+      "○○○○", "●○○○", "●●○○", "●●●○", "●●●●"};
+    return _get_value(icons, percent);
   }
 };
 
-std::string_view relative_path(std::string_view path, std::string_view base) {
-  if (base.empty() or base.empty()) {
-    return path;
-  }
-  if (base.size() >= path.size()) {
-    return "";
-  }
-  return path.substr(base.size() + 1);
+template<typename T> struct DfsPrePostData {
+  bool pre;
+  T data;
+
+  DfsPrePostData(bool _pre, T&& _data): pre(_pre), data(std::move(_data)) {}
+};
+
+template<typename T> DfsPrePostData<T> make_pre_dfs(T&& data) {
+  return DfsPrePostData(true, std::move(data));
 }
 
-std::string_view parent_path(std::string_view path) {
-  size_t last_slash = path.find_last_of("/\\");
-  if (last_slash == std::string_view::npos) {
-      return ""; // No slash found, the entire path is the filename
-  }
-  return path.substr(0, last_slash);
+template<typename T> DfsPrePostData<T> make_post_dfs(T&& data) {
+  return DfsPrePostData(false, std::move(data));
 }
 
 static void render_entry(sink_t& sink, const LineStats& stats, char letter, std::string_view root,
   std::string_view dirpath, std::string_view name, std::string_view material) {
-  std::string parent = sanitize(relative_path(parent_path(dirpath), root));
+  std::string parent = sanitize(
+    FileStorage::relative_path(FileStorage::parent_path(dirpath), root));
   std::string sname = sanitize(name);
   DisplayStats ds(stats);
   std::string_view style = parent.empty() ? "" : " style=\"display:none;\"";
@@ -243,49 +232,54 @@ static void render_entry(sink_t& sink, const LineStats& stats, char letter, std:
 
 struct CoverageDfs: public ConstDirStackController {
   using stack_value = ConstDirStackController::stack_value;
-  using yield_value = ConstDirStackController::yield_value;
+  using yield_value = DfsPrePostData<ConstDirStackController::yield_value>;
 
-  sink_t& sink;
-  std::string_view root;
-  std::stack<std::pair<double, bool>> percent_stack;
-
-  void before_pop(const stack_value& top) {
-    percent_stack.pop();
-    const auto& dirinfo = std::get<1>(top);
-    for(const auto& fe: dirinfo.files) {
-      render_entry(sink, *fe, 'b', root, fe->get_path(),
-        fe->get_filename(), material_file_outline);
-    }
+  yield_value make_yield_pre(const stack_value& top) {
+    return make_pre_dfs(
+      ConstDirStackController::yield_value{std::get<0>(top), std::get<1>(top)});
   }
 
-  stack_value make_next(stack_value& top) {
-    double perc = DisplayStats::get_percent(std::get<1>(top).stats);
-    bool is_first = std::get<2>(top) == std::get<1>(top).subdirs.cbegin();
-    percent_stack.emplace(perc, is_first);
-    return ConstDirStackController::make_next(top);
+  yield_value make_yield_post(const stack_value& top) {
+    return make_post_dfs(
+      ConstDirStackController::yield_value{std::get<0>(top), std::get<1>(top)});
   }
 };
 
-void MdCoverageGenerator::coverage_data(GenInfo& info) {
+struct DirCovInfo {
+  const FileSystemStatsInfo& fsinfo;
+  sink_t& sink;
+  std::string_view dirpath;
+  const FileSystemStatsInfo::DirInfo& dirinfo;
+  bool is_not_root;
+};
+
+static void coverage_data(DirCovInfo& info) {
   std::string_view root = info.is_not_root ? info.dirpath : "";
-  CoverageDfs controller{{info.fsinfo, info.dirpath}, info.sink, root, {}};
-  controller.percent_stack.emplace(-1.0, false);
-  for (const auto& [dirpath, dirinfo]: traverse_dfs_preorder(controller)) {
-    if (dirpath == info.dirpath) {
-      continue;
+  CoverageDfs controller{info.fsinfo, info.dirpath};
+  for (const auto& dirdata: dag_dfs_traverse<DfsTraversalType::BOTH>(controller)) {
+    const auto& [dirpath, dirinfo] = dirdata.data;
+    if (dirdata.pre) {
+      if (dirpath == info.dirpath) {
+        continue;
+      }
+      render_entry(info.sink, dirinfo.stats, 'a', root, dirpath,
+        FileStorage::get_filename(dirpath), material_folder);
+    } else {
+      for(const auto& fe: dirinfo.files) {
+        render_entry(info.sink, *fe, 'b', root, fe->get_path(),
+          fe->get_filename(), material_file_outline);
+      }
     }
-    render_entry(info.sink, dirinfo.stats, 'a', root, dirpath,
-      FileStorage::get_filename(dirpath), material_folder);
   }
 }
 
-void MdCoverageGenerator::coverage_foot(GenInfo& info) {
+static void coverage_foot(DirCovInfo& info) {
   std::string_view root = info.is_not_root ? info.dirpath : "";
   ConstDirStackController controller{info.fsinfo, info.dirpath};
-  for (const auto& [dirpath, dirinfo]: traverse_dfs_preorder<ConstDirStackController, false>(controller)) {
+  for (const auto& [dirpath, dirinfo]: dag_dfs_traverse<DfsTraversalType::POST>(controller)) {
     std::string_view path = dirpath != FileSystemStatsInfo::DEF_ROOT_PATH ? dirpath : "";
     std::string name = sanitize(path);
-    std::string_view style = (name == root) ? "" : ", style=\"display:none;\"";
+    std::string_view style = (name == root) ? "" : " style=\"display:none;\"";
     const auto& stats = dirinfo.stats;
     DisplayStats ds(stats);
     std::size_t lines_uncovered = stats.included_lines - stats.covered_lines;
@@ -303,192 +297,239 @@ void MdCoverageGenerator::coverage_foot(GenInfo& info) {
   }
 }
 
-struct SunburstDfs: public ConstDirStackController {
-  using stack_value = ConstDirStackController::stack_value;
-  using yield_value = ConstDirStackController::yield_value;
+struct SubdirCovDfs: public ConstDirStackController {
+  using coverage_info_t = std::tuple<double, bool>;
+  struct SunburstDfsStack: public ConstDirStackController::stack_value {
+    coverage_info_t coverage_info;
+  };
 
-  sink_t& sink;
-  std::string_view root;
-  std::stack<std::pair<double, bool>> percent_stack;
+  using stack_value = SunburstDfsStack;
+  using yield_value = DfsPrePostData<decltype(std::tuple_cat(
+      std::declval<ConstDirStackController::yield_value>(),
+      std::declval<coverage_info_t>()
+  ))>;
 
-  void before_pop(const stack_value& top) {
-    std::string_view color = DisplayStats::get_color(percent_stack.top().first);
-    percent_stack.pop();
-    const auto& dirinfo = std::get<1>(top);
-    bool first = dirinfo.subdirs.empty();
-    if (not first) {
-      sink.print(
-        "], itemStyle: {{ color: \"#{0}dd\", borderColor: \"#{0}\"}}, "
-        "label: {{ textBorderColor: \"#{0}\"}}"
-        "}}", color);
-    }
-    std::size_t rel_beginning = not root.empty() ? root.size() + 1 : 0;
-    for(const auto& fe: dirinfo.files) {
-      DisplayStats ds(*fe);
-      std::string_view relative_path = fe->get_path().substr(rel_beginning);
-      if (not first) {
-        sink.print(", ");
-      }
-      first = false;
-      sink.print(
-        "{{"
-        "name: \"{0}\", path: \"{1}\", value: {2}, type: \"file\", icon: \"{3}\", "
-        "itemStyle: {{ color: \"#{4}dd\", borderColor: \"#{4}\"}}, "
-        "label: {{ textBorderColor: \"#{4}\"}}"
-        "}}", fe->get_filename(), relative_path, fe->get_included_lines(), ds.icon, ds.color);
-    }
+  stack_value make_init() {
+    auto initval = ConstDirStackController::make_init();
+    double coverage = DisplayStats::get_percent(std::get<1>(initval).stats);
+    return {std::move(initval), {coverage, false}};
   }
 
   stack_value make_next(stack_value& top) {
-    double perc = DisplayStats::get_percent(std::get<1>(top).stats);
-    bool is_first = std::get<2>(top) == std::get<1>(top).subdirs.cbegin();
-    percent_stack.emplace(perc, is_first);
-    return ConstDirStackController::make_next(top);
+    auto next = ConstDirStackController::make_next(top);
+    double perc = DisplayStats::get_percent(std::get<1>(next).stats);
+    bool is_first = std::get<2>(next) == std::get<1>(next).subdirs.cbegin();
+    return {std::move(next), {perc, is_first}};
+  }
+
+  yield_value make_yield_pre(const stack_value& top) {
+    return make_pre_dfs(std::tuple_cat(ConstDirStackController::make_yield_pre(top),
+      top.coverage_info));
+  }
+
+  yield_value make_yield_post(const stack_value& top) {
+    return make_post_dfs(std::tuple_cat(ConstDirStackController::make_yield_pre(top),
+      top.coverage_info));
   }
 };
 
-void MdCoverageGenerator::sunburst(GenInfo& info) {
-    info.sink.print("{}", SUNBURST_PRELUDE);
-    std::string_view root = info.is_not_root ? info.dirpath : "";
-    SunburstDfs controller{{info.fsinfo, info.dirpath}, info.sink, root, {}};
-    controller.percent_stack.emplace(-1.0, false);
-    for (const auto& [dirpath, dirinfo]: traverse_dfs_preorder(controller)) {
-      if (dirpath == info.dirpath) {
-        continue;
-      }
-      if (not controller.percent_stack.top().second) {
-        info.sink.print(", ");
-      }
-      std::string_view relative_path = info.is_not_root ? dirpath.substr(info.dirpath.size() + 1) : dirpath;
-      std::string_view dirname = FileStorage::get_filename(relative_path);
-      std::string_view icon = DisplayStats::get_icon(controller.percent_stack.top().first);
-      info.sink.print("{{name: \"{}\", path: \"{}\", value: {},"
-        " type: \"dir\", icon: \"{}\", children: [",
-        dirname, relative_path, dirinfo.stats.included_lines, icon
-      );
+static void render_sunburst_preamble(DirCovInfo& covinfo,
+  const std::string_view& dirpath, const FileSystemStatsInfo::DirInfo& dirinfo,
+  double coverage_percentage, bool is_first_subdir) {
+  static constexpr std::string_view SUNBURST_CHILDREN_PREAMBLE =
+    "{{name: \"{}\", path: \"{}\", value: {},"
+      " type: \"dir\", icon: \"{}\", children: [";
+  if (dirpath == covinfo.dirpath) {
+    return;
+  }
+  if (not is_first_subdir) {
+    covinfo.sink.print(", ");
+  }
+  std::string_view relative_path = covinfo.is_not_root ?
+    dirpath.substr(covinfo.dirpath.size() + 1) : dirpath;
+  std::string_view dirname = FileStorage::get_filename(relative_path);
+  std::string_view icon = DisplayStats::get_icon(coverage_percentage);
+  covinfo.sink.print(SUNBURST_CHILDREN_PREAMBLE, dirname, relative_path,
+    dirinfo.stats.included_lines, icon
+  );
+}
+
+static void render_sunburst_postamble(DirCovInfo& covinfo,
+  const std::string_view& root,
+  const FileSystemStatsInfo::DirInfo& dirinfo, double coverage_percentage) {
+  static constexpr std::string_view SUNBURST_CHILDREN_POSTAMBLE =
+    "], itemStyle: {{ color: \"#{0}dd\", borderColor: \"#{0}\"}}, "
+    "label: {{ textBorderColor: \"#{0}\"}}"
+    "}}";
+
+  static constexpr std::string_view SUNBURST_FILE_COVERAGE_INFO =
+    "{{"
+    "name: \"{0}\", path: \"{1}\", value: {2}, type: \"file\", icon: \"{3}\", "
+    "itemStyle: {{ color: \"#{4}dd\", borderColor: \"#{4}\"}}, "
+    "label: {{ textBorderColor: \"#{4}\"}}"
+    "}}";
+
+  std::string_view color = DisplayStats::get_color(coverage_percentage);
+  bool first = dirinfo.subdirs.empty();
+  if (not first) {
+    covinfo.sink.print(SUNBURST_CHILDREN_POSTAMBLE, color);
+  }
+  std::size_t rel_beginning = not root.empty() ? root.size() + 1 : 0;
+  for(const auto& fe: dirinfo.files) {
+    if (not first) {
+      covinfo.sink.print(", ");
     }
-    info.sink.print("{}", SUNBURST_POSTLUDE);
+    DisplayStats ds(*fe);
+    std::string_view relative_path = fe->get_path().substr(rel_beginning);
+    first = false;
+    covinfo.sink.print(SUNBURST_FILE_COVERAGE_INFO, fe->get_filename(), relative_path,
+      fe->get_included_lines(), ds.icon, ds.color);
+  }
 }
 
-void MdCoverageGenerator::render_dir_coverage(GenInfo& info) {
-  info.sink.println(FRONTMATTER);
-  info.sink.println("# {}\n\n", info.title);
-
-  sunburst(info);
-  info.sink.print(TABLE_COVERAGE_0);
-  coverage_data(info);
-  info.sink.print(TABLE_COVERAGE_1);
-  coverage_foot(info);
-  info.sink.print(TABLE_COVERAGE_2);
-  info.sink.println();
+static void sunburst(DirCovInfo& covinfo) {
+  covinfo.sink.print("{}", SUNBURST_PRELUDE);
+  std::string_view root = covinfo.is_not_root ? covinfo.dirpath : "";
+  SubdirCovDfs controller{covinfo.fsinfo, covinfo.dirpath};
+  for (const auto& dirdata:
+    dag_dfs_traverse<DfsTraversalType::BOTH>(controller)) {
+    const auto& [dirpath, dirinfo, coverage_percentage, is_first_subdir] = dirdata.data;
+    if (dirdata.pre) {
+      render_sunburst_preamble(covinfo, dirpath, dirinfo, coverage_percentage, is_first_subdir);
+    } else {
+      render_sunburst_postamble(covinfo, root, dirinfo, coverage_percentage);
+    }
+  }
+  covinfo.sink.print("{}", SUNBURST_POSTLUDE);
 }
 
-struct CoverageFileDfs: public ConstDirStackController {
-  using stack_value = ConstDirStackController::stack_value;
-  using yield_value = ConstDirStackController::yield_value;
+static void render_dir_coverage(DirCovInfo& covinfo, std::string_view title) {
+  covinfo.sink.println(FRONTMATTER);
+  covinfo.sink.println("# {}\n", title);
 
-  const std::filesystem::path& output;
-  FileSystemDeleter& fscleaner;
+  sunburst(covinfo);
+  covinfo.sink.print(TABLE_COVERAGE_0);
+  coverage_data(covinfo);
+  covinfo.sink.print(TABLE_COVERAGE_1);
+  coverage_foot(covinfo);
+  covinfo.sink.print(TABLE_COVERAGE_2);
+  covinfo.sink.println();
+}
 
-  void before_pop(const stack_value& top) {
-    static constexpr std::string_view covered_color = DisplayStats::get_color(100.0);
-    static constexpr std::string_view uncovered_color = DisplayStats::get_color(0.0);
+static void render_file_coverage(FileSystemDeleter& fscleaner,
+  const std::filesystem::path& output_root,
+  const FwdRef<FileEntity>& file) {
+  static constexpr std::string_view covered_color = DisplayStats::get_color(100.0);
+  static constexpr std::string_view uncovered_color = DisplayStats::get_color(0.0);
+  std::filesystem::path outpath = output_root / file->get_path() / "";
+  std::filesystem::create_directories(outpath.parent_path());
+  std::filesystem::path outfile = outpath / "index.md";
+  if (not can_write(outfile)) {
+    return;
+  }
+  fscleaner.add_file(outfile);
+  std::ofstream out(outfile);
+  sink_t sink(out);
 
-    const auto& dirinfo = std::get<1>(top);
-    for(const auto& fe: dirinfo.files) {
-      std::cout << "-- file: " << fe->get_path() << std::endl;
-      std::filesystem::path outpath = output / (std::string(fe->get_path()) + ".md");
-      std::filesystem::create_directories(outpath.parent_path());
-      if (not can_write(outpath)) {
-        continue;
-      }
-      fscleaner.add_file(outpath);
-      std::ofstream out(outpath);
-      sink_t sink(out);
+  /* for a file, output the whole contents; lines are highlighted with
+   * CSS; two styles are given, one that works with MkDocs output, one
+   * that works with pandoc output */
 
-      /* for a file, output the whole contents; lines are highlighted with
-       * CSS; two styles are given, one that works with MkDocs output, one
-       * that works with pandoc output */
-
-      sink.println(FRONTMATTER);
-      sink.println("# {}\n", fe->get_name());
-      sink.println("{}\n", fe->get_docs());
-      /* for MkDocs, line numbers are added with the Markdown notation
-        * `{linenums="1"}` below, which ultimately creates a HTML <table> of
-        * one row <tr>, with two cells <td>, the first holding the line
-        * numbers and the second the code; the line number cell contains a
-        * further <pre> with one empty <span></span>, then each line number
-        * in a separate <span> within it; to indicate code coverage we apply
-        * styles to those <span>, which are readily selected by number using
-        * the CSS nth-child() pseudo-class */
-      sink.println(R""""(<style>
+  sink.println(FRONTMATTER);
+  sink.println("# {}\n", FileStorage::get_filename(file->get_name()));
+  sink.println("{}\n", file->get_docs());
+  /* for MkDocs, line numbers are added with the Markdown notation
+   * `{linenums="1"}` below, which ultimately creates a HTML <table> of
+   * one row <tr>, with two cells <td>, the first holding the line
+   * numbers and the second the code; the line number cell contains a
+   * further <pre> with one empty <span></span>, then each line number
+   * in a separate <span> within it; to indicate code coverage we apply
+   * styles to those <span>, which are readily selected by number using
+   * the CSS nth-child() pseudo-class */
+  sink.println(R""""(<style>
 .linenodiv pre span {{padding-left:4px;padding-right:4px}})"""");
 
-      const auto& line_counts = fe->get_line_counts();
-      for (std::size_t line = 0; line < line_counts.size(); ++line) {
-        if (line_counts[line] < 0) {
-          continue;
-        }
+  const auto& line_counts = file->get_line_counts();
+  for (std::size_t line = 0; line < line_counts.size(); ++line) {
+    if (line_counts[line] < 0) {
+      continue;
+    }
 
-        bool pos = line_counts[line] > 0;
-        std::string_view color = pos ? covered_color : uncovered_color;
-        std::string_view dot = pos ? "●" : "○";
-        sink.println(
-          R""""(.linenodiv pre span:nth-child({0}) {{background-color: #{1}dd;color: white;}}
-  .linenodiv pre span:nth-child({0})::before {{content: "{2} ";}})"""",
-          line + 2, color, dot);
-      }
+    const bool pos = line_counts[line] > 0;
+    const std::string_view color = pos ? covered_color : uncovered_color;
+    const std::string_view dot = pos ? "●" : "○";
+    sink.println(
+      R""""(.linenodiv pre span:nth-child({0}) {{background-color: #{1}dd;color: white;}}
+.linenodiv pre span:nth-child({0})::before {{content: "{2} ";}})"""",
+      line + 2, color, dot);
+  }
 
-      /* for pandoc, line numbers are added through the CSS; there is a <span>
-       * per line that is readily selectable with nth-child(), and it contains
-       * an <a> at the start that is expanded to add the line number and
-       * colour it */
-      sink.println(R""""(.sourceCode pre span a {{padding-left:8px;padding-right:8px;text-decoration:none;}})"""");
-      for (std::size_t line = 0; line < line_counts.size(); ++line) {
-        const bool bigger = line_counts[line] > 0;
-        const bool zero = line_counts[line] == 0;
-        std::string_view dot = bigger ? "●" : (zero ? "○" : " ");
-        sink.print(".sourceCode pre span:nth-child({}) a {{", line + 1);
-        if (bigger or zero) {
-          std::string_view color = bigger ? covered_color : uncovered_color;
-          sink.print("background-color: #{}dd;", color);
-        }
-        const std::string_view color = (bigger or zero) ? "white" : "currentColor";
-        sink.println(R""""(color: {};}}
+  /* for pandoc, line numbers are added through the CSS; there is a <span>
+   * per line that is readily selectable with nth-child(), and it contains
+   * an <a> at the start that is expanded to add the line number and
+   * colour it */
+  sink.println(R""""(.sourceCode pre span a {{padding-left:8px;padding-right:8px;text-decoration:none;}})"""");
+  for (std::size_t line = 0; line < line_counts.size(); ++line) {
+    const bool bigger = line_counts[line] > 0;
+    const bool zero = line_counts[line] == 0;
+    std::string_view dot = bigger ? "●" : (zero ? "○" : " ");
+    sink.print(".sourceCode pre span:nth-child({}) a {{", line + 1);
+    if (bigger or zero) {
+      std::string_view color = bigger ? covered_color : uncovered_color;
+      sink.print("background-color: #{}dd;", color);
+    }
+    const std::string_view color = (bigger or zero) ? "white" : "currentColor";
+    sink.println(R""""(color: {};}}
 .sourceCode pre span:nth-child({}) a::before {{content: "{} {:4}";}})"""",
-          color, line + 1, dot, line);
-      }
-      sink.println(
+      color, line + 1, dot, line);
+  }
+  sink.println(
 R""""(</style>
 
 ```cpp {{linenums="1"}}
 {}
 ```
-)"""", fe->get_content());
-    }
+)"""", file->get_content());
+}
+
+struct CovFilesRenderDfs: public ConstDirStackController {
+  using stack_value = ConstDirStackController::stack_value;
+  using yield_value = DfsPrePostData<ConstDirStackController::yield_value>;
+
+  yield_value make_yield_pre(const stack_value& top) {
+    return make_pre_dfs(ConstDirStackController::make_yield_pre(top));
+  }
+
+  yield_value make_yield_post(const stack_value& top) {
+    return make_post_dfs(ConstDirStackController::make_yield_pre(top));
   }
 };
 
 void MdCoverageGenerator::generate(const FileSystemStatsInfo& fsinfo) {
-  CoverageFileDfs controller{{fsinfo}, output, fscleaner};
-  for (const auto& [dirpath, dirinfo]: traverse_dfs_preorder(controller)) {
-    std::cout << "-- dir: " << dirpath << std::endl;
-    std::filesystem::path outpath = output;
-    const bool is_not_root = dirpath != FileSystemStatsInfo::DEF_ROOT_PATH;
-    if (is_not_root) {
-      outpath /= dirpath;
+  CovFilesRenderDfs controller{fsinfo};
+  for (const auto& dirdata: dag_dfs_traverse<DfsTraversalType::BOTH>(controller)) {
+    const auto& [dirpath, dirinfo] = dirdata.data;
+    if (dirdata.pre) {
+      std::cout << "-- dir: " << dirpath << std::endl;
+      const bool is_not_root = dirpath != FileSystemStatsInfo::DEF_ROOT_PATH;
+      std::filesystem::path outpath = is_not_root ?  output_root / dirpath : output_root;
+      std::filesystem::create_directories(outpath);
+      std::filesystem::path file = outpath / "index.md";
+      if (not can_write(file)) {
+        continue;
+      }
+      std::ofstream out(file);
+      fscleaner.add_file(file);
+      sink_t sink(out);
+      std::string_view title = is_not_root?
+        FileStorage::get_filename(dirpath) : "Code Coverage";
+      DirCovInfo info{fsinfo, sink, dirpath, dirinfo, is_not_root};
+      render_dir_coverage(info, title);
+    } else {
+      for(const auto& fe: dirinfo.files) {
+        std::cout << "-- file: " << fe->get_path() << std::endl;
+        render_file_coverage(fscleaner, output_root, fe);
+      }
     }
-
-    std::filesystem::create_directories(outpath);
-    std::filesystem::path file = outpath / "index.md";
-    if (not can_write(file)) {
-      continue;
-    }
-    fscleaner.add_file(file);
-    std::ofstream out(file);
-    sink_t sink(out);
-    std::string_view title = is_not_root?  FileStorage::get_filename(dirpath) : "Code Coverage";
-    GenInfo info{fsinfo, sink, dirpath, dirinfo, title, is_not_root};
-    render_dir_coverage(info);
   }
 }

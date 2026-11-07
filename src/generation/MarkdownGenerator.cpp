@@ -12,7 +12,6 @@
 #include <entities/TypeEntity.hpp>
 #include "generation/DocRenderer.hpp"
 
-#include "Dfs_traversal.hpp"
 #include "EntityIterStack.hpp"
 #include "MdCommon.hpp"
 #include "Sanitize.hpp"
@@ -23,7 +22,6 @@
 #include <string_view>
 #include <variant>
 #include <vector>
-#include <tuple>
 #include <type_traits>
 #include <utility>
 
@@ -283,7 +281,8 @@ void MarkdownGenerator::generate(const EntityRegistry& registry,
   const std::optional<std::string_view>& coverage_directory) {
   sink_t sink;
   EntityStackController controller{registry, output};
-  for (const auto& [v, sanitized_name, output_path] : traverse_dfs_preorder(controller)) {
+  for (const auto& [v, sanitized_name, output_path]:
+    dag_dfs_traverse(controller)) {
     sink.println("- getting entity: {} - \"{}\" - [sanitized: '{}'] on path {}",
       v.get_entity_name(), v.get_name(), sanitized_name, output_path.native());
     if (v.is_visible()) {
