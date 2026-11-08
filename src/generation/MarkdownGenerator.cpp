@@ -86,7 +86,7 @@ void print_md_table_file_link(sink_t& sink, entity_range auto&& entities, std::s
   sink.println("| Name | Description |");
   sink.println("| ---- | ----------- |");
   for (const auto& e: entities) {
-    sink.println("| [{}]({}/) | {} |", e->get_name(), sanitize(e->get_name()), line(brief(e)));
+    sink.println("| [{}]({}/) | {} |", e->get_name(), sanitized(e->get_name()), liner(brief(e)));
   }
   sink.println();
 }
@@ -99,21 +99,9 @@ void print_md_table(sink_t& sink, entity_range auto &&entities, std::string_view
   sink.println("| Name | Description |");
   sink.println("| ---- | ----------- |");
   for (const auto& e: entities) {
-    sink.println("| [{}](#{}) | {} |", e->get_name(), sanitize(e->get_name()), line(brief(e)));
+    sink.println("| [{}](#{}) | {} |", e->get_name(), sanitized(e->get_name()), liner(brief(e)));
   }
   sink.println();
-}
-
-void print_html_details(sink_t& sink, entity_range auto &&entities, std::string_view caption, std::string_view name) {
-  if (std::ranges::empty(entities)) {
-    return;
-  }
-  sink.println("## {} Details\n", caption);
-  for (const auto& e: entities) {
-    sink.println("### {}<a name=\"{}\"></a>\n", e->get_name(), sanitize(e->get_name()));
-    sink.println("!!! {} \"{}\"\n", name, htmlize(line(e->get_decl())));
-    sink.println("{}\n", indent(e->get_docs()));
-  }
 }
 
 template<entity T> void MarkdownGenerator::render_entity(
@@ -126,7 +114,7 @@ template<entity T> void MarkdownGenerator::render_entity(
   sink.println("\n# {}\n", get_title(root));
 
   if constexpr (std::is_same_v<T, TypeEntity>) {
-    sink.println("**`{}`**\n", line(root->get_decl()));
+    sink.println("**`{}`**\n", liner(root->get_decl()));
   }
   sink.println("{}\n", root->get_docs());
 

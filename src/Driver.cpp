@@ -24,8 +24,8 @@
 #include <functional>
 #include <iostream>
 #include <optional>
-#include <regex>
 #include <stack>
+#include <string_view>
 #include <stdexcept>
 #include <thread>
 #include <tuple>
@@ -35,10 +35,10 @@
  *
  * @ingroup developer
  */
-static const char* init_doxide_yaml =
-R""""(title:
-description:
-style:
+static constexpr std::string_view init_doxide_yaml =
+R""""(title: {}
+description: {}
+style: {}
 files:
   - "*.hpp"
   - "**/*.hpp"
@@ -51,9 +51,9 @@ files:
  *
  * @ingroup developer
  */
-static const char* init_mkdocs_yaml =
-R""""(site_name:
-site_description:
+static constexpr std::string_view init_mkdocs_yaml =
+R""""(site_name: {}
+site_description: {}
 theme:
   name: material
   custom_dir: docs/overrides
@@ -206,23 +206,10 @@ Driver::Driver(const DriverInitInfo& init_info, const std::optional<DriverConfig
 }
 
 void Driver::init() {
-  std::string doxide_yaml = init_doxide_yaml;
-  std::string mkdocs_yaml = init_mkdocs_yaml;
-
-  doxide_yaml = std::regex_replace(doxide_yaml, std::regex("title:"),
-      "title: " + title);
-  doxide_yaml = std::regex_replace(doxide_yaml, std::regex("description:"),
-      "description: " + description);
-  doxide_yaml = std::regex_replace(doxide_yaml, std::regex("style:"),
-      std::format("style: {}", style_option_to_str(style)));
-
-  mkdocs_yaml = std::regex_replace(mkdocs_yaml, std::regex("site_name:"),
-      "site_name: " + title);
-  mkdocs_yaml = std::regex_replace(mkdocs_yaml, std::regex("site_description:"),
-      "site_description: " + description);
-
+  std::string doxide_yaml = std::format(init_doxide_yaml, title, description, style_option_to_str(style));
   write_file_prompt(doxide_yaml, "doxide.yaml");
   if (style == StyleOption::MKDOCS) {
+    std::string mkdocs_yaml = std::format(init_mkdocs_yaml, title, description);
     write_file_prompt(mkdocs_yaml, "mkdocs.yaml");
     write_file_prompt(init_docs_stylesheets_doxide_css, "docs/stylesheets/doxide.css");
     write_file_prompt(init_docs_overrides_partials_copyright_html, "docs/overrides/partials/copyright.html");

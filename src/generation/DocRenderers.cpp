@@ -16,17 +16,26 @@
 #include <entities/VariableEntity.hpp>
 #include <generation/DocRenderer.hpp>
 
+#include <iterator>
 #include <optional>
 #include <regex>
 #include <span>
+#include <string>
 #include <string_view>
 
 struct MkdDocRender {
   sink_t& sink;
+  std::string buffer = "";
+
+  auto get_line(std::string_view s) {
+    buffer.clear();
+    std::format_to(std::back_inserter(buffer),"{}", liner{s});
+    return buffer;
+  }
 
   template<entity U> void print_link_section(const FwdRef<U>& e, std::string_view section) {
     sink.println(":{}: [{}]({}/)\n:   {}\n", section, get_title(e),
-      sanitize(e->get_name()), line(brief(e)));
+      sanitized(e->get_name()), liner(brief(e)));
   }
 
   void print(const FwdRef<GroupEntity>& e) {
@@ -57,7 +66,7 @@ struct MkdDocRender {
   template<entity U> void print_detail(const FwdRef<U>& e, std::string_view name) {
     static const std::regex start("\\n", REGEX_FLAGS);
     sink.print("!!! {1} \"{2}\"\n{0}\n{0}",
-      INDENT, name, htmlize(line(e->get_decl())));
+      INDENT, name, html_escaped(get_line(e->get_decl())));
     std::string_view docs = e->get_docs();
     std::regex_replace(sink.iter(), docs.begin(), docs.end(), start, NEWLINE_INDENT.cbegin());
     sink.println("\n{}\n", INDENT);
@@ -93,7 +102,7 @@ struct PandocRender {
 
   template<entity U> void print_link_section(const FwdRef<U>& e) {
     sink.println("[{}]({}/)\n:   {}", get_title(e),
-      sanitize(e->get_name()), line(brief(e)));
+      sanitized(e->get_name()), liner(brief(e)));
   }
 
   void print(const FwdRef<GroupEntity>& e) {
@@ -116,7 +125,7 @@ struct PandocRender {
   static constexpr std::string_view PAR_DEL = ":::";
   template<entity U> void print_detail(const FwdRef<U>& e, std::string_view name) {
     sink.println("{0} {2}\n**`{3}`**\n{1}\n{1}{4}\n{1}\n{0}\n",
-      PAR_DEL, INDENT, name, line(e->get_decl()), e->get_docs());
+      PAR_DEL, INDENT, name, liner(e->get_decl()), e->get_docs());
   }
 
   void print_detail(const FwdRef<TypedefEntity>& e) {
@@ -149,12 +158,12 @@ struct PlainRender {
 
   void print(const FwdRef<GroupEntity>& e) {
     sink.println("  - [{}]({}/)\n    {}\n", get_title(e),
-      sanitize(e->get_name()), line(brief(e)));
+      sanitized(e->get_name()), liner(brief(e)));
   }
 
   void print(const FwdRef<NamespaceEntity>& e) {
     sink.println("  - [{}]({}/)\n    {}\n", e->get_name(),
-      sanitize(e->get_name()), line(brief(e)));
+      sanitized(e->get_name()), liner(brief(e)));
   }
 
   void print_coverage(std::string_view dir) {
@@ -169,7 +178,7 @@ struct PlainRender {
   static constexpr std::string_view INDENT = NEWLINE_INDENT.substr(1);
   template<entity U> void _print_detail(const FwdRef<U>& e) {
     static const std::regex start("\\n", REGEX_FLAGS);
-    sink.println("{0}**`{1}`**\n{0}\n{0}", INDENT, line(e->get_decl()));
+    sink.println("{0}**`{1}`**\n{0}\n{0}", INDENT, liner(e->get_decl()));
     std::string_view docs = e->get_docs();
     std::regex_replace(sink.iter(), docs.begin(), docs.end(), start, NEWLINE_INDENT.cbegin());
     sink.println("\n{0}\n", INDENT);
@@ -242,10 +251,10 @@ public:
       std::string_view name = e->get_name();
       if constexpr (FIRST_ONLY) {
         if (name != prev) {
-          sink.println("### {}<a name=\"{}\"></a>\n", name, sanitize(name));
+          sink.println("### {}<a name=\"{}\"></a>\n", name, sanitized(name));
         }
       } else {
-        sink.println("### {}<a name=\"{}\"></a>\n", name, sanitize(name));
+        sink.println("### {}<a name=\"{}\"></a>\n", name, sanitized(name));
       }
       printer.print_detail(e);
       prev = name;

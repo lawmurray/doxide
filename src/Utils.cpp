@@ -4,7 +4,6 @@
 #include "YAMLNode.hpp"
 #include "YAMLParser.hpp"
 
-#include <algorithm>
 #include <cctype>
 #include <fstream>
 #include <iostream>
@@ -15,7 +14,7 @@
  *
  * @ingroup developer
  */
-static void write_file(const std::string& contents,
+static void write_file(const std::string_view& contents,
     const std::filesystem::path& dst) {
   if (dst.has_parent_path()) {
     std::filesystem::create_directories(dst.parent_path());
@@ -27,7 +26,7 @@ static void write_file(const std::string& contents,
   out << contents;
 }
 
-void write_file_prompt(const std::string& contents,
+void write_file_prompt(const std::string_view& contents,
     const std::filesystem::path& dst) {
   if (dst.has_parent_path()) {
     std::filesystem::create_directories(dst.parent_path());
@@ -56,16 +55,6 @@ std::string gulp(const std::filesystem::path& src) {
   }
   contents.append(buffer, in.gcount());
   return contents;
-}
-
-std::string capitalize(const std::string_view s) {
-  std::string r(s);
-  std::transform(r.begin(), r.end(), r.begin(),
-      [](auto c){ return std::tolower(c); });
-  if (!r.empty()) {
-    r.front() = std::toupper(r.front());
-  }
-  return r;
 }
 
 bool can_write(const std::filesystem::path& path) {

@@ -15,6 +15,7 @@
 #include <cassert>
 #include <cstddef>
 #include <fstream>
+#include <iterator>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -208,14 +209,17 @@ template<typename T> DfsPrePostData<T> make_post_dfs(T&& data) {
   return DfsPrePostData(false, std::move(data));
 }
 
+using render_buffers_t = std::tuple<std::string&, std::string&, std::string&>;
+
 static void render_entry(sink_t& sink, const LineStats& stats, char letter, std::string_view root,
-  std::string_view dirpath, std::string_view name, std::string_view material) {
-  std::string parent = sanitize(
-    FileStorage::relative_path(FileStorage::parent_path(dirpath), root));
-  std::string sname = sanitize(name);
+  std::string_view dirpath, std::string_view name, std::string_view material, render_buffers_t& buffers) {
+  std::string& parent = format_to_str(std::get<0>(buffers), "{}",
+    sanitized{FileStorage::relative_path(FileStorage::parent_path(dirpath), root)});
+  std::string& sname = format_to_str(std::get<1>(buffers), "{}", sanitized{name});
   DisplayStats ds(stats);
   std::string_view style = parent.empty() ? "" : " style=\"display:none;\"";
-  std::string path = parent.empty() ? sname : parent + '/' + sname;
+  std::string& path = parent.empty() ? sname : format_to_str(std::get<2>(buffers),
+    "{}/{}", parent, sname);
   std::size_t lines_uncovered = stats.included_lines - stats.covered_lines;
 
   sink.print(R""""(<tr id="{0}" data-parent="{1}"{2}>
@@ -225,7 +229,7 @@ static void render_entry(sink_t& sink, const LineStats& stats, char letter, std:
 <td style="text-align:right;">{9}</td>
 <td style="text-align:right;box-shadow: -8px 0 0 0 #{10}dd inset;">{11:.1f}%</td>
 </tr>
-)"""", path, parent, style, letter, sname, material, htmlize(sname),
+)"""", path, parent, style, letter, sname, material, html_escaped(sname),
     stats.included_lines, stats.covered_lines, lines_uncovered, ds.color, ds.percent
   );
 }
@@ -256,6 +260,9 @@ struct DirCovInfo {
 static void coverage_data(DirCovInfo& info) {
   std::string_view root = info.is_not_root ? info.dirpath : "";
   CoverageDfs controller{info.fsinfo, info.dirpath};
+  // rendering buffers
+  std::string b1, b2, b3;
+  auto buffers = std::tie(b1, b2, b2);
   for (const auto& dirdata: dag_dfs_traverse<DfsTraversalType::BOTH>(controller)) {
     const auto& [dirpath, dirinfo] = dirdata.data;
     if (dirdata.pre) {
@@ -263,11 +270,11 @@ static void coverage_data(DirCovInfo& info) {
         continue;
       }
       render_entry(info.sink, dirinfo.stats, 'a', root, dirpath,
-        FileStorage::get_filename(dirpath), material_folder);
+        FileStorage::get_filename(dirpath), material_folder, buffers);
     } else {
       for(const auto& fe: dirinfo.files) {
         render_entry(info.sink, *fe, 'b', root, fe->get_path(),
-          fe->get_filename(), material_file_outline);
+          fe->get_filename(), material_file_outline, buffers);
       }
     }
   }
@@ -276,9 +283,10 @@ static void coverage_data(DirCovInfo& info) {
 static void coverage_foot(DirCovInfo& info) {
   std::string_view root = info.is_not_root ? info.dirpath : "";
   ConstDirStackController controller{info.fsinfo, info.dirpath};
+  std::string name_buffer;
   for (const auto& [dirpath, dirinfo]: dag_dfs_traverse<DfsTraversalType::POST>(controller)) {
     std::string_view path = dirpath != FileSystemStatsInfo::DEF_ROOT_PATH ? dirpath : "";
-    std::string name = sanitize(path);
+    std::string& name = format_to_str(name_buffer, "{}", sanitized{path});
     std::string_view style = (name == root) ? "" : " style=\"display:none;\"";
     const auto& stats = dirinfo.stats;
     DisplayStats ds(stats);

@@ -29,8 +29,6 @@
 #include <tuple>
 #include <unordered_map>
 #include <utility>
-#include <variant>
-
 
 class RootEntity;
 class VariableEntity;
@@ -290,7 +288,7 @@ auto make_namespace_fields(
     match_state.decl.within(content),
     match_state.get_start().line,
     match_state.get_end().line,
-    full_name
+    std::move(full_name)
   );
 }
 
