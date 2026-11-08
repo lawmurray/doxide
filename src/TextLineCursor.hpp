@@ -120,8 +120,6 @@ public:
   void clear() noexcept;
 
 private:
-  // const char* _start;
-  // std::size_t _size;
   std::string_view _data;
   std::size_t _line_num;
 
@@ -131,14 +129,6 @@ private:
   void check_start(const_iterator start) const;
 
   void check_length(std::size_t length) const;
-
-  void check_end(const_iterator end) const;
-
-  void check_range(std::size_t start, std::size_t length) const;
-
-  void check_range(const_iterator start, std::size_t length) const;
-
-  void check_range(const_iterator start, const_iterator end) const;
 
   std::size_t count_lines_in_range(const_iterator start, const_iterator end) const;
 

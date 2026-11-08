@@ -5,7 +5,6 @@
 #include <entities/Entities.hpp>
 
 #include <concepts>
-#include <iterator>
 #include <format>
 #include <regex>
 #include <string>
@@ -27,28 +26,18 @@ struct html_escaped {
 };
 
 template <>
-struct std::formatter<html_escaped, char> {
-  template <class ParseContext> constexpr auto parse(ParseContext& ctx) {
-    auto it = ctx.begin();
-    if (it != ctx.end() && *it != '}')
-      throw std::format_error("html_escaped does not take a format spec");
-    return it;
-  }
-
+struct std::formatter<html_escaped, char>: std::formatter<std::string_view> {
   template <class FormatContext>
   auto format(const html_escaped& h, FormatContext& ctx) const {
     static constexpr std::string_view operator_brackets = "operator[]";
-
     auto out = ctx.out();
     const std::string_view s = h.text;
-
     for (std::size_t i = 0; i < s.size(); ++i) {
       if (s.substr(i).starts_with(operator_brackets)) {
         out = std::ranges::copy(std::string_view{"operator&#91;&#93;"}, out).out;
         i += operator_brackets.size() - 1;
         continue;
       }
-
       std::string_view rep;
       switch (s[i]) {
         case '&':  rep = "&amp;";  break;
@@ -74,17 +63,10 @@ struct sanitized {
   std::string_view text;
 };
 
-template<> struct std::formatter<sanitized, char> {
+template<> struct std::formatter<sanitized, char>: std::formatter<std::string_view> {
   static constexpr std::size_t MAX_SIZE = 250;
 
   enum class CHAR_TYPE {SPACE, ALNUM, OTHER};
-
-  template <class ParseContext> constexpr auto parse(ParseContext& ctx) {
-    auto it = ctx.begin();
-    if (it != ctx.end() && *it != '}')
-      throw std::format_error("sanitized does not take a format spec");
-    return it;
-  }
 
   template <class FormatContext>
   auto format(const sanitized& h, FormatContext& ctx) const {
@@ -132,13 +114,7 @@ struct liner {
   std::string_view text;
 };
 
-template<> struct std::formatter<liner, char> {
-  template <class ParseContext> constexpr auto parse(ParseContext& ctx) {
-    auto it = ctx.begin();
-    if (it != ctx.end() && *it != '}')
-      throw std::format_error("liner does not take a format spec");
-    return it;
-  }
+template<> struct std::formatter<liner, char>: std::formatter<std::string_view> {
 
   template <class FormatContext>
   auto format(const liner& h, FormatContext& ctx) const {

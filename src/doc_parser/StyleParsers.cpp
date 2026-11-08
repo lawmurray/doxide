@@ -63,7 +63,7 @@ struct MkDocsStyle {
   void remark() { sink.print("\n!!! quote \"Remark\"\n"); }
 
   void add_indent(int indent) {
-    sink.print("{}", RepeatChar{indent});
+    sink.print("{}", repeater{indent});
   }
 };
 
@@ -146,7 +146,7 @@ struct PlainStyle {
   void see() { sink.print("\n  - **See**\n\n\n    "); }
 
   void command(std::string_view command) {
-    sink.print("> **{}**\n> ", UpperStr{command});
+    sink.print("> **{}**\n> ", to_upper{command});
   }
 
   void attention() { sink.print("> **Attention**\n> "); }

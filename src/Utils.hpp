@@ -31,33 +31,26 @@ std::string gulp(const std::filesystem::path& src);
 
 bool can_write(const std::filesystem::path& path);
 
-struct UpperStr {
+struct to_upper {
     std::string_view view;
 };
 
-template <> struct std::formatter<UpperStr> : std::formatter<std::string_view> {
-    auto format(UpperStr wrapper, format_context& ctx) const {
+template <> struct std::formatter<to_upper>: std::formatter<std::string_view> {
+    auto format(to_upper wrapper, format_context& ctx) const {
       return std::ranges::transform(wrapper.view, ctx.out(), [](char c){
         return static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
       }).out;
     }
 };
 
-struct RepeatChar {
+struct repeater {
     int count;
     char ch = ' ';
 };
 
-template <> struct std::formatter<RepeatChar> {
-
-    // Parses format specifiers if needed (e.g., if you wrote {:x}).
-    // We don't need specifiers here, so we just return the iterator.
-    constexpr auto parse(std::format_parse_context& ctx) {
-        return ctx.begin();
-    }
-
+template <> struct std::formatter<repeater>: std::formatter<std::string_view> {
     // This writes the output to the formatting buffer
-    auto format(const RepeatChar& rc, std::format_context& ctx) const {
+    auto format(const repeater& rc, std::format_context& ctx) const {
         // Efficiently write the character 'rc.count' times directly into the output
         return std::fill_n(ctx.out(), rc.count, rc.ch);
     }

@@ -3,7 +3,8 @@
 #include <format>
 #include <tuple>
 
-template<class ParseContext> constexpr std::tuple<typename ParseContext::iterator, bool> __parse(ParseContext& ctx) {
+template<class ParseContext>
+constexpr std::tuple<typename ParseContext::iterator, bool> __parse(ParseContext& ctx) {
   bool dbg = false;
   auto it = ctx.begin();
   auto end = ctx.end();
@@ -14,7 +15,7 @@ template<class ParseContext> constexpr std::tuple<typename ParseContext::iterato
     dbg = true;
     ++it;
   }
-  if (it != end && *it != '}') {
+  if (it != end and *it != '}') {
     throw std::format_error("Invalid format args.");
   }
   return std::make_tuple(it, dbg);
