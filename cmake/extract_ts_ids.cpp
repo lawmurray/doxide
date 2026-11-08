@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
+#include <cstring>
 #include <format>
 #include <initializer_list>
 #include <iostream>
@@ -94,6 +95,9 @@ static void print_queries() {
 }
 
 int main(int argc, const char** argv) {
+  if (argc == 2 and std::strncmp(argv[1], "none", 4) == 0) {
+    return 0;
+  }
   if (argc != 2) {
     cerr << "Usage: " << argv[0] << " [";
     print_queries();

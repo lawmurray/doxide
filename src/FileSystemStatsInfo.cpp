@@ -112,7 +112,7 @@ void FileSystemStatsInfo::remove_file(const std::filesystem::path& filepath) {
   auto get_opt_path = [&](std::string_view path) {
     auto it = dir_info_map.find(path);
     if (it == dir_info_map.end()) {
-      return std::optional<typeof(it)>();
+      return std::optional<decltype(it)>();
     }
     return std::optional(it);
   };

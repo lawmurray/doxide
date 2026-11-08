@@ -52,9 +52,12 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt update --assume-yes
-            sudo apt install --assume-yes --no-install-recommends \
+            sudo apt install -y software-properties-common
+            sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+            sudo apt update --assume-yes
+            sudo NEEDRESTART_MODE=l DEBIAN_FRONTEND=noninteractive apt install --assume-yes --no-install-recommends \
               cmake \
-              g++ \
+              gcc-13 g++-13 \
               lcov \
               libyaml-dev \
               libcli11-dev \
@@ -65,7 +68,7 @@ jobs:
           command: |
               mkdir build
               cd build
-              cmake ..
+              cmake .. -DCMAKE_CXX_COMPILER=g++-13 -DCMAKE_C_COMPILER=gcc-13
               cmake --build . --config Debug --parallel
               sudo cmake --install . --config Debug
       - test

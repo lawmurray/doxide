@@ -6,8 +6,11 @@ project(doxide
 )
 cmake_policy(SET CMP0074 NEW) # use <PackageName>_ROOT to look for packages
 
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # Available options to control how dependencies are sourced
@@ -89,18 +92,30 @@ else()
   set(link_deps LINK_LIBRARIES tree-sitter-cuda::tree-sitter-cuda)
 endif()
 
-try_compile(COMPILE_RESULT
+try_run(RUN_RESULT COMPILE_RESULT
+  ${CMAKE_BINARY_DIR}/generate
   SOURCES ${PROJECT_SOURCE_DIR}/cmake/extract_ts_ids.cpp ${src_files}
-  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${PROJECT_SOURCE_DIR}/src;${inc_dirs}"
+  CMAKE_FLAGS
+    "-DINCLUDE_DIRECTORIES=${PROJECT_SOURCE_DIR}/src;${inc_dirs}"
+    "-DCMAKE_CXX_STANDARD=20"
+    "-DCMAKE_CXX_STANDARD_REQUIRED=ON"
+    "-DCMAKE_CXX_EXTENSIONS=OFF"
   ${link_deps}
-  CXX_STANDARD 20
-  CXX_STANDARD_REQUIRED TRUE
-  OUTPUT_VARIABLE COMPILE_LOG
-  COPY_FILE "${CMAKE_BINARY_DIR}/generate/extract_ts_ids${CMAKE_EXECUTABLE_SUFFIX}"
+  COMPILE_OUTPUT_VARIABLE COMPILE_LOG
+  COPY_FILE
+    "${CMAKE_BINARY_DIR}/generate/extract_ts_ids${CMAKE_EXECUTABLE_SUFFIX}"
+  RUN_OUTPUT_VARIABLE RUN_LOG
+  ARGS none
 )
+
 if(NOT COMPILE_RESULT)
   message(FATAL_ERROR "Compilation failed with code '${COMPILE_RESULT}'"
   " and log\n--------\n${COMPILE_LOG}\n--------\n")
+endif()
+
+if(RUN_RESULT)
+  message(FATAL_ERROR "Execution failed with code '${RUN_RESULT}'"
+  " and log\n--------\n${RUN_LOG}\n--------\n")
 endif()
 
 foreach(VAR IN ITEMS QueryCppNodes QueryCppExcludeNodes QueryCppIncludeNodes)
