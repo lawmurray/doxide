@@ -86,7 +86,7 @@ void print_md_table_file_link(sink_t& sink, entity_range auto&& entities, std::s
   sink.println("| Name | Description |");
   sink.println("| ---- | ----------- |");
   for (const auto& e: entities) {
-    sink.println("| [{}]({}/) | {} |", e->get_name(), sanitized(e->get_name()), liner(brief(e)));
+    sink.println("| [{}]({}/index.md) | {} |", e->get_name(), sanitized(e->get_name()), liner(brief(e)));
   }
   sink.println();
 }

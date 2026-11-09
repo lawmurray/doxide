@@ -34,7 +34,7 @@ struct MkdDocRender {
   }
 
   template<entity U> void print_link_section(const FwdRef<U>& e, std::string_view section) {
-    sink.println(":{}: [{}]({}/)\n:   {}\n", section, get_title(e),
+    sink.println(":{}: [{}]({}/index.md)\n:   {}\n", section, get_title(e),
       sanitized(e->get_name()), liner(brief(e)));
   }
 
@@ -47,7 +47,7 @@ struct MkdDocRender {
   }
 
   void print_coverage(std::string_view dir) {
-    sink.println(":material-chart-pie: [Code Coverage]({}/)\n:    \n", dir);
+    sink.println(":material-chart-pie: [Code Coverage]({}/index.md)\n:    \n", dir);
   }
 
   void print(const FwdRef<EnumEntity>& e) {
@@ -101,7 +101,7 @@ struct PandocRender {
   sink_t& sink;
 
   template<entity U> void print_link_section(const FwdRef<U>& e) {
-    sink.println("[{}]({}/)\n:   {}", get_title(e),
+    sink.println("[{}]({}/index.md)\n:   {}", get_title(e),
       sanitized(e->get_name()), liner(brief(e)));
   }
 
@@ -114,7 +114,7 @@ struct PandocRender {
   }
 
   void print_coverage(std::string_view dir) {
-    sink.println("[Code Coverage]({}/)\n:    \n", dir);
+    sink.println("[Code Coverage]({}/index.md)\n:    \n", dir);
   }
 
   void print(const FwdRef<EnumEntity>& e) {
@@ -157,17 +157,17 @@ struct PlainRender {
   sink_t& sink;
 
   void print(const FwdRef<GroupEntity>& e) {
-    sink.println("  - [{}]({}/)\n    {}\n", get_title(e),
+    sink.println("  - [{}]({}/index.md)\n    {}\n", get_title(e),
       sanitized(e->get_name()), liner(brief(e)));
   }
 
   void print(const FwdRef<NamespaceEntity>& e) {
-    sink.println("  - [{}]({}/)\n    {}\n", e->get_name(),
+    sink.println("  - [{}]({}/index.md)\n    {}\n", e->get_name(),
       sanitized(e->get_name()), liner(brief(e)));
   }
 
   void print_coverage(std::string_view dir) {
-    sink.println("  - [Code Coverage]({}/)\n    \n", dir);
+    sink.println("  - [Code Coverage]({}/index.md)\n    \n", dir);
   }
 
   void print(const FwdRef<EnumEntity>& e) {
