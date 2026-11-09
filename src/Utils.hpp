@@ -59,11 +59,11 @@ template <> struct std::formatter<repeater>: std::formatter<std::string_view> {
 struct het_string_hash {
     using is_transparent = void; // Enables heterogeneous lookup
 
-    constexpr std::size_t operator()(const std::string_view& sv) const noexcept {
+    std::size_t operator()(const std::string_view& sv) const noexcept {
         return std::hash<std::string_view>{}(sv);
     }
 
-    constexpr std::size_t operator()(const std::string& s) const noexcept {
+    std::size_t operator()(const std::string& s) const noexcept {
         return std::hash<std::string>{}(s);
     }
 };

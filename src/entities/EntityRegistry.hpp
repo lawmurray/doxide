@@ -552,7 +552,7 @@ public:
 
   void remove_file(const std::filesystem::path& file) {
     std::filesystem::path normalized = file.lexically_normal();
-    std::string_view filename = normalized.native();
+    std::string_view filename{normalized.native()};
     auto it  = catalog.find(filename);
     if (it == catalog.end()) {
       return;

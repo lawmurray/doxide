@@ -61,7 +61,7 @@ public:
   /**
    * Get the text as a string_view.
    */
-  inline std::string_view view() const noexcept {
+  constexpr inline std::string_view view() const noexcept {
     return _data;
   }
 

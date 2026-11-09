@@ -16,7 +16,7 @@ struct FileStorage {
   std::string file_path;
   std::string_view filename;
 
-  constexpr FileStorage(const std::filesystem::path& path): file_path(path),
+  constexpr FileStorage(const std::filesystem::path& path): file_path(path.native()),
     filename(get_filename(file_path)) {}
 
   constexpr static std::string_view get_filename(const std::string_view& path) {
